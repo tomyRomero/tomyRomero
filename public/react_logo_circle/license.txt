@@ -1,0 +1,11 @@
+Model Information:
+* title:	React logo circle
+* source:	https://sketchfab.com/3d-models/react-logo-circle-540ff21ac0f54a038df6f634c7cce726
+* author:	xenadus (https://sketchfab.com/xenadus)
+
+Model License:
+* license type:	CC-BY-NC-4.0 (http://creativecommons.org/licenses/by-nc/4.0/)
+* requirements:	Author must be credited. No commercial use.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "React logo circle" (https://sketchfab.com/3d-models/react-logo-circle-540ff21ac0f54a038df6f634c7cce726) by xenadus (https://sketchfab.com/xenadus) licensed under CC-BY-NC-4.0 (http://creativecommons.org/licenses/by-nc/4.0/)

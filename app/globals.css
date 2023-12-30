@@ -2,26 +2,70 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Custom Properties, update these for your own design */
+
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+  --ff-primary: 'Lora', serif;
+  --ff-secondary: 'Roboto Slab', serif;
+  
+  --fw-reg: 400;
+  --fw-bold: 700;
+  
+  --clr-light: #fff;
+  --clr-dark: #303030;
+  --clr-accent: #f8333c;
+  
+  --fs-h1: 3rem;
+  --fs-h2: 2.25rem;
+  --fs-h3: 1.25rem;
+  --fs-body: 1rem;
+  
+  --bs: 0.25em 0.25em 0.75em rgba(0,0,0,.25),
+        0.125em 0.125em 0.25em rgba(0,0,0,.15);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
+/* Hero styles */
+
+section {
+  padding: 5em 2em;
+}
+
+.intro_text{ 
+  font-size: var(--fs-h1) 
+}
+
+.section__subtitle {
+  margin: 0;
+  font-size: var(--fs-h3);
+}
+
+/*  Intro section  */
+
+.intro {
+  position: relative;
+}
+
+.intro__img {
+  box-shadow: var(--bs);
+}
+
+@media (min-width: 600px) {
+  .intro {
+      display: grid;
+      margin: 0 auto;
+      width: min-content;
+      grid-column-gap: 1em;
+      grid-template-areas: 
+          "img title"
+          "img subtitle";
+      grid-template-columns: min-content max-content;
   }
-}
-
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  
+  .intro__img {
+      grid-area: img;
+      min-width: 250px;
+      position: relative;
+      z-index: 2;
+  }    
+  
 }
