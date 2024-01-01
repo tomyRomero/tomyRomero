@@ -1,14 +1,12 @@
 
-import Image from 'next/image'
-import Navbar from '../components/nav/Navbar'
-import Hero from '@/components/hero'
-import { useAppContext } from '@/lib/AppContext';
-import About from '@/components/about';
+import About from '@/components/About';
+import Hero from '@/components/Hero';
 
+import Skills from '@/components/Skills';
 export default function Home() {
 
   return (
-    <div className='w-full'>
+    <div>
         <Hero />
         <About />
    </div>
