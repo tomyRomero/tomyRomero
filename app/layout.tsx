@@ -3,9 +3,6 @@ import { Lora } from 'next/font/google'
 import './globals.css'
 import Navbar from '../components/nav/Navbar'
 import { AppProvider } from '@/lib/AppContext'
-import { relative } from 'path'
-
-
 
 export const metadata: Metadata = {
   title: 'tomyRomero',
