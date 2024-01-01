@@ -4,7 +4,7 @@ import React from 'react';
 import Image from 'next/image';
 import { useAppContext } from '@/lib/AppContext';
 
-const Hero = () => {
+const hero = () => {
   const {theme, setTheme} = useAppContext();
 
   return (
@@ -27,4 +27,4 @@ const Hero = () => {
   );
 };
 
-export default Hero;
+export default hero;
