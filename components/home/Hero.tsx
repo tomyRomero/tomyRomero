@@ -13,7 +13,7 @@ const Hero = () => {
         <h1 className={`intro_text mt-2 max-sm:text-center ${theme === "light" ? '' : 'text-white'}`}>
           Hey, I am <strong className='font-black block'>Tomy Romero</strong>
         </h1>
-        <p className={`h-8 rounded ${theme === "light" ? 'bg-primary-light' : 'bg-primary-dark'} p-[0.25em] px-4 mb-4 text-center text-white font-bold max-sm:w-1/2 max-sm:mx-auto`}>A Full Stack Junior Dev</p>
+        <p className={`h-8 rounded ${theme === "light" ? 'bg-primary-light' : 'bg-primary-dark'} p-[0.25em] px-4 mb-4 text-center text-white font-bold max-sm:w-1/2 max-sm:mx-auto`}>Junior Dev</p>
         <Image
           src="/assets/tomyRomero.jpeg"
           alt="a picture of Tomy Romero smiling"

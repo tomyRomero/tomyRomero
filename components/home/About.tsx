@@ -3,8 +3,8 @@
 import React from "react";
 import { Tilt } from "react-tilt";
 import { motion } from "framer-motion";
-import { services, styles } from "../constants";
-import { fadeIn, textVariant, staggerContainer } from "../utils/motion";
+import { services, styles } from "../../constants";
+import { fadeIn, textVariant, staggerContainer } from "../../utils/motion";
 import Image from "next/image";
 
 //@ts-ignore
