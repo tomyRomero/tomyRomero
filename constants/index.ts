@@ -1,3 +1,12 @@
+import tomy from '../public/assets/tomyRomero.jpeg'
+import uvi from '../public/assets/uvi.jpeg'
+import president from '../public/assets/presidentUvi.jpeg'
+import stt from '../public/assets/St.Thomas.webp'
+import deanslist from '../public/assets/deanslist.jpeg'
+import art from '../public/assets/macmiller.jpeg'
+import scholarship from '../public/assets/scholarship.jpeg'
+import uvilogo from '../public/assets/uvi_icon.webp'
+import sga from '../public/assets/sga.jpeg'
 
 export const navLinks = [
   {
@@ -17,70 +26,36 @@ export const navLinks = [
   },
   {
     title: 'About',
-    path: 'about',
+    path: '#about',
     image: '/assets/sun.svg',
   },
 ];
 
 
-export const skillsText = {
-  en: '',
+export const images = [
+  { img: tomy, title: 'tomyRomero', alt: 'picture of Tomy Romero smiling' },
+  { img: uvi, title: 'University of the Virgin Islands', alt: 'University of the Virgin Islands' },
+  { img: scholarship, title: 'Scholarship Award winner', alt: 'Picture of ScholarShip Reception' },
+  { img: stt, title: 'St.Thomas', alt: 'St.Thomas USVI' },
+  { img: president, title: 'Picture with President of University of the Virgin Islands', alt: 'Picture with President of University of the Virgin Islands' },
+  { img: art, title: 'My Painting', alt: 'Picture of a Painting by Tomy Romero' },
+  { img: deanslist, title: 'Deans List Reception', alt: 'Deans List Reception' },
+  { img: uvilogo, title: 'University Logo', alt: 'Picture of UVI logo' },
+  { img: sga, title: 'Student Government Association Junior Senator', alt: 'Picture of Tomy Romero as Student Government Association Junior Senator' },
+]
 
-};
-
-
-export const socials = [
-  {
-    title: 'GitHub',
-    icon: '/socials/github.png',
-    link: 'https://github.com/',
-  },
-  {
-    title: 'Frontend Mentor',
-    icon: '/socials/frontendmentor.svg',
-    link: 'https://www.frontendmentor.io/profile/',
-  },
-  {
-    title: 'LinkedIn',
-    icon: '/socials/linkedin.svg',
-    link: 'https://www.linkedin.com/',
-  },
-];
 
 export const services = [
   {
-    title: "B.S. in Computer Science",
-    icon: '/assets/formart.jpg',
+    title: `Cloud Developer`,
+    icon: '/assets/aws.svg.png',
   },
   {
-    title: 
-    `Certifcation
-    Cloud Foundations
-    AWS`,
-    icon: '/assets/formart.jpg',
+    title: "Frontend Developer",
+    icon: '/assets/webdev_icon.png',
   },
   {
-    title: "Full Stack Developer",
-    icon: '/assets/formart.jpg',
-  },
-  {
-    title: "Content Creator",
-    icon: '/assets/formart.jpg',
+    title: "Backend Developer",
+    icon: '/assets/backend.png',
   },
 ];
-
-export const styles = {
-  paddingX: "sm:px-16 px-6",
-  paddingY: "sm:py-16 py-6",
-  padding: "sm:px-16 px-6 sm:py-16 py-10",
-
-  heroHeadText:
-    "font-black text-white lg:text-[80px] sm:text-[60px] xs:text-[50px] text-[40px] lg:leading-[98px] mt-2",
-  heroSubText:
-    "text-[#dfd9ff] font-medium lg:text-[30px] sm:text-[26px] xs:text-[20px] text-[16px] lg:leading-[40px]",
-
-  sectionHeadText:
-    "text-primary-light font-black md:text-[60px] sm:text-[50px] xs:text-[40px] text-[30px]",
-  sectionSubText:
-    "sm:text-[18px] text-[14px] text-secondary uppercase tracking-wider",
-};

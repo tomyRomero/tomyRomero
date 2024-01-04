@@ -8,7 +8,7 @@ const Hero = () => {
   const {theme, setTheme} = useAppContext();
 
   return (
-    <div className={`w-full ${theme === 'light' ? '' : 'bg-near-black'}`}>
+    <div className={`w-full ${theme === 'light' ? '' : 'bg-near-black'} p-16`}>
       <section className={`intro`} id="home">
         <h1 className={`intro_text mt-2 max-sm:text-center ${theme === "light" ? '' : 'text-white'}`}>
           Hey, I am <strong className='font-black block'>Tomy Romero</strong>
@@ -19,7 +19,7 @@ const Hero = () => {
           alt="a picture of Tomy Romero smiling"
           width={800}
           height={800}
-          className="intro__img block max-sm:mx-auto max-sm:h-72 max-sm:w-72 object-contain"
+          className="intro__img block max-sm:mx-auto max-sm:h-72 max-sm:w-72 object-contain rounded-lg"
         />
       </section>
       
@@ -28,3 +28,4 @@ const Hero = () => {
 };
 
 export default Hero;
+

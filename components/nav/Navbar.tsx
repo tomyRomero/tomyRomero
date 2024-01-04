@@ -21,7 +21,7 @@ export default function Navbar() {
     <div className="relative">
       <header
         className={`w-full transition-colors text-inherit bg-inherit z-50 fixed top-0 border-b  ${
-          theme === "light" ? "border-b-black/20 bg-white" : "border-b-white/20 bg-near-black"
+          theme === "light" ? "border-b-black/20 bg-white" : "border-b-white bg-near-black"
         }`}
       >
         <div
@@ -40,7 +40,9 @@ export default function Navbar() {
             </span>
             </Link>
           </div>
+
           <MenuToggle isActive={isActive} setIsActive={setIsActive} />
+          
           <ThemeToggle />
 
           <NavMenu

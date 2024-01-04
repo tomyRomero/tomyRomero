@@ -9,6 +9,9 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@react-three/drei": "^9.92.7",
+    "@react-three/fiber": "^8.15.13",
+    "clsx": "^2.1.0",
     "framer-motion": "^10.16.16",
     "next": "14.0.4",
     "react": "^18",

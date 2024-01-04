@@ -24,7 +24,7 @@ export default function RootLayout({
       <body className={interTight.className}>
         <AppProvider>
           <Navbar />
-          <div className='mt-14 max-sm:mt-2 relative'>
+          <div className='mt-14 max-sm:mt-2'>
           {children}
           </div>
         </AppProvider>

@@ -8,85 +8,36 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-family: "Poppins", sans-serif;
   scroll-behavior: smooth;
-  
 }
 
-:root {
-  --ff-primary: 'Lora', serif;
-  --ff-secondary: 'Roboto Slab', serif;
-  
-  --fw-reg: 400;
-  --fw-bold: 700;
-  
-  --clr-light: #fff;
-  --clr-dark: #303030;
-  --clr-accent: #f8333c;
-  
-  --fs-h1: 3rem;
-  --fs-h2: 2.25rem;
-  --fs-h3: 1.25rem;
-  --fs-body: 1rem;
-  
-  --bs: 0.25em 0.25em 0.75em rgba(0,0,0,.25),
-        0.125em 0.125em 0.25em rgba(0,0,0,.15);
+
+
+.dark-gradient {
+  background: "#200E3A";
+  background: linear-gradient(90.13deg, #200E3A 1.9%, #F7B787 97.5%);
+  background: -webkit-linear-gradient(-90.13deg, #200E3A 1.9%, #F7B787 97.5%);
 }
 
-/* Hero styles */
-
-section {
-  padding: 5em 2em;
-}
-
-.intro_text{ 
-  font-size: var(--fs-h1) 
-}
-
-.section__subtitle {
-  margin: 0;
-  font-size: var(--fs-h3);
-}
-
-/*  Intro section  */
-
-.intro {
-  position: relative;
-}
-
-.intro__img {
-  box-shadow: var(--bs);
-}
-
-@media (min-width: 600px) {
-  .intro {
-      display: grid;
-      margin: 0 auto;
-      width: min-content;
-      grid-column-gap: 1em;
-      grid-template-areas: 
-          "img title"
-          "img subtitle";
-      grid-template-columns: min-content max-content;
-  }
-  
-  .intro__img {
-      grid-area: img;
-      min-width: 250px;
-      position: relative;
-      z-index: 2;
-  }    
-  
-}
-
-.green-pink-gradient {
-  background: "#00cea8";
-  background: linear-gradient(90.13deg, #00cea8 1.9%, #bf61ff 97.5%);
-  background: -webkit-linear-gradient(-90.13deg, #00cea8 1.9%, #bf61ff 97.5%);
+.light-gradient {
+  background: "#200E3A";
+  background: linear-gradient(90.13deg, #200E3A 1.9%, #0060d4 97.5%);
+  background: -webkit-linear-gradient(-90.13deg, #200E3A 1.9%, #0060d4 97.5%);
 }
 
 .shadow-card {
   --tw-shadow: 0px 35px 120px -15px #211e35;
   --tw-shadow-colored: 0px 35px 120px -15px var(--tw-shadow-color);
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
+@layer components {
+  .sectionHeadText {
+    @apply text-primary-light font-black text-heading1-bold
+  }
+
+  .sectionSubText {
+    @apply text-secondary uppercase tracking-wider
+  }
+
 }
