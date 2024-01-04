@@ -37,19 +37,15 @@ export const images = [
   { img: uvi, title: 'University of the Virgin Islands', alt: 'University of the Virgin Islands' },
   { img: scholarship, title: 'Scholarship Award winner', alt: 'Picture of ScholarShip Reception' },
   { img: stt, title: 'St.Thomas', alt: 'St.Thomas USVI' },
-  { img: president, title: 'Picture with President of University of the Virgin Islands', alt: 'Picture with President of University of the Virgin Islands' },
-  { img: art, title: 'My Painting', alt: 'Picture of a Painting by Tomy Romero' },
   { img: deanslist, title: 'Deans List Reception', alt: 'Deans List Reception' },
+  { img: art, title: 'My Painting', alt: 'Picture of a Painting by Tomy Romero' },
+  { img: president, title: 'Picture with President of University of the Virgin Islands', alt: 'Picture with President of University of the Virgin Islands' },
   { img: uvilogo, title: 'University Logo', alt: 'Picture of UVI logo' },
   { img: sga, title: 'Student Government Association Junior Senator', alt: 'Picture of Tomy Romero as Student Government Association Junior Senator' },
 ]
 
 
 export const services = [
-  {
-    title: `Cloud Developer`,
-    icon: '/assets/aws.svg.png',
-  },
   {
     title: "Frontend Developer",
     icon: '/assets/webdev_icon.png',
@@ -58,4 +54,8 @@ export const services = [
     title: "Backend Developer",
     icon: '/assets/backend.png',
   },
+  {
+    title: `Cloud Developer`,
+    icon: '/assets/aws.svg.png',
+  }
 ];

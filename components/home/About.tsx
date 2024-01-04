@@ -7,6 +7,7 @@ import { services} from "../../constants";
 import { fadeIn, textVariant, staggerContainer } from "../../utils/motion";
 import Image from "next/image";
 import { useAppContext } from "@/lib/AppContext";
+import { useInView } from "react-intersection-observer";
 
 //@ts-ignore
 const ServiceCard = ({ index, title, icon }) =>
@@ -50,6 +51,10 @@ const ServiceCard = ({ index, title, icon }) =>
 
 const About = () => {
   const {theme} = useAppContext();
+  // Set up the ref and inView state for the intersection observer
+  const [ref, inView] = useInView({
+    triggerOnce: true, // Only trigger once when the component comes into view
+  });
   return (
     <motion.div
       variants={staggerContainer()}
@@ -67,20 +72,24 @@ const About = () => {
 
             <motion.p
               variants={fadeIn("", "", 0.1, 1)}
-              className={`mt-4 text-center  text-body-normal max-w-3xl leading-[30px] ${theme === "light" ? 'text-near-black' : 'text-white'}`}
+              className={`mt-4 text-left  max-sm:text-small-regular text-body-normal max-w-3xl leading-[30px] ${theme === "light" ? 'text-near-black' : 'text-white'}`}
+             // Attach the ref to where you want to check comes to view
             >
-            
-              I have experience in Java, JavaScript, and knowledge in frameworks like React, Node.js, Next.js as well as AWS cloud foundations such as S3, RDS, EC2 and even VPCs.
-              I am also acquainted with DataBase managment systems such as mySql and even .  
-              I'm a quick learner and would love to collaborate closely with potential employers to
-              create efficient, scalable, and user-friendly solutions that solve
-              real-world problems!
+              I bring a robust skill set to the table, I have proficiency in Java, JavaScript, and a suite of frameworks including React, React Native, Node.js, and Next.js. My knowledge extends to AWS cloud foundations, navigating services such as S3, RDS, and EC2.
+              In the realm of database management, I am well-versed in both relational databases like MySQL and also NoSQL databases such as MongoDB and Firebase. Alongside this, I possess adept knowledge of Restful APIs, and I'm skilled in crafting engaging and responsive user interfaces with CSS, Tailwind CSS, and HTML. 
+              Driven by a passion for continuous learning, I am eager to collaborate closely with employers. My goal is to contribute to the creation of efficient, scalable, and user-friendly solutions that address real-world challenges. Let's build something great together!
             </motion.p>
             
 
-        <div className='ml-8 mt-16 flex flex-wrap gap-10'>
+        <div className='ml-8 mt-16 flex flex-wrap gap-10'
+        ref={ref}>
           {services.map((service, index) => (
-            <motion.div key={service.title} variants={fadeIn("up", "spring", index * 0.5, 0.75)}>
+            <motion.div 
+            initial='hidden'
+            animate={inView ? 'show' : 'hidden'} // Use inView state to trigger animation
+            key={service.title} variants={fadeIn("up", "spring", index * 0.5, 0.75)}
+
+            >
               <ServiceCard index={index} {...service} />
             </motion.div>
           ))}

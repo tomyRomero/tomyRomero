@@ -4,6 +4,7 @@ import { useAppContext } from "@/lib/AppContext";
 import Link from "next/link"
 import { Single_Day } from 'next/font/google';
 import Image from "next/image";
+import { Photos } from "../Photos";
 
 const singleDayFont = Single_Day({
     weight: "400"
@@ -21,8 +22,8 @@ export default function Intro() {
         <span className={singleDayFont.className}>
         <h1 className={`text-heading1-bold tracking-tighter p-1 ${theme === "light" ? '' : 'text-primary-dark'}`}>Tomy Romero</h1>
         </span>
-        <p className={`max-w-[700px] text-body-medium p-1 ${theme === "light" ? '' : 'text-white'}`}>
-        Greetings! I based in the US Virgin Islands and I am a Full Stack Junior Dev , and a graduate from the prestigious University of the Virgin Islands, where I earned my Bachelor's degree in Computer Science. 
+        <p className={`max-w-[700px] text-body-medium p-1 max-sm:p-6 ${theme === "light" ? '' : 'text-white'}`}>
+        Hey! I am based in the US Virgin Islands, and I am a Full Stack Junior Developer and a graduate of the prestigious University of the Virgin Islands, where I earned my Bachelor's degree in Computer Science.
         </p>
       </div>
       <div className="flex space-x-4 mt-4">

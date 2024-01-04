@@ -8,6 +8,7 @@ import { useState } from 'react';
 
 import { images } from '../constants/index';
 import { useAppContext } from '@/lib/AppContext';
+import { fadeIn } from '@/utils/motion';
 
 const possibleRotations = [1.3, -1.3, 1.3, -1.3, 1.3, -1.3];
 
@@ -67,6 +68,11 @@ export const Photos = () => {
     <div className="my-8">
       <div className="hide-scrollbar -my-4 flex gap-8 overflow-y-auto py-4 px-8">
         {images.map((travelImage, index) => (
+          <motion.div 
+          initial='hidden'
+          animate={ 'show'} // Use inView state to trigger animation
+          variants={fadeIn("up", "spring", index * 0.5, 1.5)}
+          >
           <Photo
             key={travelImage.img.src}
             img={travelImage.img}
@@ -74,7 +80,9 @@ export const Photos = () => {
             alt={travelImage.alt}
             idx={index}
           />
+          </motion.div>
         ))}
+        
       </div>
     </div>
     </div>
