@@ -59,3 +59,36 @@ export const services = [
     icon: '/assets/aws.svg.png',
   }
 ];
+
+export const projects = [
+{
+  title: "Project 1",
+  techStack: 'React, Node.js, MongoDB',
+  projectIcon: '/assets/github.svg',
+  image: '/assets/macmiller.jpeg',
+  description: 'A full-stack MERN application with user authentication.'
+},
+{
+  title: "Project 1",
+  techStack: 'React, Node.js, MongoDB',
+  projectIcon: '/assets/github.svg',
+  image: '/assets/macmiller.jpeg',
+  description: 'A full-stack MERN application with user authentication.'
+},
+{
+  title: "Project 1",
+  techStack: 'React, Node.js, MongoDB',
+  projectIcon: '/assets/github.svg',
+  image: '/assets/macmiller.jpeg',
+  description: 'A full-stack MERN application with user authentication.'
+},
+{
+  title: "Project 1",
+  techStack: 'React, Node.js, MongoDB',
+  projectIcon: '/assets/github.svg',
+  image: '/assets/macmiller.jpeg',
+  description: 'A full-stack MERN application with user authentication.'
+},
+
+]
+

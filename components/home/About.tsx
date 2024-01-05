@@ -60,7 +60,7 @@ const About = () => {
       variants={staggerContainer()}
       initial='hidden'
       animate='show'
-      className={`w-full mx-auto px-20 relative z-0 ${theme === "light" ? '' : 'bg-near-black'}`}
+      className={`w-full mx-auto px-20 py-6 relative z-0 ${theme === "light" ? '' : 'bg-near-black'}`}
       id={"about"}
     >
       <motion.section>
@@ -72,7 +72,7 @@ const About = () => {
 
             <motion.p
               variants={fadeIn("", "", 0.1, 1)}
-              className={`mt-4 text-left  max-sm:text-small-regular text-body-normal max-w-3xl leading-[30px] ${theme === "light" ? 'text-near-black' : 'text-white'}`}
+              className={`mt-4 text-left  max-sm:text-base-semibold text-body-normal max-w-3xl leading-[30px] ${theme === "light" ? 'text-near-black' : 'text-white'}`}
              // Attach the ref to where you want to check comes to view
             >
               I bring a robust skill set to the table, I have proficiency in Java, JavaScript, and a suite of frameworks including React, React Native, Node.js, and Next.js. My knowledge extends to AWS cloud foundations, navigating services such as S3, RDS, and EC2.

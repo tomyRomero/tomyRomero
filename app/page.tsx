@@ -5,6 +5,7 @@ import Skills from '@/components/Skills';
 import Code from '@/components/canvas/Code';
 import { Photos } from '@/components/Photos';
 import Intro from '@/components/home/Intro';
+import Projects from '@/components/Projects';
 
 
 export default function Home() {
@@ -14,6 +15,7 @@ export default function Home() {
     <Intro />
     <Photos />
     <About />
+    <Projects />
   </div>
   )
 }

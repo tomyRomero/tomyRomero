@@ -2,16 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Custom Properties, update these for your own design */
-
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   scroll-behavior: smooth;
 }
-
-
 
 .dark-gradient {
   background: "#200E3A";
@@ -33,11 +29,11 @@
 
 @layer components {
   .sectionHeadText {
-    @apply text-primary-light font-black text-heading1-bold
+    @apply font-black text-heading1-bold
   }
 
   .sectionSubText {
-    @apply text-secondary uppercase tracking-wider
+    @apply uppercase tracking-wider text-body-semibold
   }
 
 }
