@@ -1,3 +1,4 @@
+//Home Page Pictures
 import tomy from '../public/assets/tomyRomero.jpeg'
 import uvi from '../public/assets/uvi.jpeg'
 import president from '../public/assets/presidentUvi.jpeg'
@@ -7,6 +8,25 @@ import art from '../public/assets/macmiller.jpeg'
 import scholarship from '../public/assets/scholarship.jpeg'
 import uvilogo from '../public/assets/uvi_icon.webp'
 import sga from '../public/assets/sga.jpeg'
+
+//Techs
+import javascript from '../public/assets/javascript.png'
+import html from '../public/assets/html.png'
+import docker from '../public/assets/docker.png'
+import mongodb from '../public/assets/mongodb.png'
+import tailwind from '../public/assets/tailwind.png'
+import git from '../public/assets/git.png'
+import nodejs from '../public/assets/nodejs.png'
+import css from '../public/assets/css.png'
+import reactjs from '../public/assets/reactjs.png'
+import threejs from '../public/assets/threejs.svg'
+import typescript from '../public/assets/typescript.png'
+import java from '../public/assets/java.png'
+import sql from '../public/assets/sql.png'
+
+
+
+
 
 export const navLinks = [
   {
@@ -89,6 +109,60 @@ export const projects = [
   image: '/assets/macmiller.jpeg',
   description: 'A full-stack MERN application with user authentication.'
 },
-
 ]
+
+export const technologies = [
+  {
+    name: "HTML 5",
+    icon: html.src,
+  },
+  {
+    name: "CSS 3",
+    icon: css.src,
+  },
+  {
+    name: "JavaScript",
+    icon: javascript.src,
+  },
+  {
+    name: "TypeScript",
+    icon: typescript.src,
+  },
+  {
+    name: "React JS",
+    icon: reactjs.src,
+  },
+  {
+    name: "Tailwind CSS",
+    icon: tailwind.src,
+  },
+  {
+    name: "Node JS",
+    icon: nodejs.src,
+  },
+  {
+    name: "MongoDB",
+    icon: mongodb.src,
+  },
+  {
+    name: "Three JS",
+    icon: threejs.src,
+  },
+  {
+    name: "git",
+    icon: git.src,
+  },
+  {
+    name: "docker",
+    icon: docker.src,
+  },
+  {
+    name: "Java",
+    icon: java.src,
+  },
+  {
+    name: "mySQL",
+    icon: sql.src,
+  }
+];
 

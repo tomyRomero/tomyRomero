@@ -12,6 +12,7 @@ import { Single_Day } from 'next/font/google';
 const singleDayFont = Single_Day({
   weight: "400"
 })
+
 export default function Navbar() {
 
   const {theme, setTheme} = useAppContext();

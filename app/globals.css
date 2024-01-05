@@ -27,6 +27,13 @@
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
 
+.white-shadow-card {
+  --tw-white-shadow: 0px 35px 120px -15px rgba(255, 255, 255, 0.5);
+  --tw-white-shadow-colored: 0px 35px 120px -15px var(--tw-white-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-white-shadow);
+}
+
+
 @layer components {
   .sectionHeadText {
     @apply font-black text-heading1-bold
