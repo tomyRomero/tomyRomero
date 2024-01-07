@@ -36,7 +36,7 @@ const {theme, setTheme} = useAppContext();
             }`}
           >
             <Image
-              src={theme === "light" ? "assets/bulb.svg" : "assets/moon.svg"}
+              src={theme === "light" ? "/assets/bulb.svg" : "/assets/moon.svg"}
               alt="theme-icon"
               width={11}
               height={11}

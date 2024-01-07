@@ -10,6 +10,7 @@ import { projects } from '@/constants'
 import { useInView } from "react-intersection-observer";
 import { Single_Day } from 'next/font/google';
 
+
 const singleDayFont = Single_Day({
   weight: "400"
 })
@@ -20,9 +21,9 @@ const Projects = () => {
     triggerOnce: true, // Only trigger once when the component comes into view
   });
 
+
   return (
     <motion.div
-    className={`${theme === "light" ? '' : 'bg-near-black'}`}
     id='projects'
     variants={staggerContainer()}
     >
@@ -38,7 +39,7 @@ const Projects = () => {
         </p>
       </motion.div>
       <div className="flex flex-col w-full">
-      <section className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-10"
+      <section className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-10 "
         ref={ref}
       >
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 max-w-6xl w-full mx-auto">
@@ -48,21 +49,26 @@ const Projects = () => {
             animate={inView ? 'show' : 'hidden'} // Use inView state to trigger animation
             key={project.title} variants={fadeIn("up", "spring", index * 0.5, 0.75)}
             >
+              <Link href={`/project/${project.title}`}>
               <Card key={`project-${index}`}
               className={`border-2 rounded-xl max-sm:w-3/4 max-sm:mx-auto
               cursor-pointer hover:scale-105 ease-in-out duration-300 
               ${theme === 'light' ? 
               'border-primary-light shadow-card' 
               : 
-              'border-primary-dark white-shadow-card bg-near-black text-white'}`}
+              'border-primary-dark white-shadow-card bg-near-black text-white'}
+              `}
               >
                 <CardHeader className="flex flex-row items-center gap-4">
-                  <Image 
-                  src={project.projectIcon}
-                  alt={'Project Icon'}
-                  width={24}
-                  height={24}
+                <Link href={project.link} target="_blank">
+                  <Image
+                    src={project.projectIcon}
+                    alt={'Project Icon'}
+                    width={24}
+                    height={24}
+                    className='hover:scale-150 ease-in-out duration-300'
                   />
+                </Link>
                   <div className="grid gap-1">
                     <CardTitle className='text-heading2-bold'>
                       <span className={singleDayFont.className}>{project.title}</span>
@@ -82,6 +88,7 @@ const Projects = () => {
                   <div className={`text-small-semibold p-1 ${theme === "light" ? 'text-primary-light' : 'text-primary-dark'}`}>Click for Details</div>
                 </CardContent>
               </Card>
+              </Link>
               </motion.div>
             ))}
         </div>

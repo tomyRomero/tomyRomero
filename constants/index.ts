@@ -24,10 +24,7 @@ import typescript from '../public/assets/typescript.png'
 import java from '../public/assets/java.png'
 import sql from '../public/assets/sql.png'
 
-
-
-
-
+//Links for Nav Menu
 export const navLinks = [
   {
     title: 'Home',
@@ -51,7 +48,7 @@ export const navLinks = [
   },
 ];
 
-
+//Images for home page Photos.tsx
 export const images = [
   { img: tomy, title: 'tomyRomero', alt: 'picture of Tomy Romero smiling' },
   { img: uvi, title: 'University of the Virgin Islands', alt: 'University of the Virgin Islands' },
@@ -64,7 +61,7 @@ export const images = [
   { img: sga, title: 'Student Government Association Junior Senator', alt: 'Picture of Tomy Romero as Student Government Association Junior Senator' },
 ]
 
-
+//My services
 export const services = [
   {
     title: "Frontend Developer",
@@ -80,37 +77,63 @@ export const services = [
   }
 ];
 
+//Projects for Home Page
 export const projects = [
 {
-  title: "Project 1",
-  techStack: 'React, Node.js, MongoDB',
+  title: "Sparks",
+  techStack: 'React (Next.js), Node.js, mySQL',
   projectIcon: '/assets/github.svg',
-  image: '/assets/macmiller.jpeg',
-  description: 'A full-stack MERN application with user authentication.'
+  image: '/assets/sparks-home-moblie.png',
+  description: 'AI powered full stack social media platform and messaging app with user authentication, using AWS, RDS, S3, mySQL, Web Sockets, Clerk auth, Zod forms, ShadCN & headless UI, openAI, tailwind and Next.js',
+  link: "https://github.com/tomyRomero/sparks"
 },
 {
-  title: "Project 1",
-  techStack: 'React, Node.js, MongoDB',
+  title: "Class Organizer",
+  techStack: 'Java EE, Servlet, mySQL, Glassfish',
   projectIcon: '/assets/github.svg',
-  image: '/assets/macmiller.jpeg',
-  description: 'A full-stack MERN application with user authentication.'
+  image: '/assets/class.png',
+  description: 'A starter full-stack Java Web App with built in user auth that allows users to add and remove classes to create class schedules.',
+  link: "https://github.com/tomyRomero/classOrganizer"
 },
 {
-  title: "Project 1",
-  techStack: 'React, Node.js, MongoDB',
+  title: "ElectricCompanyGUIApp",
+  techStack: 'Java, Javax Swing, Java Awt',
   projectIcon: '/assets/github.svg',
-  image: '/assets/macmiller.jpeg',
-  description: 'A full-stack MERN application with user authentication.'
-},
-{
-  title: "Project 1",
-  techStack: 'React, Node.js, MongoDB',
-  projectIcon: '/assets/github.svg',
-  image: '/assets/macmiller.jpeg',
-  description: 'A full-stack MERN application with user authentication.'
+  image: '/assets/CustomerHome.png',
+  description: 'A starter GUI Front End Application using Java framework spring to provide a Graphical User Interface experience, with a built in database that creates binary files and reads from them, also updates them. This was the first app I ever created during college and was used for a project.',
+  link: "https://github.com/tomyRomero/electricCompanyGUIApp"
 },
 ]
 
+//Projects in Detail
+export const projectDetails = [
+  {
+    title: '',
+    tools: [''],
+    images: ['/assets/CustomerHome.png','/assets/class.png', '/assets/sparks-home-moblie.png']
+
+      // title: string;
+      // isFeatured: boolean;
+      // tools: string[];
+      // color: string;
+      // images: Image[];
+      // prefix: string;
+      // slug: string;
+      // year: string;
+      // liveurl: string;
+      // giturl: string;
+      // description: Description;
+      // type: ProjectType;
+      // catagory: Catagory;
+      // arrowcolor: Arrowcolor;
+      // ischallenge: boolean;
+      // createdat: string;
+      // challengeurl?: string;
+    
+  }
+]
+
+//Techs
 export const technologies = [
   {
     name: "HTML 5",

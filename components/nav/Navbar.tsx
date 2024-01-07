@@ -15,7 +15,7 @@ const singleDayFont = Single_Day({
 
 export default function Navbar() {
 
-  const {theme, setTheme} = useAppContext();
+  const {theme} = useAppContext();
   const [isActive, setIsActive] = useState(false);
 
   return (

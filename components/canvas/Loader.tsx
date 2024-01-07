@@ -1,6 +1,10 @@
+"use client"
+import { useAppContext } from "@/lib/AppContext";
 import { Html, useProgress } from "@react-three/drei";
 
+
 const CanvasLoader = () => {
+  const {theme} = useAppContext();
   const { progress } = useProgress();
   return (
     <Html
@@ -17,7 +21,7 @@ const CanvasLoader = () => {
       <p
         style={{
           fontSize: 14,
-          color: "#F1F1F1",
+          color: `${theme === 'light' ? '#0060d4' : '#F7B787'}`,
           fontWeight: 800,
           marginTop: 40,
         }}
