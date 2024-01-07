@@ -3,7 +3,6 @@
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import '../../app/globals.css';
 import { nanoid } from 'nanoid';
 import Image from 'next/image';
 import { useAppContext } from '@/lib/AppContext';
@@ -28,7 +27,7 @@ export default function ImageSlider({ project }: any) {
       <Slider {...settings}>
         {project.images.map((image: any) => (
           <Image
-            src={`${project.image}`}
+            src={`${image}`}
             alt={image}
             width={1920}
             height={1080}
