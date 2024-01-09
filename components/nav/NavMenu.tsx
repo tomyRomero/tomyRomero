@@ -14,8 +14,6 @@ interface Props {
 
 export default function NavMenu({ isActive, setIsActive, theme }: Props) {
 
-  console.log(navLinks)
-
   const [isMouseOver, setIsMouseOver] = useState('');
   const activeLink = navLinks.find((link) => link.title === isMouseOver);
   const pathname = usePathname();

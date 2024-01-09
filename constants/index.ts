@@ -108,28 +108,15 @@ export const projects = [
 //Projects in Detail
 export const projectDetails = [
   {
-    title: '',
-    tools: [''],
-    images: ['/assets/CustomerHome.png','/assets/class.png', '/assets/sparks-home-moblie.png']
-
-      // title: string;
-      // isFeatured: boolean;
-      // tools: string[];
-      // color: string;
-      // images: Image[];
-      // prefix: string;
-      // slug: string;
-      // year: string;
-      // liveurl: string;
-      // giturl: string;
-      // description: Description;
-      // type: ProjectType;
-      // catagory: Catagory;
-      // arrowcolor: Arrowcolor;
-      // ischallenge: boolean;
-      // createdat: string;
-      // challengeurl?: string;
-    
+    title: 'Sparks',
+    type: 'Full Stack',
+    tools: ['/assets/docker.png', '/assets/docker.png', '/assets/docker.png'],
+    images: ['/assets/CustomerHome.png','/assets/class.png', '/assets/sparks-home-moblie.png'],
+    description: 'AI powered full stack social media platform, using AWS, RDS, S3, mySQL, Web Sockets, Clerk auth, Zod forms, ShadCN & headless UI, openAI, tailwind and Next.js',
+    livelink: 'https://sparkify.vercel.app/',
+    githubrepo: 'https://github.com/tomyRomero/sparks',
+    year: '2023',
+    isLive: true,
   }
 ]
 
