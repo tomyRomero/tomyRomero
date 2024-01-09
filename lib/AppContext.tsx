@@ -9,6 +9,8 @@ type AppContextProps = {
   theme: any;
   setTheme: React.Dispatch<React.SetStateAction<any>>;
   // Add additional states here
+  slider: any;
+  setSlider: React.Dispatch<React.SetStateAction<any>>;
  
 };
 
@@ -21,6 +23,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   const [theme, setTheme] = useState<any>("light");
 
   // Add additional states using the useState hook
+  const [slider, setSlider] = useState(false)
 
 
 
@@ -28,6 +31,8 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   const contextValue: AppContextProps = {
     theme,
     setTheme,
+    slider,
+    setSlider
   };
 
   return <AppContext.Provider value={contextValue}>{children}</AppContext.Provider>;

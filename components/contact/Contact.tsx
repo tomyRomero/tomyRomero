@@ -29,7 +29,7 @@ const {theme} = useAppContext();
                 focus-visible:ring-1 disabled:opacity-50
                 cursor-pointer hover:scale-105 ease-in-out duration-300
                 `}
-                href="#"
+                href="/contact"
               >
                 Contact Form
               </Link>

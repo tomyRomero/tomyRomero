@@ -14,17 +14,17 @@ interface Props{
 }
 
 export default function ProjectDetails({title, tools, type, year}: Props) {
-  const [isMouseOver, setIsMouseOver] = useState('');
+  
   const {theme} = useAppContext();
   const router = useRouter();
 
   return (
     <article className="flex flex-col-reverse md:flex-row justify-between gap-x-6 pb-6">
       <section>
-        <h1 className="text-[32px] font-bold tracking-[1.92px] md:text-[58px] md:tracking-[3.48px] uppercase pb-[7px]">
+        <h1 className={`${theme === "light" ? 'text-primary-light' : 'text-primary-dark'} text-heading2-bold tracking-[1.92px] md:text-[58px] md:tracking-[3.48px] uppercase pb-[7px]`}>
          {title}
         </h1>
-        <article className="text-[14px] font-semibold tracking-[0.84px] md:text-[24px] md:tracking-[1.44px] uppercase pb-[15px] md:pb-[18px]">
+        <article className={`${theme === "light" ? '' : 'text-white'} text-[14px] font-semibold tracking-[0.84px] md:text-[24px] md:tracking-[1.44px] uppercase pb-[15px] md:pb-[18px]`}>
           <p>{type}</p>
         </article>
           <article className="flex items-center gap-[15px] flex-wrap">
@@ -34,12 +34,12 @@ export default function ProjectDetails({title, tools, type, year}: Props) {
             alt="tool icon"
             width={35}
             height={35}
-            className="w-[35px] md:w-[45px]"
+            className="w-[35px] md:w-[45px] rounded-full"
             key={index}
           />
           ))}
           </article>
-          <div className="py-2">
+          <div className="py-3">
           <button 
         className={`
         cursor-pointer hover:scale-125 ease-in-out duration-300
@@ -56,7 +56,7 @@ export default function ProjectDetails({title, tools, type, year}: Props) {
         </button>
         </div>
       </section>
-      <h4 className="text-[12px] font-bold tracking-[0.72px] md:text-[24px] md:tracking-[1.44px] md:pt-[24px]">
+      <h4 className={`${theme === "light" ? 'text-primary-light' : 'text-primary-dark'} text-body-bold tracking-[0.72px] md:text-[24px] md:tracking-[1.44px] md:pt-[24px]`}>
         {year}
       </h4>
     </article>

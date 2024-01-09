@@ -19,7 +19,7 @@ export default function ProjectDescription({text, github, live, isLive}: Props) 
     <section className="mt-6 flex items-center justify-between mb-[100px] flex-col md:flex-row gap-[76px]"
     id="description"
     >
-      <p className="md:max-w-[530px] text-[20px] tracking-[1.2px]">
+      <p className={`md:max-w-[530px] text-body1-semibold tracking-[1.2px] ${theme === "light" ? '' : 'text-white'}`}>
         {text}
       </p>
 
@@ -27,14 +27,14 @@ export default function ProjectDescription({text, github, live, isLive}: Props) 
         <div>
           <div className="hidden lg:block">
             <Magnetic padding="p-0">
-              <Link href={live} target="_blank">
+              <Link href={isLive ? live : github} target="_blank">
                 <RoundButton  text={`${isLive ? 'Live Site' : 'Code'}`} variant="lg" />
               </Link>
             </Magnetic>
           </div>
 
           <div className="lg:hidden">
-            <Link href={live} target="_blank">
+            <Link href={isLive ? live : github} target="_blank">
               <RoundButton  text={`${isLive ? 'Live Site' : 'Code'}`}  variant="lg" />
             </Link>
           </div>

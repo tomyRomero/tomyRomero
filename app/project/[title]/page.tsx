@@ -26,10 +26,14 @@ const page = ({ params }: { params: { title: string } }) => {
       isLive: false,
     };
   };
-  const projectTitle = params.title;
+  const title = params.title;
+  const decodedTitle = decodeURIComponent(title);
+
+
+  console.log("Title:" , decodedTitle)
 
   // Use the findProjectByTitle function to get the project details
-  const currentProject = findProjectByTitle(projectTitle);
+  const currentProject = findProjectByTitle(decodedTitle);
   
   return (
     <div className={`flex flex-col gap-0 ${theme === "light" ? "" : "bg-near-black"}`}>
@@ -42,7 +46,7 @@ const page = ({ params }: { params: { title: string } }) => {
             width={55}
             height={30}
             onClick={() => router.back()}
-            className="cursor-pointer w-12 mt-10 md:w-16 max-sm:ml-4"
+            className="cursor-pointer w-12 mt-10 md:w-16 max-sm:ml-4 hover:scale-125 ease-in-out duration-300"
           />
           <div className='w-full max-sm:ml-6'>
           <ProjectDetails title={currentProject.title} tools={currentProject.tools} type={currentProject.type} year={currentProject.year} />
