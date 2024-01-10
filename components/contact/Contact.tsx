@@ -16,7 +16,7 @@ const {theme} = useAppContext();
                 Get in Touch
               </h1>
               <p className={`mx-auto max-w-[700px] text-body-medium py-6 ${theme === 'light' ? 'text-near-black' : 'text-white'}`}>
-                I would love to hear from you. Click below to fill out a form to send me a message and I'll get back to you as soon as
+                I would love to hear from you. Click below to send me a message and I'll get back to you as soon as
                 possible.
               </p>
             </div>
@@ -31,7 +31,7 @@ const {theme} = useAppContext();
                 `}
                 href="/contact"
               >
-                Contact Form
+                Contact Me
               </Link>
             </div>
           </div>

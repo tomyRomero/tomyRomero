@@ -178,6 +178,7 @@ module.exports = {
       'gray' : 'rgb(156 163 175)',
       'secondary' : "#aaa6c3",
       'tertiary' : "#151030",
+      'mid-light': '#1a1a2e'
     },
     extend: {
       keyframes: {

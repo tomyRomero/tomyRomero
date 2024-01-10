@@ -92,7 +92,7 @@ export const projects = [
   title: "Class Organizer",
   techStack: 'Java EE, Servlet, mySQL, Glassfish, JavaServerPages (JSP)',
   projectIcon: '/assets/github.svg',
-  image: '/assets/class.png',
+  image: '/class/Landing.png',
   description: 'A starter full-stack Java Web App with built in user auth that allows users to add and remove classes to create class schedules.',
   link: "https://github.com/tomyRomero/classOrganizer"
 },
@@ -100,7 +100,7 @@ export const projects = [
   title: "Electric GUI",
   techStack: 'Java, Javax Swing, Java Awt',
   projectIcon: '/assets/github.svg',
-  image: '/assets/CustomerHome.png',
+  image: '/javaGui/CustomerHome.png',
   description: 'A starter GUI Front End Application using Java framework spring to provide a Graphical User Interface experience, with a built in database that creates binary files and reads from them, also updates them. This was the first app I ever created during college and was used for a project.',
   link: "https://github.com/tomyRomero/electricCompanyGUIApp"
 },
