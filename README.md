@@ -3,7 +3,7 @@
 This is the source code for my personal portfolio website. It showcases my projects, skills, and provides information about me.
 
 # Intro
-Greetings! I'm Tomy Romero, a 24-year-old professional equipped with a Bachelor's Degree in Computer Science from the University of the Virgin Islands. Where I acquired a 3.11 GPA and beyond the classroom, I actively engage with my community. I had the privilege of serving as the Junior Senator for the Student Government Association, contributing to positive change and fostering a thriving campus environment. Additionally, I held the role of Public Relations Officer for Rotaract UVI, where I honed my leadership and communication skills.
+Greetings! I'm Tomy Romero, a 24-year-old professional equipped with a Bachelor's Degree in Computer Science from the University of the Virgin Islands. Where I acquired a 3.11 GPA and beyond the classroom, I actively engage with my community. I had the privilege of serving as the Junior Senator for the Student Government Association, contributing to positive change and fostering a thriving campus environment. 
 
 During my academic journey, I enthusiastically participated in various research opportunities, collaborating with esteemed professors to explore and contribute to topics in the field of computer science. In recognition of the evolving technological landscape, I obtained certification in Cloud Foundations from Amazon Web Services, solidifying my proficiency in cloud computing. 
 
