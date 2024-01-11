@@ -74,6 +74,7 @@ const ContactForm = () => {
             <input
               type='text'
               name='name'
+              required
               value={form.name}
               onChange={handleChange}
               placeholder="What's your name?"
@@ -96,11 +97,13 @@ const ContactForm = () => {
               className={`bg-white py-4 px-6 placeholder:text-gray border rounded-lg outline-none 
               ${theme === "light" ? "border-primary-light" : "border-primary-dark"}
               font-medium`}
+              required
             />
           </label>
           <label className='flex flex-col'>
             <span className={`${theme === "light" ? "text-near-black" : "text-white"} font-medium mb-4`}>Your Message</span>
             <textarea
+              required
               rows={7}
               name='message'
               value={form.message}
