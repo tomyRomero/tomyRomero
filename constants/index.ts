@@ -82,7 +82,7 @@ export const services = [
 export const projects = [
 {
   title: "Sparks",
-  techStack: 'React (Next.js), Node.js, mySQL',
+  techStack: 'React, AWS, Next.js, Node.js, mySQL',
   projectIcon: '/assets/github.svg',
   image: '/sparks/sparks-chats.png',
   description: 'AI powered full stack social media platform and messaging app with user authentication, using AWS, RDS, S3, mySQL, Web Sockets, Clerk auth, Zod forms, ShadCN & headless UI, openAI, tailwind and Next.js',
@@ -111,7 +111,7 @@ export const projectDetails = [
   {
     title: 'Sparks',
     type: 'Full Stack CRUD',
-    tools: ['/assets/sql.png', '/assets/next-js.svg', '/assets/reactjs.png', '/assets/tailwind.png', '/assets/typescript.png', '/assets/s3.svg', '/assets/rds.webp', '/assets/pusher.png'],
+    tools: ['/assets/sql.png', '/assets/next.webp', '/assets/reactjs.png', '/assets/tailwind.png', '/assets/typescript.png', '/assets/s3.svg', '/assets/rds.webp', '/assets/pusher.png'],
     images: ['/sparks/sparks-home.png','/assets/sparks-home-moblie.png','/sparks/sparks-studio.png', '/sparks/sparks-chats.png', '/sparks/sparks-noti.png', '/sparks/sparks-profile.png', '/sparks/sparks-message.png', '/sparks/sparks-post.png', '/sparks/sparks-share.png','/sparks/sparks-search.png', '/sparks/movieSpark.png', '/sparks/novelSpark.png' ],
     description: `Threads like Social media platform with AI-powered post generation with various categories. Dynamic home page with filtering, image storage powered by the cloud.
     User profile management and user-to-user messaging system using web sockets.
@@ -126,7 +126,7 @@ export const projectDetails = [
   {
     title: 'Class Organizer',
     type: 'Full Stack CRUD',
-    tools: ['/assets/sql.png', '/assets/java.png', '/assets/JSP.png', '/assets/html.png', '/assets/css.png'],
+    tools: ['/assets/sql.png', '/assets/java.png', '/assets/jsp.webp', '/assets/html.png', '/assets/css.png'],
     images: ['/class/Home.png', '/class/CreateAccount.png', '/class/Login.png', '/class/Landing.png', '/class/Schedule.png','/class/AddClass.png', '/class/RemoveClass.png', '/class/AccountInfo.png'],
     description: `For my first full stack project I wanted to fix a common issue amongst my classmates in college.
     Everytime we signed up for classes we would receive a class schedule. However, this schedule just had numbers and letters of the day, and it was not in order or visualized in a matter where you are organized and have a clear understanding of how your days would look like.

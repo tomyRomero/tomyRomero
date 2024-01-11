@@ -34,7 +34,7 @@ export default function ProjectDetails({title, tools, type, year}: Props) {
             alt="tool icon"
             width={35}
             height={35}
-            className="w-[35px] md:w-[45px] rounded-full"
+            className={`w-[35px] md:w-[45px] rounded-full ${theme === "light" ? "" : "border border-white "}`}
             key={index}
           />
           ))}

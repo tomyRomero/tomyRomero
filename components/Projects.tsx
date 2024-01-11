@@ -10,7 +10,6 @@ import { projects } from '@/constants'
 import { useInView } from "react-intersection-observer";
 import { Single_Day } from 'next/font/google';
 
-
 const singleDayFont = Single_Day({
   weight: "400"
 })
@@ -68,8 +67,8 @@ const Projects = () => {
                   <Image
                     src={project.projectIcon}
                     alt={'Project Icon'}
-                    width={24}
-                    height={24}
+                    width={34}
+                    height={34}
                     className='hover:scale-150 ease-in-out duration-300'
                   />
                 </Link>
@@ -77,7 +76,7 @@ const Projects = () => {
                     <CardTitle className='text-heading2-bold'>
                       <span className={singleDayFont.className}>{project.title}</span>
                       </CardTitle>
-                    <CardDescription className='text-base-regular'>{project.techStack}</CardDescription>
+                    <CardDescription className={`text-base-regular font-bold ${theme === "light" ? 'text-primary-light' : 'text-primary-dark'}`}>{project.techStack}</CardDescription>
                   </div>
                 </CardHeader>
                 <CardContent className="grid gap-2">

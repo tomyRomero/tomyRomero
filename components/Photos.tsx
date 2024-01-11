@@ -72,6 +72,7 @@ export const Photos = () => {
           initial='hidden'
           animate={ 'show'} // Use inView state to trigger animation
           variants={fadeIn("up", "spring", index * 0.5, 1.5)}
+          key={travelImage.img.src}
           >
           <Photo
             key={travelImage.img.src}
