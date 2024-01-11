@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { slideIn } from "../../lib/motion";
 import { useAppContext } from "@/lib/AppContext";
@@ -112,6 +112,7 @@ const ContactForm = () => {
           </label>
           <div className="flex justify-evenly">
           <button
+            type="button"
             onClick={() => router.back()}
             className={`${theme === "light" ? "bg-primary-light" : "bg-primary-dark"}
              text-white py-3 px-8 rounded-xl outline-none w-fit 

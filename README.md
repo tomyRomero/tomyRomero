@@ -1,36 +1,68 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Portfolio Website
+
+This is the source code for my personal portfolio website. It showcases my projects, skills, and provides information about me.
+
+# Intro
+Greetings! I'm Tomy Romero, a 24-year-old professional equipped with a Bachelor's Degree in Computer Science from the University of the Virgin Islands. Where I acquired a 3.11 GPA and beyond the classroom, I actively engage with my community. I had the privilege of serving as the Junior Senator for the Student Government Association, contributing to positive change and fostering a thriving campus environment. Additionally, I held the role of Public Relations Officer for Rotaract UVI, where I honed my leadership and communication skills.
+
+During my academic journey, I enthusiastically participated in various research opportunities, collaborating with esteemed professors to explore and contribute to topics in the field of computer science. In recognition of the evolving technological landscape, I obtained certification in Cloud Foundations from Amazon Web Services, solidifying my proficiency in cloud computing. 
+
+# Live Site
+https://tomyromero.vercel.app/
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Features](#features)
+- [Technologies Used](#technologies-used)
+- [Getting Started](#getting-started)
+- [Usage](#usage)
+- [Key Features](#key-features)
+- [Acknowledgments](#acknowledgments)
+
+
+## Overview
+
+My portfolio is crafted to provide a comprehensive overview of my journey in software development. Through an elegant and user-friendly interface, it invites you to explore my projects, each reflecting my commitment to excellence and innovation and also highlighing growth along my journey, with each project becoming more complex and diverse as I have gone through the years in my eduaction and accquired more skills.
+
+## Technologies Used
+
+- HTML
+- CSS/tailwind
+- JavaScript/TypeScript
+- React/Next.js
+- Three.js
+- Nodemailer
+- FramerMotion
+- ShadCn 
+
+## Key Features
+
+- **Project Showcase:** Dive into a collection of carefully selected projects, each demonstrating my technical prowess and creativity.
+- **Skills Proficiency:** Gain insights into the diverse set of technologies and skills I have mastered throughout my career.
+- **Responsive Design:** Experience seamless navigation and an aesthetically pleasing interface across various devices.
+
 
 ## Getting Started
 
-First, run the development server:
+Instructions on how to clone the repository and set up the project locally.
 
 ```bash
+# Clone the repository
+git clone https://github.com/tomyRomero/tomyRomero
+
+# Navigate to the project directory
+cd tomyRomero
+
+# Install dependencies
+npm install
+
+# Run project
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
 ```
+## Acknowledgments
+- Some of the captivating images used on this site is sourced from [Unsplash](https://unsplash.com/). 
+- Icons used throughout the portfolio are provided by [icons8](https://icons8.com/), adding a great boast to my design. 
+- A special thanks to Bartosz Jarocki for the insightful code snippets for the Photos.tsx component. Visit their [GitHub Profile](https://github.com/BartoszJarocki/BartoszJarocki) for more incredible work.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
