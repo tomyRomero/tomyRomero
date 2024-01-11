@@ -8,7 +8,8 @@ Greetings! I'm Tomy Romero, a 24-year-old professional equipped with a Bachelor'
 During my academic journey, I enthusiastically participated in various research opportunities, collaborating with esteemed professors to explore and contribute to topics in the field of computer science. In recognition of the evolving technological landscape, I obtained certification in Cloud Foundations from Amazon Web Services, solidifying my proficiency in cloud computing. 
 
 # Live Site
-https://tomyromero.vercel.app/
+<a href="https://tomyromero.vercel.app/" target="_blank">Live Site</a>
+Address: tomyromero.vercel.app
 
 ## Table of Contents
 
