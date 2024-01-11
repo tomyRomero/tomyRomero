@@ -7,6 +7,8 @@ import { projectDetails } from '@/constants';
 import ImageSlider from '@/components/project/ImageSlider';
 import ProjectDetails from '@/components/project/ProjectDetails';
 import ProjectDescription from '@/components/project/ProjectDescription';
+import { motion } from "framer-motion";
+import { slideIn } from "../../../lib/motion";
 
 const page = ({ params }: { params: { title: string } }) => {
   const { theme } = useAppContext();
@@ -29,15 +31,16 @@ const page = ({ params }: { params: { title: string } }) => {
   const title = params.title;
   const decodedTitle = decodeURIComponent(title);
 
-
-  console.log("Title:" , decodedTitle)
-
   // Use the findProjectByTitle function to get the project details
   const currentProject = findProjectByTitle(decodedTitle);
   
   return (
     <div className={`flex flex-col gap-0 ${theme === "light" ? "" : "bg-near-black"}`}>
-      <div className="max-sm:mt-12 md:m-8">
+      <motion.div
+       initial='hidden'
+       animate='show'
+       variants={slideIn("left", "tween", 0.2, 1)}
+       className="max-sm:mt-12 md:m-8">
         <section className="max-w-[980px] mx-auto relative">
           
           <Image
@@ -59,7 +62,7 @@ const page = ({ params }: { params: { title: string } }) => {
           <ProjectDescription text={currentProject.description} github={currentProject.githubrepo} live={currentProject.livelink} isLive={currentProject.isLive}/>
           </div>
         </section>
-      </div>
+      </motion.div>
     </div>
   );
 };
