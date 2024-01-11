@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import Image from 'next/image'
-import { fadeIn, staggerContainer, textVariant } from '@/utils/motion'
+import { fadeIn, staggerContainer, textVariant } from '../lib/motion'
 import { motion } from 'framer-motion'
 import { CardTitle, CardDescription, CardHeader, CardContent, Card } from "@/components/ui/card"
 import { useAppContext } from '@/lib/AppContext'
@@ -25,9 +25,13 @@ const Projects = () => {
   return (
     <motion.div
     id='projects'
+    //@ts-ignore
     variants={staggerContainer()}
     >
-      <motion.div variants={textVariant()}
+      
+      <motion.div 
+      //@ts-ignore
+      variants={textVariant()}
       initial='hidden'
       animate={inView ? 'show' : 'hidden'}
       >

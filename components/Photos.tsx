@@ -8,7 +8,7 @@ import { useState } from 'react';
 
 import { images } from '../constants/index';
 import { useAppContext } from '@/lib/AppContext';
-import { fadeIn } from '@/utils/motion';
+import { fadeIn } from '../lib/motion';
 
 const possibleRotations = [1.3, -1.3, 1.3, -1.3, 1.3, -1.3];
 

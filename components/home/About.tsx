@@ -4,7 +4,7 @@ import React from "react";
 import { Tilt } from "react-tilt";
 import { motion} from "framer-motion";
 import { services} from "../../constants";
-import { fadeIn, textVariant, staggerContainer } from "../../utils/motion";
+import { fadeIn, textVariant, staggerContainer } from "../../lib/motion";
 import Image from "next/image";
 import { useAppContext } from "@/lib/AppContext";
 import { useInView } from "react-intersection-observer";

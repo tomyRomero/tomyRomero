@@ -29,23 +29,23 @@ import next from '../public/assets/next-js.svg'
 export const navLinks = [
   {
     title: 'Home',
-    path: '',
-    image: '/assets/sun.svg',
+    path: '/',
+    image: '/assets/homenav.jpg',
   },
   {
     title: 'Contact',
-    path: 'contact',
-    image: '/assets/sun.svg',
+    path: './contact',
+    image: '/assets/contactnav.jpg',
   },
   {
     title: 'Projects',
-    path: 'works',
-    image: '/assets/sun.svg',
+    path: '#projects',
+    image: '/assets/projectsnav.jpg',
   },
   {
     title: 'About',
     path: '#about',
-    image: '/assets/sun.svg',
+    image: '/assets/about.jpg',
   },
 ];
 

@@ -1,4 +1,4 @@
-export const textVariant = (delay) => {
+export const textVariant = (delay: any) => {
     return {
       hidden: {
         y: -50,
@@ -16,6 +16,7 @@ export const textVariant = (delay) => {
     };
   };
   
+  //@ts-ignore
   export const fadeIn = (direction, type, delay, duration) => {
     return {
       hidden: {
@@ -37,25 +38,7 @@ export const textVariant = (delay) => {
     };
   };
   
-  export const zoomIn = (delay, duration) => {
-    return {
-      hidden: {
-        scale: 0,
-        opacity: 0,
-      },
-      show: {
-        scale: 1,
-        opacity: 1,
-        transition: {
-          type: "tween",
-          delay: delay,
-          duration: duration,
-          ease: "easeOut",
-        },
-      },
-    };
-  };
-  
+  //@ts-ignore
   export const slideIn = (direction, type, delay, duration) => {
     return {
       hidden: {
@@ -75,6 +58,7 @@ export const textVariant = (delay) => {
     };
   };
   
+  //@ts-ignore
   export const staggerContainer = (staggerChildren, delayChildren) => {
     return {
       hidden: {},
