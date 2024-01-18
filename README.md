@@ -1,15 +1,15 @@
 # Portfolio Website
 
-This is the source code for my personal portfolio website. It showcases my projects, skills, and provides information about me.
-
-# Intro
-Greetings! I'm Tomy Romero, a 24-year-old professional equipped with a Bachelor's Degree in Computer Science from the University of the Virgin Islands. Where I acquired a 3.11 GPA and beyond the classroom, I actively engage with my community. I had the privilege of serving as the Junior Senator for the Student Government Association, contributing to positive change and fostering a thriving campus environment. 
-
-During my academic journey, I enthusiastically participated in various research opportunities, collaborating with esteemed professors to explore and contribute to topics in the field of computer science. In recognition of the evolving technological landscape, I obtained certification in Cloud Foundations from Amazon Web Services, solidifying my proficiency in cloud computing. 
+Hello, here are some of my skills and information about me. I look forward to working with you!
 
 # Live Site
 <a href="https://tomyromero.vercel.app/" target="_blank">Live Site</a>
 Address: tomyromero.vercel.app
+
+# Intro
+Greetings! I'm Tomy Romero a junior developer, 24-year-old professional equipped with a Bachelor's Degree in Computer Science from the University of the Virgin Islands. Where I acquired a 3.11 GPA and beyond the classroom, I actively engage with my community. I had the privilege of serving as the Junior Senator for the Student Government Association, contributing to positive change and fostering a thriving campus environment. 
+
+During my academic journey, I enthusiastically participated in various research opportunities, collaborating with esteemed professors to explore and contribute to topics in the field of computer science. In recognition of the evolving technological landscape, I obtained certification in Cloud Foundations from Amazon Web Services. 
 
 ## Table of Contents
 
@@ -24,7 +24,7 @@ Address: tomyromero.vercel.app
 
 ## Overview
 
-My portfolio is crafted to provide a comprehensive overview of my journey in software development. Through an elegant and user-friendly interface, it invites you to explore my projects, each reflecting my commitment to excellence and innovation and also highlighing growth along my journey, with each project becoming more complex and diverse as I have gone through the years in my eduaction and accquired more skills.
+My portfolio is crafted to provide a comprehensive overview of my journey in software development. With each project becoming more complex and diverse as I have gone through the years in my eduaction and accquired more skills. My personal favorite is Sparks, be sure to check it out!
 
 ## Technologies Used
 
@@ -39,9 +39,9 @@ My portfolio is crafted to provide a comprehensive overview of my journey in sof
 
 ## Key Features
 
-- **Project Showcase:** Dive into a collection of carefully selected projects, each demonstrating my technical prowess and creativity.
-- **Skills Proficiency:** Gain insights into the diverse set of technologies and skills I have mastered throughout my career.
-- **Responsive Design:** Experience seamless navigation and an aesthetically pleasing interface across various devices.
+- **Project Showcase:** Dive into a collection of my projects.
+- **Skills Proficiency:** Gain insights into the diverse set of technologies and skills I have learned.
+- **Responsive Design:** Responsive interface across various devices.
 
 
 ## Getting Started
