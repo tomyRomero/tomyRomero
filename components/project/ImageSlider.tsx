@@ -22,7 +22,7 @@ export default function ImageSlider({ images }: any) {
       autoplay: true,
       accessibility: true,
       pauseOnHover: true,
-      autoplaySpeed: 4000,
+      autoplaySpeed: 8000,
       arrows: false,
 
     };

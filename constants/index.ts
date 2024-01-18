@@ -113,11 +113,7 @@ export const projectDetails = [
     type: 'Full Stack CRUD',
     tools: ['/assets/sql.png', '/assets/next.webp', '/assets/reactjs.png', '/assets/tailwind.png', '/assets/typescript.png', '/assets/s3.svg', '/assets/rds.webp', '/assets/pusher.png'],
     images: ['/sparks/sparks-login.png','/sparks/sparks-home.png','/assets/sparks-home-moblie.png','/sparks/sparks-studio.png', '/sparks/sparks-chats.png', '/sparks/sparks-noti.png', '/sparks/sparks-profile.png', '/sparks/sparks-message.png', '/sparks/sparks-post.png', '/sparks/sparks-share.png','/sparks/sparks-search.png', '/sparks/movieSpark.png', '/sparks/novelSpark.png' ],
-    description: `Threads like Social media platform with AI-powered post generation with various categories. Dynamic home page with filtering, image storage powered by the cloud.
-    User profile management and user-to-user messaging system using web sockets.
-    Like comment and share functionality. As well as notification system. Personal profile pages.
-    Fully Responsive for all screens, phones, tablets and desktops.
-    Liverages the latest of Next.js by using server actions and API routes, API routes include, openAIChat, openAIImage, and S3 for more details check out the readMe in the github repo!`,
+    description: `This full-stack web application empowers users to discover and create new ideas in various categories, ranging from movies and novels to artworks, fashion, and more. Leveraging the latest technologies, Sparks offers a dynamic home page with real-time filtering, a user-to-user messaging system powered by web sockets, and AI-driven post generation with customizable categories. Key features include an innovative AI-powered post generation system, cloud-based image storage with S3, user profile management, real-time messaging using web sockets, and a robust like-comment-share functionality and pagination. The platform is further enriched with a notification system, personalized profile pages, and a thoughtful database schema that supports relationships between users and posts.`,
     livelink: 'https://sparkify.vercel.app/',
     githubrepo: 'https://github.com/tomyRomero/sparks',
     year: '2023',
