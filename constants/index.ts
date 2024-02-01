@@ -51,13 +51,13 @@ export const navLinks = [
 
 //Images for home page Photos.tsx
 export const images = [
-  { img: tomy, title: 'tomyRomero', alt: 'picture of Tomy Romero smiling' },
+  { img: president, title: 'Picture with President of University of the Virgin Islands', alt: 'Picture with President of University of the Virgin Islands' },
   { img: uvi, title: 'University of the Virgin Islands', alt: 'University of the Virgin Islands' },
   { img: scholarship, title: 'Scholarship Award winner', alt: 'Picture of ScholarShip Reception' },
   { img: stt, title: 'St.Thomas', alt: 'St.Thomas USVI' },
   { img: deanslist, title: 'Deans List Reception', alt: 'Deans List Reception' },
   { img: art, title: 'My Painting', alt: 'Picture of a Painting by Tomy Romero' },
-  { img: president, title: 'Picture with President of University of the Virgin Islands', alt: 'Picture with President of University of the Virgin Islands' },
+  { img: tomy, title: 'tomyRomero', alt: 'picture of Tomy Romero smiling' },
   { img: uvilogo, title: 'University Logo', alt: 'Picture of UVI logo' },
   { img: sga, title: 'Student Government Association Junior Senator', alt: 'Picture of Tomy Romero as Student Government Association Junior Senator' },
 ]
@@ -93,7 +93,7 @@ export const projects = [
   techStack: 'Java EE, Servlet, mySQL, Glassfish, JavaServerPages (JSP)',
   projectIcon: '/assets/github.svg',
   image: '/class/Landing.png',
-  description: 'A starter full-stack Java Web App with built in user auth that allows users to add and remove classes to create class schedules.',
+  description: 'A starter Java Web App that allows users to add and remove classes to create class schedules.',
   link: "https://github.com/tomyRomero/classOrganizer"
 },
 {
@@ -124,9 +124,9 @@ export const projectDetails = [
     type: 'Full Stack CRUD',
     tools: ['/assets/sql.png', '/assets/java.png', '/assets/jsp.webp', '/assets/html.png', '/assets/css.png'],
     images: ['/class/Home.png', '/class/CreateAccount.png', '/class/Login.png', '/class/Landing.png', '/class/Schedule.png','/class/AddClass.png', '/class/RemoveClass.png', '/class/AccountInfo.png'],
-    description: `For my first full stack project I wanted to fix a common issue amongst my classmates in college.
+    description: `For my first web app object I wanted to fix a common issue amongst my classmates in college.
     Everytime we signed up for classes we would receive a class schedule. However, this schedule just had numbers and letters of the day, and it was not in order or visualized in a matter where you are organized and have a clear understanding of how your days would look like.
-    I wrote out to write a simple program that lets Users create an account (self build auth) and proceed to record their class data like how it is in the default schedule and then my program would visualize a schedule that is clearer to understand. This was my first web app and it allowed me to learn the basics of frontend and backend design for frontend I used JavaServerPages and for Backend I used Java Servlets. I hosted it on an EC2 in AWS for some time before I decided to take it down to save resources, for more details on how I hosted it, check out the ReadME in my github Repo!`,
+    I wrote out to write a simple program that lets Users create an account (beginner self build auth) and proceed to record their class data like how it is in the default schedule and then my program would visualize a schedule that is clearer to understand. This was my first web app and it allowed me to learn the basics of frontend and backend design for frontend I used JavaServerPages/CSS/HTML and for Backend I used Java Servlets. I hosted it on an EC2 in AWS for some time before I decided to take it down to save resources, for more details on how I hosted it, check out the ReadME in my github Repo!`,
     livelink: '',
     githubrepo: 'https://github.com/tomyRomero/classOrganizer',
     year: '2022',
@@ -137,7 +137,7 @@ export const projectDetails = [
     type: 'Java Graphical User Interface App',
     tools: ['/assets/java.png', '/assets/spring.png' ],
     images: ['/javaGui/Login.png', '/javaGui/CreateAccount.png' , '/javaGui/CustomerHome.png', '/javaGui/AdminHome.png', '/javaGui/ChangePassword.png', '/javaGui/CustomerAccountInfo.png', '/javaGui/CustomerAccountPayment.png' , '/javaGui/CustomerConsumption.png'],
-    description: `The application uses Java framework spring to provide a Graphical User Interface experience for an Electric Company, this was the first app I ever created during college and was used for a project. The app mostly serves as boiler plate for future interactivity functionality, but features such as creating accounts, logging in and changing passwords, as well as changing the balance of users and logging in as Admin, works flawlessly. I had limited knowledge back in the day and no access to database technologies, so I created my own database without knowing by writing to binary files and reading to them as well as reading from text files, this was my first time creating a user auth experience. The ReadME in my github Repo talks more about it!`,
+    description: `The application uses Java framework spring to provide a Graphical User Interface experience for an Electric Company, this was the first app I ever created during college and was used for a project. The app mostly serves as boiler plate for future interactivity functionality, but features such as creating accounts, logging in and changing passwords, as well as changing the balance of users and logging in as Admin, works. I had limited knowledge back in the day and no access to database technologies, so I created my own database without knowing by writing to binary files and reading to them as well as reading from text files, this was my first time creating a user auth experience. The ReadME in my github Repo talks more about it!`,
     livelink: '',
     githubrepo: 'https://github.com/tomyRomero/electricCompanyGUIApp',
     year: '2021',

@@ -25,7 +25,7 @@ export default function Intro() {
         <h1 className={`text-heading1-bold tracking-tighter p-1 ${theme === "light" ? '' : 'text-primary-dark'}`}>Tomy Romero</h1>
         </span>
         <p className={`max-w-[700px] text-body-medium px-1 max-sm:p-6 ${theme === "light" ? '' : 'text-white'}`}>
-        Recent college graduate with a Bachelor's degree in Computer Science, equipped with a strong foundation in the field and a passion for software development. Seeking a challenging role as a Junior Full Stack Developer to contribute technical expertise and innovative solutions to a dynamic team.
+        Recent college graduate with a Bachelor's degree in Computer Science, equipped with a strong foundation in the field and a passion for software development. Seeking a challenging role as a Junior Developer to contribute technical expertise and innovative solutions to a dynamic team.
         </p>
       </div>
       <div className="flex space-x-4 mt-4">

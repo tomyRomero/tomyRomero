@@ -46,7 +46,10 @@ const {theme} = useAppContext();
             </div>
             <div className="space-y-2">
               <h2 className={`text-heading3-bold ${theme === 'light' ? 'text-primary-light' : 'text-primary-dark'}`}>Linkedin</h2>
-              <p className={`text-base-regular ${theme === 'light' ? 'text-near-black' : 'text-white'}`}>Tomy Romero</p>
+              <Link href="https://www.linkedin.com/in/tomy-romero-902476145/"
+              target="_blank">
+              <p className={`text-base-regular ${theme === 'light' ? 'text-near-black hover:text-primary-light' : 'text-white hover:text-primary-dark'}  hover:underline`}>Tomy Romero</p>
+              </Link>
             </div>
             <div className="space-y-2">
               <h2 className={`text-heading3-bold ${theme === 'light' ? 'text-primary-light' : 'text-primary-dark'}`}>Location</h2>
