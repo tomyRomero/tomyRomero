@@ -1,13 +1,23 @@
-# Hi there, I'm Tomy Romero 👋
+# Hi there, I'm Tomy Romero 👋 
 
 I'm a passionate 🚀 junior dev based in 🌍 the U.S Virgin Islands. I love to 🎨 paint, sketch, go to the beach 🏖️ and play 🏀 basketball. My main passion is creating things. 
 
 ![Profile Views](https://komarev.com/ghpvc/?username=tomyRomero)
 
-## 🌐 Portfolio
+## 📋 Table of Contents
+
+1. 🌐 [Portfolio](#portfolio)
+2. ⚙️ [Technologies & Tools](#technologies)
+3. 🎓 [Education](#education)
+4. 🚀 [Projects](#projects)
+5. 📫 [Connect with me](#connect)
+6. 🌱 [Currently Learning](#currently-learning)
+7. 🎉 [Fun Fact](#fun-fact)
+
+## <a name="portfolio"> 🌐 Portfolio</a>
 Check out my [**Live Portfolio Site**](https://tomyromero.vercel.app/) to explore more.
 
-## 🔧 Technologies & Tools
+## <a name="technologies">🔧 Technologies & Tools</a>
 
 ![HTML 5](https://img.shields.io/badge/-HTML%205-E34F26?style=flat&logo=html5&logoColor=white)
 ![CSS 3](https://img.shields.io/badge/-CSS%203-1572B6?style=flat&logo=css3&logoColor=white)
@@ -28,13 +38,13 @@ Check out my [**Live Portfolio Site**](https://tomyromero.vercel.app/) to explor
 ![AWS VPC](https://img.shields.io/badge/AWS%20VPC-232F3E?style=flat&logo=amazon-aws&logoColor=white)
 ![AWS EC2](https://img.shields.io/badge/AWS%20EC2-232F3E?style=flat&logo=amazon-aws&logoColor=white)
 
-## 🎓 Education
+## <a name="education">🎓 Education</a>
 
 ![University Logo](/public/assets/uvi_icon.webp)
 - **University of the Virgin Islands 🎓 Bachelor of Science in Computer Science, 3.11 GPA** 
 - [Amazon Web Services (AWS) Academy Graduate - AWS Academy Cloud Foundations](https://www.credly.com/badges/49f35d3b-7ea8-40ee-afde-77c8e7725827)
 
-## 🚀 Some of my projects
+##<a name="projects">🚀 Some of my projects</a>
 
 - [**PaletteHub**](https://github.com/tomyRomero/palettehub) 🛍️
   - FullStack E-commerce Store powered by Next.js, Tailwind, MongoDB and Stripe, featuring an admin dashboard.
@@ -55,11 +65,13 @@ Check out my [**Live Portfolio Site**](https://tomyromero.vercel.app/) to explor
   - [**ReadMe**](https://github.com/tomyRomero/electricCompanyGUIApp/blob/main/ReadMe.md)
 
 
-## 📫 Connect with me
+## <a name="connect">📫 Connect with me</a>
 
 [![LinkedIn](https://img.shields.io/badge/-LinkedIn-0A66C2?style=flat&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/tomy-romero-902476145/)
 
-## 🌱 I'm currently learning
+tomyfletcher99@hotmail.com
+
+## <a name="fun-fact">🌱 I'm currently learning</a>
 
 - React Native
 - Docker
