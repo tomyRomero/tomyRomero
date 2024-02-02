@@ -25,7 +25,7 @@ export default function Intro() {
         <h1 className={`text-heading1-bold tracking-tighter p-1 ${theme === "light" ? '' : 'text-primary-dark'}`}>Tomy Romero</h1>
         </span>
         <p className={`max-w-[700px] text-body-medium px-1 max-sm:p-6 ${theme === "light" ? '' : 'text-white'}`}>
-        Recent college graduate with a Bachelor's degree in Computer Science, equipped with a strong foundation in the field and a passion for software development. Seeking a challenging role as a Junior Developer to contribute technical expertise and innovative solutions to a dynamic team.
+        I am a results-driven Computer Science graduate, armed with a Bachelor's degree and a strong foundation in software development. Seeking a rewarding position as a Junior Developer to apply my technical skills and contribute innovative solutions to drive team success.
         </p>
       </div>
       <div className="flex space-x-4 mt-4">

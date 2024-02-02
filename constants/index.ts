@@ -85,7 +85,7 @@ export const projects = [
   techStack: 'React, AWS, Next.js, Node.js, mySQL',
   projectIcon: '/assets/github.svg',
   image: '/sparks/sparks-chats.png',
-  description: 'AI powered full stack social media platform and messaging app with user authentication, using AWS, RDS, S3, mySQL, Web Sockets, Clerk auth, Zod forms, ShadCN & headless UI, openAI, tailwind and Next.js',
+  description: 'AI powered full stack social media platform and messaging app with user authentication, using RDS, S3, mySQL, Web Sockets, Next.js and much more.',
   link: "https://github.com/tomyRomero/sparks"
 },
 {
@@ -93,7 +93,7 @@ export const projects = [
   techStack: 'Java EE, Servlet, mySQL, Glassfish, JavaServerPages (JSP)',
   projectIcon: '/assets/github.svg',
   image: '/class/Landing.png',
-  description: 'A starter Java Web App that allows users to add and remove classes to create class schedules.',
+  description: 'A starter Java EE Web App that allows users to visualize class schedules.',
   link: "https://github.com/tomyRomero/classOrganizer"
 },
 {
@@ -101,7 +101,7 @@ export const projects = [
   techStack: 'Java, Javax Swing, Java Awt',
   projectIcon: '/assets/github.svg',
   image: '/javaGui/CustomerHome.png',
-  description: 'A starter GUI Front End Application using Java framework spring to provide a Graphical User Interface experience, with a built in database that creates binary files and reads from them, also updates them. This was the first app I ever created during college and was used for a project.',
+  description: 'A starter GUI Front End Application using Java framework spring to provide a Graphical User Interface experience, with a unique approach to data storage by creating a database using binary and text files.',
   link: "https://github.com/tomyRomero/electricCompanyGUIApp"
 },
 ]
@@ -110,7 +110,7 @@ export const projects = [
 export const projectDetails = [
   {
     title: 'Sparks',
-    type: 'Full Stack',
+    type: 'Full Stack CRUD',
     tools: ['/assets/sql.png', '/assets/next.webp', '/assets/reactjs.png', '/assets/tailwind.png', '/assets/typescript.png', '/assets/s3.svg', '/assets/rds.webp', '/assets/pusher.png'],
     images: ['/sparks/sparks-login.png','/sparks/sparks-home.png','/assets/sparks-home-moblie.png','/sparks/sparks-studio.png', '/sparks/sparks-chats.png', '/sparks/sparks-noti.png', '/sparks/sparks-profile.png', '/sparks/sparks-message.png', '/sparks/sparks-post.png', '/sparks/sparks-share.png','/sparks/sparks-search.png', '/sparks/movieSpark.png', '/sparks/novelSpark.png' ],
     description: `This full-stack web application empowers users to discover and create new ideas in various categories, ranging from movies and novels to artworks, fashion, and more. Leveraging the latest technologies, Sparks offers a dynamic home page with real-time filtering, a user-to-user messaging system powered by web sockets, and AI-driven post generation with customizable categories. Key features include an innovative AI-powered post generation system, cloud-based image storage with S3, user profile management, real-time messaging using web sockets, and a robust like-comment-share functionality and pagination. The platform is further enriched with a notification system, personalized profile pages, and a thoughtful database schema that supports relationships between users and posts.`,
@@ -121,12 +121,10 @@ export const projectDetails = [
   },
   {
     title: 'Class Organizer',
-    type: 'Full Stack',
+    type: 'Full Stack CRUD',
     tools: ['/assets/sql.png', '/assets/java.png', '/assets/jsp.webp', '/assets/html.png', '/assets/css.png'],
     images: ['/class/Home.png', '/class/CreateAccount.png', '/class/Login.png', '/class/Landing.png', '/class/Schedule.png','/class/AddClass.png', '/class/RemoveClass.png', '/class/AccountInfo.png'],
-    description: `For my first web app object I wanted to fix a common issue amongst my classmates in college.
-    Everytime we signed up for classes we would receive a class schedule. However, this schedule just had numbers and letters of the day, and it was not in order or visualized in a matter where you are organized and have a clear understanding of how your days would look like.
-    I wrote out to write a simple program that lets Users create an account (beginner self build auth) and proceed to record their class data like how it is in the default schedule and then my program would visualize a schedule that is clearer to understand. This was my first web app and it allowed me to learn the basics of frontend and backend design for frontend I used JavaServerPages/CSS/HTML and for Backend I used Java Servlets. I hosted it on an EC2 in AWS for some time before I decided to take it down to save resources, for more details on how I hosted it, check out the ReadME in my github Repo!`,
+    description: `My initial web application, a program that allows users to create accounts and visualize class schedules in a clear format. Using JavaServer Pages (JSP), CSS, and HTML for the frontend, and Java Servlets for the backend, the app simplifies the scheduling process. Initially hosted on AWS EC2, the project showcases my early exploration into web development. For more details, refer to the README in my GitHub repository`,
     livelink: '',
     githubrepo: 'https://github.com/tomyRomero/classOrganizer',
     year: '2022',
@@ -137,7 +135,7 @@ export const projectDetails = [
     type: 'Java Graphical User Interface App',
     tools: ['/assets/java.png', '/assets/spring.png' ],
     images: ['/javaGui/Login.png', '/javaGui/CreateAccount.png' , '/javaGui/CustomerHome.png', '/javaGui/AdminHome.png', '/javaGui/ChangePassword.png', '/javaGui/CustomerAccountInfo.png', '/javaGui/CustomerAccountPayment.png' , '/javaGui/CustomerConsumption.png'],
-    description: `The application uses Java framework spring to provide a Graphical User Interface experience for an Electric Company, this was the first app I ever created during college and was used for a project. The app mostly serves as boiler plate for future interactivity functionality, but features such as creating accounts, logging in and changing passwords, as well as changing the balance of users and logging in as Admin, works. I had limited knowledge back in the day and no access to database technologies, so I created my own database without knowing by writing to binary files and reading to them as well as reading from text files, this was my first time creating a user auth experience. The ReadME in my github Repo talks more about it!`,
+    description: `GUI Java app that encompasses essential features like creating accounts, logging in, changing passwords, modifying user balances, and administrator login capabilities (mostly boilerplate for future functionality). With limited knowledge and absence of database technologies at the time, I devised a unique approach by creating my database using binary and text files.`,
     livelink: '',
     githubrepo: 'https://github.com/tomyRomero/electricCompanyGUIApp',
     year: '2021',
