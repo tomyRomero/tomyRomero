@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { slideIn } from "../../lib/motion";
 import { useAppContext } from "@/lib/AppContext";
 import { useRouter } from "next/navigation";
+import { toast } from "../ui/use-toast";
 
 const ContactForm = () => {
   const formRef = useRef<HTMLFormElement | null>(null);
@@ -43,9 +44,18 @@ const ContactForm = () => {
         message: ""
       })
       const data = await response.json();
-      alert(data.message);
+
+      toast({
+        title: "Success!",
+        description: `${data.message}`, 
+      })
+
     }else{
-      alert("Error Sending Message, please try again");
+      toast({
+        title: "Failed to send message",
+        description: "Something went wrong!", 
+        variant: "destructive",
+      })
     }
 
  

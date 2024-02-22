@@ -14,7 +14,7 @@ I'm a passionate 🚀 junior dev based in 🌍 the U.S Virgin Islands. I love to
 6. 🌱 [Currently Learning](#currently-learning)
 7. 🎉 [Fun Fact](#fun-fact)
 
-## <a name="portfolio"> 🌐 Portfolio</a>
+## <a name="portfolio" target="_blank"> 🌐 Portfolio</a>
 Check out my [**Live Portfolio Site**](https://tomyromero.vercel.app/) to explore more.
 
 ## <a name="technologies">🔧 Technologies & Tools</a>
@@ -44,11 +44,11 @@ Check out my [**Live Portfolio Site**](https://tomyromero.vercel.app/) to explor
 - **University of the Virgin Islands 🎓 Bachelor of Science in Computer Science, 3.11 GPA** 
 - [Amazon Web Services (AWS) Academy Graduate - AWS Academy Cloud Foundations](https://www.credly.com/badges/49f35d3b-7ea8-40ee-afde-77c8e7725827)
 
-##<a name="projects">🚀 Some of my projects</a>
+## <a name="projects">🚀 Some of my projects</a>
 
-- [**PaletteHub**](https://github.com/tomyRomero/palettehub) 🛍️
+- [**StoreOps**](https://github.com/tomyRomero/storeOps) 📦 
   - FullStack E-commerce Store powered by Next.js, Tailwind, MongoDB and Stripe, featuring an admin dashboard.
-  - [**ReadMe**](https://github.com/tomyRomero/palettehub/blob/main/README.md)
+  - [**ReadMe**](https://github.com/tomyRomero/storeOps/blob/main/README.md)
   - [![Stars](https://img.shields.io/github/stars/tomyRomero/palettehub?style=social)](https://github.com/tomyRomero/palettehub/stargazers)
 
 - [**Sparks**](https://github.com/tomyRomero/sparks) ⚡
@@ -59,10 +59,12 @@ Check out my [**Live Portfolio Site**](https://tomyromero.vercel.app/) to explor
 - [**Class Organizer**](https://github.com/tomyRomero/classOrganizer) 📅
   - Java EE Web App with SQL database running on Glass-fish Server, class schedule management App. My first full stack app, old but gold
   - [**ReadMe**](https://github.com/tomyRomero/classOrganizer/blob/main/README.md)
+  - [![Stars](https://img.shields.io/github/stars/tomyRomero/classOrganizer?style=social)](https://github.com/tomyRomero/classOrganizer/stargazers)
 
 - [**Electric GUI**](https://github.com/tomyRomero/electricCompanyGUIApp) ☕
   - Java Graphical User Interface App 
   - [**ReadMe**](https://github.com/tomyRomero/electricCompanyGUIApp/blob/main/ReadMe.md)
+  - [![Stars](https://img.shields.io/github/stars/tomyRomero/electricCompanyGUIApp?style=social)](https://github.com/tomyRomero/electricCompanyGUIApp/stargazers)
 
 
 ## <a name="connect">📫 Connect with me</a>
@@ -75,7 +77,7 @@ tomyfletcher99@hotmail.com
 
 - React Native
 - Docker
-- Flask
+- Java Spring
 
 🎉 Fun fact
 

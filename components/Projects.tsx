@@ -65,7 +65,7 @@ const Projects = () => {
                 <CardHeader className="flex flex-row items-center gap-4">
                 <Link href={project.link} target="_blank">
                   <Image
-                    src={project.projectIcon}
+                    src={theme === "light" ? "/assets/github.svg" : "/assets/githubdark.png"}
                     alt={'Project Icon'}
                     width={34}
                     height={34}

@@ -1,3 +1,4 @@
+
 //Home Page Pictures
 import tomy from '../public/assets/tomyRomero.jpeg'
 import uvi from '../public/assets/uvi.jpeg'
@@ -24,6 +25,7 @@ import typescript from '../public/assets/typescript.png'
 import java from '../public/assets/java.png'
 import sql from '../public/assets/sql.png'
 import next from '../public/assets/next-js.svg'
+import { useAppContext } from '@/lib/AppContext';
 
 //Links for Nav Menu
 export const navLinks = [
@@ -80,9 +82,18 @@ export const services = [
 
 //Projects for Home Page
 export const projects = [
+
+  {
+    title: "StoreOps",
+    techStack: 'Next.js, MongoDB Atlas, AWS S3, Stripe',
+    projectIcon: '/assets/storeOps-icon.svg',
+    image: '/storeOps/cart.png',
+    description: 'Full-stack E-Commerce Platform with features like product and category management, cart functionality, user authentication, payment processing, order management, responsive design, and more.',
+    link: "https://github.com/tomyRomero/storeOps"
+  },
 {
   title: "Sparks",
-  techStack: 'React, AWS, Next.js, Node.js, mySQL',
+  techStack: 'React, AWS, Next.js, mySQL',
   projectIcon: '/assets/github.svg',
   image: '/sparks/sparks-chats.png',
   description: 'AI powered full stack social media platform and messaging app with user authentication, using RDS, S3, mySQL, Web Sockets, Next.js and much more.',
@@ -110,7 +121,7 @@ export const projects = [
 export const projectDetails = [
   {
     title: 'Sparks',
-    type: 'Full Stack CRUD',
+    type: 'Full Stack Social Media',
     tools: ['/assets/sql.png', '/assets/next.webp', '/assets/reactjs.png', '/assets/tailwind.png', '/assets/typescript.png', '/assets/s3.svg', '/assets/rds.webp', '/assets/pusher.png'],
     images: ['/sparks/sparks-login.png','/sparks/sparks-home.png','/assets/sparks-home-moblie.png','/sparks/sparks-studio.png', '/sparks/sparks-chats.png', '/sparks/sparks-noti.png', '/sparks/sparks-profile.png', '/sparks/sparks-message.png', '/sparks/sparks-post.png', '/sparks/sparks-share.png','/sparks/sparks-search.png', '/sparks/movieSpark.png', '/sparks/novelSpark.png' ],
     description: `This full-stack web application empowers users to discover and create new ideas in various categories, ranging from movies and novels to artworks, fashion, and more. Leveraging the latest technologies, Sparks offers a dynamic home page with real-time filtering, a user-to-user messaging system powered by web sockets, and AI-driven post generation with customizable categories. Key features include an innovative AI-powered post generation system, cloud-based image storage with S3, user profile management, real-time messaging using web sockets, and a robust like-comment-share functionality and pagination. The platform is further enriched with a notification system, personalized profile pages, and a thoughtful database schema that supports relationships between users and posts.`,
@@ -140,6 +151,25 @@ export const projectDetails = [
     githubrepo: 'https://github.com/tomyRomero/electricCompanyGUIApp',
     year: '2021',
     isLive: false,
+  },
+  {
+    title: 'StoreOps',
+    type: 'Full Stack E-Commerce Platform',
+    tools: ['/assets/reactjs.png','/assets/next.webp', '/assets/typescript.png', '/assets/mongodb.png', '/assets/s3.svg', '/assets/nextauth.png', '/assets/stripe.svg'],
+    images: ['/storeOps/home.png', '/storeOps/mobliehome.png', '/storeOps/promotions.png','/storeOps/footer.png',
+    '/storeOps/products.png', '/storeOps/productdetails.png', '/storeOps/cart.png', '/storeOps/checkout.png','/storeOps/search.png'
+    , '/storeOps/login.png','/storeOps/accountorderdetails.png','/storeOps/accountorders.png','/storeOps/accountaddresses.png',  '/storeOps/privacyPolicy.png', '/storeOps/address.png',
+    , '/storeOps/ordersuccess.png', '/storeOps/activity.png', 
+    '/storeOps/adminproducts.png', '/storeOps/editproduct.png',
+     , '/storeOps/mobileadmin.png', '/storeOps/adminusers.png','/storeOps/adminuserdetails.png', 
+      '/storeOps/adminmakedeal.png',   '/storeOps/newsletter.png',
+      '/storeOps/admincategories.png', '/storeOps/editcategory.png', '/storeOps/adminorders.png',
+    ],
+    description: `StoreOps is a full-stack E-Commerce Platform designed to provide a seamless online shopping experience for users and businesses with an admin panel. With features like product and category management, cart functionality, user authentication, payment processing, order management, and more, StoreOps offers a comprehensive solution for businesses. Please checkout the readMe for more details`,
+    livelink: 'https://palettehub.vercel.app/',
+    githubrepo: 'https://github.com/tomyRomero/storeOps',
+    year: '2024',
+    isLive: true,
   }
 ]
 
