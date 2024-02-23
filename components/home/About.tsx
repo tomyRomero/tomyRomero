@@ -3,7 +3,7 @@
 import React from "react";
 import { Tilt } from "react-tilt";
 import { motion} from "framer-motion";
-import { services} from "../../constants";
+import { about, services} from "../../constants";
 import { fadeIn, textVariant, staggerContainer } from "../../lib/motion";
 import Image from "next/image";
 import { useAppContext } from "@/lib/AppContext";
@@ -72,9 +72,7 @@ const About = () => {
               variants={fadeIn("", "", 0.1, 1)}
               className={`mt-4 text-left  max-sm:text-base-semibold text-body-normal max-w-3xl leading-[30px] ${theme === "light" ? 'text-near-black' : 'text-white'}`}
             >
-              I have proficiency in <strong>Java</strong>, <strong>TypeScript</strong> and a couple of frameworks including <strong>React</strong>, <strong>React Native</strong>, and <strong>Next.js</strong>. My knowledge extends to AWS cloud foundations, navigating services such as <strong>S3</strong> (Simple Storage Service), <strong>RDS</strong> (Relational Database Service), and <strong>EC2</strong> (Elastic Compute Cloud).
-              In the realm of database management, I am versed in relational databases like <strong>SQL</strong> (Structured Query Language) and also NoSQL databases such as <strong>MongoDB</strong>. Alongside this, I possess adept knowledge of <strong>Restful APIs</strong>, and I'm familiar with crafting engaging and responsive user interfaces with <strong>CSS</strong>, <strong>Tailwind CSS</strong>, and ofc <strong>HTML</strong>. I have also recently delved into <strong>Docker</strong>, to expand my knowledge with containerization technology. 
-              Driven by a passion for continuous learning, I am eager to collaborate closely with employers. My goal is to contribute to the creation of efficient, scalable, and user-friendly solutions that address real-world challenges. Let's build something great together! 
+            {about}
             </motion.p>
             
 

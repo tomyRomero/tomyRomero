@@ -25,7 +25,15 @@ import typescript from '../public/assets/typescript.png'
 import java from '../public/assets/java.png'
 import sql from '../public/assets/sql.png'
 import next from '../public/assets/next-js.svg'
-import { useAppContext } from '@/lib/AppContext';
+
+
+export const intro = `I am a results-driven Computer Science graduate, armed with a Bachelor's degree and a strong foundation in software development. Seeking a rewarding position as a Junior Developer to apply my technical skills and contribute innovative solutions to drive team success.`
+
+export const about =`I am proficient in Java backends, JavaScript/TypeScript based frontends, and have extensive experience in projects utilizing React/React Native and Next.js. I've taken my solutions from start to finish by deploying on cloud architectures like Amazon Web Services.
+I have experience working with relational databases like mySQL and have also worked in NoSQL databases like MongoDB. Additionally, I have a strong grasp of building Restful APIs and crafting engaging and responsive user interfaces using CSS, Tailwind CSS, and HTML. Recently, I've ventured into Docker to enhance my skills in containerization technology.
+Driven by a passion for continuous learning, I am eager to collaborate closely with employers. My goal is to contribute to the creation of efficient, scalable, and user-friendly solutions that address real-world challenges. Let's build something great together!`
+
+
 
 //Links for Nav Menu
 export const navLinks = [
