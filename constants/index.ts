@@ -34,7 +34,6 @@ I have experience working with relational databases like mySQL and have also wor
 Driven by a passion for continuous learning, I am eager to collaborate closely with employers. My goal is to contribute to the creation of efficient, scalable, and user-friendly solutions that address real-world challenges. Let's build something great together!`
 
 
-
 //Links for Nav Menu
 export const navLinks = [
   {
@@ -96,7 +95,7 @@ export const projects = [
     techStack: 'Next.js, MongoDB Atlas, AWS S3, Stripe',
     projectIcon: '/assets/storeOps-icon.svg',
     image: '/storeOps/cart.png',
-    description: 'Full-stack E-Commerce Platform with features like product and category management, cart functionality, user authentication, payment processing, order management, responsive design, and more.',
+    description: 'Full-stack CRUD E-Commerce Platform with features like product and category management, cart functionality, user authentication, payment processing, order management, responsive design, and more.',
     link: "https://github.com/tomyRomero/storeOps"
   },
 {
@@ -104,7 +103,7 @@ export const projects = [
   techStack: 'React, AWS, Next.js, mySQL',
   projectIcon: '/assets/github.svg',
   image: '/sparks/sparks-chats.png',
-  description: 'AI powered full stack social media platform and messaging app with user authentication, using RDS, S3, mySQL, Web Sockets, Next.js and much more.',
+  description: 'AI powered full stack CRUD social media platform and messaging app with user authentication, using RDS, S3, mySQL, Web Sockets, Next.js and much more.',
   link: "https://github.com/tomyRomero/sparks"
 },
 {
@@ -112,7 +111,7 @@ export const projects = [
   techStack: 'Java EE, Servlet, mySQL, Glassfish, JavaServerPages (JSP)',
   projectIcon: '/assets/github.svg',
   image: '/class/Landing.png',
-  description: 'A starter Java EE Web App that allows users to visualize class schedules.',
+  description: 'A starter CRUD Java EE Web App that allows users to visualize class schedules.',
   link: "https://github.com/tomyRomero/classOrganizer"
 },
 {
@@ -129,10 +128,10 @@ export const projects = [
 export const projectDetails = [
   {
     title: 'Sparks',
-    type: 'Full Stack Social Media',
+    type: 'Full Stack CRUD Social Media',
     tools: ['/assets/sql.png', '/assets/next.webp', '/assets/reactjs.png', '/assets/tailwind.png', '/assets/typescript.png', '/assets/s3.svg', '/assets/rds.webp', '/assets/pusher.png'],
-    images: ['/sparks/sparks-login.png','/sparks/sparks-home.png','/assets/sparks-home-moblie.png','/sparks/sparks-studio.png', '/sparks/sparks-chats.png', '/sparks/sparks-noti.png', '/sparks/sparks-profile.png', '/sparks/sparks-message.png', '/sparks/sparks-post.png', '/sparks/sparks-share.png','/sparks/sparks-search.png', '/sparks/movieSpark.png', '/sparks/novelSpark.png' ],
-    description: `This full-stack web application empowers users to discover and create new ideas in various categories, ranging from movies and novels to artworks, fashion, and more. Leveraging the latest technologies, Sparks offers a dynamic home page with real-time filtering, a user-to-user messaging system powered by web sockets, and AI-driven post generation with customizable categories. Key features include an innovative AI-powered post generation system, cloud-based image storage with S3, user profile management, real-time messaging using web sockets, and a robust like-comment-share functionality and pagination. The platform is further enriched with a notification system, personalized profile pages, and a thoughtful database schema that supports relationships between users and posts.`,
+    images: ['/sparks/sparks-login.png','/sparks/sparks-home.png','/assets/sparks-home-moblie.png','/sparks/sparks-studio.png', '/sparks/sparks-chats.png','/sparks/editSpark.png' , '/sparks/sparks-noti.png', '/sparks/sparks-profile.png', '/sparks/sparks-message.png', '/sparks/sparks-post.png', '/sparks/sparks-share.png','/sparks/sparks-search.png','/sparks/sparks-search-post.png', '/sparks/movieSpark.png', '/sparks/novelSpark.png' ],
+    description: `This full-stack web application empowers users to discover and create new ideas in various categories, ranging from movies and novels to artworks, fashion, and more. Leveraging the latest technologies, Sparks offers full create/read/update/delete operations for all posts, a dynamic home page with real-time filtering, a user-to-user messaging system powered by web sockets, and AI-driven post generation with customizable categories. Key features include an innovative AI-powered post generation system, cloud-based image storage with S3, user profile management, real-time messaging using web sockets, and a robust like-comment-share functionality and pagination. The platform is further enriched with a notification system, personalized profile pages, and a thoughtful database schema that supports relationships between users and posts.`,
     livelink: 'https://sparkify.vercel.app/',
     githubrepo: 'https://github.com/tomyRomero/sparks',
     year: '2023',
@@ -162,7 +161,7 @@ export const projectDetails = [
   },
   {
     title: 'StoreOps',
-    type: 'Full Stack E-Commerce Platform',
+    type: 'Full Stack CRUD E-Commerce Platform',
     tools: ['/assets/reactjs.png','/assets/next.webp', '/assets/typescript.png', '/assets/mongodb.png', '/assets/s3.svg', '/assets/nextauth.png', '/assets/stripe.svg'],
     images: ['/storeOps/home.png', '/storeOps/mobliehome.png', '/storeOps/promotions.png','/storeOps/footer.png',
     '/storeOps/products.png', '/storeOps/productdetails.png', '/storeOps/cart.png', '/storeOps/checkout.png','/storeOps/search.png'
@@ -173,7 +172,7 @@ export const projectDetails = [
       '/storeOps/adminmakedeal.png',   '/storeOps/newsletter.png',
       '/storeOps/admincategories.png', '/storeOps/editcategory.png', '/storeOps/adminorders.png',
     ],
-    description: `StoreOps is a full-stack E-Commerce Platform designed to provide a seamless online shopping experience for users and businesses with an admin panel. With features like product and category management, cart functionality, user authentication, payment processing, order management, and more, StoreOps offers a comprehensive solution for businesses. Please checkout the readMe for more details`,
+    description: `StoreOps is a full-stack E-Commerce Platform designed to provide a seamless online shopping experience for users and businesses with an admin panel. With features like product and category management(create,read, update, delete), cart functionality, user authentication, payment processing, order management, and more, StoreOps offers a comprehensive solution for businesses. Please checkout the readMe for more details`,
     livelink: 'https://palettehub.vercel.app/',
     githubrepo: 'https://github.com/tomyRomero/storeOps',
     year: '2024',

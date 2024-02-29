@@ -29,7 +29,7 @@ export default function RootLayout({
           {children}
           </div>
           <Toaster />
-        </AppProvider>npx shadcn-ui@latest add 
+        </AppProvider>
       </body>
     </html>
   )
