@@ -38,7 +38,7 @@ const Projects = () => {
           Projects
         </h2>
         <p className={`sectionSubText text-center p-1 ${theme === 'light' ? 'text-near-black' : 'text-white'}`}>
-          What I have done so far
+          Some of my top projects so far
         </p>
       </motion.div>
       <div className="flex flex-col w-full">
@@ -82,7 +82,7 @@ const Projects = () => {
                 <CardContent className="grid gap-2">
                 <Image
                       alt={project.title}
-                      className="object-cover w-full h-60 rounded-xl"
+                      className="object-contain w-full h-60 rounded-2xl"
                       height={300}
                       width={300}
                       src={project.image}

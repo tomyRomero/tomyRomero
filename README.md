@@ -1,8 +1,6 @@
 # Hi there, I'm Tomy Romero 👋 
 
-I'm a passionate 🚀 junior dev based in 🌍 the U.S Virgin Islands. I love to 🎨 paint, sketch, go to the beach 🏖️ and play 🏀 basketball. My main passion is creating things. 
-
-![Profile Views](https://komarev.com/ghpvc/?username=tomyRomero)
+I'm a passionate 🚀 junior dev based in the U.S. 🌍 I love to 🎨 paint, sketch, go to the beach 🏖️ and play 🏀 basketball. My main passion is creating things. 
 
 ## 📋 Table of Contents
 
@@ -37,6 +35,9 @@ Check out my [**Live Portfolio Site**](https://tomyromero.vercel.app/) to explor
 ![Amazon RDS](https://img.shields.io/badge/-Amazon%20RDS-232F3E?style=flat&)
 ![AWS VPC](https://img.shields.io/badge/AWS%20VPC-232F3E?style=flat&logo=amazon-aws&logoColor=white)
 ![AWS EC2](https://img.shields.io/badge/AWS%20EC2-232F3E?style=flat&logo=amazon-aws&logoColor=white)
+![Spring Boot](https://img.shields.io/badge/-Spring%20Boot-6DB33F?style=flat&logo=spring&logoColor=white)
+![Python](https://img.shields.io/badge/-Python-3776AB?style=flat&logo=python&logoColor=white)
+![FastAPI](https://img.shields.io/badge/-FastAPI-009688?style=flat&logo=fastapi&logoColor=white)
 
 ## <a name="education">🎓 Education</a>
 
@@ -44,28 +45,22 @@ Check out my [**Live Portfolio Site**](https://tomyromero.vercel.app/) to explor
 - **University of the Virgin Islands 🎓 Bachelor of Science in Computer Science, 3.11 GPA** 
 - [Amazon Web Services (AWS) Academy Graduate - AWS Academy Cloud Foundations](https://www.credly.com/badges/49f35d3b-7ea8-40ee-afde-77c8e7725827)
 
-## <a name="projects">🚀 Some of my projects</a>
+## <a name="projects">🚀 Some of my top projects so far</a>
+
+- [**ArtifyMe**](https://github.com/tomyRomero/artifyMe) 🎨 
+  - Transform imaginative sketches into AI-generated images , using react native , java spring boot with jwt auth, python fastapi w/ stable diffusion.
+  - [**ReadMe**](https://github.com/tomyRomero/artifyme/blob/main/README.md)
+  - [![Stars](https://img.shields.io/github/stars/tomyRomero/artifyMe?style=social)](https://github.com/tomyRomero/artifyMe/stargazers)
 
 - [**StoreOps**](https://github.com/tomyRomero/storeOps) 📦 
   - FullStack E-commerce Store powered by Next.js, Tailwind, MongoDB and Stripe, featuring an admin dashboard.
   - [**ReadMe**](https://github.com/tomyRomero/storeOps/blob/main/README.md)
-  - [![Stars](https://img.shields.io/github/stars/tomyRomero/palettehub?style=social)](https://github.com/tomyRomero/palettehub/stargazers)
+  - [![Stars](https://img.shields.io/github/stars/tomyRomero/storeOps?style=social)](https://github.com/tomyRomero/storeOps/stargazers)
 
 - [**Sparks**](https://github.com/tomyRomero/sparks) ⚡
   - Sparks is a full stack social media web app that is designed to help users discover as well as create new ideas for all things creative with the help of AI
   - [**ReadMe**](https://github.com/tomyRomero/sparks/blob/main/README.md)
   - [![Stars](https://img.shields.io/github/stars/tomyRomero/sparks?style=social)](https://github.com/tomyRomero/sparks/stargazers)
-
-- [**Class Organizer**](https://github.com/tomyRomero/classOrganizer) 📅
-  - Java EE Web App with SQL database running on Glass-fish Server, class schedule management App. My first full stack app, old but gold
-  - [**ReadMe**](https://github.com/tomyRomero/classOrganizer/blob/main/README.md)
-  - [![Stars](https://img.shields.io/github/stars/tomyRomero/classOrganizer?style=social)](https://github.com/tomyRomero/classOrganizer/stargazers)
-
-- [**Electric GUI**](https://github.com/tomyRomero/electricCompanyGUIApp) ☕
-  - Java Graphical User Interface App 
-  - [**ReadMe**](https://github.com/tomyRomero/electricCompanyGUIApp/blob/main/ReadMe.md)
-  - [![Stars](https://img.shields.io/github/stars/tomyRomero/electricCompanyGUIApp?style=social)](https://github.com/tomyRomero/electricCompanyGUIApp/stargazers)
-
 
 ## <a name="connect">📫 Connect with me</a>
 
