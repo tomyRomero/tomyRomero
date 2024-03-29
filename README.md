@@ -48,7 +48,7 @@ Check out my [**Live Portfolio Site**](https://tomyromero.vercel.app/) to explor
 ## <a name="projects">🚀 Some of my top projects so far</a>
 
 - [**ArtifyMe**](https://github.com/tomyRomero/artifyMe) 🎨 
-  - Transform imaginative sketches into AI-generated images , using react native , java spring boot with jwt auth, python fastapi w/ stable diffusion.
+  - Transform imaginative sketches into AI-generated images , using react native , JAVA spring boot with JWT auth, python fastapi w/ stable diffusion.
   - [**ReadMe**](https://github.com/tomyRomero/artifyme/blob/main/README.md)
   - [![Stars](https://img.shields.io/github/stars/tomyRomero/artifyMe?style=social)](https://github.com/tomyRomero/artifyMe/stargazers)
 
