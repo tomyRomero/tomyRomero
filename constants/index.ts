@@ -135,6 +135,7 @@ export const projectDetails = [
     tools: ['/assets/typescript.png','/assets/s3.svg', '/assets/reactjs.png', '/assets/springboot.png', '/assets/fastapi.png', '/assets/mongodb.png' , '/assets/expo.png'],
     images: ['/artifyme/details.png', '/artifyme/canvas.png', '/artifyme/colorpicker.png', '/artifyme/home.png', '/artifyme/homedark.png','/artifyme/login.png', '/artifyme/signup.png', '/artifyme/about.png', '/artifyme/profile.png', '/artifyme/profiledark.png', '/artifyme/create.png', '/artifyme/results.png','/artifyme/contact.png' ],
     description: 'ArtifyMe is a mobile application that enables users to convert sketches into images using AI-powered image generation. The app features a React Native frontend for seamless mobile experience, backed by a Java Spring Boot backend with JWT authentication for secure user management. Sketch-to-image conversion is facilitated by a Python FastAPI integrated with Stable Diffusion AI model. ArtifyMe utilizes Amazon S3 for cloud storage and MongoDB for efficient data management. Click on the code bubble to explore the README for more details and detailed setup instructions.',
+    livelink: 'https://github.com/tomyRomero/artifyme',
     githubrepo: 'https://github.com/tomyRomero/artifyme',
     year: '2024',
     isLive: false
