@@ -92,7 +92,7 @@ const About = () => {
           {services.map((service, index) => (
             <motion.div 
             initial='hidden'
-            animate={inView ? 'show' : 'hidden'} // Use inView state to trigger animation
+            animate={ 'show'} // Use inView state to trigger animation
             key={service.title} variants={fadeIn("up", "spring", index * 0.5, 0.75)}
 
             >
