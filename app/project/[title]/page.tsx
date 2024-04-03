@@ -48,7 +48,7 @@ const page = ({ params }: { params: { title: string } }) => {
             alt="back-button"
             width={55}
             height={30}
-            onClick={() => router.back()}
+            onClick={() => router.push("/#projects")}
             className="cursor-pointer w-12 mt-10 md:w-16 max-sm:ml-4 hover:scale-125 ease-in-out duration-300"
           />
           <div className='w-full max-sm:ml-6'>

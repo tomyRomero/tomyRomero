@@ -2,13 +2,15 @@
 
 import { useAppContext } from "@/lib/AppContext";
 import Link from "next/link"
+import { useEffect } from "react";
+import { useInView } from "react-intersection-observer";
 
 export default function Contact() {
-const {theme} = useAppContext();
+const {theme, setSelected} = useAppContext();
 
   return (
     <>
-      <section className={`w-full py-12 md:py-16 lg:py-20 `}>
+      <section className={`w-full py-12 md:py-16 lg:py-20 `} >
         <div className="px-4 md:px-6">
           <div className="flex flex-col items-center space-y-4 text-center">
             <div className="space-y-2">
@@ -58,7 +60,7 @@ const {theme} = useAppContext();
           </div>
         </div>
       </section>
-      <footer className={`w-full h-20 flex justify-center items-center border-t ${ theme === "light" ? 'border-primary-light' : 'border-primary-dark'}`}>
+      <footer className={`w-full h-20 flex justify-center items-center border-t ${ theme === "light" ? 'border-primary-light' : 'border-primary-dark'}`} >
         <p className={`text-body1 ${theme === 'light' ? 'text-near-black' : 'text-white'}`}>©Tomy Romero. All rights reserved.</p>
         </footer>
         </>

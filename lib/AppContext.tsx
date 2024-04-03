@@ -11,7 +11,9 @@ type AppContextProps = {
   // Add additional states here
   slider: any;
   setSlider: React.Dispatch<React.SetStateAction<any>>;
- 
+  
+  selected: any;
+  setSelected: React.Dispatch<React.SetStateAction<any>>;
 };
 
 // Create the AppContext with an initial value of undefined
@@ -25,14 +27,16 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   // Add additional states using the useState hook
   const [slider, setSlider] = useState(false)
 
-
+  //For navbar , selected pages
+  const [selected, setSelected] = useState(0);
 
   // Provide the context value to the children components, include additional states if there are any
   const contextValue: AppContextProps = {
     theme,
     setTheme,
     slider,
-    setSlider
+    setSlider,
+    selected, setSelected
   };
 
   return <AppContext.Provider value={contextValue}>{children}</AppContext.Provider>;

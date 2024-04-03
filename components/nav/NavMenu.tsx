@@ -48,7 +48,7 @@ export default function NavMenu({ isActive, setIsActive, theme }: Props) {
                     key={link.title}
                   >
                     <Link
-                      href={`/${link.path}`}
+                      href={`${link.path}`}
                       onClick={() => setIsActive(false)}
                       onMouseEnter={() => setIsMouseOver(link.title)}
                       onMouseLeave={() => setIsMouseOver('')}
@@ -76,8 +76,8 @@ export default function NavMenu({ isActive, setIsActive, theme }: Props) {
                                   pathname.includes(link.path)
                                 : pathname === '/' && link.path === '') &&
                               (theme === 'light'
-                                ? 'text-primary-light'
-                                : 'text-primary-dark')
+                                ? ''
+                                : '')
                         } transition-all duration-[500ms] md:text-[82px] text-[42px] tracking-[2.52px] font-bold uppercase md:tracking-[5.8px]`}
                       >
                         {link.title}

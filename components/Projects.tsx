@@ -9,17 +9,25 @@ import { useAppContext } from '@/lib/AppContext'
 import { projects } from '@/constants'
 import { useInView } from "react-intersection-observer";
 import { Single_Day } from 'next/font/google';
+import { useEffect } from 'react'
 
 const singleDayFont = Single_Day({
   weight: "400"
 })
 
 const Projects = () => {
-  const {theme} = useAppContext();
+  const {theme, setSelected} = useAppContext();
   const [ref, inView] = useInView({
-    triggerOnce: true, // Only trigger once when the component comes into view
+    triggerOnce: false, 
   });
 
+  useEffect(()=> {
+
+    if(inView)
+    {
+      setSelected(2)
+    }
+  }, [inView])
 
   return (
     <motion.div
@@ -43,9 +51,8 @@ const Projects = () => {
       </motion.div>
       <div className="flex flex-col w-full">
       <section className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-10 "
-        ref={ref}
       >
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 max-w-6xl w-full mx-auto">
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 max-w-6xl w-full mx-auto" ref={ref}>
           {projects.map((project, index) => (
             <motion.div
             initial='hidden'

@@ -39,23 +39,23 @@ Driven by a passion for continuous learning, I am eager to collaborate closely w
 export const navLinks = [
   {
     title: 'Home',
-    path: '/',
+    path: '/#home',
     image: '/assets/homenav.jpg',
   },
   {
-    title: 'Contact',
-    path: './contact',
-    image: '/assets/contactnav.jpg',
+    title: 'About',
+    path: '/#about',
+    image: '/assets/about.jpg',
   },
   {
     title: 'Projects',
-    path: '#projects',
+    path: '/#projects',
     image: '/assets/projectsnav.jpg',
   },
   {
-    title: 'About',
-    path: '#about',
-    image: '/assets/about.jpg',
+    title: 'Contact',
+    path: '/contact',
+    image: '/assets/contactnav.jpg',
   },
 ];
 

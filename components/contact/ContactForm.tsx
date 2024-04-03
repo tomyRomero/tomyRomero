@@ -126,7 +126,9 @@ const ContactForm = () => {
           <div className="flex justify-evenly">
           <button
             type="button"
-            onClick={() => router.back()}
+            onClick={() => router.push("/")
+          
+          }
             className={`${theme === "light" ? "bg-primary-light" : "bg-primary-dark"}
              text-white py-3 px-8 rounded-xl outline-none w-fit 
              cursor-pointer hover:scale-125 ease-in-out duration-300

@@ -22,10 +22,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={interTight.className}>
+      <body className={`${interTight.className}`} >
         <AppProvider>
           <Navbar />
-          <div className='mt-14 max-sm:mt-2'>
+          <div className='mt-14 max-sm:mt-2' >
           {children}
           </div>
           <Toaster />

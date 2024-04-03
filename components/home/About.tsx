@@ -1,6 +1,6 @@
 "use client"
 
-import React from "react";
+import React, { useEffect } from "react";
 import { Tilt } from "react-tilt";
 import { motion} from "framer-motion";
 import { about, services} from "../../constants";
@@ -48,11 +48,22 @@ const ServiceCard = ({ index, title, icon }) =>
 } 
 
 const About = () => {
-  const {theme} = useAppContext();
+  const {theme, setSelected} = useAppContext();
   // Set up the ref and inView state for the intersection observer
   const [ref, inView] = useInView({
-    triggerOnce: true, // Only trigger once when the component comes into view
-  });
+    triggerOnce: false, 
+  }
+  );
+
+  useEffect(()=> {
+
+    if(inView)
+    {
+      setSelected(1)
+    }
+
+  }, [inView])
+
   return (
     <motion.div
       variants={staggerContainer()}

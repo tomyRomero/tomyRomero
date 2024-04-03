@@ -6,6 +6,8 @@ import { Single_Day } from 'next/font/google';
 import Image from "next/image";
 import { useRouter } from 'next/navigation';
 import { intro } from "@/constants";
+import { useInView } from "react-intersection-observer";
+import { useEffect } from "react";
 
 
 const singleDayFont = Single_Day({
@@ -14,12 +16,28 @@ const singleDayFont = Single_Day({
 
 export default function Intro() {
 
-  const {theme} = useAppContext();
+  const {theme, setSelected} = useAppContext();
   const router = useRouter();
+
+   // Set up the ref and inView state for the intersection observer
+   const [ref, inView] = useInView({
+    triggerOnce: false, 
+  }
+  );
+
+  useEffect(()=> {
+
+    if(inView)
+    {
+      setSelected(0)
+    }
+
+  }, [inView])
 
   return (
     <section className={`flex flex-col items-center justify-center md:space-y-10 py-8 md:py-16 lg:py-20 ${ theme === "light" ? "" : "bg-near-black"}`}
     id="home"
+    ref={ref}
     >
       <div className="space-y-2 text-center">
         <span className={singleDayFont.className}>
@@ -55,7 +73,9 @@ export default function Intro() {
         className={`
         cursor-pointer hover:scale-125 ease-in-out duration-300
         flex items-center gap-1.5 px-3 py-1 rounded-xl text-body1-bold text-white ${theme === "light" ? 'bg-primary-light ':'bg-primary-dark'}`}
-        onClick={()=> {router.push('#projects')}}
+        onClick={()=> {
+          setSelected(1)
+          router.push('#projects')}}
         >
         Projects
         <Image 
