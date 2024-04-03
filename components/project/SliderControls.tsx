@@ -6,35 +6,38 @@ import 'slick-carousel/slick/slick-theme.css';
 
 interface ImageControlsProps {
     slider: Slider | null;
-  }
-  
-  const SliderControls: React.FC<ImageControlsProps> = ({ slider }) => {
+}
+
+const SliderControls: React.FC<ImageControlsProps> = ({ slider }) => {
     const nextSlide = () => {
-      if (slider) {
-        slider.slickNext();
-      }
+        if (slider) {
+            slider.slickNext();
+        }
     };
-  
+
     const prevSlide = () => {
-      if (slider) {
-        slider.slickPrev();
-      }
+        if (slider) {
+            slider.slickPrev();
+        }
     };
-  
-    const {theme} = useAppContext();
+
+    const { theme } = useAppContext();
 
     return (
-      <div className="mt-[17px] md:mt-[50px] h-[57px] md:h-[79px] border-[2px] md:border-[3px] rounded-[5px] md:rounded-[10px] mb-[30px] md:mb-[50px]">
-        <div className="flex justify-between w-full px-[20px] md:px-[37px] h-full rounded-[4px] md:rounded-[8px]" style={{ backgroundColor: theme === "light" ? '#0060d4' : '#F7B787' }}>
-          <button onClick={prevSlide}>
-            <Image src="/assets/advance.png" alt="arrow" width={55} height={30} className="rotate-180 w-[30px] md:w-[55px]" />
-          </button>
-          <button onClick={nextSlide}>
-            <Image src="/assets/advance.png" alt="arrow" width={55} height={30} className="w-[30px] md:w-[55px]" />
-          </button>
+      <>
+      <br></br>
+        <div className={`mb-[30px] md:mb-[50px] ${theme === "light" ? "bg-primary-light" : "bg-primary-dark"} rounded-xl py-4`}>
+            <div className="flex justify-between w-full px-[20px] md:px-[37px] h-full">
+                <button onClick={prevSlide} className="slider-button">
+                    <Image src={"/assets/advance.png"} alt="arrow" width={40} height={40} className="rotate-180 w-[30px] md:w-[40px]" />
+                </button>
+                <button onClick={nextSlide} className="slider-button">
+                    <Image src={"/assets/advance.png"} alt="arrow" width={40} height={40} className="w-[30px] md:w-[40px]" />
+                </button>
+            </div>
         </div>
-      </div>
+        </>
     );
-  };
-  
-  export default SliderControls;
+};
+
+export default SliderControls;

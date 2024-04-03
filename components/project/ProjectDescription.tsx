@@ -19,7 +19,7 @@ export default function ProjectDescription({text, github, live, isLive}: Props) 
     <section className="mt-6 flex items-center justify-between mb-[100px] flex-col md:flex-row gap-[76px]"
     id="description"
     >
-      <p className={`md:max-w-[530px] text-body1-semibold tracking-[1.2px] ${theme === "light" ? '' : 'text-white'}`}>
+      <p className={`md:max-w-[530px] text-body-normal  ${theme === "light" ? '' : 'text-white'}`}>
         {text}
       </p>
 

@@ -7,12 +7,17 @@ import NavMenu from "./NavMenu";
 import { motion as m, AnimatePresence  } from "framer-motion";
 import Link from "next/link";
 import { useAppContext } from "@/lib/AppContext";
-import { Single_Day } from 'next/font/google';
+import { Single_Day, Inter} from 'next/font/google';
 import { navLinks } from "@/constants";
 import { usePathname } from 'next/navigation';
 
 const singleDayFont = Single_Day({
   weight: "400"
+})
+
+const interFont = Inter({
+  weight: "400",
+  subsets: ["cyrillic"]
 })
 
 export default function Navbar() {
@@ -73,7 +78,7 @@ export default function Navbar() {
               <Link href={path}>
               <m.li
                 key={i}
-                className={`title  ${i === selected && "selected"} ${singleDayFont.className}` }
+                className={`title  ${i === selected && "selected"} ${singleDayFont.className} uppercase` }
                 style={{ color: i === selected ? theme === "light" ? "#0060d4" : "#F7B787" : theme === "light" ? "black" : "white" }}
                 onClick={() => setSelected(i)}
                 layoutId={`title-${i}`}
@@ -95,7 +100,7 @@ export default function Navbar() {
             ))}
           </ol>
 
-
+         
           <ThemeToggle />
 
 

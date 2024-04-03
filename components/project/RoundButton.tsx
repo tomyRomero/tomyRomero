@@ -24,7 +24,7 @@ return (
       variant === 'lg'
         ? 'w-[173px] text-[18px] tracking-[1.08px]'
         : 'w-[87px] text-[12px] tracking-[0.72px]'
-    } aspect-square rounded-full border-[3px] ${theme === "light" ?  '' : 'text-white hover:bg-primary-dark'} ${
+    } aspect-square rounded-3xl border-[3px] ${theme === "light" ?  '' : 'text-white hover:bg-primary-dark'} ${
       theme === 'light'
         ? 'border-primary-light hover:text-white'
         : 'border-primary-dark hover:text-white'
@@ -43,7 +43,7 @@ return (
             initial={{ y: '100%' }}
             animate={{ y: 0 }}
             exit={{ y: '-100%' }}
-            className={`absolute inset-[-3px] rounded-full z-[-1] ${
+            className={`absolute inset-[-3px] rounded-3xl z-[-1] ${
               theme === 'light' ? 'bg-primary-light' : 'bg-primary-dark'
             }`}
           />

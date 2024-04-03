@@ -8,6 +8,21 @@ import { useInView } from "react-intersection-observer";
 export default function Contact() {
 const {theme, setSelected} = useAppContext();
 
+   // Set up the ref and inView state for the intersection observer
+   const [ref, inView] = useInView({
+    triggerOnce: false, 
+  }
+  );
+
+  useEffect(()=> {
+
+    if(inView)
+    {
+      setSelected(3)
+    }
+
+  }, [inView])
+
   return (
     <>
       <section className={`w-full py-12 md:py-16 lg:py-20 `} >
@@ -61,7 +76,7 @@ const {theme, setSelected} = useAppContext();
         </div>
       </section>
       <footer className={`w-full h-20 flex justify-center items-center border-t ${ theme === "light" ? 'border-primary-light' : 'border-primary-dark'}`} >
-        <p className={`text-body1 ${theme === 'light' ? 'text-near-black' : 'text-white'}`}>©Tomy Romero. All rights reserved.</p>
+        <p ref={ref} className={`text-body1 ${theme === 'light' ? 'text-near-black' : 'text-white'}`}>©Tomy Romero. All rights reserved.</p>
         </footer>
         </>
   )

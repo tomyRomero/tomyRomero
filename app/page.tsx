@@ -13,7 +13,7 @@ import { useAppContext } from '@/lib/AppContext';
 export default function Home() {
   const {theme} = useAppContext();
   return (
-  <div className={`flex flex-col mt-10 ${theme === "light" ? '' : 'bg-near-black'}`}>
+  <div className={`flex flex-col mt-10 ${theme === "light" ? '' : 'bg-near-black'} overflow-hidden`}>
     <Intro />
     <Photos />
     <About />

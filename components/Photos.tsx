@@ -62,23 +62,23 @@ const Photo = ({
 };
 
 export const Photos = () => {
-  const {theme, setTheme} = useAppContext();
+  const {theme} = useAppContext();
   return (
     <div className={`${theme === 'light' ? '' : 'bg-near-black'}`}>
     <div className="my-8">
       <div className="hide-scrollbar -my-4 flex gap-8 overflow-y-auto py-4 px-8">
-        {images.map((travelImage, index) => (
+        {images.map((Image, index) => (
           <motion.div 
           initial='hidden'
           animate={ 'show'} // Use inView state to trigger animation
           variants={fadeIn("up", "spring", index * 0.5, 1.5)}
-          key={travelImage.img.src}
+          key={Image.img.src}
           >
           <Photo
-            key={travelImage.img.src}
-            img={travelImage.img}
-            title={travelImage.title}
-            alt={travelImage.alt}
+            key={Image.img.src}
+            img={Image.img}
+            title={Image.title}
+            alt={Image.alt}
             idx={index}
           />
           </motion.div>

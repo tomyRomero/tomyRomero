@@ -45,18 +45,18 @@ const Projects = () => {
         <h2 className={`sectionHeadText text-center p-1 ${theme === 'light' ? 'text-primary-light' : 'text-primary-dark'}`}>
           Projects
         </h2>
-        <p className={`sectionSubText text-center p-1 ${theme === 'light' ? 'text-near-black' : 'text-white'}`}>
+        <p ref={ref} className={`sectionSubText text-center p-1 ${theme === 'light' ? 'text-near-black' : 'text-white'}`}>
           Some of my top projects so far
         </p>
       </motion.div>
       <div className="flex flex-col w-full">
-      <section className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-10 "
+      <section  className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-10 "
       >
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 max-w-6xl w-full mx-auto" ref={ref}>
+        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 max-w-6xl w-full mx-auto">
           {projects.map((project, index) => (
             <motion.div
             initial='hidden'
-            animate={inView ? 'show' : 'hidden'} // Use inView state to trigger animation
+            animate={'show'}
             key={project.title} variants={fadeIn("up", "spring", index * 0.5, 0.75)}
             >
               <Link href={`/project/${project.title}`}>
@@ -81,7 +81,7 @@ const Projects = () => {
                 </Link>
                   <div className="grid gap-1">
                     <CardTitle className='text-heading2-bold'>
-                      <span className={singleDayFont.className}>{project.title}</span>
+                      <span className={`${singleDayFont.className} uppercase`}>{project.title}</span>
                       </CardTitle>
                     <CardDescription className={`text-base-regular font-bold ${theme === "light" ? 'text-primary-light' : 'text-primary-dark'}`}>{project.techStack}</CardDescription>
                   </div>

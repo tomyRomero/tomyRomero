@@ -24,7 +24,7 @@ const {theme, setTheme} = useAppContext();
     <div className="justify-self-end">
       <button onClick={handleTheme}>
         <div
-          className={`w-[53px] h-[27px] border rounded-full relative flex items-center `}
+          className={`md:mt-2.5 w-[53px] h-[27px] border rounded-full relative flex items-center `}
           style={{
             border: `1px solid ${theme === "light" ? "black" : "white"}`,
           }}

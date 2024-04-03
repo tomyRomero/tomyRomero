@@ -61,7 +61,7 @@ ol {
 }
 
 .title {
-  @apply text-heading3-bold ml-6 relative cursor-pointer
+  @apply text-heading4-bold ml-6 relative cursor-pointer
 }
 
 .title.selected {
@@ -73,7 +73,18 @@ ol {
   height: 8px;
   border-radius: 4px;
   position: absolute;
-  bottom: -8px;
+  bottom: -15px;
 }
 
 
+.slider-button {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  transition: transform 0.2s ease-in-out;
+}
+
+.slider-button:hover {
+  transform: scale(1.1);
+}
