@@ -80,7 +80,13 @@ export default function Navbar() {
                 key={i}
                 className={`title  ${i === selected && "selected"} ${singleDayFont.className} uppercase` }
                 style={{ color: i === selected ? theme === "light" ? "#0060d4" : "#F7B787" : theme === "light" ? "black" : "white" }}
-                onClick={() => setSelected(i)}
+                
+                onClick={() => 
+                  setTimeout(() => {
+                    setSelected(i)
+                  }, 
+                  1000)}
+                  
                 layoutId={`title-${i}`}
                 animate
                 transition={{ duration: 0.5 }}

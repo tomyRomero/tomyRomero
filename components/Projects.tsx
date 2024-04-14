@@ -25,7 +25,7 @@ const Projects = () => {
 
     if(inView)
     {
-      setSelected(2)
+        setSelected(2)
     }
   }, [inView])
 

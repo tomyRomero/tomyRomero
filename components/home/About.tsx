@@ -56,12 +56,10 @@ const About = () => {
   );
 
   useEffect(()=> {
-
     if(inView)
     {
-      setSelected(1)
+        setSelected(1)
     }
-
   }, [inView])
 
   return (
