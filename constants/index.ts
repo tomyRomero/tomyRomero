@@ -27,13 +27,15 @@ import sql from '../public/assets/sql.png'
 import next from '../public/assets/next-js.svg'
 import python from '../public/assets/python.png'
 import springboot from '../public/assets/springboot.png'
+import azure from '../public/assets/azure.png'
+import dotnet from '../public/assets/dotnet.png'
 
 
 export const intro = `I am a results-driven Computer Science graduate, armed with a Bachelor's degree and a strong foundation in software development. Seeking a rewarding position as a Junior Developer to apply my technical skills and contribute innovative solutions to drive team success.`
 
-export const about =`I am proficient in building Java and Node.js/Next.js backends, JavaScript/TypeScript based frontends, and have extensive experience in projects utilizing React/React Native. I've taken my solutions from start to finish by deploying on cloud architectures like Amazon Web Services.
-I have experience working with relational databases like mySQL and have also worked in NoSQL databases like MongoDB. Additionally, I have a strong grasp of building Restful APIs and crafting engaging and responsive user interfaces using CSS, SCSS and Tailwind CSS. I also have experience in building user authentication systems.
-Driven by a passion for continuous learning, I am eager to collaborate closely with employers. My goal is to contribute to the creation of efficient, scalable, and user-friendly solutions that address real-world challenges. Let's build something great together!`
+export const about =`I am a versatile developer with a proficiency in building both backends and frontends, with extensive experience in taking projects from inception to deployment on cloud platforms like Amazon Web Services and Azure. My expertise includes working with relational databases such as MySQL, building RESTful APIs, and developing engaging, responsive user interfaces. I also have a solid background in unit testing and creating robust user authentication systems.
+
+Driven by a passion for continuous learning, I am eager to collaborate closely with employers to contribute to the creation of efficient, scalable, and user-friendly solutions that address real-world challenges. Let’s build something great together!`
 
 //Links for Nav Menu
 export const navLinks = [
@@ -184,20 +186,16 @@ export const technologies = [
     icon: reactjs.src,
   },
   {
-    name: "Tailwind CSS",
-    icon: tailwind.src,
+    name: "dotnet",
+    icon: dotnet.src
+  },
+  {
+    name: "azure",
+    icom: azure.src
   },
   {
     name: "Node JS",
     icon: nodejs.src,
-  },
-  {
-    name: "MongoDB",
-    icon: mongodb.src,
-  },
-  {
-    name: "Three JS",
-    icon: threejs.src,
   },
   {
     name: "git",
@@ -218,14 +216,6 @@ export const technologies = [
   {
     name: "next.js",
     icon: next.src
-  },
-  {
-    name:"python",
-    icon: python.src
-  }
-  ,{
-    name: "spring-boot",
-    icon: springboot.src
   }
 ];
 

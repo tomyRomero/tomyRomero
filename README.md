@@ -19,25 +19,20 @@ Check out my [**Live Portfolio Site**](https://tomyromero.vercel.app/) to explor
 
 ![HTML 5](https://img.shields.io/badge/-HTML%205-E34F26?style=flat&logo=html5&logoColor=white)
 ![CSS 3](https://img.shields.io/badge/-CSS%203-1572B6?style=flat&logo=css3&logoColor=white)
+![C#](https://img.shields.io/badge/-C%23-239120?style=flat&logo=c-sharp&logoColor=white)
+![.NET](https://img.shields.io/badge/-.NET-512BD4?style=flat&logo=dotnet&logoColor=white)
+![Azure](https://img.shields.io/badge/-Azure-0078D4?style=flat&logo=microsoft-azure&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/-JavaScript-F7DF1E?style=flat&logo=javascript&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/-TypeScript-3178C6?style=flat&logo=typescript&logoColor=white)
 ![React JS](https://img.shields.io/badge/-React%20JS-61DAFB?style=flat&logo=react&logoColor=white)
-![Tailwind CSS](https://img.shields.io/badge/-Tailwind%20CSS-38B2AC?style=flat&logo=tailwind-css&logoColor=white)
 ![Node JS](https://img.shields.io/badge/-Node%20JS-339933?style=flat&logo=node.js&logoColor=white)
-![MongoDB](https://img.shields.io/badge/-MongoDB-47A248?style=flat&logo=mongodb&logoColor=white)
 ![Git](https://img.shields.io/badge/-Git-F05032?style=flat&logo=git&logoColor=white)
 ![Docker](https://img.shields.io/badge/-Docker-2496ED?style=flat&logo=docker&logoColor=white)
 ![Java](https://img.shields.io/badge/-Java-007396?style=flat&logo=java&logoColor=white)
 ![MySQL](https://img.shields.io/badge/-MySQL-4479A1?style=flat&logo=mysql&logoColor=white)
 ![Next.js](https://img.shields.io/badge/-Next.js-000000?style=flat&logo=next.js&logoColor=white)
-![Three JS](https://img.shields.io/badge/-Three%20JS-000000?style=flat&logo=three.js&logoColor=white)
 ![AWS S3](https://img.shields.io/badge/-AWS%20S3-232F3E?style=flat&logo=amazon-aws&logoColor=white) 
 ![Amazon RDS](https://img.shields.io/badge/-Amazon%20RDS-232F3E?style=flat&)
-![AWS VPC](https://img.shields.io/badge/AWS%20VPC-232F3E?style=flat&logo=amazon-aws&logoColor=white)
-![AWS EC2](https://img.shields.io/badge/AWS%20EC2-232F3E?style=flat&logo=amazon-aws&logoColor=white)
-![Spring Boot](https://img.shields.io/badge/-Spring%20Boot-6DB33F?style=flat&logo=spring&logoColor=white)
-![Python](https://img.shields.io/badge/-Python-3776AB?style=flat&logo=python&logoColor=white)
-![FastAPI](https://img.shields.io/badge/-FastAPI-009688?style=flat&logo=fastapi&logoColor=white)
 
 ## <a name="education">🎓 Education</a>
 
@@ -70,9 +65,9 @@ tomyfletcher99@hotmail.com
 
 ## <a name="fun-fact">🌱 I'm currently learning</a>
 
-- React Native
+- .NET
 - Docker
-- Java Spring
+- Azure
 
 🎉 Fun fact
 
