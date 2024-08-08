@@ -191,7 +191,7 @@ export const technologies = [
   },
   {
     name: "azure",
-    icom: azure.src
+    icon: azure.src
   },
   {
     name: "Node JS",
