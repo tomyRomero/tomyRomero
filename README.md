@@ -41,7 +41,10 @@ Check out my [**Live Portfolio Site**](https://tomyromero.vercel.app/) to explor
 - [Amazon Web Services (AWS) Academy Graduate - AWS Academy Cloud Foundations](https://www.credly.com/badges/49f35d3b-7ea8-40ee-afde-77c8e7725827)
 
 ## <a name="projects">🚀 Some of my top projects so far</a>
-
+- [**iMovies**](https://github.com/240708-NET-FS/Project2_OMDb_API_Movies_CMS_Group1) 🎬
+  - As part of a collaborative team, I contributed to a content management system that allows users to manage a list of movies with social media features. Built using ASP.NET Core and React, the system enables users to add, view, edit, and delete movies, interact with the OMDb API, and share their movie lists with followers.
+  - [**ReadMe**](https://github.com/240708-NET-FS/Project2_OMDb_API_Movies_CMS_Group1/blob/main/README.md)
+  
 - [**ArtifyMe**](https://github.com/tomyRomero/artifyMe) 🎨 
   - Transform imaginative sketches into AI-generated images , using react native , JAVA spring boot with JWT auth, python fastapi w/ stable diffusion.
   - [**ReadMe**](https://github.com/tomyRomero/artifyme/blob/main/README.md)
@@ -56,10 +59,6 @@ Check out my [**Live Portfolio Site**](https://tomyromero.vercel.app/) to explor
   - Sparks is a full stack social media web app that is designed to help users discover as well as create new ideas for all things creative with the help of AI
   - [**ReadMe**](https://github.com/tomyRomero/sparks/blob/main/README.md)
   - [![Stars](https://img.shields.io/github/stars/tomyRomero/sparks?style=social)](https://github.com/tomyRomero/sparks/stargazers)
-
-- [**iMovies**](https://github.com/240708-NET-FS/Project2_OMDb_API_Movies_CMS_Group1) 🎬
-  - As part of a collaborative team, I contributed to a content management system that allows users to manage a list of movies with social media features. Built using ASP.NET Core and React, the system enables users to add, view, edit, and delete movies, interact with the OMDb API, and share their movie lists with followers.
-  - [**ReadMe**](https://github.com/240708-NET-FS/Project2_OMDb_API_Movies_CMS_Group1/blob/main/README.md)
 
 ## <a name="connect">📫 Connect with me</a>
 
