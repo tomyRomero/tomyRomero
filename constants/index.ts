@@ -180,11 +180,11 @@ export const projectDetails = [
       '/assets/azure.png'
     ],
     images: [
-      '/imovies/imovieshome.png',
-      '/imovies/usermovielist.png',
-      '/imovies/addmovie.png',
-      '/imovies/moviemodal.png',
-      '/imovies/profile.png'
+      '/iMovies/imovieshome.png',
+      '/iMovies/usermovielist.png',
+      '/iMovies/addmovie.png',
+      '/iMovies/moviemodal.png',
+      '/iMovies/profile.png'
     ],
     description: `As part of a collaborative team, I contributed to a comprehensive platform designed for movie enthusiasts to manage and share their favorite movies. 
     Responsibilities:
