@@ -70,7 +70,7 @@ const {theme, setSelected} = useAppContext();
             </div>
             <div className="space-y-2">
               <h2 className={`text-heading3-bold ${theme === 'light' ? 'text-primary-light' : 'text-primary-dark'}`}>Location</h2>
-              <p className={`text-base-regular ${theme === 'light' ? 'text-near-black' : 'text-white'}`}>U.S Virgin Islands</p>
+              <p className={`text-base-regular ${theme === 'light' ? 'text-near-black' : 'text-white'}`}>U.S CT</p>
             </div>
           </div>
         </div>

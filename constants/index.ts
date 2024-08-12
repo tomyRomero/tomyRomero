@@ -92,6 +92,14 @@ export const services = [
 
 //Projects for Home Page
 export const projects = [
+  {
+    title: "iMovies",
+    techStack: 'ASP.NET Core, React, SQL Server, OMDb API',
+    projectIcon: '/assets/github.svg',
+    image: '/iMovies/imovieshome.png',
+    description: 'As part of a collaborative team, I contributed to a content management system that allows users to manage a list of movies with social media features. Built using ASP.NET Core and React, the system enables users to add, view, edit, and delete movies, interact with the OMDb API, and share their movie lists with followers.',
+    link: "https://github.com/240708-NET-FS/Project2_OMDb_API_Movies_CMS_Group1",
+  },
 {
   title: "ArtifyMe",
   techStack: "React Native, JAVA Spring Boot, Fast API, MongoDB",
@@ -116,6 +124,7 @@ export const projects = [
   description: 'AI powered full stack CRUD social media platform and messaging app with user authentication, using RDS, S3, Web Sockets and much more.',
   link: "https://github.com/tomyRomero/sparks"
 },
+
 ]
 
 //Projects in Detail
@@ -160,6 +169,37 @@ export const projectDetails = [
     githubrepo: 'https://github.com/tomyRomero/storeOps',
     year: '2024',
     isLive: true,
+  },
+  {
+    title: 'iMovies',
+    type: 'Full Stack CRUD Content Management System',
+    tools: [
+      '/assets/reactjs.png',
+      '/assets/sql.png',
+      '/assets/dotnet.png',
+      '/assets/azure.png'
+    ],
+    images: [
+      '/imovies/imovieshome.png',
+      '/imovies/usermovielist.png',
+      '/imovies/addmovie.png',
+      '/imovies/moviemodal.png',
+      '/imovies/profile.png'
+    ],
+    description: `As part of a collaborative team, I contributed to a comprehensive platform designed for movie enthusiasts to manage and share their favorite movies. 
+    Responsibilities:
+    Developed a Movies Content Management System using ASP.NET Core, integrating the OMDb API to manage and display movie information.
+    Implemented a RESTful API backend with C#, utilizing Entity Framework Core for database management, SQL Server for data persistence.
+    Designed and built the client-server architecture, creating a dynamic React frontend with authentication and CRUD functionality for managing user movie lists, including searching, adding, editing, and deleting movies using the OMDb API for metadata retrieval and user input customization.
+    Implemented social media capabilities, allowing users to share movie lists with followers, like/dislike movies, and view the most popular movies within the community.
+    Hosted the database on Azure SQL Server for secure and scalable data management.
+    Developed and executed unit tests using xUnit for backend services.
+    Managed front-end testing using Jest.
+    `,
+    livelink: '', 
+    githubrepo: 'https://github.com/240708-NET-FS/Project2_OMDb_API_Movies_CMS_Group1',
+    year: '2024',
+    isLive: false,
   }
 ]
 

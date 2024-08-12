@@ -57,6 +57,10 @@ Check out my [**Live Portfolio Site**](https://tomyromero.vercel.app/) to explor
   - [**ReadMe**](https://github.com/tomyRomero/sparks/blob/main/README.md)
   - [![Stars](https://img.shields.io/github/stars/tomyRomero/sparks?style=social)](https://github.com/tomyRomero/sparks/stargazers)
 
+- [**iMovies**](https://github.com/240708-NET-FS/Project2_OMDb_API_Movies_CMS_Group1) 🎬
+  - As part of a collaborative team, I contributed to a content management system that allows users to manage a list of movies with social media features. Built using ASP.NET Core and React, the system enables users to add, view, edit, and delete movies, interact with the OMDb API, and share their movie lists with followers.
+  - [**ReadMe**](https://github.com/240708-NET-FS/Project2_OMDb_API_Movies_CMS_Group1/blob/main/README.md)
+
 ## <a name="connect">📫 Connect with me</a>
 
 [![LinkedIn](https://img.shields.io/badge/-LinkedIn-0A66C2?style=flat&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/tomy-romero-902476145/)
@@ -65,7 +69,7 @@ tomyfletcher99@hotmail.com
 
 ## <a name="fun-fact">🌱 I'm currently learning</a>
 
-- .NET
+- .NET core
 - Docker
 - Azure
 
