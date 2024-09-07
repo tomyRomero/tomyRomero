@@ -14,28 +14,19 @@ import sga from '../public/assets/sga.jpeg'
 import javascript from '../public/assets/javascript.png'
 import html from '../public/assets/html.png'
 import docker from '../public/assets/docker.png'
-import mongodb from '../public/assets/mongodb.png'
-import tailwind from '../public/assets/tailwind.png'
 import git from '../public/assets/git.png'
-import nodejs from '../public/assets/nodejs.png'
 import css from '../public/assets/css.png'
 import reactjs from '../public/assets/reactjs.png'
-import threejs from '../public/assets/threejs.svg'
 import typescript from '../public/assets/typescript.png'
-import java from '../public/assets/java.png'
-import sql from '../public/assets/sql.png'
+import sqlServer from '../public/assets/sqlserver.jpeg'
 import next from '../public/assets/next-js.svg'
-import python from '../public/assets/python.png'
-import springboot from '../public/assets/springboot.png'
 import azure from '../public/assets/azure.png'
 import dotnet from '../public/assets/dotnet.png'
 
 
-export const intro = `I am a results-driven Computer Science graduate, armed with a Bachelor's degree and a strong foundation in software development. Seeking a rewarding position as a Junior Developer to apply my technical skills and contribute innovative solutions to drive team success.`
+export const intro = `Hey, I’m Tomy! I’m passionate about delivering software solutions that meets the needs of users. I value effective communication and thrive in collaborative environments where I can exchange ideas, give and receive constructive feedback, and work towards common goals. I enjoy engaging with my colleagues and solving problems together.`
 
-export const about =`I am a versatile developer with a proficiency in building both backends and frontends, with extensive experience in taking projects from inception to deployment on cloud platforms like Amazon Web Services and Azure. My expertise includes working with relational databases such as MySQL, building RESTful APIs, and developing engaging, responsive user interfaces. I also have a solid background in unit testing and creating robust user authentication systems.
-
-Driven by a passion for continuous learning, I am eager to collaborate closely with employers to contribute to the creation of efficient, scalable, and user-friendly solutions that address real-world challenges. Let’s build something great together!`
+export const about =`I am a Computer Science graduate with a strong foundation in full stack development, specializing in React, C#, ASP.NET, .NET, REST APIs, and SQL Server, along with knowledge of DevOps practices in Git, Amazon Web Services and Azure.`
 
 //Links for Nav Menu
 export const navLinks = [
@@ -85,7 +76,7 @@ export const services = [
     icon: '/assets/backend.png',
   },
   {
-    title: `Cloud Developer`,
+    title: `Dev Ops`,
     icon: '/assets/aws.svg.png',
   }
 ];
@@ -94,23 +85,23 @@ export const services = [
 export const projects = [
   {
     title: "iMovies",
-    techStack: 'ASP.NET Core, React, SQL Server, OMDb API',
+    techStack: 'React, ASP.NET Core, SQL Server, Azure, OMDb API',
     projectIcon: '/assets/github.svg',
     image: '/iMovies/imovieshome.png',
-    description: 'As part of a collaborative team, I contributed to a content management system that allows users to manage a list of movies with social media features. Built using ASP.NET Core and React, the system enables users to add, view, edit, and delete movies, interact with the OMDb API, and share their movie lists with followers.',
+    description: 'As part of a collaborative team, I contributed to a content management system that allows users to manage a list of movies with social media features. Responsibilities: Frontend and backend development',
     link: "https://github.com/240708-NET-FS/Project2_OMDb_API_Movies_CMS_Group1",
   },
 {
   title: "ArtifyMe",
-  techStack: "React Native, JAVA Spring Boot, Fast API, MongoDB",
+  techStack: "React Native, ASP.NET Core, SQL Server, Fast API, AWS",
   projectIcon: '/assets/github.svg',
   image: "/artifyme/details.png",
-  description: 'Full-stack CRUD mobile app, Transform imaginative sketches into AI-generated images. Secured with JAVA spring-boot security JWT authentication',
+  description: 'Full-stack CRUD mobile app, Transform imaginative sketches into AI-generated images.',
   link: "https://github.com/tomyRomero/artifyme"
 },
   {
     title: "StoreOps",
-    techStack: 'Next.js, MongoDB Atlas, AWS, Stripe',
+    techStack: 'React, Next.js, AWS, Stripe',
     projectIcon: '/assets/storeOps-icon.svg',
     image: '/storeOps/cart.png',
     description: 'Full-stack CRUD E-Commerce Platform with features like product and category management, cart functionality, user authentication, payment processing, order management, responsive design, and more.',
@@ -118,10 +109,10 @@ export const projects = [
   },
 {
   title: "Sparks",
-  techStack: 'Next.js, Web Sockets, AWS, mySQL',
+  techStack: 'React, Next.js, Web Sockets, AWS, SQL',
   projectIcon: '/assets/github.svg',
   image: '/sparks/sparks-chats.png',
-  description: 'AI powered full stack CRUD social media platform and messaging app with user authentication, using RDS, S3, Web Sockets and much more.',
+  description: 'AI powered full stack CRUD social media platform and messaging application.',
   link: "https://github.com/tomyRomero/sparks"
 },
 
@@ -143,9 +134,10 @@ export const projectDetails = [
   {
     title: "ArtifyMe",
     type: "Full Stack CRUD Mobile App",
-    tools: ['/assets/typescript.png','/assets/s3.svg', '/assets/reactjs.png', '/assets/springboot.png', '/assets/fastapi.png', '/assets/mongodb.png' , '/assets/expo.png'],
-    images: ['/artifyme/details.png', '/artifyme/canvas.png', '/artifyme/colorpicker.png', '/artifyme/home.png', '/artifyme/homedark.png','/artifyme/login.png', '/artifyme/signup.png', '/artifyme/about.png', '/artifyme/profile.png', '/artifyme/profiledark.png', '/artifyme/create.png', '/artifyme/results.png','/artifyme/contact.png' ],
-    description: 'ArtifyMe is a mobile application that enables users to convert sketches into images using AI-powered image generation. The app features a React Native frontend for seamless mobile experience, backed by a JAVA Spring Boot backend with JWT authentication for secure user management. Sketch-to-image conversion is facilitated by a Python FastAPI integrated with Stable Diffusion AI model. ArtifyMe utilizes Amazon S3 for cloud storage and MongoDB for efficient data management. Click on the code button to explore the README for more details and detailed setup instructions.',
+    tools: ['/assets/typescript.png','/assets/s3.svg', '/assets/dotnet.png', '/assets/reactjs.png', '/assets/fastapi.png', '/assets/expo.png',  '/assets/sql.png',
+      ],
+    images: ['/artifyme/details.png', '/artifyme/canvas.png', '/artifyme/colorpicker.png', '/artifyme/home.png', '/artifyme/homedark.png','/artifyme/login.png', '/artifyme/signup.png', '/artifyme/about.png', '/artifyme/profile.png', '/artifyme/profiledark.png', '/artifyme/create.png', '/artifyme/results.png' ],
+    description: 'ArtifyMe is a mobile application that enables users to convert sketches into images using AI-powered image generation. The app features a React Native frontend for seamless mobile experience, backed by a ASP .NET backend with JWT authentication for secure user management. Sketch-to-image conversion is facilitated by a Python FastAPI integrated with Stable Diffusion AI model. ArtifyMe utilizes Amazon S3 for cloud storage and SQL Server with Entity Framework for efficient data management. Click on the code button to explore the README for more details and detailed setup instructions.',
     livelink: 'https://github.com/tomyRomero/artifyme',
     githubrepo: 'https://github.com/tomyRomero/artifyme',
     year: '2024',
@@ -234,10 +226,6 @@ export const technologies = [
     icon: azure.src
   },
   {
-    name: "Node JS",
-    icon: nodejs.src,
-  },
-  {
     name: "git",
     icon: git.src,
   },
@@ -246,12 +234,8 @@ export const technologies = [
     icon: docker.src,
   },
   {
-    name: "Java",
-    icon: java.src,
-  },
-  {
-    name: "mySQL",
-    icon: sql.src,
+    name: "SQL server",
+    icon: sqlServer.src,
   },
   {
     name: "next.js",

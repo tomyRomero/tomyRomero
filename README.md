@@ -21,6 +21,8 @@ Check out my [**Live Portfolio Site**](https://tomyromero.vercel.app/) to explor
 ![CSS 3](https://img.shields.io/badge/-CSS%203-1572B6?style=flat&logo=css3&logoColor=white)
 ![C#](https://img.shields.io/badge/-C%23-239120?style=flat&logo=c-sharp&logoColor=white)
 ![.NET](https://img.shields.io/badge/-.NET-512BD4?style=flat&logo=dotnet&logoColor=white)
+![ASP.NET](https://img.shields.io/badge/ASP.NET-512BD4?style=flat&logo=dotnet&logoColor=white)
+![MS SQL Server](https://img.shields.io/badge/MS%20SQL%20Server-CC2927?style=flat&logo=microsoft-sql-server&logoColor=white)
 ![Azure](https://img.shields.io/badge/-Azure-0078D4?style=flat&logo=microsoft-azure&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/-JavaScript-F7DF1E?style=flat&logo=javascript&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/-TypeScript-3178C6?style=flat&logo=typescript&logoColor=white)
@@ -28,8 +30,6 @@ Check out my [**Live Portfolio Site**](https://tomyromero.vercel.app/) to explor
 ![Node JS](https://img.shields.io/badge/-Node%20JS-339933?style=flat&logo=node.js&logoColor=white)
 ![Git](https://img.shields.io/badge/-Git-F05032?style=flat&logo=git&logoColor=white)
 ![Docker](https://img.shields.io/badge/-Docker-2496ED?style=flat&logo=docker&logoColor=white)
-![Java](https://img.shields.io/badge/-Java-007396?style=flat&logo=java&logoColor=white)
-![MySQL](https://img.shields.io/badge/-MySQL-4479A1?style=flat&logo=mysql&logoColor=white)
 ![Next.js](https://img.shields.io/badge/-Next.js-000000?style=flat&logo=next.js&logoColor=white)
 ![AWS S3](https://img.shields.io/badge/-AWS%20S3-232F3E?style=flat&logo=amazon-aws&logoColor=white) 
 ![Amazon RDS](https://img.shields.io/badge/-Amazon%20RDS-232F3E?style=flat&)
@@ -46,7 +46,7 @@ Check out my [**Live Portfolio Site**](https://tomyromero.vercel.app/) to explor
   - [**ReadMe**](https://github.com/240708-NET-FS/Project2_OMDb_API_Movies_CMS_Group1/blob/main/README.md)
   
 - [**ArtifyMe**](https://github.com/tomyRomero/artifyMe) 🎨 
-  - Transform imaginative sketches into AI-generated images , using react native , JAVA spring boot with JWT auth, python fastapi w/ stable diffusion.
+  - Transform imaginative sketches into AI-generated images , using react native , asp .net, SQL server, python fastapi w/ stable diffusion.
   - [**ReadMe**](https://github.com/tomyRomero/artifyme/blob/main/README.md)
   - [![Stars](https://img.shields.io/github/stars/tomyRomero/artifyMe?style=social)](https://github.com/tomyRomero/artifyMe/stargazers)
 
@@ -68,7 +68,6 @@ tomyfletcher99@hotmail.com
 
 ## <a name="fun-fact">🌱 I'm currently learning</a>
 
-- .NET core
 - Docker
 - Azure
 
