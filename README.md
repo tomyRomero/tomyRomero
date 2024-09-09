@@ -50,7 +50,7 @@ Check out my [**Live Portfolio Site**](https://tomyromero.vercel.app/) to explor
   - [**ReadMe**](https://github.com/tomyRomero/artifyme/blob/main/README.md)
   - [![Stars](https://img.shields.io/github/stars/tomyRomero/artifyMe?style=social)](https://github.com/tomyRomero/artifyMe/stargazers)
 
-- [**StoreOps**](https://github.com/tomyRomero/storeOps) 📦 
+- [**StoreOperations**](https://github.com/tomyRomero/storeOps) 📦 
   - FullStack E-commerce Store powered by Next.js, Tailwind, MongoDB and Stripe, featuring an admin dashboard.
   - [**ReadMe**](https://github.com/tomyRomero/storeOps/blob/main/README.md)
   - [![Stars](https://img.shields.io/github/stars/tomyRomero/storeOps?style=social)](https://github.com/tomyRomero/storeOps/stargazers)
