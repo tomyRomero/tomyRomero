@@ -1,37 +1,37 @@
-
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { motion as m } from "framer-motion";
 import Image from "next/image";
 import { useAppContext } from "@/lib/AppContext";
 
 export default function ThemeToggle() {
+  const { theme, setTheme } = useAppContext();
+  const [mounted, setMounted] = useState(false); 
 
-const {theme, setTheme} = useAppContext();
-
+  // Set mounted state to true after the component has mounted
   useEffect(() => {
-    if (theme === "dark") {
-      setTheme("dark");
-    } else {
-      setTheme("light");
-    }
-  }, [theme]);
+    setMounted(true);
+  }, []);
 
+  // Handle theme toggle
   function handleTheme() {
     setTheme(theme === "dark" ? "light" : "dark");
   }
+
+  // Return null if the component has not mounted to avoid hydration issues
+  if (!mounted) return null;
 
   return (
     <div className="justify-self-end">
       <button onClick={handleTheme}>
         <div
-          className={`md:mt-2.5 w-[53px] h-[27px] border rounded-full relative flex items-center `}
+          className={`md:mt-2.5 w-[53px] h-[27px] border rounded-full relative flex items-center`}
           style={{
             border: `1px solid ${theme === "light" ? "black" : "white"}`,
           }}
         >
           <m.div
             animate={theme === "light" ? { x: 29 } : { x: 5 }}
-            className={`w-[17px] h-[17px] translate-x-[5px] rounded-full absolute flex items-center justify-center  ${
+            className={`w-[17px] h-[17px] translate-x-[5px] rounded-full absolute flex items-center justify-center ${
               theme === "light" ? "bg-primary-light" : "bg-primary-dark"
             }`}
           >

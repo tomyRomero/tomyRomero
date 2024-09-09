@@ -79,7 +79,7 @@ const About = () => {
 
             <motion.p
               variants={fadeIn("", "", 0.1, 1)}
-              className={`mt-4 text-left  max-sm:text-base-semibold text-body-normal max-w-3xl leading-[30px] ${theme === "light" ? 'text-near-black' : 'text-white'}`}
+              className={`mt-4 text-left  max-sm:text-heading5-bold text-heading4-bold max-w-3xl leading-[30px] ${theme === "light" ? 'text-near-black' : 'text-white'}`}
             >
             {about}
             </motion.p>
@@ -89,6 +89,7 @@ const About = () => {
         ref={ref}>
           {services.map((service, index) => (
             <motion.div 
+            className="max-sm:mx-auto"
             initial='hidden'
             animate={ 'show'} // Use inView state to trigger animation
             key={service.title} variants={fadeIn("up", "spring", index * 0.5, 0.75)}

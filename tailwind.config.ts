@@ -171,6 +171,10 @@ const config: Config = {
       'gray' : 'rgb(156 163 175)',
       'secondary' : "#aaa6c3",
       'tertiary' : "#151030",
+      'blue' : "#0060d4",
+      'green' : "#0ABF53",
+      "orange": "#E85C0D",
+      "yellow" : "#FABC3F"
     },
     extend: {
       backgroundImage: {

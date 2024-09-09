@@ -33,7 +33,7 @@ const ContactForm = () => {
     // Mail submission logic here
     const response = await fetch('/api/nodemailer', {
       method: 'POST',
-      body: JSON.stringify(form), // Convert data to JSON
+      body: JSON.stringify(form), 
     });
 
     if(response.ok)
@@ -72,8 +72,8 @@ const ContactForm = () => {
         variants={slideIn("left", "tween", 0.2, 1)}
         className="flex-[0.75] bg-black-100 p-8 rounded-2xl"
       >
-        <h3 className={`sectionHeadText py-1 max-sm:text-center ${theme === "light" ? 'text-primary-light' : 'text-primary-dark'}`}>Contact</h3>
-        <p className={`sectionSubText max-sm:text-center ${theme === "light" ? 'text-primary-light' : 'text-primary-dark'}`}>Get in touch</p>
+        <h3 className={`sectionHeadText text-center ${theme === "light" ? 'text-primary-light' : 'text-primary-dark'}`}>Contact</h3>
+        <p className={`sectionSubText text-center ${theme === "light" ? 'text-primary-light' : 'text-primary-dark'}`}>Get in touch</p>
         <form
           ref={formRef}
           onSubmit={handleSubmit}
@@ -124,23 +124,12 @@ const ContactForm = () => {
             />
           </label>
           <div className="flex justify-evenly">
-          <button
-            type="button"
-            onClick={() => router.push("/")
           
-          }
-            className={`${theme === "light" ? "bg-primary-light" : "bg-primary-dark"}
-             text-white py-3 px-8 rounded-xl outline-none w-fit 
-             cursor-pointer hover:scale-125 ease-in-out duration-300
-             font-bold shadow-md shadow-primary`}
-          >
-            Back
-          </button>
           <button
             type='submit'
-            className={`${theme === "light" ? "bg-primary-light" : "bg-primary-dark"}
+            className={`${theme === "light" ? "bg-primary-light text-white" : "bg-primary-dark text-near-black"}
             cursor-pointer hover:scale-125 ease-in-out duration-300
-            py-3 px-8 rounded-xl outline-none w-fit text-white font-bold shadow-md shadow-primary`}
+            py-3 px-8 rounded-xl outline-none w-fit font-bold shadow-md shadow-primary`}
           >
             {loading ? "Sending..." : "Send"}
           </button>

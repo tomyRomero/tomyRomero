@@ -24,30 +24,30 @@ import azure from '../public/assets/azure.png'
 import dotnet from '../public/assets/dotnet.png'
 
 
-export const intro = `Hey, I’m Tomy! I’m passionate about delivering software solutions that meets the needs of users. I value effective communication and thrive in collaborative environments where I can exchange ideas, give and receive constructive feedback, and work towards common goals. I enjoy engaging with my colleagues and solving problems together.`
+export const intro = `I’m passionate about delivering software solutions that meets the needs of users. I value effective communication and thrive in collaborative environments where I can exchange ideas, give and receive constructive feedback, and work towards common goals. I enjoy engaging with my colleagues and solving problems together.`
 
 export const about =`I am a Computer Science graduate with a strong foundation in full stack development, specializing in React, C#, ASP.NET, .NET, REST APIs, and SQL Server, along with knowledge of DevOps practices in Git, Amazon Web Services and Azure.`
 
 //Links for Nav Menu
 export const navLinks = [
   {
-    title: 'Home',
+    title: 'HOME',
     path: '/#home',
     image: '/assets/homenav.jpg',
   },
   {
-    title: 'About',
+    title: 'ABOUT',
     path: '/#about',
     image: '/assets/about.jpg',
   },
   {
-    title: 'Projects',
+    title: 'PROJECTS',
     path: '/#projects',
     image: '/assets/projectsnav.jpg',
   },
   {
-    title: 'Contact',
-    path: '/contact',
+    title: 'CONTACT',
+    path: '/#contact',
     image: '/assets/contactnav.jpg',
   },
 ];
@@ -100,7 +100,7 @@ export const projects = [
   link: "https://github.com/tomyRomero/artifyme"
 },
   {
-    title: "StoreOps",
+    title: "StoreOperations",
     techStack: 'React, Next.js, AWS, Stripe',
     projectIcon: '/assets/storeOps-icon.svg',
     image: '/storeOps/cart.png',

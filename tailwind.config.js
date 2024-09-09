@@ -43,6 +43,13 @@ module.exports = {
           fontWeight: "600",
         },
       ],
+      "heading2.5-bold": [  
+        "28px",
+        {
+            lineHeight: "140%",
+            fontWeight: "700",
+          },
+      ],
       "heading3-bold": [
         "24px",
         {
@@ -58,6 +65,20 @@ module.exports = {
         },
       ], "heading4-bold": [
         "20px",
+        {
+          lineHeight: "140%",
+          fontWeight: "700",
+        },
+      ],
+      "heading5-medium": [
+        "18px",
+        {
+          lineHeight: "140%",
+          fontWeight: "500",
+        },
+      ],
+      "heading5-bold": [
+        "18px",
         {
           lineHeight: "140%",
           fontWeight: "700",
@@ -184,7 +205,11 @@ module.exports = {
       'gray' : 'rgb(156 163 175)',
       'secondary' : "#aaa6c3",
       'tertiary' : "#151030",
-      'mid-light': '#1a1a2e'
+      'mid-light': '#1a1a2e',
+      'blue' : "#0060d4",
+      'green' : "#0ABF53",
+      "orange": "#E85C0D",
+      "yellow" : "#FABC3F"
     },
     extend: {
       keyframes: {
