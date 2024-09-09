@@ -4,6 +4,7 @@ import './globals.css'
 import { AppProvider } from '@/lib/AppContext'
 import { Toaster } from "@/components/ui/toaster";
 import NewNav from '@/components/nav/newNav'
+import StarsCanvas from '@/components/canvas/Stars';
 
 
 
@@ -24,7 +25,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${interTight.className}`} >
+      <body className={`${interTight.className}  z-0`} >
         <AppProvider>
           <NewNav />
           <div className='mt-14 max-sm:mt-2' >

@@ -11,7 +11,7 @@ const HeroSection = () => {
   const router = useRouter();
 
   return (
-    <section className={`mt-10 max-sm:mt-16 ${theme == 'light' ? 'bg-white' : 'bg-near-black'} relative flex items-center justify-center px-4 py-6 md:px-6 md:py-10 `}>
+    <section className={`z-0 mt-10 max-sm:mt-16 relative flex items-center justify-center px-4 py-6 md:px-6 md:py-10 `}>
   
       <div className={`${theme == "light" ? "text-near-black" : "text-white"} text-center max-w-md md:max-w-2xl lg:max-w-3xl flex flex-col items-center`}>
         <h1 className="text-heading2.5-bold md:text-heading1-bold font-bold leading-tight">

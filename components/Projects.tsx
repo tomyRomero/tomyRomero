@@ -29,6 +29,7 @@ const Projects = () => {
       id="projects"
       //@ts-ignore
       variants={staggerContainer()}
+      className="mt-10"
     >
       <motion.div
         //@ts-ignore
@@ -70,7 +71,9 @@ const Projects = () => {
                   `}
                   >
                     <CardHeader className="flex flex-row items-center gap-4">
-                      <Link href={project.link} target="_blank">
+                      <Link href={project.link} target="_blank"
+                      onClick={(e) => e.stopPropagation()} // Prevents click from triggering main link
+                      >
                         <Image
                           src={
                             theme === "light"

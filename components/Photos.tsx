@@ -64,7 +64,7 @@ const Photo = ({
 export const Photos = () => {
   const {theme} = useAppContext();
   return (
-    <div className={`md:pt-8 ${theme === 'light' ? '' : 'bg-near-black'}`}>
+    <div className={`md:pt-8`}>
     <div className="my-8">
       <div className="hide-scrollbar -my-4 flex gap-8 overflow-y-auto py-4 px-8">
         {images.map((Image, index) => (

@@ -35,7 +35,6 @@ const {theme, setSelected} = useAppContext();
           </div>
             <div className={`py-6 relative z-0`}>
                   <ContactForm />
-                  <StarsCanvas />
               </div>
         </div>
       </section>
@@ -55,7 +54,7 @@ const {theme, setSelected} = useAppContext();
             </div>
             <div className="space-y-2">
               <h2 className={`text-heading3-bold ${theme === 'light' ? 'text-primary-light' : 'text-primary-dark'}`}>Location</h2>
-              <p className={`text-base-regular ${theme === 'light' ? 'text-near-black' : 'text-white'}`}>U.S CT</p>
+              <p className={`text-base-regular ${theme === 'light' ? 'text-near-black' : 'text-white'}`}>U.S.A, CT 06239</p>
             </div>
           </div>
         </div>

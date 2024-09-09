@@ -29,7 +29,7 @@ const Stars = (props: any) => {
         <PointMaterial
           transparent
           color={starColor}
-          size={0.002}
+          size={0.001}
           sizeAttenuation={true}
           depthWrite={false}
         />
@@ -39,9 +39,8 @@ const Stars = (props: any) => {
 };
 
 const StarsCanvas = () => {
-  const {theme} = useAppContext();
   return (
-    <div className={`w-full h-auto absolute inset-0 z-[-1]  ${theme === "light" ? '' : 'bg-near-black'}`}>
+    <div className={`w-full h-full absolute inset-0 z-[-10]`}>
       <Canvas camera={{ position: [0, 0, 1] }}>
         <Suspense fallback={null}>
           <Stars />

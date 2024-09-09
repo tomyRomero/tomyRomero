@@ -18,7 +18,7 @@ import git from '../public/assets/git.png'
 import css from '../public/assets/css.png'
 import reactjs from '../public/assets/reactjs.png'
 import typescript from '../public/assets/typescript.png'
-import sqlServer from '../public/assets/sqlserver.jpeg'
+import sqlserver from '../public/assets/MSSQLServer.png'
 import next from '../public/assets/next-js.svg'
 import azure from '../public/assets/azure.png'
 import dotnet from '../public/assets/dotnet.png'
@@ -31,22 +31,22 @@ export const about =`I am a Computer Science graduate with a strong foundation i
 //Links for Nav Menu
 export const navLinks = [
   {
-    title: 'HOME',
-    path: '/#home',
-    image: '/assets/homenav.jpg',
-  },
-  {
-    title: 'ABOUT',
+    title: 'About',
     path: '/#about',
     image: '/assets/about.jpg',
   },
   {
-    title: 'PROJECTS',
+    title: 'Experience',
+    path: '/#experience',
+    image: '/assets/projectsnav.jpg',
+  },
+  {
+    title: 'Projects',
     path: '/#projects',
     image: '/assets/projectsnav.jpg',
   },
   {
-    title: 'CONTACT',
+    title: 'Contact',
     path: '/#contact',
     image: '/assets/contactnav.jpg',
   },
@@ -88,7 +88,7 @@ export const projects = [
     techStack: 'React, ASP.NET Core, SQL Server, Azure, OMDb API',
     projectIcon: '/assets/github.svg',
     image: '/iMovies/imovieshome.png',
-    description: 'As part of a collaborative team, I contributed to a content management system that allows users to manage a list of movies with social media features. Responsibilities: Frontend and backend development',
+    description: 'Contributed to a content management system as part of a collaborative team, that allows users to manage a list of movies with social media features.',
     link: "https://github.com/240708-NET-FS/Project2_OMDb_API_Movies_CMS_Group1",
   },
 {
@@ -104,7 +104,7 @@ export const projects = [
     techStack: 'React, Next.js, AWS, Stripe',
     projectIcon: '/assets/storeOps-icon.svg',
     image: '/storeOps/cart.png',
-    description: 'Full-stack CRUD E-Commerce Platform with features like product and category management, cart functionality, user authentication, payment processing, order management, responsive design, and more.',
+    description: 'Full-stack CRUD E-Commerce Platform for online shopping for customers and businesses.',
     link: "https://github.com/tomyRomero/storeOps"
   },
 {
@@ -123,9 +123,42 @@ export const projectDetails = [
   {
     title: 'Sparks',
     type: 'Full Stack CRUD Social Media App',
-    tools: ['/assets/sql.png', '/assets/next.webp', '/assets/reactjs.png', '/assets/tailwind.png', '/assets/typescript.png', '/assets/s3.svg', '/assets/rds.webp', '/assets/pusher.png'],
-    images: ['/sparks/sparks-login.png','/sparks/sparks-home.png','/assets/sparks-home-moblie.png','/sparks/sparks-studio.png', '/sparks/sparks-chats.png','/sparks/editSpark.png' , '/sparks/sparks-noti.png', '/sparks/sparks-profile.png', '/sparks/sparks-message.png', '/sparks/sparks-post.png', '/sparks/sparks-share.png','/sparks/sparks-search.png','/sparks/sparks-search-post.png', '/sparks/movieSpark.png', '/sparks/novelSpark.png' ],
-    description: `Sparks empowers users to explore and share innovative ideas. It offers full CRUD operations for all posts, a dynamic homepage with real-time filtering, a user-to-user messaging system powered by web sockets, and AI-driven post generation with customizable categories. The platform includes a notification system with real-time updates, dynamic user profiles with data on their comments, likes, and authored posts. Additionally, users can search for other users and posts, and pagination is implemented for optimal performance. These are just some of the many features, click on the code button to read the ReadMe for more details!`,
+    tools: [
+      '/assets/sql.png',
+      '/assets/next.webp',
+      '/assets/reactjs.png',
+      '/assets/tailwind.png',
+      '/assets/typescript.png',
+      '/assets/s3.svg',
+      '/assets/rds.webp',
+      '/assets/pusher.png'
+    ],
+    images: [
+      '/sparks/sparks-login.png',
+      '/sparks/sparks-home.png',
+      '/assets/sparks-home-moblie.png',
+      '/sparks/sparks-studio.png',
+      '/sparks/sparks-chats.png',
+      '/sparks/editSpark.png',
+      '/sparks/sparks-noti.png',
+      '/sparks/sparks-profile.png',
+      '/sparks/sparks-message.png',
+      '/sparks/sparks-post.png',
+      '/sparks/sparks-share.png',
+      '/sparks/sparks-search.png',
+      '/sparks/sparks-search-post.png',
+      '/sparks/movieSpark.png',
+      '/sparks/novelSpark.png'
+    ],
+    description: `Sparks is an innovative social media application designed to help users explore, share, and interact with creative ideas. Built using the latest frontend techonologies such as React and Next, Sparks is hosted on Amazon Web Services using a RDS SQL database for database management and S3 for image storage.`,
+    features: [
+      'Full CRUD operations for posts',
+      'Real-time filtering and updates',
+      'Web socket-based real-time user messaging',
+      'AI-driven post generation with customizable categories',
+      'Dynamic user profiles with interaction insights',
+      'Comprehensive search and pagination'
+    ],
     livelink: 'https://sparkify.vercel.app/',
     githubrepo: 'https://github.com/tomyRomero/sparks',
     year: '2023',
@@ -134,29 +167,94 @@ export const projectDetails = [
   {
     title: "ArtifyMe",
     type: "Full Stack CRUD Mobile App",
-    tools: ['/assets/typescript.png','/assets/s3.svg', '/assets/dotnet.png', '/assets/reactjs.png', '/assets/fastapi.png', '/assets/expo.png',  '/assets/sql.png',
-      ],
-    images: ['/artifyme/details.png', '/artifyme/canvas.png', '/artifyme/colorpicker.png', '/artifyme/home.png', '/artifyme/homedark.png','/artifyme/login.png', '/artifyme/signup.png', '/artifyme/about.png', '/artifyme/profile.png', '/artifyme/profiledark.png', '/artifyme/create.png', '/artifyme/results.png' ],
-    description: 'ArtifyMe is a mobile application that enables users to convert sketches into images using AI-powered image generation. The app features a React Native frontend for seamless mobile experience, backed by a ASP .NET backend with JWT authentication for secure user management. Sketch-to-image conversion is facilitated by a Python FastAPI integrated with Stable Diffusion AI model. ArtifyMe utilizes Amazon S3 for cloud storage and SQL Server with Entity Framework for efficient data management. Click on the code button to explore the README for more details and detailed setup instructions.',
+    tools: [
+      '/assets/typescript.png',
+      '/assets/s3.svg',
+      '/assets/dotnet.png',
+      '/assets/reactjs.png',
+      '/assets/fastapi.png',
+      '/assets/expo.png',
+      '/assets/sql.png',
+    ],
+    images: [
+      '/artifyme/details.png',
+      '/artifyme/canvas.png',
+      '/artifyme/colorpicker.png',
+      '/artifyme/home.png',
+      '/artifyme/homedark.png',
+      '/artifyme/login.png',
+      '/artifyme/signup.png',
+      '/artifyme/about.png',
+      '/artifyme/profile.png',
+      '/artifyme/profiledark.png',
+      '/artifyme/create.png',
+      '/artifyme/results.png'
+    ],
+    description: `ArtifyMe is a powerful mobile application that enables users to transform sketches into high-quality images using AI technology. The app features a user-friendly React Native interface, an ASP.NET backend for secure authentication, and a FastAPI-powered image generation service integrated with the Stable Diffusion model.  Explore the README for comprehensive setup instructions and additional details.`,
+    features: [
+      'Sketch-to-image AI-powered conversion',
+      'Secure authentication with JWT',
+      'Cloud storage with Amazon S3',
+      'User-friendly UI/UX with pagination and dark mode',
+      'Data management with SQL Server',
+      'Seamless React Native mobile experience',
+      'Integration with Stable Diffusion AI model'
+    ],
     livelink: 'https://github.com/tomyRomero/artifyme',
     githubrepo: 'https://github.com/tomyRomero/artifyme',
     year: '2024',
-    isLive: false
+    isLive: false,
   },
   {
-    title: 'StoreOps',
+    title: 'StoreOperations',
     type: 'Full Stack CRUD E-Commerce Platform',
-    tools: ['/assets/reactjs.png','/assets/next.webp', '/assets/typescript.png', '/assets/mongodb.png', '/assets/s3.svg', '/assets/nextauth.png', '/assets/stripe.svg'],
-    images: ['/storeOps/home.png', '/storeOps/mobliehome.png', '/storeOps/promotions.png','/storeOps/footer.png',
-    '/storeOps/products.png', '/storeOps/productdetails.png', '/storeOps/cart.png', '/storeOps/checkout.png','/storeOps/search.png'
-    , '/storeOps/login.png','/storeOps/accountorderdetails.png','/storeOps/accountorders.png','/storeOps/accountaddresses.png',  '/storeOps/privacyPolicy.png', '/storeOps/address.png',
-    , '/storeOps/ordersuccess.png', '/storeOps/activity.png', 
-    '/storeOps/adminproducts.png', '/storeOps/editproduct.png',
-     , '/storeOps/mobileadmin.png', '/storeOps/adminusers.png','/storeOps/adminuserdetails.png', 
-      '/storeOps/adminmakedeal.png',   '/storeOps/newsletter.png',
-      '/storeOps/admincategories.png', '/storeOps/editcategory.png', '/storeOps/adminorders.png',
+    tools: [
+      '/assets/reactjs.png',
+      '/assets/next.webp',
+      '/assets/typescript.png',
+      '/assets/mongodb.png',
+      '/assets/s3.svg',
+      '/assets/nextauth.png',
+      '/assets/stripe.svg'
     ],
-    description: `StoreOps is a full-stack E-Commerce Platform designed to provide a seamless online shopping experience for users and businesses with an admin panel. With features like product and category management(create,read, update, delete), cart functionality, user authentication, payment processing, order management, and more, StoreOps offers a comprehensive solution for businesses. Please click on the code button to checkout the readMe for more details!`,
+    images: [
+      '/storeOps/home.png',
+      '/storeOps/mobliehome.png',
+      '/storeOps/promotions.png',
+      '/storeOps/footer.png',
+      '/storeOps/products.png',
+      '/storeOps/productdetails.png',
+      '/storeOps/cart.png',
+      '/storeOps/checkout.png',
+      '/storeOps/search.png',
+      '/storeOps/login.png',
+      '/storeOps/accountorderdetails.png',
+      '/storeOps/accountorders.png',
+      '/storeOps/accountaddresses.png',
+      '/storeOps/privacyPolicy.png',
+      '/storeOps/address.png',
+      '/storeOps/ordersuccess.png',
+      '/storeOps/activity.png',
+      '/storeOps/adminproducts.png',
+      '/storeOps/editproduct.png',
+      '/storeOps/mobileadmin.png',
+      '/storeOps/adminusers.png',
+      '/storeOps/adminuserdetails.png',
+      '/storeOps/adminmakedeal.png',
+      '/storeOps/newsletter.png',
+      '/storeOps/admincategories.png',
+      '/storeOps/editcategory.png',
+      '/storeOps/adminorders.png'
+    ],
+    description: `StoreOpertions is a robust E-Commerce platform designed to enhance the online shopping experience for users and businesses. Built using the latest frontend techonologies such as React and Next, payment processing with Stripe and real time email notifications using nodemailer and webhooks, as well as image stroage solution with Amazon S3. Explore the README for comprehensive setup instructions and additional details.`,
+    features: [
+      'Product and category management (CRUD operations)',
+      'Cart functionality and payment processing with Stripe',
+      'User authentication and order management',
+      'Admin panel for comprehensive business operations',
+      'Responsive design for desktop and mobile, with pagination , filtering and search functionality',
+      'Detailed analytics and reporting'
+    ],
     livelink: 'https://palettehub.vercel.app/',
     githubrepo: 'https://github.com/tomyRomero/storeOps',
     year: '2024',
@@ -178,22 +276,23 @@ export const projectDetails = [
       '/iMovies/moviemodal.png',
       '/iMovies/profile.png'
     ],
-    description: `As part of a collaborative team, I contributed to a comprehensive platform designed for movie enthusiasts to manage and share their favorite movies. 
-    Responsibilities:
-    Developed a Movies Content Management System using ASP.NET Core, integrating the OMDb API to manage and display movie information.
-    Implemented a RESTful API backend with C#, utilizing Entity Framework Core for database management, SQL Server for data persistence.
-    Designed and built the client-server architecture, creating a dynamic React frontend with authentication and CRUD functionality for managing user movie lists, including searching, adding, editing, and deleting movies using the OMDb API for metadata retrieval and user input customization.
-    Implemented social media capabilities, allowing users to share movie lists with followers, like/dislike movies, and view the most popular movies within the community.
-    Hosted the database on Azure SQL Server for secure and scalable data management.
-    Developed and executed unit tests using xUnit for backend services.
-    Managed front-end testing using Jest.
-    `,
+    description: `For the iMovies project, I contributed to both the frontend and backend development, creating a comprehensive content management system for movie enthusiasts. My responsibilities included helping with the backend using ASP.NET Core, integrating Entity Framework Core and SQL Server for data management, and implementing API endpoints. On the frontend, I developed dynamic React components for managing movie collections.`,
+    features: [
+      'Content management for movie collections',
+      'User authentication with JWT',
+      'Reponisve UI/UX',
+      'Integration with OMDb API for movie data',
+      'CRUD operations for managing user movie lists',
+      'Social features including movie sharing, liking, and community interactions, such as displaying top-rated movies.',
+      'Secure data management with Azure SQL Server',
+      'Unit testing with xUnit and front-end testing with Jest'
+    ],
     livelink: '', 
     githubrepo: 'https://github.com/240708-NET-FS/Project2_OMDb_API_Movies_CMS_Group1',
     year: '2024',
     isLive: false,
   }
-]
+];
 
 //Techs
 export const technologies = [
@@ -235,11 +334,22 @@ export const technologies = [
   },
   {
     name: "SQL server",
-    icon: sqlServer.src,
+    icon: sqlserver.src,
   },
   {
     name: "next.js",
     icon: next.src
+  }
+];
+
+export const experiences = [
+  {
+    title: "Contract Software Developer",
+    company: "Revature",
+    date: "July 2024 - Present",
+    description: `Experience in .NET, React, and DevOps, knowledge in developing end-to-end
+web applications, creating dynamic front-end interfaces, and robust backend
+REST APIs with thorough unit testing.`
   }
 ];
 

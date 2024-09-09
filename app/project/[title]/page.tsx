@@ -9,6 +9,7 @@ import ProjectDetails from '@/components/project/ProjectDetails';
 import ProjectDescription from '@/components/project/ProjectDescription';
 import { motion } from "framer-motion";
 import { slideIn } from "../../../lib/motion";
+import StarsCanvas from '@/components/canvas/Stars';
 
 const page = ({ params }: { params: { title: string } }) => {
   const { theme } = useAppContext();
@@ -22,6 +23,7 @@ const page = ({ params }: { params: { title: string } }) => {
       tools: ['/assets/docker.png', '/assets/docker.png', '/assets/docker.png'],
       images: ['','', ''],
       description: 'Project Not Found, No Details',
+      features: ['empty'],
       livelink: '',
       githubrepo: '',
       year: '----',
@@ -35,12 +37,17 @@ const page = ({ params }: { params: { title: string } }) => {
   const currentProject = findProjectByTitle(decodedTitle);
   
   return (
-    <div className={`flex flex-col gap-0 ${theme === "light" ? "" : "bg-near-black"}`}>
+    
+    <section className={`z-0 relative flex flex-col gap-0 ${theme === "light" ? "" : "bg-near-black"}`}>
+       <StarsCanvas />
+    <div>
+        {/* Stars Canvas as background */}
+        
       <motion.div
        initial='hidden'
        animate='show'
        variants={slideIn("left", "tween", 0.2, 1)}
-       className="max-sm:mt-12 md:m-8">
+       className="z-0 max-sm:mt-12 md:m-8">
         <section className="max-w-[980px] mx-auto relative">
           
           <Image
@@ -59,11 +66,12 @@ const page = ({ params }: { params: { title: string } }) => {
           <ImageSlider images={currentProject.images}/>
           </div>
           <div className='px-4'>
-          <ProjectDescription text={currentProject.description} github={currentProject.githubrepo} live={currentProject.livelink} isLive={currentProject.isLive}/>
+          <ProjectDescription features={currentProject.features ? currentProject.features : []} text={currentProject.description} github={currentProject.githubrepo} live={currentProject.livelink} isLive={currentProject.isLive}/>
           </div>
         </section>
       </motion.div>
     </div>
+    </section>
   );
 };
 

@@ -67,7 +67,7 @@ const About = () => {
       variants={staggerContainer()}
       initial='hidden'
       animate='show'
-      className={`w-full mx-auto px-20 py-6 relative z-0 ${theme === "light" ? '' : 'bg-near-black'}`}
+      className={`w-full mx-auto px-20 py-6 relative z-0`}
       id={"about"}
     >
       <motion.section>
@@ -86,7 +86,8 @@ const About = () => {
             
 
         <div className='ml-8 mt-16 flex flex-wrap gap-10'
-        ref={ref}>
+        ref={ref}
+        >
           {services.map((service, index) => (
             <motion.div 
             className="max-sm:mx-auto"
