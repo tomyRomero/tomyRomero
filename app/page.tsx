@@ -3,7 +3,6 @@
 import About from '@/components/home/About';
 import HeroSection from '@/components/Hero';
 import { Photos } from '@/components/Photos';
-import Intro from '@/components/home/Intro';
 import Projects from '@/components/Projects';
 import Tech from '@/components/Tech';
 import Contact from '@/components/contact/Contact';
