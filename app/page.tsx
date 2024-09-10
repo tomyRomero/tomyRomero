@@ -20,19 +20,36 @@ export default function Home() {
     setShowStars(!showStars);
   };
   
-  return (
-  <div className={`relative z-0 flex flex-col mt-10 ${theme === "light" ? '' : 'bg-near-black'} overflow-hidden`}>
-      {/* Stars Canvas as background */}
-       {showStars && <StarsCanvas />}
-      
-      {/* Main Content */}
-      <HeroSection showStars={showStars} toggleStars={toggleStars} />
-      <Photos />
-      <About />
-      <Tech />
-      <Experience />
-      <Projects />
-      <Contact />
-  </div>
-  )
+  try{
+    return (
+      <div className={`relative z-0 flex flex-col mt-10 ${theme === "light" ? '' : 'bg-near-black'} overflow-hidden`}>
+          {/* Stars Canvas as background */}
+           {showStars && <StarsCanvas />}
+          
+          {/* Main Content */}
+          <HeroSection showStars={showStars} toggleStars={toggleStars} />
+          <Photos />
+          <About />
+          <Tech />
+          <Experience />
+          <Projects />
+          <Contact />
+      </div>
+      )
+  } catch (error) {
+    alert("failed to load stars");
+
+    return (
+      <div className={`relative z-0 flex flex-col mt-10 ${theme === "light" ? '' : 'bg-near-black'} overflow-hidden`}>
+          <HeroSection showStars={showStars} toggleStars={toggleStars} />
+          <Photos />
+          <About />
+          <Tech />
+          <Experience />
+          <Projects />
+          <Contact />
+      </div>
+    )
+  }
+
 }

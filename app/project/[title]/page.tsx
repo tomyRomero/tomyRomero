@@ -39,9 +39,7 @@ const page = ({ params }: { params: { title: string } }) => {
   return (
     
     <section className={`z-0 relative flex flex-col gap-0 ${theme === "light" ? "" : "bg-near-black"}`}>
-       <StarsCanvas />
     <div>
-        {/* Stars Canvas as background */}
         
       <motion.div
        initial='hidden'
