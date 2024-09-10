@@ -9,18 +9,24 @@ import Contact from '@/components/contact/Contact';
 import { useAppContext } from '@/lib/AppContext';
 import Experience from '@/components/Experience';
 import StarsCanvas from '@/components/canvas/Stars';
+import { useState } from 'react';
 
 
 export default function Home() {
   const {theme} = useAppContext();
+  const [showStars, setShowStars] = useState(false);
+
+  const toggleStars = () => {
+    setShowStars(!showStars);
+  };
   
   return (
   <div className={`relative z-0 flex flex-col mt-10 ${theme === "light" ? '' : 'bg-near-black'} overflow-hidden`}>
       {/* Stars Canvas as background */}
-      <StarsCanvas />
+       {showStars && <StarsCanvas />}
       
       {/* Main Content */}
-      <HeroSection />
+      <HeroSection showStars={showStars} toggleStars={toggleStars} />
       <Photos />
       <About />
       <Tech />

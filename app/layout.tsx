@@ -4,9 +4,6 @@ import './globals.css'
 import { AppProvider } from '@/lib/AppContext'
 import { Toaster } from "@/components/ui/toaster";
 import NewNav from '@/components/nav/newNav'
-import StarsCanvas from '@/components/canvas/Stars';
-
-
 
 export const metadata: Metadata = {
   title: 'tomyRomero',

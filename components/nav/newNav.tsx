@@ -8,7 +8,6 @@ import { motion as m } from "framer-motion";
 import Link from 'next/link';
 import NavMenu from './NavMenu';
 import { useAppContext } from '@/lib/AppContext';
-import { usePathname } from 'next/navigation';
 
 const NewNav = () => {
   const { theme , selected} = useAppContext();

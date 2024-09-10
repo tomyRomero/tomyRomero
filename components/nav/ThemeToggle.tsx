@@ -26,7 +26,7 @@ export default function ThemeToggle() {
         <div
           className={`md:mt-2.5 w-[53px] h-[27px] border rounded-full relative flex items-center`}
           style={{
-            border: `1px solid ${theme === "light" ? "black" : "white"}`,
+            border: `2px solid ${theme === "light" ? "black" : "white"}`,
           }}
         >
           <m.div
