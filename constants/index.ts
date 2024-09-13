@@ -1,5 +1,6 @@
 
 //Home Page Pictures
+import proTomy from '../public/assets/tomyRomero.jpg'
 import tomy from '../public/assets/tomyRomero.jpeg'
 import uvi from '../public/assets/uvi.jpeg'
 import president from '../public/assets/presidentUvi.jpeg'
@@ -57,7 +58,7 @@ export const images = [
   { img: president, title: 'Picture with President of University of the Virgin Islands', alt: 'Picture with President of University of the Virgin Islands' },
   { img: uvi, title: 'University of the Virgin Islands', alt: 'University of the Virgin Islands' },
   { img: scholarship, title: 'Scholarship Award winner', alt: 'Picture of ScholarShip Reception' },
-  { img: stt, title: 'St.Thomas', alt: 'St.Thomas USVI' },
+  { img: proTomy, title: 'Tomy Romero at Revature', alt: 'Picture of Tomy Romero' },
   { img: deanslist, title: 'Deans List Reception', alt: 'Deans List Reception' },
   { img: art, title: 'My Painting', alt: 'Picture of a Painting by Tomy Romero' },
   { img: tomy, title: 'tomyRomero', alt: 'picture of Tomy Romero smiling' },
