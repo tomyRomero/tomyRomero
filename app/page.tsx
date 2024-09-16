@@ -24,7 +24,8 @@ export default function Home() {
     return (
       <div className={`relative z-0 flex flex-col mt-10 ${theme === "light" ? '' : 'bg-near-black'} overflow-hidden`}>
           {/* Stars Canvas as background */}
-           {showStars && <StarsCanvas />}
+          {/* Disabled for now due to lack of brwowser support for moblie devices */}
+          {/* {showStars && <StarsCanvas />} */}
           
           {/* Main Content */}
           <HeroSection showStars={showStars} toggleStars={toggleStars} />

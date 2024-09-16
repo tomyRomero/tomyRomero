@@ -89,7 +89,8 @@ const HeroSection: React.FC<HeroSectionProps> = ({ showStars, toggleStars }) => 
             Projects
           </button>
           {/* Toggle Stars Canvas button */}
-          <button onClick={toggleStars} className="relative">
+          {/* Disabled for now due to lack of support for moblie device browsers */}
+          {/* <button onClick={toggleStars} className="relative">
             <div
               className={`w-[53px] h-[30px] border rounded-full relative flex items-center`}
               style={{
@@ -110,7 +111,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ showStars, toggleStars }) => 
                 />
               </m.div>
             </div>
-          </button>
+          </button> */}
         </div>
       </div>
     </section>

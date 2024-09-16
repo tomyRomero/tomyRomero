@@ -43,16 +43,49 @@ export default function Experience() {
                     {experience.company}
                   </p>
                 </div>
-                {/* Date positioned below title on smaller screens */}
                 <p className="text-heading4-bold text-muted-foreground sm:mt-0 mt-2">
                   {experience.date}
                 </p>
               </div>
-              <p>{experience.description}</p>
+
+              {/* Rendering the description as bullet points */}
+              <ul className="grid gap-2">
+                {experience.description.map((bullet, i) => (
+                  <li key={i}>
+                    <CheckIcon
+                      className={`mr-2 inline-block h-4 w-4 ${
+                        theme === 'light' ? 'text-near-black' : 'text-white'
+                      }`}
+                    />
+                    <span className={`${theme === 'light' ? 'text-black' : 'text-white'}`}>
+                      {bullet}
+                    </span>
+                  </li>
+                ))}
+              </ul>
             </div>
           ))}
         </div>
       </div>
     </section>
+  );
+}
+
+function CheckIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      className={className}
+      xmlns="http://www.w3.org/2000/svg"
+      width="24"
+      height="24"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <path d="M20 6 9 17l-5-5" />
+    </svg>
   );
 }

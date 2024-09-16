@@ -345,12 +345,15 @@ export const technologies = [
 
 export const experiences = [
   {
-    title: "Contract Software Developer",
+    title: "Software Developer",
     company: "Revature",
-    date: "July 2024 - Present",
-    description: `Experience in .NET, React, and DevOps, knowledge in developing end-to-end
-web applications, creating dynamic front-end interfaces, and robust backend
-REST APIs with thorough unit testing.`
+    date: "June - September 2024",
+    description: [
+      "Trained in full-stack development with .NET, React, MS SQL Server, and DevOps methodologies, alongside unit testing for code quality.",
+      "Developed proficiency in building and maintaining dynamic front-end interfaces with React and REST APIs with ASP.NET.",
+      "Gained hands-on experience with CI/CD pipelines and Azure cloud-based solutions.",
+      "Collaborated in an agile environment on end-to-end development projects."
+    ]
   }
 ];
 
