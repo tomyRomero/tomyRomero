@@ -345,7 +345,7 @@ export const technologies = [
 
 export const experiences = [
   {
-    title: "Software Developer",
+    title: "Software Developer Trainee",
     company: "Revature",
     date: "June - September 2024",
     description: [
