@@ -70,7 +70,7 @@ const ContactForm = () => {
         initial='hidden'
         animate='show'
         variants={slideIn("left", "tween", 0.2, 1)}
-        className="flex-[0.75] bg-black-100 p-8 rounded-2xl"
+        className={`flex-[0.75] border-2 ${theme === "light" ? 'border-primary-light' : 'border-primary-dark'} p-8 rounded-2xl shadow-lg`}
       >
         <h3 className={`sectionHeadText text-center ${theme === "light" ? 'text-primary-light' : 'text-primary-dark'}`}>Contact</h3>
         <p className={`sectionSubText text-center ${theme === "light" ? 'text-primary-light' : 'text-primary-dark'}`}>Get in touch</p>
@@ -92,6 +92,7 @@ const ContactForm = () => {
                placeholder:text-gray rounded-lg 
                outline-none
                font-medium
+               focus:outline-none focus:ring-2 ${theme === "light" ? "focus:ring-primary-light" : "focus:ring-primary-dark"}
               ${theme === "light" ? "border-primary-light" : "border-primary-dark"}
                `}
             />
@@ -104,9 +105,13 @@ const ContactForm = () => {
               value={form.email}
               onChange={handleChange}
               placeholder="What's your web address? So I can get back to you."
-              className={`bg-white py-4 px-6 placeholder:text-gray border rounded-lg outline-none 
-              ${theme === "light" ? "border-primary-light" : "border-primary-dark"}
-              font-medium`}
+              className={`bg-white border py-4 px-6
+                placeholder:text-gray rounded-lg 
+                outline-none
+                font-medium
+                focus:outline-none focus:ring-2 ${theme === "light" ? "focus:ring-primary-light" : "focus:ring-primary-dark"}
+               ${theme === "light" ? "border-primary-light" : "border-primary-dark"}
+                `}
               required
             />
           </label>
@@ -119,18 +124,23 @@ const ContactForm = () => {
               value={form.message}
               onChange={handleChange}
               placeholder='What would you like to say? Include phone number or web address for me to get back to you.'
-              className={`bg-white py-4 px-6 placeholder:text-secondary rounded-lg outline-none font-medium border 
-              ${theme === "light" ? "border-primary-light" : "border-primary-dark"}`}
+              className={`bg-white border py-4 px-6
+                placeholder:text-gray rounded-lg 
+                outline-none
+                font-medium
+                focus:outline-none focus:ring-2 ${theme === "light" ? "focus:ring-primary-light" : "focus:ring-primary-dark"}
+               ${theme === "light" ? "border-primary-light" : "border-primary-dark"}
+                `}
             />
           </label>
           <div className="flex justify-evenly">
           
-          <button
-            type='submit'
-            className={`${theme === "light" ? "bg-primary-light text-white" : "bg-primary-dark text-near-black"}
-            cursor-pointer hover:scale-125 ease-in-out duration-300
-            py-3 px-8 rounded-xl outline-none w-fit font-bold shadow-md shadow-primary`}
-          >
+            <button
+              type='submit'
+              className={`py-2 px-6 rounded-full font-bold transition duration-300 ease-in-out shadow-lg ${loading ? "bg-gray" : `bg-${theme === "light" ? "primary-light text-white" : "primary-dark text-near-black"} hover:scale-105`} 
+              sm:py-3 sm:px-8 md:py-4 md:px-10`}
+              disabled={loading}
+            >
             {loading ? "Sending..." : "Send"}
           </button>
           </div>
