@@ -11,9 +11,10 @@ import { resumeLink } from '@/constants';
 interface HeroSectionProps {
   showStars: boolean;
   toggleStars: () => void;
+  projectsRef: React.RefObject<HTMLDivElement>;
 }
 
-const HeroSection: React.FC<HeroSectionProps> = ({ showStars, toggleStars }) => {
+const HeroSection: React.FC<HeroSectionProps> = ({ showStars, toggleStars , projectsRef}) => {
   const { theme } = useAppContext();
   const router = useRouter();
 
@@ -105,7 +106,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ showStars, toggleStars }) => 
                 : 'bg-primary-dark text-near-black '
             }`}
             onClick={() => {
-              router.push('#projects');
+              projectsRef.current?.scrollIntoView({ behavior: 'smooth' }); 
             }}
           >
             Projects

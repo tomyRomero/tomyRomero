@@ -15,7 +15,7 @@ interface Props{
 
 export default function ProjectDetails({title, tools, type, year}: Props) {
   
-  const {theme} = useAppContext();
+  const {theme, scrollToSection} = useAppContext();
   const router = useRouter();
 
   return (
@@ -44,7 +44,7 @@ export default function ProjectDetails({title, tools, type, year}: Props) {
         className={`
         cursor-pointer hover:scale-125 ease-in-out duration-300
         flex items-center gap-1.5 px-3 py-1 rounded-xl text-body1-bold text-white ${theme === "light" ? 'bg-primary-light ':'bg-primary-dark'}`}
-        onClick={()=> {router.push('#description')}}
+        onClick={()=> {scrollToSection("description")}}
         >
         Description
         <Image 

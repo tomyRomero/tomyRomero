@@ -19,7 +19,6 @@ export default function ProjectDescription({ text, features, github, live, isLiv
   return (
     <section
       className="mt-6 flex items-center justify-between mb-[100px] flex-col md:flex-row gap-[76px]"
-      id="description"
     >
       <div className="grid gap-6 md:grid-cols-2 md:gap-10">
         <div className="space-y-4">

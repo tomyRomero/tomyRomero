@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ThemeToggle from './ThemeToggle';
 import MenuToggle from './MenuToggle';
 import { navLinks } from '@/constants';
@@ -8,13 +8,13 @@ import { motion as m } from "framer-motion";
 import Link from 'next/link';
 import NavMenu from './NavMenu';
 import { useAppContext } from '@/lib/AppContext';
+import { useRouter, usePathname } from 'next/navigation';
 
 const NewNav = () => {
   const { theme , selected, setSelected, scrollToSection} = useAppContext();
   const [isActive, setIsActive] = useState(false);
-  
+
   const handleNavClick = (path: string) => {
-    setSelected(path);
     scrollToSection(path); // Trigger scroll
     setIsActive(false); // Close the menu if active
   };
@@ -29,15 +29,15 @@ const NewNav = () => {
         </Link>
       </div>
 
-       {/* Links Section */}
-       <ul className={`${theme === "light" ? "text-near-black bg-near-black/10 " : "text-white bg-white/10 "} p-2 px-4 sm:px-6 rounded-full flex space-x-4 sm:space-x-6 md:space-x-8 font-medium max-md:hidden`}>
+      {/* Links Section */}
+      <ul className={`${theme === "light" ? "text-near-black bg-near-black/10" : "text-white bg-white/10"} p-2 px-4 sm:px-6 rounded-full flex space-x-4 sm:space-x-6 md:space-x-8 font-medium max-md:hidden`}>
         {navLinks.map(({ title, path }, i) => (
           <li key={i}>
             <button 
               onClick={() => handleNavClick(path)} 
               className={`px-4 py-2 rounded-lg transition-colors 
-              ${selected === path ? `${theme === "light" ? "bg-primary-light text-white" : "bg-primary-dark text-near-black"} ` : ""}
-              ${theme === "light" ? "hover:bg-primary-light hover:text-white" : "hover:bg-primary-dark hover:text-near-black"}
+                ${selected === path ? `${theme === "light" ? "bg-primary-light text-white" : "bg-primary-dark text-near-black"}` : ""}
+                ${theme === "light" ? "hover:bg-primary-light hover:text-white" : "hover:bg-primary-dark hover:text-near-black"}
               `}
             >
               {title}

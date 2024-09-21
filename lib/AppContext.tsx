@@ -2,6 +2,7 @@
 
 // Import necessary React modules
 import React, { createContext, useContext, ReactNode, useState, useEffect, useRef } from 'react';
+import { useRouter } from 'next/navigation';
 
 // Define the types for the context
 type AppContextProps = {
@@ -20,6 +21,7 @@ type AppContextProps = {
    projectsRef: React.RefObject<HTMLDivElement>;
    contactRef: React.RefObject<HTMLDivElement>;
    experienceRef: React.RefObject<HTMLDivElement>;
+   descriptionRef: React.RefObject<HTMLDivElement>;
 
    scrollToSection: (section: string) => void;
 };
@@ -29,6 +31,8 @@ const AppContext = createContext<AppContextProps | undefined>(undefined);
 
 // Create the AppProvider component that will wrap your application
 export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+
+  const router = useRouter();
   // Initialize the user state using the useState hook
   const [theme, setTheme] = useState<any>("light");
 
@@ -43,6 +47,7 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   const projectsRef = useRef<HTMLDivElement>(null);
   const contactRef = useRef<HTMLDivElement>(null);
   const experienceRef = useRef<HTMLDivElement>(null);
+  const descriptionRef = useRef<HTMLDivElement>(null);
 
   const scrollToSection = (section: string) => {
     const refMap: { [key: string]: React.RefObject<HTMLDivElement> } = {
@@ -50,11 +55,23 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
       projects: projectsRef,
       contact: contactRef,
       experience: experienceRef,
+      description: descriptionRef,
     };
   
     const sectionRef = refMap[section];
+    // Check if we are already on the home page
     if (sectionRef?.current) {
       sectionRef.current.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      // If we are on a project page, push to home and then scroll
+      router.push('/'); // Navigate to the home page
+      setTimeout(() => {
+        // Use a timeout to ensure the navigation happens before scrolling
+        const targetRef = refMap[section];
+        if (targetRef?.current) {
+          targetRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 300); // Adjust the delay if necessary
     }
   };
 
@@ -66,11 +83,12 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
     setSlider,
     selected, setSelected,
 
-    // New section refs
+    // Refs
     aboutRef,
     projectsRef,
     contactRef,
     experienceRef,
+    descriptionRef,
 
     scrollToSection 
   };

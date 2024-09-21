@@ -29,7 +29,7 @@ export default function Home() {
           {/* {showStars && <StarsCanvas />} */}
           
           {/* Main Content */}
-          <HeroSection showStars={showStars} toggleStars={toggleStars} />
+          <HeroSection showStars={showStars} toggleStars={toggleStars} projectsRef={projectsRef}  />
           <Photos />
           <div ref={aboutRef}><About /></div>
           <Tech />
@@ -43,13 +43,16 @@ export default function Home() {
 
     return (
       <div className={`relative z-0 flex flex-col mt-10 ${theme === "light" ? '' : 'bg-near-black'} overflow-hidden`}>
-          <HeroSection showStars={showStars} toggleStars={toggleStars} />
+        
+          {/* Main Content */}
+          <HeroSection showStars={showStars} toggleStars={toggleStars} projectsRef={projectsRef}  />
           <Photos />
-          <About />
+          <div ref={aboutRef}><About /></div>
           <Tech />
-          <Experience />
-          <Projects />
-          <Contact />
+          <div ref={experienceRef}><Experience /></div>
+          <div ref={projectsRef}><Projects /></div>
+          <div ref={contactRef}><Contact /> </div>
+          
       </div>
     )
   }
