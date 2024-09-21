@@ -6,6 +6,7 @@ import { intro } from '@/constants';
 import Link from 'next/link';
 import { useAppContext } from '@/lib/AppContext';
 import { useRouter } from 'next/navigation';
+import { resumeLink } from '@/constants';
 
 interface HeroSectionProps {
   showStars: boolean;
@@ -75,6 +76,27 @@ const HeroSection: React.FC<HeroSectionProps> = ({ showStars, toggleStars }) => 
               className="cursor-pointer hover:scale-125 ease-in-out duration-300"
             />
           </Link>
+          {/* Download Resume button */}
+          <button
+            className={`cursor-pointer hover:scale-125 ease-in-out duration-300 flex items-center gap-1.5 px-3 py-1 rounded-xl text-body1-bold ${
+              theme === 'light'
+                ? 'bg-primary-light text-white'
+                : 'bg-primary-dark text-near-black '
+            }`}
+            onClick={() => {
+              window.open(`${resumeLink}`, '_blank'); 
+            }}
+          >
+            Resume
+            <Image
+              src={`${
+                theme == 'light' ? '/assets/downloadwhite.png' : '/assets/download.png'
+              }`}
+              alt="download icon"
+              width={15}
+              height={15}
+            />
+          </button>
           {/* Projects button */}
           <button
             className={`cursor-pointer hover:scale-125 ease-in-out duration-300 flex items-center gap-1.5 px-3 py-1 rounded-xl text-body1-bold ${
@@ -87,6 +109,14 @@ const HeroSection: React.FC<HeroSectionProps> = ({ showStars, toggleStars }) => 
             }}
           >
             Projects
+            <Image
+              src={`${
+                theme == 'light' ? '/assets/projectwhite.png' : '/assets/project.png'
+              }`}
+              alt="project icon"
+              width={15}
+              height={15}
+            />
           </button>
           {/* Toggle Stars Canvas button */}
           {/* Disabled for now due to lack of support for moblie device browsers */}

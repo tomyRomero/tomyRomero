@@ -25,6 +25,8 @@ import azure from '../public/assets/azure.png'
 import dotnet from '../public/assets/dotnet.png'
 
 
+export const resumeLink = `https://docs.google.com/document/d/1NgKOp9uVqTW2ntBhMemJ5E-mporMj0cH9h6Cnki2nWA/edit?usp=sharing`;
+
 export const intro = `I’m passionate about delivering software solutions that meets the needs of users. I value effective communication and thrive in collaborative environments where I can exchange ideas, give and receive constructive feedback, and work towards common goals. I enjoy engaging with my colleagues and solving problems together.`
 
 export const about =`I am a Computer Science graduate with a strong foundation in full stack development, specializing in React, C#, ASP.NET, .NET, REST APIs, and SQL Server, along with knowledge of DevOps practices in Git, Amazon Web Services and Azure.`
