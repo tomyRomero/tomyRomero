@@ -1,4 +1,7 @@
+"use client";
+
 import { navLinks } from '@/constants';
+import { useAppContext } from '@/lib/AppContext';
 import { motion as m, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -11,6 +14,8 @@ interface Props {
 }
 
 export default function NavMenu({ isActive, setIsActive, theme }: Props) {
+  const { scrollToSection } = useAppContext(); // Access the scrollToSection function
+
   return (
     <>
       <AnimatePresence>
@@ -28,7 +33,7 @@ export default function NavMenu({ isActive, setIsActive, theme }: Props) {
           >
             <div className="flex items-center justify-between max-w-custom mx-auto px-[24px] xl:px-[103px] md:pt-[75px] md:pb-[69px] py-[42px]">
               <nav className="flex flex-wrap lg:max-w-[880px] flex-col md:flex-row md:gap-x-[35px]">
-                {navLinks.map((link, index) => (
+                {navLinks.map(({ title, path }, index) => (
                   <m.div
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -38,19 +43,21 @@ export default function NavMenu({ isActive, setIsActive, theme }: Props) {
                       transition: { delay: index * 0.05 },
                     }}
                     transition={{ delay: index * 0.15 + 0.45 }}
-                    key={link.title}
+                    key={title}
                   >
-                    <Link
-                      href={link.path}
-                      onClick={() => setIsActive(false)}
+                    <button
+                      onClick={() => {
+                        scrollToSection(path); // Trigger scroll
+                        setIsActive(false); // Close the menu
+                      }}
                       className={`md:text-[82px] text-[42px] tracking-[2.52px] font-bold uppercase md:tracking-[5.8px] transition-all duration-500 ${
                         theme === 'light'
                           ? 'text-near-black hover:text-primary-light'
                           : 'text-white hover:text-primary-dark'
                       }`}
                     >
-                      {link.title}
-                    </Link>
+                      {title}
+                    </button>
                   </m.div>
                 ))}
               </nav>

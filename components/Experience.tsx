@@ -10,7 +10,6 @@ export default function Experience() {
       className={`w-full mt-10 mx-auto px-6 md:px-20 py-6 relative z-0 ${
         theme === 'light' ? '' : 'bg-near-black'
       }`}
-      id="experience"
     >
       <div className="space-y-6">
         <h2

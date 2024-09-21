@@ -9,11 +9,12 @@ import Contact from '@/components/contact/Contact';
 import { useAppContext } from '@/lib/AppContext';
 import Experience from '@/components/Experience';
 import StarsCanvas from '@/components/canvas/Stars';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 
 
 export default function Home() {
-  const {theme} = useAppContext();
+  
+  const { theme, aboutRef, projectsRef, contactRef, experienceRef } = useAppContext();
   const [showStars, setShowStars] = useState(false);
 
   const toggleStars = () => {
@@ -30,11 +31,11 @@ export default function Home() {
           {/* Main Content */}
           <HeroSection showStars={showStars} toggleStars={toggleStars} />
           <Photos />
-          <About />
+          <div ref={aboutRef}><About /></div>
           <Tech />
-          <Experience />
-          <Projects />
-          <Contact />
+          <div ref={experienceRef}><Experience /></div>
+          <div ref={projectsRef}><Projects /></div>
+          <div ref={contactRef}><Contact /> </div>
       </div>
       )
   } catch (error) {

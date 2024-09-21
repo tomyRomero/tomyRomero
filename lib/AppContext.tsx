@@ -1,7 +1,7 @@
 "use client"
 
 // Import necessary React modules
-import React, { createContext, useContext, ReactNode, useState, useEffect } from 'react';
+import React, { createContext, useContext, ReactNode, useState, useEffect, useRef } from 'react';
 
 // Define the types for the context
 type AppContextProps = {
@@ -14,6 +14,14 @@ type AppContextProps = {
   
   selected: any;
   setSelected: React.Dispatch<React.SetStateAction<any>>;
+
+   // New section refs
+   aboutRef: React.RefObject<HTMLDivElement>;
+   projectsRef: React.RefObject<HTMLDivElement>;
+   contactRef: React.RefObject<HTMLDivElement>;
+   experienceRef: React.RefObject<HTMLDivElement>;
+
+   scrollToSection: (section: string) => void;
 };
 
 // Create the AppContext with an initial value of undefined
@@ -30,14 +38,43 @@ export const AppProvider: React.FC<{ children: ReactNode }> = ({ children }) => 
   //For navbar , selected pages
   const [selected, setSelected] = useState(0);
 
+  // Create refs for sections
+  const aboutRef = useRef<HTMLDivElement>(null);
+  const projectsRef = useRef<HTMLDivElement>(null);
+  const contactRef = useRef<HTMLDivElement>(null);
+  const experienceRef = useRef<HTMLDivElement>(null);
+
+  const scrollToSection = (section: string) => {
+    const refMap: { [key: string]: React.RefObject<HTMLDivElement> } = {
+      about: aboutRef,
+      projects: projectsRef,
+      contact: contactRef,
+      experience: experienceRef,
+    };
+  
+    const sectionRef = refMap[section];
+    if (sectionRef?.current) {
+      sectionRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   // Provide the context value to the children components, include additional states if there are any
   const contextValue: AppContextProps = {
     theme,
     setTheme,
     slider,
     setSlider,
-    selected, setSelected
+    selected, setSelected,
+
+    // New section refs
+    aboutRef,
+    projectsRef,
+    contactRef,
+    experienceRef,
+
+    scrollToSection 
   };
+
 
   return <AppContext.Provider value={contextValue}>{children}</AppContext.Provider>;
 };

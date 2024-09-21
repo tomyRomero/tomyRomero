@@ -33,26 +33,10 @@ export const about =`I am a Computer Science graduate with a strong foundation i
 
 //Links for Nav Menu
 export const navLinks = [
-  {
-    title: 'About',
-    path: '/#about',
-    image: '/assets/about.jpg',
-  },
-  {
-    title: 'Experience',
-    path: '/#experience',
-    image: '/assets/projectsnav.jpg',
-  },
-  {
-    title: 'Projects',
-    path: '/#projects',
-    image: '/assets/projectsnav.jpg',
-  },
-  {
-    title: 'Contact',
-    path: '/#contact',
-    image: '/assets/contactnav.jpg',
-  },
+  { title: 'About', path: 'about' },
+  { title: 'Experience', path: 'experience' },
+  { title: 'Projects', path: 'projects' },
+  { title: 'Contact', path: 'contact' },
 ];
 
 //Images for home page Photos.tsx

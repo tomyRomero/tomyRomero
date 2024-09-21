@@ -68,7 +68,6 @@ const About = () => {
       initial='hidden'
       animate='show'
       className={`w-full mx-auto px-20 py-6 relative z-0`}
-      id={"about"}
     >
       <motion.section>
         

@@ -26,7 +26,6 @@ const Projects = () => {
 
   return (
     <motion.div
-      id="projects"
       //@ts-ignore
       variants={staggerContainer()}
       className="mt-10"
