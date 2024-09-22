@@ -27,7 +27,7 @@ export default function Experience() {
           {experiences.map((experience, index) => (
             <div key={index} className="grid gap-2">
               {/* Flex Direction adjusted for smaller screens */}
-              <div className="flex flex-col md:flex-row items-start md:items-center justify-between">
+              <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between">
                 <div className="space-y-1">
                   <h3 className="text-heading2-bold max-sm:text-heading3-bold">
                     {experience.title}

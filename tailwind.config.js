@@ -96,7 +96,7 @@ module.exports = {
         "16px",
         {
           lineHeight: "120%",
-          fontWeight: "560",
+          fontWeight: "700",
         },
       ],
       "body-bold": [
@@ -248,6 +248,7 @@ module.exports = {
       },
     },
     screens: {
+      xxs:"376px",
       xs: "450px",
       sm: "640px",
       md: "768px",

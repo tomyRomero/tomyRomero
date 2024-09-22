@@ -12,7 +12,7 @@ const ServiceCard = ({ index, title, icon }) => {
   const { theme } = useAppContext();
 
   return (
-    <Tilt className='xs:w-[250px] max-sm:mx-auto w-full'>
+    <Tilt className='min-w-[300px] xs:w-[250px] max-sm:mx-auto w-full'>
       <motion.div
         variants={fadeIn("right", "spring", index * 0.5, 0.75)}
         className={`w-full border-2 ${theme === "light" ? 'border-primary-light' : 'border-primary-dark'} p-[1px] rounded-[20px]`}
@@ -75,7 +75,7 @@ const About = () => {
         </motion.p>
 
         <div 
-          className='mt-16 flex flex-wrap justify-start gap-10 max-sm:justify-center'
+          className='mt-16 flex flex-wrap lg:justify-start gap-10 sm:justify-center'
           ref={ref}
         >
           {services.map((service, index) => (

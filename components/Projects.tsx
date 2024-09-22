@@ -62,7 +62,7 @@ const Projects = () => {
               >
                 <Link href={`/project/${project.title}`}>
                   <Card
-                    className={`border-2 rounded-xl max-sm:w-3/4 max-sm:mx-auto
+                    className={`min-w-[300px] border-2 rounded-xl max-sm:w-3/4 max-sm:mx-auto
                   cursor-pointer hover:scale-105 ease-in-out duration-300 
                   ${theme === "light" ? "border-primary-light " : "border-primary-dark bg-near-black text-white"}
                   `}

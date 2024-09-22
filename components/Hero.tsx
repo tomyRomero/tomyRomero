@@ -43,7 +43,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ showStars, toggleStars, proje
         <p className="max-xs:text-heading6-bold max-xs:px-8 mt-6 md:mt-4 text-heading5-bold md:text-heading4-bold max-sm:px-6">{intro}</p>
 
         {/* Buttons Container */}
-        <div className="flex justify-center flex-wrap space-x-4 mt-6">
+        <div className="flex flex-col max-sm:flex-col max-md:items-center max-md:space-y-4 mt-6 md:flex-row md:justify-center md:space-x-4">
           {/* GitHub button */}
           <Link
             href={'https://github.com/tomyRomero?tab=overview&from=2023-12-01&to=2023-12-31'}

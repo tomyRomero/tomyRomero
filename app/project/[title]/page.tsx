@@ -61,14 +61,14 @@ const page = ({ params }: { params: { title: string } }) => {
             onClick={() => handleNavClick("projects")}
             className="cursor-pointer w-12 mt-12 md:w-16 max-sm:mt-14 max-sm:ml-4 hover:scale-125 ease-in-out duration-300"
           />
-          <div className='w-full max-sm:ml-6'>
+          <div className='w-full px-6 max-sm:px-8'>
           <ProjectDetails title={currentProject.title} tools={currentProject.tools} type={currentProject.type} year={currentProject.year} />
           </div>
           
-          <div className='max-sm:px-4'>
+          <div className='px-6 max-sm:px-8'>
           <ImageSlider images={currentProject.images}/>
           </div>
-          <div className='px-4'  ref={descriptionRef}>
+          <div className='px-6 max-sm:px-8'  ref={descriptionRef}>
           <ProjectDescription features={currentProject.features ? currentProject.features : []} text={currentProject.description} github={currentProject.githubrepo} live={currentProject.livelink} isLive={currentProject.isLive}/>
           </div>
         </section>

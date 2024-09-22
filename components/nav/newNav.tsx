@@ -24,7 +24,7 @@ const NewNav = () => {
       
       {/* Logo Section */}
       <div className="max-md:hidden">
-        <Link href={"/"} className={`${theme === "light" ? "text-black" : "text-white"} md:text-heading4-bold lg:text-heading3-bold`}>
+        <Link href={"/"} className={`${theme === "light" ? "text-black" : "text-white"} md:text-heading6-bold md:mr-2 lg:text-heading3-bold`}>
           <span className="uppercase">Tomy Romero</span>
         </Link>
       </div>
@@ -47,7 +47,7 @@ const NewNav = () => {
       </ul>
 
       {/* Button Section */}
-      <button>
+      <button className='md:ml-4'>
         <ThemeToggle />
       </button>
 
