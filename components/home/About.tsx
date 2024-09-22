@@ -75,7 +75,7 @@ const About = () => {
         </motion.p>
 
         <div 
-          className='mt-16 flex flex-wrap lg:justify-start gap-10 sm:justify-center'
+          className='mt-16 flex flex-wrap lg:justify-start gap-10 justify-center'
           ref={ref}
         >
           {services.map((service, index) => (
