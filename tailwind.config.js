@@ -29,6 +29,14 @@ module.exports = {
           fontWeight: "600",
         },
       ],
+      
+      "heading1.5-bold": [
+        "45px",
+        {
+          lineHeight: "160%",
+          fontWeight: "800",
+        },
+      ],
       "heading2-bold": [
         "30px",
         {
@@ -82,6 +90,13 @@ module.exports = {
         {
           lineHeight: "140%",
           fontWeight: "700",
+        },
+      ],
+      "heading6-bold": [
+        "16px",
+        {
+          lineHeight: "120%",
+          fontWeight: "560",
         },
       ],
       "body-bold": [

@@ -9,6 +9,7 @@ import { useState } from 'react';
 import { images } from '../constants/index';
 import { useAppContext } from '@/lib/AppContext';
 import { fadeIn } from '../lib/motion';
+import { useEffect, useRef } from 'react';
 
 const possibleRotations = [1.3, -1.3, 1.3, -1.3, 1.3, -1.3];
 
@@ -62,30 +63,40 @@ const Photo = ({
 };
 
 export const Photos = () => {
-  const {theme} = useAppContext();
+  const { theme } = useAppContext();
+  const scrollRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollLeft = 50;
+    }
+  }, []);
+
   return (
-    <div className={`md:pt-8`}>
-    <div className="my-8">
-      <div className="hide-scrollbar -my-4 flex gap-8 overflow-y-auto py-4 px-8">
-        {images.map((Image, index) => (
-          <motion.div 
-          initial='hidden'
-          animate={ 'show'} // Use inView state to trigger animation
-          variants={fadeIn("up", "spring", index * 0.5, 1.5)}
-          key={Image.img.src}
-          >
-          <Photo
-            key={Image.img.src}
-            img={Image.img}
-            title={Image.title}
-            alt={Image.alt}
-            idx={index}
-          />
-          </motion.div>
-        ))}
-        
+    <div className="md:pt-8">
+      <div className="my-8">
+        <div 
+          ref={scrollRef}
+          className="hide-scrollbar -my-4 flex gap-8 overflow-y-auto py-4 px-8"
+        >
+          {images.map((Image, index) => (
+            <motion.div 
+              initial='hidden'
+              animate='show'
+              variants={fadeIn("up", "spring", index * 0.5, 1.5)}
+              key={Image.img.src}
+            >
+              <Photo
+                key={Image.img.src}
+                img={Image.img}
+                title={Image.title}
+                alt={Image.alt}
+                idx={index}
+              />
+            </motion.div>
+          ))}
+        </div>
       </div>
-    </div>
     </div>
   );
 };

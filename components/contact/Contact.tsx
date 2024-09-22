@@ -27,7 +27,7 @@ const {theme, setSelected} = useAppContext();
 
   return (
     <>
-      <section className={`w-full py-12 md:py-16 lg:py-20 `} >
+      <section className={`w-full `} >
         <div className="px-4 md:px-6">
           <div className="flex flex-col items-center space-y-4 text-center">
           </div>
@@ -52,7 +52,7 @@ const {theme, setSelected} = useAppContext();
             </div>
             <div className="space-y-2">
               <h2 className={`text-heading3-bold ${theme === 'light' ? 'text-primary-light' : 'text-primary-dark'}`}>Location</h2>
-              <p className={`text-base-regular ${theme === 'light' ? 'text-near-black' : 'text-white'}`}>U.S.A, CT 06239</p>
+              <p className={`text-base-regular ${theme === 'light' ? 'text-near-black' : 'text-white'}`}>U.S. Danielson , CT 06239</p>
             </div>
           </div>
         </div>

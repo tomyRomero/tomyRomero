@@ -28,16 +28,14 @@ const Projects = () => {
     <motion.div
       //@ts-ignore
       variants={staggerContainer()}
-      className="mt-10"
+      className="mt-10 max-sm:mt-4"
     >
       <motion.div
         //@ts-ignore
         variants={textVariant()}
-        initial="hidden"
-        animate={inView ? "show" : "hidden"}
       >
         <h2
-          className={`sectionHeadText text-center p-1 ${
+          className={`text-heading2-bold md:text-heading1-bold text-center p-1 ${
             theme === "light" ? "text-primary-light" : "text-primary-dark"
           }`}
         >
@@ -49,7 +47,7 @@ const Projects = () => {
             theme === "light" ? "text-near-black" : "text-white"
           }`}
         >
-          Some of my top projects so far
+          Some of my top projects
         </p>
       </motion.div>
       <div className="flex flex-col w-full">
@@ -66,7 +64,7 @@ const Projects = () => {
                   <Card
                     className={`border-2 rounded-xl max-sm:w-3/4 max-sm:mx-auto
                   cursor-pointer hover:scale-105 ease-in-out duration-300 
-                  ${theme === "light" ? "border-primary-light shadow-card" : "border-primary-dark bg-near-black text-white"}
+                  ${theme === "light" ? "border-primary-light " : "border-primary-dark bg-near-black text-white"}
                   `}
                   >
                     <CardHeader className="flex flex-row items-center gap-4">
@@ -80,13 +78,13 @@ const Projects = () => {
                               : "/assets/githubdark.png"
                           }
                           alt={"Project Icon"}
-                          width={34}
-                          height={34}
-                          className="hover:scale-150 ease-in-out duration-300"
+                          width={50}
+                          height={50}
+                          className="hover:scale-150 ease-in-out duration-300 max-w-8"
                         />
                       </Link>
                       <div className="grid gap-1">
-                        <CardTitle className="text-heading2-bold">
+                        <CardTitle className="max-sm:text-heading3-bold text-heading2-bold">
                           <span>{project.title}</span>
                         </CardTitle>
                         <CardDescription

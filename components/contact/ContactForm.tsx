@@ -70,14 +70,14 @@ const ContactForm = () => {
         initial='hidden'
         animate='show'
         variants={slideIn("left", "tween", 0.2, 1)}
-        className={`flex-[0.75] border-2 ${theme === "light" ? 'border-primary-light' : 'border-primary-dark'} p-8 rounded-2xl shadow-lg`}
+        className={`flex-[0.75] rounded-2xl shadow-lg max-w-[1000px]`}
       >
         <h3 className={`sectionHeadText text-center ${theme === "light" ? 'text-primary-light' : 'text-primary-dark'}`}>Contact</h3>
         <p className={`sectionSubText text-center ${theme === "light" ? 'text-primary-light' : 'text-primary-dark'}`}>Get in touch</p>
         <form
           ref={formRef}
           onSubmit={handleSubmit}
-          className="mt-6 flex flex-col gap-8"
+          className={`mt-6 flex flex-col gap-8 border-2 p-8 ${theme === "light" ? 'border-primary-light' : 'border-primary-dark'} rounded-2xl`}   
         >
           <label className='flex flex-col'>
             <span className={`${theme === "light" ? "text-near-black" : "text-white"} font-medium mb-4 `}>Your Name</span>

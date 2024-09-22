@@ -1,25 +1,21 @@
-"use client"
-
 import React, { useEffect } from "react";
 import { Tilt } from "react-tilt";
-import { motion} from "framer-motion";
-import { about, services} from "../../constants";
+import { motion } from "framer-motion";
+import { about, services } from "../../constants";
 import { fadeIn, textVariant, staggerContainer } from "../../lib/motion";
 import Image from "next/image";
 import { useAppContext } from "@/lib/AppContext";
 import { useInView } from "react-intersection-observer";
 
-//@ts-ignore
-const ServiceCard = ({ index, title, icon }) =>
-{
-  const {theme} = useAppContext();
+// @ts-ignore
+const ServiceCard = ({ index, title, icon }) => {
+  const { theme } = useAppContext();
 
-  return(
-
+  return (
     <Tilt className='xs:w-[250px] max-sm:mx-auto w-full'>
       <motion.div
         variants={fadeIn("right", "spring", index * 0.5, 0.75)}
-        className={`w-full border-2 ${theme === "light" ? 'border-primary-light shadow-card':'border-primary-dark white-shadow-card'} p-[1px] rounded-[20px] `}
+        className={`w-full border-2 ${theme === "light" ? 'border-primary-light' : 'border-primary-dark'} p-[1px] rounded-[20px]`}
       >
         <div
           //@ts-ignore
@@ -37,7 +33,6 @@ const ServiceCard = ({ index, title, icon }) =>
             height={100}
             className='object-contain rounded-xl'
           />
-  
           <h3 className={`${theme === "light" ? "text-near-black" : "text-white"} text-[20px] font-bold text-center`}>
             {title}
           </h3>
@@ -45,22 +40,19 @@ const ServiceCard = ({ index, title, icon }) =>
       </motion.div>
     </Tilt>
   );
-} 
+}
 
 const About = () => {
-  const {theme, setSelected} = useAppContext();
-  // Set up the ref and inView state for the intersection observer
+  const { theme, setSelected } = useAppContext();
   const [ref, inView] = useInView({
-    triggerOnce: false, 
-  }
-  );
+    triggerOnce: false,
+  });
 
-  useEffect(()=> {
-    if(inView)
-    {
-        setSelected(1)
+  useEffect(() => {
+    if (inView) {
+      setSelected(1);
     }
-  }, [inView])
+  }, [inView]);
 
   return (
     <motion.div
@@ -70,30 +62,29 @@ const About = () => {
       className={`w-full mx-auto px-20 py-6 relative z-0`}
     >
       <motion.section>
-        
-            <motion.div variants={textVariant()}>
-              <p className={`sectionSubText ${theme === "light" ? 'text-primary-light' : 'text-primary-dark'}`}>Introduction</p>
-              <h2 className={`sectionHeadText ${theme === "light" ? 'text-primary-light' : 'text-primary-dark'}`}>Overview.</h2>
-            </motion.div>
+        <motion.div variants={textVariant()}>
+          <p className={`sectionSubText ${theme === "light" ? 'text-primary-light' : 'text-primary-dark'}`}>Introduction</p>
+          <h2 className={`sectionHeadText ${theme === "light" ? 'text-primary-light' : 'text-primary-dark'}`}>About.</h2>
+        </motion.div>
 
-            <motion.p
-              variants={fadeIn("", "", 0.1, 1)}
-              className={`mt-4 text-left  max-sm:text-heading5-bold text-heading4-bold max-w-3xl leading-[30px] ${theme === "light" ? 'text-near-black' : 'text-white'}`}
-            >
-            {about}
-            </motion.p>
-            
+        <motion.p
+          variants={fadeIn("", "", 0.1, 1)}
+          className={`mt-4 text-left max-sm:text-heading5-bold text-heading4-bold max-w-3xl leading-[30px] ${theme === "light" ? 'text-near-black' : 'text-white'}`}
+        >
+          {about}
+        </motion.p>
 
-        <div className='ml-8 mt-16 flex flex-wrap gap-10'
-        ref={ref}
+        <div 
+          className='mt-16 flex flex-wrap justify-start gap-10 max-sm:justify-center'
+          ref={ref}
         >
           {services.map((service, index) => (
             <motion.div 
-            className="max-sm:mx-auto"
-            initial='hidden'
-            animate={ 'show'} // Use inView state to trigger animation
-            key={service.title} variants={fadeIn("up", "spring", index * 0.5, 0.75)}
-
+              className="max-sm:mx-auto"
+              initial='hidden'
+              animate={'show'} 
+              key={service.title}
+              variants={fadeIn("up", "spring", index * 0.5, 0.75)}
             >
               <ServiceCard index={index} {...service} />
             </motion.div>

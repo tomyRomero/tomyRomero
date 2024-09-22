@@ -68,7 +68,7 @@ const page = ({ params }: { params: { title: string } }) => {
           <div className='max-sm:px-4'>
           <ImageSlider images={currentProject.images}/>
           </div>
-          <div className='px-4' ref={descriptionRef}>
+          <div className='px-4'  ref={descriptionRef}>
           <ProjectDescription features={currentProject.features ? currentProject.features : []} text={currentProject.description} github={currentProject.githubrepo} live={currentProject.livelink} isLive={currentProject.isLive}/>
           </div>
         </section>
