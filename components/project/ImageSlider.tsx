@@ -53,7 +53,7 @@ export default function ImageSlider({ images }: any) {
         </Slider>
     {/* Pass the slider ref to ImageControls */}  
       </div>
-      <div className='mb-4 md:mb-8'>
+      <div className='mb-2 md:mb-6'>
       <SliderControls
       slider={sliderRef.current} />
       </div>

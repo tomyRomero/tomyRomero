@@ -10,6 +10,9 @@ import art from '../public/assets/macmiller.jpeg'
 import scholarship from '../public/assets/scholarship.jpeg'
 import uvilogo from '../public/assets/uvi_icon.webp'
 import sga from '../public/assets/sga.jpeg'
+import newyork from '../public/assets/newyork.jpg'
+import rhodeisland from '../public/assets/rhodeisland.jpg'
+import fall from '../public/assets/picnic.jpg'
 
 //Techs
 import javascript from '../public/assets/javascript.png'
@@ -41,15 +44,17 @@ export const navLinks = [
 
 //Images for home page Photos.tsx
 export const images = [
-  { img: president, title: 'Picture with President of University of the Virgin Islands', alt: 'Picture with President of University of the Virgin Islands' },
   { img: uvi, title: 'University of the Virgin Islands', alt: 'University of the Virgin Islands' },
-  { img: scholarship, title: 'Scholarship Award winner', alt: 'Picture of ScholarShip Reception' },
-  { img: proTomy, title: 'Tomy Romero at Revature', alt: 'Picture of Tomy Romero' },
+  { img: president, title: 'Picture with President of University of the Virgin Islands', alt: 'Picture with President of University of the Virgin Islands' },
+  {img: newyork, title: 'New York City', alt: 'Picture of New York City'},
+  {img: proTomy, title: 'Tomy Romero', alt: 'Picture of Tomy Romero' },
+  {img: fall, title: 'Fall Picnic', alt: 'Fall Picnic'},
   { img: deanslist, title: 'Deans List Reception', alt: 'Deans List Reception' },
-  { img: art, title: 'My Painting', alt: 'Picture of a Painting by Tomy Romero' },
+  { img: rhodeisland, title: 'Rhode Island', alt: 'Picture of Rhode Island' },
   { img: tomy, title: 'tomyRomero', alt: 'picture of Tomy Romero smiling' },
   { img: uvilogo, title: 'University Logo', alt: 'Picture of UVI logo' },
-  { img: sga, title: 'Student Government Association Junior Senator', alt: 'Picture of Tomy Romero as Student Government Association Junior Senator' },
+  { img: scholarship, title: 'Scholarship Award winner', alt: 'Picture of ScholarShip Reception' },
+  // { img: sga, title: 'Student Government Association Junior Senator', alt: 'Picture of Tomy Romero as Student Government Association Junior Senator' }
 ]
 
 //My services
@@ -257,10 +262,12 @@ export const projectDetails = [
       '/assets/azure.png'
     ],
     images: [
+      '/iMovies/login.png',
       '/iMovies/imovieshome.png',
       '/iMovies/usermovielist.png',
       '/iMovies/addmovie.png',
       '/iMovies/moviemodal.png',
+      '/iMovies/signup.png',
       '/iMovies/profile.png'
     ],
     description: `For the iMovies project, I contributed to both the frontend and backend development, creating a comprehensive content management system for movie enthusiasts. My responsibilities included helping with the backend using ASP.NET Core, integrating Entity Framework Core and SQL Server for data management, and implementing API endpoints. On the frontend, I developed dynamic React components for managing movie collections.`,
@@ -341,5 +348,23 @@ export const experiences = [
       "Collaborated in an agile environment on end-to-end development projects."
     ]
   }
+];
+
+export const contactDetails = [
+  {
+    type: "Email",
+    value: "tomyfletcher99@hotmail.com",
+    href: "mailto:tomyfletcher99@hotmail.com",
+  },
+  {
+    type: "LinkedIn",
+    value: "Tomy Romero",
+    href: "https://www.linkedin.com/in/tomy-romero-902476145/",
+  },
+  {
+    type: "Location",
+    value: "U.S. Danielson, CT 06239",
+    href: "",
+  },
 ];
 

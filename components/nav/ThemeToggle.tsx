@@ -24,7 +24,7 @@ export default function ThemeToggle() {
     <div className="justify-self-end">
       <button onClick={handleTheme}>
         <div
-          className={`md:mt-2.5 w-[53px] h-[27px] border rounded-full relative flex items-center`}
+          className={` max-sm:mt-1.5 mt-2.5 w-[53px] h-[27px] border rounded-full relative flex items-center`}
           style={{
             border: `2px solid ${theme === "light" ? "black" : "white"}`,
           }}

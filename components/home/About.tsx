@@ -59,7 +59,7 @@ const About = () => {
       variants={staggerContainer()}
       initial='hidden'
       animate='show'
-      className={`w-full mx-auto px-20 py-6 relative z-0`}
+      className={`w-full mx-auto max-sm:px-10 px-20 py-6 relative z-0`}
     >
       <motion.section>
         <motion.div variants={textVariant()}>

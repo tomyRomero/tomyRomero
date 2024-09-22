@@ -18,7 +18,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ showStars, toggleStars, proje
   const router = useRouter();
 
   return (
-    <section className="z-0 max-xs:mt-6 max-sm:mt-4 mt-10 relative flex items-center justify-center px-4 pt-6 pb-2 md:px-6 md:pt-10">
+    <section className="z-0 max-xs:mt-6 max-sm:mt-8 mt-10 relative flex items-center justify-center px-4 pt-6 pb-2 md:px-6 md:pt-10">
       <div
         className={`${
           theme === 'light' ? 'text-near-black' : 'text-white'

@@ -46,7 +46,7 @@ export default function ProjectDescription({ text, features, github, live, isLiv
         </div>
       </div>
 
-      <div className="relative mt-6 md:mt-0">
+      <div className="relative md:mt-0">
         <div className="flex gap-4">
           <Link href={isLive ? live : github} target="_blank">
             <RoundButton text={`${isLive ? 'Live Site' : 'Code'}`} variant="lg" />

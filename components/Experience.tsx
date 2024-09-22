@@ -7,7 +7,7 @@ export default function Experience() {
 
   return (
     <section
-      className={`w-full mt-10 mx-auto px-12 md:px-20 py-6 relative z-0 ${
+      className={`w-full mt-10 mx-auto px-10 md:px-20 py-6 relative z-0 ${
         theme === 'light' ? '' : 'bg-near-black'
       }`}
     >

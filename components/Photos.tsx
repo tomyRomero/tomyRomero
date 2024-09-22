@@ -68,7 +68,7 @@ export const Photos = () => {
 
   useEffect(() => {
     if (scrollRef.current) {
-      scrollRef.current.scrollLeft = 50;
+      scrollRef.current.scrollLeft = 150;
     }
   }, []);
 

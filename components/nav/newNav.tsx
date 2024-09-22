@@ -8,7 +8,6 @@ import { motion as m } from "framer-motion";
 import Link from 'next/link';
 import NavMenu from './NavMenu';
 import { useAppContext } from '@/lib/AppContext';
-import { useRouter, usePathname } from 'next/navigation';
 
 const NewNav = () => {
   const { theme , selected, setSelected, scrollToSection} = useAppContext();
@@ -20,7 +19,7 @@ const NewNav = () => {
   };
 
   return (
-    <nav className={`w-full z-50 fixed top-0 flex items-center justify-between px-6 py-4 lg:px-24 ${theme === "light" ? "bg-white" : "bg-near-black"}`}>
+    <nav className={`w-full z-50 fixed top-0 flex items-center justify-between px-6 py-4 lg:px-24 ${theme === "light" ? "bg-white" : "bg-near-black"} rounded-b-lg shadow-lg`}>
       
       {/* Logo Section */}
       <div className="max-md:hidden">
