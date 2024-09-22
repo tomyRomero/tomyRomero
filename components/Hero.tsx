@@ -18,7 +18,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ showStars, toggleStars, proje
   const router = useRouter();
 
   return (
-    <section className="z-0 max-xs:mt-6 max-sm:mt-4 mt-10 relative flex items-center justify-center px-4 py-6 md:px-6 md:py-10">
+    <section className="z-0 max-xs:mt-6 max-sm:mt-4 mt-10 relative flex items-center justify-center px-4 pt-6 pb-2 md:px-6 md:pt-10">
       <div
         className={`${
           theme === 'light' ? 'text-near-black' : 'text-white'
@@ -43,67 +43,74 @@ const HeroSection: React.FC<HeroSectionProps> = ({ showStars, toggleStars, proje
         <p className="max-xs:text-heading6-bold max-xs:px-8 mt-6 md:mt-4 text-heading5-bold md:text-heading4-bold max-sm:px-6">{intro}</p>
 
         {/* Buttons Container */}
-        <div className="flex flex-col max-sm:flex-col max-md:items-center max-md:space-y-4 mt-6 md:flex-row md:justify-center md:space-x-4">
-          {/* GitHub button */}
-          <Link
-            href={'https://github.com/tomyRomero?tab=overview&from=2023-12-01&to=2023-12-31'}
-            target="_blank"
-          >
-            <Image
-              src={`${theme === 'light' ? '/assets/github.svg' : '/assets/githubdark.svg'}`}
-              alt="github icon"
-              width={34}
-              height={34}
-              className="cursor-pointer hover:scale-125 ease-in-out duration-300"
-            />
-          </Link>
-          {/* LinkedIn button */}
-          <Link
-            href="https://www.linkedin.com/in/tomy-romero-902476145/"
-            target="_blank"
-          >
-            <Image
-              src={`${theme === 'light' ? '/assets/linkedin.svg' : '/assets/linkedindark.svg'}`}
-              alt="linkedin icon"
-              width={34}
-              height={34}
-              className="cursor-pointer hover:scale-125 ease-in-out duration-300"
-            />
-          </Link>
-          {/* Download Resume button */}
-          <button
-            className={`cursor-pointer hover:scale-125 ease-in-out duration-300 flex items-center gap-1.5 px-3 py-1 rounded-xl text-body1-bold ${
-              theme === 'light' ? 'bg-primary-light text-white' : 'bg-primary-dark text-near-black'
-            }`}
-            onClick={() => {
-              window.open(`${resumeLink}`, '_blank'); 
-            }}
-          >
-            Resume
-            <Image
-              src={`${theme === 'light' ? '/assets/downloadwhite.png' : '/assets/download.png'}`}
-              alt="download icon"
-              width={15}
-              height={15}
-            />
-          </button>
-          {/* Projects button */}
-          <button
-            className={`cursor-pointer hover:scale-125 ease-in-out duration-300 flex items-center gap-1.5 px-3 py-1 rounded-xl text-body1-bold ${
-              theme === 'light' ? 'bg-primary-light text-white' : 'bg-primary-dark text-near-black'
-            }`}
-            onClick={() => {
-              projectsRef.current?.scrollIntoView({ behavior: 'smooth' }); 
-            }}
-          >
-            Projects
-            <Image
-              src={`${theme === 'light' ? '/assets/projectwhite.png' : '/assets/project.png'}`}
-              alt="project icon"
-              width={15}
-              height={15}
-            />
-          </button>
+        <div className="flex flex-col md:flex-row md:space-x-4 items-center md:justify-center mt-6 space-y-4 md:space-y-0">
+          {/* First Row (GitHub and LinkedIn on mobile, combined with second row on larger screens) */}
+          <div className="flex space-x-4">
+            {/* GitHub button */}
+            <Link
+              href={'https://github.com/tomyRomero?tab=overview&from=2023-12-01&to=2023-12-31'}
+              target="_blank"
+            >
+              <Image
+                src={`${theme === 'light' ? '/assets/github.svg' : '/assets/githubdark.svg'}`}
+                alt="github icon"
+                width={34}
+                height={34}
+                className="cursor-pointer hover:scale-125 ease-in-out duration-300"
+              />
+            </Link>
+            {/* LinkedIn button */}
+            <Link
+              href="https://www.linkedin.com/in/tomy-romero-902476145/"
+              target="_blank"
+            >
+              <Image
+                src={`${theme === 'light' ? '/assets/linkedin.svg' : '/assets/linkedindark.svg'}`}
+                alt="linkedin icon"
+                width={34}
+                height={34}
+                className="cursor-pointer hover:scale-125 ease-in-out duration-300"
+              />
+            </Link>
+          </div>
+
+          {/* Second Row (Resume and Projects on mobile, combined with first row on larger screens) */}
+          <div className="flex space-x-4">
+            {/* Download Resume button */}
+            <button
+              className={`cursor-pointer hover:scale-125 ease-in-out duration-300 flex items-center gap-1.5 px-3 py-1 rounded-xl text-body1-bold ${
+                theme === 'light' ? 'bg-primary-light text-white' : 'bg-primary-dark text-near-black'
+              }`}
+              onClick={() => {
+                window.open(`${resumeLink}`, '_blank'); 
+              }}
+            >
+              Resume
+              <Image
+                src={`${theme === 'light' ? '/assets/downloadwhite.png' : '/assets/download.png'}`}
+                alt="download icon"
+                width={15}
+                height={15}
+              />
+            </button>
+            {/* Projects button */}
+            <button
+              className={`cursor-pointer hover:scale-125 ease-in-out duration-300 flex items-center gap-1.5 px-3 py-1 rounded-xl text-body1-bold ${
+                theme === 'light' ? 'bg-primary-light text-white' : 'bg-primary-dark text-near-black'
+              }`}
+              onClick={() => {
+                projectsRef.current?.scrollIntoView({ behavior: 'smooth' }); 
+              }}
+            >
+              Projects
+              <Image
+                src={`${theme === 'light' ? '/assets/projectwhite.png' : '/assets/project.png'}`}
+                alt="project icon"
+                width={15}
+                height={15}
+              />
+            </button>
+          </div>
         </div>
       </div>
     </section>
