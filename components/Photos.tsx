@@ -81,9 +81,9 @@ export const Photos = () => {
         >
           {images.map((Image, index) => (
             <motion.div 
-              initial='hidden'
-              animate='show'
-              variants={fadeIn("up", "spring", index * 0.5, 1.5)}
+              // initial='hidden'
+              // animate='show'
+              // variants={fadeIn("up", "spring", index * 0.5, 1.5)}
               key={Image.img.src}
             >
               <Photo
