@@ -47,14 +47,13 @@ export const images = [
   { img: uvi, title: 'University of the Virgin Islands', alt: 'University of the Virgin Islands' },
   { img: president, title: 'Picture with President of University of the Virgin Islands', alt: 'Picture with President of University of the Virgin Islands' },
   {img: newyork, title: 'New York City', alt: 'Picture of New York City'},
-  {img: proTomy, title: 'Tomy Romero', alt: 'Picture of Tomy Romero' },
-  {img: fall, title: 'Fall Picnic', alt: 'Fall Picnic'},
   { img: deanslist, title: 'Deans List Reception', alt: 'Deans List Reception' },
-  { img: rhodeisland, title: 'Rhode Island', alt: 'Picture of Rhode Island' },
+  {img: fall, title: 'Fall Picnic', alt: 'Fall Picnic'},
   { img: tomy, title: 'tomyRomero', alt: 'picture of Tomy Romero smiling' },
-  { img: uvilogo, title: 'University Logo', alt: 'Picture of UVI logo' },
+  { img: rhodeisland, title: 'Rhode Island', alt: 'Picture of Rhode Island' },
   { img: scholarship, title: 'Scholarship Award winner', alt: 'Picture of ScholarShip Reception' },
-  // { img: sga, title: 'Student Government Association Junior Senator', alt: 'Picture of Tomy Romero as Student Government Association Junior Senator' }
+  { img: uvilogo, title: 'University Logo', alt: 'Picture of UVI logo' },
+  { img: sga, title: 'Student Government Association Junior Senator', alt: 'Picture of Tomy Romero as Student Government Association Junior Senator' }
 ]
 
 //My services
