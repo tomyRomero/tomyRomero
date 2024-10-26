@@ -4,6 +4,7 @@ import './globals.css'
 import { AppProvider } from '@/lib/AppContext'
 import { Toaster } from "@/components/ui/toaster";
 import NewNav from '@/components/nav/newNav'
+import { Analytics } from "@vercel/analytics/react"
 
 export const metadata: Metadata = {
   title: 'tomyRomero',
@@ -27,6 +28,7 @@ export default function RootLayout({
           <NewNav />
           <div className='mt-14 max-sm:mt-2' >
           {children}
+          <Analytics />
           </div>
           <Toaster />
         </AppProvider>
