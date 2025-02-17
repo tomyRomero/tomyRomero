@@ -30,9 +30,9 @@ import dotnet from '../public/assets/dotnet.png'
 
 export const resumeLink = `https://docs.google.com/document/d/1NgKOp9uVqTW2ntBhMemJ5E-mporMj0cH9h6Cnki2nWA/edit?usp=sharing`;
 
-export const intro = `I’m passionate about delivering software solutions that meets the needs of users. I value effective communication and thrive in collaborative environments where I can exchange ideas, give and receive constructive feedback, and work towards common goals. I enjoy engaging with my colleagues and solving problems together.`
+export const intro = `I’m a Computer Science graduate passionate about creating software solutions that meet user needs. I value clear communication and enjoy working in teams where we can share ideas, give feedback, and tackle challenges together.`
 
-export const about =`I am a Computer Science graduate with a strong foundation in full stack development, specializing in React, C#, ASP.NET, .NET, REST APIs, and SQL Server, along with knowledge of DevOps practices in Git, Amazon Web Services and Azure.`
+export const about =`I have a strong foundation in full-stack development, with skills in designing and maintaining software solutions that drive business success. I’m experienced in building dynamic user interfaces with modern javascript frameworks like React, creating backend solutions with C# and ASP.NET (and some exposure to Java Spring Boot), and developing RESTful APIs. I’m also familiar with DevOps tools like Git, AWS, and Azure for continuous integration and deployment, and have a solid understanding of MySQL for database management`
 
 //Links for Nav Menu
 export const navLinks = [
@@ -345,6 +345,16 @@ export const experiences = [
       "Developed proficiency in building and maintaining dynamic front-end interfaces with React and REST APIs with ASP.NET.",
       "Gained hands-on experience with CI/CD pipelines and Azure cloud-based solutions.",
       "Collaborated in an agile environment on end-to-end development projects."
+    ]
+  },
+  {
+    title: "Software Developer Intern",
+    company: "LocalChef",
+    date: "January 2025 - Present",
+    description: [
+      "Assist in developing and maintaining a dynamic app using React, Java Spring Boot, AWS  and MySQL.",
+      "Collaborate with a team to implement secure authentication, payment integration, and an intuitive user experience.",
+      "Work in a fast-paced startup environment, delivering scalable and maintainable code.",
     ]
   }
 ];
