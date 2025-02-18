@@ -40,7 +40,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ showStars, toggleStars, proje
             software developer
           </span>
         </h1>
-        <p className="max-xs:text-heading6-bold max-xs:px-8 mt-6 md:mt-4 text-heading5-bold md:text-heading4-bold max-sm:px-6">{intro}</p>
+        <p className="max-xs:text-heading6-bold max-xs:px-8 mt-6 md:mt-4 text-heading6-bold md:text-heading4-bold max-sm:px-6">{intro}</p>
 
         {/* Buttons Container */}
         <div className="flex flex-col md:flex-row md:space-x-4 items-center md:justify-center mt-6 space-y-4 md:space-y-0">
@@ -76,23 +76,6 @@ const HeroSection: React.FC<HeroSectionProps> = ({ showStars, toggleStars, proje
 
           {/* Second Row (Resume and Projects on mobile, combined with first row on larger screens) */}
           <div className="flex space-x-4">
-            {/* Download Resume button */}
-            <button
-              className={`cursor-pointer hover:scale-125 ease-in-out duration-300 flex items-center gap-1.5 px-3 py-1 rounded-xl text-body1-bold ${
-                theme === 'light' ? 'bg-primary-light text-white' : 'bg-primary-dark text-near-black'
-              }`}
-              onClick={() => {
-                window.open(`${resumeLink}`, '_blank'); 
-              }}
-            >
-              Resume
-              <Image
-                src={`${theme === 'light' ? '/assets/downloadwhite.png' : '/assets/download.png'}`}
-                alt="download icon"
-                width={15}
-                height={15}
-              />
-            </button>
             {/* Projects button */}
             <button
               className={`cursor-pointer hover:scale-125 ease-in-out duration-300 flex items-center gap-1.5 px-3 py-1 rounded-xl text-body1-bold ${

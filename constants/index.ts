@@ -30,9 +30,9 @@ import dotnet from '../public/assets/dotnet.png'
 
 export const resumeLink = `https://docs.google.com/document/d/1NgKOp9uVqTW2ntBhMemJ5E-mporMj0cH9h6Cnki2nWA/edit?usp=sharing`;
 
-export const intro = `I’m a Computer Science graduate passionate about creating software solutions that meet user needs. I value clear communication and enjoy working in teams where we can share ideas, give feedback, and tackle challenges together.`
+export const intro = `I’m an enthusiastic Software Developer with hands-on experience in full-stack development. I’m passionate about building scalable applications, optimizing performance, and delivering reliable software that meets business needs. I thrive in collaborative, fast-paced environments where clear communication and teamwork drive high-quality results.`
 
-export const about =`I have a strong foundation in full-stack development, with skills in designing and maintaining software solutions that drive business success. I’m experienced in building dynamic user interfaces with modern javascript frameworks like React, creating backend solutions with C# and ASP.NET (and some exposure to Java Spring Boot), and developing RESTful APIs. I’m also familiar with DevOps tools like Git, AWS, and Azure for continuous integration and deployment, and have a solid understanding of MySQL for database management`
+export const about = `As a full-stack developer, I have designed, built, and maintained software solutions using React, C# .NET, and cloud services like AWS and Azure. My work includes secure authentication systems, seamless payment integrations, AI-powered applications, and efficient e-commerce platforms. Proficient in database management systems such as MySQL and MS SQL Server, I create scalable, optimized database solutions. I leverage DevOps tools for continuous integration and deployment, ensuring reliable and maintainable software. Focused on delivering results, I embrace Agile workflows and cross-functional collaboration to develop software that meets user needs and drives business success.`
 
 //Links for Nav Menu
 export const navLinks = [
@@ -341,10 +341,9 @@ export const experiences = [
     company: "Revature",
     date: "June - September 2024",
     description: [
-      "Trained in full-stack development with .NET, React, MS SQL Server, and DevOps methodologies, alongside unit testing for code quality.",
-      "Developed proficiency in building and maintaining dynamic front-end interfaces with React and REST APIs with ASP.NET.",
-      "Gained hands-on experience with CI/CD pipelines and Azure cloud-based solutions.",
-      "Collaborated in an agile environment on end-to-end development projects."
+      "Gained hands-on experience in an Agile environment, receiving training in C# .NET, React, MS SQL Server, and DevOps.",
+      "Collaborated with teams, ensuring code quality through unit testing and version control.",
+      "Gained proficiency in cloud services using pipeline, CI/CD, and containerization.",
     ]
   },
   {
@@ -352,7 +351,7 @@ export const experiences = [
     company: "LocalChef",
     date: "January 2025 - Present",
     description: [
-      "Assist in developing and maintaining a dynamic app using React, Java Spring Boot, AWS  and MySQL.",
+      "Assist in developing and maintaining software using React, Java Spring Boot, AWS, and MySQL.",
       "Collaborate with a team to implement secure authentication, payment integration, and an intuitive user experience.",
       "Work in a fast-paced startup environment, delivering scalable and maintainable code.",
     ]

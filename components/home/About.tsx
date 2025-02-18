@@ -63,13 +63,12 @@ const About = () => {
     >
       <motion.section>
         <motion.div variants={textVariant()}>
-          <p className={`sectionSubText ${theme === "light" ? 'text-primary-light' : 'text-primary-dark'}`}>Introduction</p>
-          <h2 className={`sectionHeadText ${theme === "light" ? 'text-primary-light' : 'text-primary-dark'}`}>About.</h2>
+                  <h2 className={`sectionHeadText ${theme === "light" ? 'text-primary-light' : 'text-primary-dark'}`}>About</h2>
         </motion.div>
 
         <motion.p
           variants={fadeIn("", "", 0.1, 1)}
-          className={`mt-4 text-left max-sm:text-heading5-bold text-heading4-bold max-w-3xl leading-[30px] ${theme === "light" ? 'text-near-black' : 'text-white'}`}
+          className={`mt-4 text-left max-sm:text-heading6-bold text-heading5-bold max-w-3xl leading-[30px] ${theme === "light" ? 'text-near-black' : 'text-white'}`}
         >
           {about}
         </motion.p>
