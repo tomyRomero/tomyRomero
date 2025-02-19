@@ -18,7 +18,7 @@ const NavBar = () => {
   };
 
   return (
-    <nav className={`w-full z-50 fixed top-0 flex items-center justify-between px-6 py-4 lg:px-24 ${theme === "light" ? "bg-white" : "bg-near-black"}`}>
+    <nav className={` w-full z-50 fixed top-0 flex items-center justify-between px-6 py-4 lg:px-24 ${theme === "light" ? "bg-white" : "bg-near-black"}`}>
       
       {/* Small Screen Layout - Menu Toggle on Left */}
       <div className="md:hidden">
@@ -27,7 +27,7 @@ const NavBar = () => {
 
       {/* Logo Section */}
       <div className="hidden md:block">
-        <Link href={"/"} className={`${theme === "light" ? "text-black" : "text-white"} md:text-heading6-bold md:mr-2 lg:text-heading3-bold`}>
+        <Link href={"/"} className={`${theme === "light" ? "text-black" : "text-white"} font-bold md:text-heading5-bold`}>
           <span className="uppercase">Tomy Romero</span>
         </Link>
       </div>

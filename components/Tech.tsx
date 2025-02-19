@@ -56,7 +56,7 @@ const Tech = () => {
             <div
               className={`w-20 h-20 sm:w-24 sm:h-24 lg:w-28 lg:h-28 flex items-center justify-center rounded-xl shadow-lg 
                 transition-all duration-300 ease-out transform hover:-translate-y-2
-                ${theme === "light" ? "bg-primary-light/40" : "bg-primary-dark/50"}`}  
+                ${theme === "light" ? "bg-near-black/10" : "bg-white/10"}`}  
             >
               <img src={tech.icon} alt={tech.name} className="w-2/3 h-2/3 object-contain" />
             </div>
