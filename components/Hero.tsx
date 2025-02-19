@@ -96,7 +96,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ projectsRef }) => {
 
           {/* CTA Button */}
           <button
-            className={`flex items-center gap-2 px-5 py-3 rounded-xl text-lg font-semibold shadow-md transition-all duration-300 transform hover:scale-105 ${
+            className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-lg font-semibold shadow-md transition-all duration-300 transform hover:scale-105 ${
               theme === "light"
                 ? "bg-primary-light text-white"
                 : "bg-primary-dark text-near-black"

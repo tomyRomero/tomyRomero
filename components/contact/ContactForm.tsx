@@ -31,38 +31,41 @@ const ContactForm = () => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
-    // Mail submission logic here
-    const response = await fetch('/api/nodemailer', {
-      method: 'POST',
-      body: JSON.stringify(form), 
-    });
 
-    if(response.ok)
-    { 
-      setForm({
-        name: "", 
-        email: "",
-        message: ""
-      })
+    try {
+      const response = await fetch('/api/nodemailer', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      });
+
       const data = await response.json();
 
-      toast({
-        title: "Success!",
-        description: `${data.message}`, 
-        className: `${theme === "light" ? "bg-primary-light text-white" : "bg-primary-dark"}`
-      })
-
-    }else{
+      if (response.ok) {
+        setForm({ name: "", email: "", message: "" });
+        toast({
+          title: "Success!",
+          description: data.message,
+          className: `${theme === "light" ? "bg-primary-light text-white" : "bg-primary-dark"}`
+        });
+      } else {
+        toast({
+          title: "Failed to send message",
+          description: data.message || "Something went wrong!",
+          variant: "destructive",
+          className: `${theme === "light" ? "bg-primary-light text-white" : "bg-primary-dark"}`
+        });
+      }
+    } catch (error) {
       toast({
         title: "Failed to send message",
-        description: "Something went wrong!", 
+        description: "Something went wrong!",
         variant: "destructive",
         className: `${theme === "light" ? "bg-primary-light text-white" : "bg-primary-dark"}`
-      })
+      });
     }
 
- 
-    setLoading(false)
+    setLoading(false);
   };
 
   const { theme } = useAppContext();

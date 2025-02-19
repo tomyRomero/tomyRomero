@@ -1,53 +1,63 @@
 "use server"
 import nodemailer from 'nodemailer';
 import { NextApiResponse } from "next";
+import { NextRequest } from 'next/server';
 
-const myEmail = "tomyfletcher99@hotmail.com"
+const myEmail = "tomyfletcher99@hotmail.com";
 
-export const POST = async (req: any, res: NextApiResponse) => {
-  const { email, name, message } = await req.json();
-
-  const emailContent = `
-    <div>
-      <p>${message}</p>
-      <br>
-      <p>You can get back to me at the following address: ${email}</p>
-    </div>
-  `;
-
-  const transporter = nodemailer.createTransport({
-    pool: true,
-    service: 'hotmail',
-    port: 2525,
-    auth: {
-      user: 'tomyfletcher99@hotmail.com',
-      pass: process.env.EMAIL_PASSWORD,
+export const GET = async (req: NextRequest) => {
+  console.log("Access to nodemailer API GET");
+  return new Response(JSON.stringify({ message: "GET request received" }), {
+    status: 200,
+    headers: {
+      'Content-Type': 'application/json',
     },
-    maxConnections: 1,
   });
-
-  const sendEmail = async (emailContent: any, userEmail: string) => {
-    const mailOptions = {
-      from: myEmail,
-      to: myEmail,
-      html: emailContent,
-      subject: `Greetings from ${name}`,
-    };
-
-    try {
-      const info = await transporter.sendMail(mailOptions);
-      console.log('Email sent: ', info);
-    } catch (error) {
-      console.error('Error sending mail: ', error);
-      throw new Error("Mail Failed to Send");
-    }
-  };
-
-  try {
-    await sendEmail(emailContent, myEmail);
-    return new Response(JSON.stringify({ message: "Successfully sent email. Thanks for contacting me! I will get back to you ASAP :)" }), { status: 201 });
-  } catch (error) {
-    return new Response(JSON.stringify({ message: "Error sending email. Please try again and ensure your email is correct" }), { status: 501 });
-  }
 };
 
+export const POST = async (req: NextRequest) => {
+  try {
+    console.log("Access to nodemailer API POST");
+    const { email, name, message } = await req.json();
+
+    if (!email || !name || !message) {
+      return new Response(JSON.stringify({ message: "Missing required fields" }), { status: 400 });
+    }
+
+    const emailContent = `
+      <div>
+        <p>${message}</p>
+        <br>
+        <p>You can get back to me at the following address: ${email}</p>
+      </div>
+    `;
+
+    // Setup transporter for Hotmail
+    const transporter = nodemailer.createTransport({
+      host: 'smtp-mail.outlook.com',  // Correct SMTP server for Hotmail
+      port: 587,                     // Port for sending mail (587 is for STARTTLS)
+      secure: false,                 // false for TLS, true for SSL
+      auth: {
+        user: myEmail,               // Your Hotmail email address
+        pass: "",   // Use your app password here
+      },
+      tls: {
+        ciphers: 'SSLv3',
+      },
+    });
+
+    // Send the email
+    await transporter.sendMail({
+      from: myEmail,
+      to: myEmail,
+      subject: `Greetings from ${name}`,
+      html: emailContent,
+    });
+
+    return new Response(JSON.stringify({ message: "Successfully sent email. Thanks for contacting me! I will get back to you ASAP :)" }), { status: 201 });
+
+  } catch (error) {
+    console.error("Error sending mail:", error);
+    return new Response(JSON.stringify({ message: "Error sending email. Please try again." }), { status: 500 });
+  }
+};

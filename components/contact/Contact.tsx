@@ -23,16 +23,16 @@ export default function Contact() {
 
   return (
     <>
-      <section className="w-full">
+      {/* <section className="w-full">
         <div className="px-4 md:px-6">
           <div className="flex flex-col items-center space-y-4 text-center"></div>
           <div className="pt-6 relative z-0">
             <ContactForm />
           </div>
         </div>
-      </section>
+      </section> */}
 
-<section className="w-full pb-12">
+<section className="w-full py-12">
   <div className="container mx-auto px-6 md:px-12">
     <div className="text-center mb-10">
       <h2
