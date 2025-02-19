@@ -73,7 +73,7 @@ export const Photos = () => {
   }, []);
 
   return (
-    <div className="max-sm:pt-0 md:pt-8">
+    <div className="max-sm:pt-2.5 md:pt-8">
       <div className="mb-8">
         <div 
           ref={scrollRef}

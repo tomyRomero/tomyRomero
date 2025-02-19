@@ -21,7 +21,9 @@ export default function Home() {
     >
       {/* Main Content */}
       <HeroSection projectsRef={projectsRef} />
+      <div className='overflow-x-auto w-full'>
       <Photos />
+      </div>
       <div ref={aboutRef} className="w-full">
         <About />
       </div>
