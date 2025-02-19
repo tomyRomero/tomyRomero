@@ -30,7 +30,7 @@ const Projects = () => {
       {/* Projects Title */}
       <motion.div variants={textVariant()} className="flex justify-center mb-4 sm:mb-6 lg:mb-8">
           <h2
-            className={`text-heading3-bold flex items-center gap-2 text-center ${
+            className={`text-heading2-bold flex items-center gap-2 text-center ${
               theme === "light" ? "text-primary-light" : "text-primary-dark"
             }`}
           >
@@ -38,7 +38,7 @@ const Projects = () => {
           </h2>
         </motion.div>
 
-      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-10">
+        <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 sm:gap-6 mt-10 px-6 sm:px-4 md:px-16">
         {projects.map((project) => (
           <motion.div
             key={project.title}
@@ -48,7 +48,7 @@ const Projects = () => {
             transition={{ duration: 0.3 }}
           >
             <Link href={`/project/${project.title}`} className="block">
-              <Card className={`relative rounded-3xl shadow-[0px_-2px_8px_rgba(0,0,0,0.2),0px_4px_6px_rgba(0,0,0,0.1)] transition-transform ${theme === "light" ? "bg-white" : " text-white shadow-white bg-near-black"} p-4 border-none`}> 
+              <Card className={`relative rounded-3xl shadow-[0px_-2px_4px_rgba(0,0,0,0.2),0px_4px_6px_rgba(0,0,0,0.1)] transition-transform ${theme === "light" ? "bg-white" : " text-white shadow-primary-dark bg-near-black"} p-4 border-none`}> 
                 <div className="absolute inset-0 opacity-20 rounded-xl"></div>
                 <CardHeader className="relative z-10">
                   <CardTitle className={`text-heading6-bold tracking-wide whitespace-nowrap ${theme === "light" ? "text-primary-light" : "text-primary-dark"}`}>{project.title}</CardTitle>
@@ -61,13 +61,13 @@ const Projects = () => {
                     src={project.image}
                     width={300}
                     height={160}
-                    className="w-full h-36 object-scale-down rounded-xl shadow-md"
+                    className="w-full h-36 object-scale-down rounded-xl"
                   />
-                  <p className="text-small-regular font-medium leading-5 ">{project.description}</p>
+                  <p className="pt-1 leading-5 max-sm:text-small-regular md:text-body-normal ">{project.description}</p>
                   <div className="flex justify-between items-center">
                     <span className={`${theme === "light" ? "text-primary-light" : "text-primary-dark"}`}>Click for Details</span>
                     {/* GitHub Button */}
-                    <Link href={project.link} target="_blank" className="w-8 h-8 flex justify-center items-center rounded-full bg-gray-100 dark:bg-gray-800 shadow-md"
+                    <Link href={project.link} target="_blank" className="w-10 h-10 flex justify-center items-center rounded-full"
                       onClick={(e) => {
                         e.stopPropagation();
                       }}

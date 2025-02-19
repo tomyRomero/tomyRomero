@@ -2,10 +2,11 @@
 
 import React, { useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { slideIn } from "../../lib/motion";
+import { slideIn, textVariant } from "../../lib/motion";
 import { useAppContext } from "@/lib/AppContext";
 import { toast } from "../ui/use-toast";
 import { useRouter } from "next/navigation";
+import { Mail } from "lucide-react";
 
 const ContactForm = () => {
   const formRef = useRef<HTMLFormElement | null>(null);
@@ -66,17 +67,23 @@ const ContactForm = () => {
 
   const { theme } = useAppContext();
   return (
-    <div className="flex justify-center items-center py-10 px-4 md:px-8 lg:px-16">
+    <div className="flex justify-center items-center px-4 md:px-8 lg:px-16">
       <motion.div
         initial="hidden"
         animate="show"
         variants={slideIn("left", "tween", 0.2, 1)}
-        className={`w-full max-w-xl lg:max-w-2xl rounded-2xl shadow-sm shadow-near-black p-8 md:p-12 
+        className={`w-full max-w-xl lg:max-w-2xl rounded-2xl p-8 md:p-12 
           transition-all mx-auto`}
       >
-        <h3 className={`text-heading3-bold font-extrabold text-center ${theme === "light" ? "text-primary-light" : "text-primary-dark"}`}>
-          Contact Me
-        </h3>
+        <motion.div variants={textVariant()} className="flex justify-center mb-4 sm:mb-6 lg:mb-8">
+          <h2
+            className={`text-heading2-bold flex items-center gap-2 text-center ${
+              theme === "light" ? "text-primary-light" : "text-primary-dark"
+            }`}
+          >
+            <Mail /> Contact Me
+          </h2>
+        </motion.div>
         <p className={`text-lg text-center mt-2 ${theme === "light" ? "text-near-black" : "text-white"}`}>
           Let's work together! Drop me a message.
         </p>

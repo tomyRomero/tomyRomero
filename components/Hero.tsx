@@ -24,7 +24,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ projectsRef }) => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: "easeOut" }}
-          className="text-heading1-semibold px-4 xs:px-6 sm:px-8 py-3 sm:py-4 text-center leading-[30px] xs:leading-[36px] sm:leading-[38px] md:leading-[42px] lg:leading-[44px]"
+          className="text-heading1-semibold px-4 xs:px-6 sm:px-8 py-3 sm:py-4 text-center leading-[30px] max-sm:leading-[42px] md:leading-[44px] lg:leading-[44px]"
         >
           Hey, I am{" "}
           <span

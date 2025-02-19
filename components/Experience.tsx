@@ -10,12 +10,12 @@ export default function Experience() {
   const { theme } = useAppContext();
 
   return (
-    <section className="max-sm:mt-4 mt-8 w-full px-6 md:px-16 py-8 relative z-0 rounded-2xl">
+    <section className="max-sm:mt-4 mt-8 w-full px-6 md:px-16 pt-8 relative z-0 rounded-2xl">
       <div className="space-y-8">
         {/* Title with animation */}
         <motion.div variants={textVariant()} className="flex justify-center mb-4 sm:mb-6 lg:mb-8">
           <h2
-            className={`text-heading3-bold flex items-center gap-2 text-center ${
+            className={` text-heading2-bold flex items-center gap-2 text-center ${
               theme === "light" ? "text-primary-light" : "text-primary-dark"
             }`}
           >
@@ -69,7 +69,7 @@ export default function Experience() {
                             theme === 'light' ? 'text-primary-light' : 'text-primary-dark'
                           }`}
                         />
-                        <span className="text-md leading-relaxed">{bullet}</span>
+                        <span className="max-sm:text-small-regular md:text-body-normal leading-relaxed">{bullet}</span>
                       </motion.li>
                     ))}
                   </ul>

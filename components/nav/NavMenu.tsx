@@ -27,8 +27,8 @@ export default function NavMenu({ isActive, setIsActive, theme }: Props) {
             transition={{ duration: 0.7, ease: [0.76, 0, 0.24, 1] }}
             className={`absolute top-[50px] left-0 right-0 border-b ${
               theme === 'light'
-                ? 'border-b-black/20 bg-white'
-                : 'border-b-white/20 bg-near-black'
+                ? ' bg-white '
+                : ' bg-near-black border-white'
             }`}
           >
             <div className="flex items-center justify-between max-w-custom mx-auto px-[24px] xl:px-[103px] md:pt-[75px] md:pb-[69px] py-[42px]">
