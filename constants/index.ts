@@ -1,12 +1,30 @@
 
+import {
+  FaGithub,
+  FaLinkedin,
+  FaTwitter,
+  FaInstagram,
+} from "react-icons/fa";
+import { IconType } from "react-icons/lib";
+
+// Define the structure of the social links
+interface SocialLink {
+  title: string;
+  href: string;
+  icon: IconType;
+}
+
+// Social links array with icons from react-icons
+export const socialLinks: SocialLink[] = [
+  { title: 'GitHub', href: 'https://github.com/yourusername', icon: FaGithub },
+  { title: 'LinkedIn', href: 'https://www.linkedin.com/in/yourusername', icon: FaLinkedin },
+];
+
 //Home Page Pictures
-import proTomy from '../public/assets/tomyRomero.jpg'
 import tomy from '../public/assets/tomyRomero.jpeg'
 import uvi from '../public/assets/uvi.jpeg'
 import president from '../public/assets/presidentUvi.jpeg'
-import stt from '../public/assets/St.Thomas.webp'
 import deanslist from '../public/assets/deanslist.jpeg'
-import art from '../public/assets/macmiller.jpeg'
 import scholarship from '../public/assets/scholarship.jpeg'
 import uvilogo from '../public/assets/uvi_icon.webp'
 import sga from '../public/assets/sga.jpeg'
@@ -26,6 +44,7 @@ import sqlserver from '../public/assets/MSSQLServer.png'
 import next from '../public/assets/next-js.svg'
 import azure from '../public/assets/azure.png'
 import dotnet from '../public/assets/dotnet.png'
+import aws from '../public/assets/aws.svg.png'
 
 
 export const resumeLink = `https://docs.google.com/document/d/1NgKOp9uVqTW2ntBhMemJ5E-mporMj0cH9h6Cnki2nWA/edit?usp=sharing`;
@@ -74,14 +93,6 @@ export const services = [
 
 //Projects for Home Page
 export const projects = [
-  {
-    title: "iMovies",
-    techStack: 'React, ASP.NET Core, SQL Server, Azure, OMDb API',
-    projectIcon: '/assets/github.svg',
-    image: '/iMovies/imovieshome.png',
-    description: 'Contributed to a content management system as part of a collaborative team, that allows users to manage a list of movies with social media features.',
-    link: "https://github.com/240708-NET-FS/Project2_OMDb_API_Movies_CMS_Group1",
-  },
 {
   title: "ArtifyMe",
   techStack: "React Native, ASP.NET Core, SQL Server, Fast API, AWS",
@@ -105,6 +116,14 @@ export const projects = [
   image: '/sparks/sparks-chats.png',
   description: 'AI powered full stack CRUD social media platform and messaging application.',
   link: "https://github.com/tomyRomero/sparks"
+},
+{
+  title: "iMovies",
+  techStack: 'React, ASP.NET Core, SQL Server, Azure, OMDb API',
+  projectIcon: '/assets/github.svg',
+  image: '/iMovies/imovieshome.png',
+  description: 'Contributed to a content management system as part of a collaborative team, that allows users to manage a list of movies with social media features.',
+  link: "https://github.com/240708-NET-FS/Project2_OMDb_API_Movies_CMS_Group1",
 },
 
 ]
@@ -310,7 +329,7 @@ export const technologies = [
     icon: reactjs.src,
   },
   {
-    name: "dotnet",
+    name: ".net",
     icon: dotnet.src
   },
   {
@@ -326,12 +345,16 @@ export const technologies = [
     icon: docker.src,
   },
   {
-    name: "SQL server",
+    name: "SQLServer",
     icon: sqlserver.src,
   },
   {
     name: "next.js",
     icon: next.src
+  },
+  {
+    name: "Amazon Web Services",
+    icon: aws.src
   }
 ];
 

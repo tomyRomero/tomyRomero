@@ -21,10 +21,10 @@ export default function ProjectDetails({title, tools, type, year}: Props) {
   return (
     <article className="flex flex-col-reverse md:flex-row justify-between gap-x-6">
       <section>
-        <h1 className={`${theme === "light" ? 'text-primary-light' : 'text-primary-dark'} text-heading1.5-bold tracking-[1.92px] md:text-[58px] md:tracking-[3.48px] pb-[7px]`}>
+        <h1 className={`${theme === "light" ? 'text-primary-light' : 'text-primary-dark'} text-heading3-bold tracking-[1.92px] md:text-[40px] md:tracking-[3.48px] pb-[7px]`}>
          {title}
         </h1>
-        <article className={`${theme === "light" ? '' : 'text-white'} text-[18px] font-semibold tracking-[0.84px] md:text-[24px] md:tracking-[1.44px] pb-[15px] md:pb-[18px]`}>
+        <article className={`${theme === "light" ? '' : 'text-white'} text-[18px] font-semibold tracking-[0.84px] md:text-[20px] md:tracking-[1.44px] pb-[15px] md:pb-[18px]`}>
           <p>{type}</p>
         </article>
           <article className="flex items-center gap-[15px] flex-wrap">

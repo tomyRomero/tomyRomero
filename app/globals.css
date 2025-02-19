@@ -60,14 +60,6 @@ ol {
   transform: translateZ(0);
 }
 
-.title {
-  @apply text-heading4-bold ml-6 relative cursor-pointer
-}
-
-.title.selected {
-  @apply text-heading2-bold
-}
-
 .underline {
   width: 100%;
   height: 8px;
@@ -88,3 +80,15 @@ ol {
 .slider-button:hover {
   transform: scale(1.1);
 }
+
+/* Hide scrollbar for Chrome, Safari, and Edge */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for Firefox */
+.hide-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+

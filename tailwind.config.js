@@ -23,13 +23,13 @@ module.exports = {
         },
       ],
       "heading1-semibold": [
-        "36px",
+        "42px",
         {
-          lineHeight: "140%",
+          lineHeight: "120%",
           fontWeight: "600",
         },
       ],
-      
+    
       "heading1.5-bold": [
         "45px",
         {

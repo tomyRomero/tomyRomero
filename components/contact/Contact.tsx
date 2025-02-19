@@ -32,61 +32,45 @@ export default function Contact() {
         </div>
       </section>
 
-      <section className="w-full ml-20 py-10">
-        <div className="container px-4 md:px-6">
-          <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3">
-            {contactDetails.map((contact, index) => (
-              <div key={index} className="space-y-2">
-                <h2
-                  className={`text-heading3-bold ${
-                    theme === "light"
-                      ? "text-primary-light"
-                      : "text-primary-dark"
-                  }`}
-                >
-                  {contact.type}
-                </h2>
-                {contact.href ? (
-                  <Link href={contact.href} target="_blank">
-                    <p
-                      className={`text-base-regular ${
-                        theme === "light"
-                          ? "text-near-black hover:text-primary-light"
-                          : "text-white hover:text-primary-dark"
-                      } hover:underline`}
-                    >
-                      {contact.value}
-                    </p>
-                  </Link>
-                ) : (
-                  <p
-                    className={`text-base-regular ${
-                      theme === "light" ? "text-near-black" : "text-white"
-                    }`}
-                  >
-                    {contact.value}
-                  </p>
-                )}
-              </div>
-            ))}
-          </div>
+      <section className="w-full py-10">
+  <div className="container mx-auto px-4 md:px-8">
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
+      {contactDetails.map((contact, index) => (
+        <div key={index} className="space-y-4">
+          <h2
+            className={`text-heading3-bold ${
+              theme === "light" ? "text-primary-light" : "text-primary-dark"
+            }`}
+          >
+            {contact.type}
+          </h2>
+          {contact.href ? (
+            <Link href={contact.href} target="_blank">
+              <p
+                className={`text-base-regular ${
+                  theme === "light"
+                    ? "text-near-black hover:text-primary-light"
+                    : "text-white hover:text-primary-dark"
+                } hover:underline`}
+              >
+                {contact.value}
+              </p>
+            </Link>
+          ) : (
+            <p
+              className={`text-base-regular ${
+                theme === "light" ? "text-near-black" : "text-white"
+              }`}
+            >
+              {contact.value}
+            </p>
+          )}
         </div>
-      </section>
+      ))}
+    </div>
+  </div>
+</section>
 
-      <footer
-        className={`w-full h-20 flex justify-center items-center border-t ${
-          theme === "light" ? "border-primary-light" : "border-primary-dark"
-        }`}
-      >
-        <p
-          ref={ref}
-          className={`text-body1 ${
-            theme === "light" ? "text-near-black" : "text-white"
-          }`}
-        >
-          ©Tomy Romero. All rights reserved.
-        </p>
-      </footer>
     </>
   );
 }

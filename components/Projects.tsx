@@ -2,13 +2,14 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { fadeIn, staggerContainer, textVariant } from "../lib/motion";
 import { motion } from "framer-motion";
-import { CardTitle, CardDescription, CardHeader, CardContent, Card } from "@/components/ui/card";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
 import { useAppContext } from "@/lib/AppContext";
 import { projects } from "@/constants";
 import { useInView } from "react-intersection-observer";
 import { useEffect, useState } from "react";
+import { FolderOpen } from "lucide-react";
+import { textVariant } from "@/lib/motion";
 
 const Projects = () => {
   const { theme, setSelected } = useAppContext();
@@ -25,107 +26,67 @@ const Projects = () => {
   if (!mounted) return null;
 
   return (
-    <motion.div
-      //@ts-ignore
-      variants={staggerContainer()}
-      className="mt-10 max-sm:mt-4"
-    >
-      <motion.div
-        //@ts-ignore
-        variants={textVariant()}
-      >
-        <h2
-          className={`text-heading2-bold md:text-heading1-bold text-center p-1 ${
-            theme === "light" ? "text-primary-light" : "text-primary-dark"
-          }`}
-        >
-          Projects
-        </h2>
-        <p
-          ref={ref}
-          className={`sectionSubText text-center p-1 ${
-            theme === "light" ? "text-near-black" : "text-white"
-          }`}
-        >
-          Some of my top projects
-        </p>
-      </motion.div>
-      <div className="flex flex-col w-full">
-        <section className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-10 ">
-          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 max-w-6xl w-full mx-auto">
-            {projects.map((project, index) => (
-              <motion.div
-                initial="hidden"
-                animate={"show"}
-                key={project.title}
-                variants={fadeIn("up", "spring", index * 0.5, 0.75)}
-              >
-                <Link href={`/project/${project.title}`}>
-                  <Card
-                    className={`min-w-[300px] border-2 rounded-xl max-sm:w-3/4 max-sm:mx-auto
-                  cursor-pointer hover:scale-105 ease-in-out duration-300 
-                  ${theme === "light" ? "border-primary-light " : "border-primary-dark bg-near-black text-white"}
-                  `}
-                  >
-                    <CardHeader className="flex flex-row items-center gap-4">
-                      <Link href={project.link} target="_blank"
-                      onClick={(e) => e.stopPropagation()} // Prevents click from triggering main link
-                      >
-                        <Image
-                          src={
-                            theme === "light"
-                              ? "/assets/github.svg"
-                              : "/assets/githubdark.png"
-                          }
-                          alt={"Project Icon"}
-                          width={50}
-                          height={50}
-                          className="hover:scale-150 ease-in-out duration-300 max-w-8"
-                        />
-                      </Link>
-                      <div className="grid gap-1">
-                        <CardTitle className="max-sm:text-heading3-bold text-heading2-bold">
-                          <span>{project.title}</span>
-                        </CardTitle>
-                        <CardDescription
-                          className={`text-base-regular font-bold ${
-                            theme === "light"
-                              ? "text-primary-light"
-                              : "text-primary-dark"
-                          }`}
-                        >
-                          {project.techStack}
-                        </CardDescription>
-                      </div>
-                    </CardHeader>
-                    <CardContent className="grid gap-2">
+    <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }} className="mt-12 sm:mt-8 px-4 md:px-16 max-w-7xl mx-auto">
+      {/* Projects Title */}
+      <motion.div variants={textVariant()} className="flex justify-center mb-4 sm:mb-6 lg:mb-8">
+          <h2
+            className={`text-heading3-bold flex items-center gap-2 text-center ${
+              theme === "light" ? "text-primary-light" : "text-primary-dark"
+            }`}
+          >
+            <FolderOpen /> Projects
+          </h2>
+        </motion.div>
+
+      <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-10">
+        {projects.map((project) => (
+          <motion.div
+            key={project.title}
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            whileHover={{ scale: 1.05 }}
+            transition={{ duration: 0.3 }}
+          >
+            <Link href={`/project/${project.title}`} className="block">
+              <Card className={`relative rounded-3xl shadow-[0px_-2px_8px_rgba(0,0,0,0.2),0px_4px_6px_rgba(0,0,0,0.1)] transition-transform ${theme === "light" ? "bg-white" : " text-white shadow-white bg-near-black"} p-4 border-none`}> 
+                <div className="absolute inset-0 opacity-20 rounded-xl"></div>
+                <CardHeader className="relative z-10">
+                  <CardTitle className={`text-heading6-bold tracking-wide whitespace-nowrap ${theme === "light" ? "text-primary-light" : "text-primary-dark"}`}>{project.title}</CardTitle>
+                  <CardDescription className={`text-body-normal italic ${theme === "light" ? "text-near-black" : "text-white"}`}>{project.techStack}</CardDescription>
+                </CardHeader>
+                <CardContent className="p-2 flex flex-col gap-2 relative z-10">
+                  {/* Project Image */}
+                  <Image
+                    alt={project.title}
+                    src={project.image}
+                    width={300}
+                    height={160}
+                    className="w-full h-36 object-scale-down rounded-xl shadow-md"
+                  />
+                  <p className="text-small-regular font-medium leading-5 ">{project.description}</p>
+                  <div className="flex justify-between items-center">
+                    <span className={`${theme === "light" ? "text-primary-light" : "text-primary-dark"}`}>Click for Details</span>
+                    {/* GitHub Button */}
+                    <Link href={project.link} target="_blank" className="w-8 h-8 flex justify-center items-center rounded-full bg-gray-100 dark:bg-gray-800 shadow-md"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                      }}
+                    >
                       <Image
-                        alt={project.title}
-                        className="object-contain w-full h-60 rounded-2xl"
-                        height={300}
-                        width={300}
-                        src={project.image}
+                        src={theme === "light" ? "/assets/github.svg" : "/assets/githubdark.png"}
+                        alt="GitHub Repository"
+                        width={20}
+                        height={20}
+                        className="object-contain w-5 h-5 transition-transform hover:scale-110"
                       />
-                      <div className="text-base1-semibold p-1">
-                        {project.description}
-                      </div>
-                      <div
-                        className={`text-small-semibold p-1 ${
-                          theme === "light"
-                            ? "text-primary-light"
-                            : "text-primary-dark"
-                        }`}
-                      >
-                        Click for Details
-                      </div>
-                    </CardContent>
-                  </Card>
-                </Link>
-              </motion.div>
-            ))}
-          </div>
-        </section>
-      </div>
+                    </Link>
+                  </div>
+                </CardContent>
+              </Card>
+            </Link>
+          </motion.div>
+        ))}
+      </section>
     </motion.div>
   );
 };

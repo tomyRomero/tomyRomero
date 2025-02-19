@@ -73,8 +73,8 @@ export const Photos = () => {
   }, []);
 
   return (
-    <div className="md:pt-8">
-      <div className="my-8">
+    <div className="max-sm:pt-0 md:pt-8">
+      <div className="mb-8">
         <div 
           ref={scrollRef}
           className="hide-scrollbar -my-4 flex gap-8 overflow-y-auto py-4 px-8"

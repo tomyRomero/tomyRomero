@@ -9,7 +9,7 @@ import ProjectDetails from '@/components/project/ProjectDetails';
 import ProjectDescription from '@/components/project/ProjectDescription';
 import { motion } from 'framer-motion';
 import { slideIn } from '@/lib/motion';
-import StarsCanvas from '@/components/canvas/Stars';
+
 
 const page = ({ params }: { params: { title: string } }) => {
   const { theme, selected, scrollToSection, descriptionRef } = useAppContext();

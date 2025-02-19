@@ -3,8 +3,8 @@ import { Lora } from 'next/font/google'
 import './globals.css'
 import { AppProvider } from '@/lib/AppContext'
 import { Toaster } from "@/components/ui/toaster";
-import NewNav from '@/components/nav/newNav'
 import { Analytics } from "@vercel/analytics/react"
+import NavBar from '@/components/nav/NavBar';
 
 export const metadata: Metadata = {
   title: 'tomyRomero',
@@ -25,7 +25,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${interTight.className}  z-0`} >
         <AppProvider>
-          <NewNav />
+          <NavBar />
           <div className='mt-14 max-sm:mt-2' >
           {children}
           <Analytics />

@@ -1,11 +1,11 @@
-"use client"
+"use client";
 
 import React, { useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { slideIn } from "../../lib/motion";
 import { useAppContext } from "@/lib/AppContext";
-import { useRouter } from "next/navigation";
 import { toast } from "../ui/use-toast";
+import { useRouter } from "next/navigation";
 
 const ContactForm = () => {
   const formRef = useRef<HTMLFormElement | null>(null);
@@ -48,6 +48,7 @@ const ContactForm = () => {
       toast({
         title: "Success!",
         description: `${data.message}`, 
+        className: `${theme === "light" ? "bg-primary-light text-white" : "bg-primary-dark"}`
       })
 
     }else{
@@ -55,6 +56,7 @@ const ContactForm = () => {
         title: "Failed to send message",
         description: "Something went wrong!", 
         variant: "destructive",
+        className: `${theme === "light" ? "bg-primary-light text-white" : "bg-primary-dark"}`
       })
     }
 
@@ -62,88 +64,82 @@ const ContactForm = () => {
     setLoading(false)
   };
 
-  const {theme} = useAppContext();
+  const { theme } = useAppContext();
   return (
-    <div className="flex justify-center items-center"
-    >
+    <div className="flex justify-center items-center py-10 px-4 md:px-8 lg:px-16">
       <motion.div
-        initial='hidden'
-        animate='show'
+        initial="hidden"
+        animate="show"
         variants={slideIn("left", "tween", 0.2, 1)}
-        className={`flex-[0.75] rounded-2xl shadow-lg max-w-[1000px]`}
+        className={`w-full max-w-xl lg:max-w-2xl rounded-2xl shadow-sm shadow-near-black p-8 md:p-12 
+          transition-all mx-auto`}
       >
-        <h3 className={`sectionHeadText text-center ${theme === "light" ? 'text-primary-light' : 'text-primary-dark'}`}>Contact</h3>
-        <p className={`sectionSubText text-center ${theme === "light" ? 'text-primary-light' : 'text-primary-dark'}`}>Get in touch</p>
-        <form
-          ref={formRef}
-          onSubmit={handleSubmit}
-          className={`mt-6 flex flex-col gap-8 border-2 p-8 ${theme === "light" ? 'border-primary-light' : 'border-primary-dark'} rounded-2xl`}   
-        >
-          <label className='flex flex-col'>
-            <span className={`${theme === "light" ? "text-near-black" : "text-white"} font-medium mb-4 `}>Your Name</span>
+        <h3 className={`text-heading3-bold font-extrabold text-center ${theme === "light" ? "text-primary-light" : "text-primary-dark"}`}>
+          Contact Me
+        </h3>
+        <p className={`text-lg text-center mt-2 ${theme === "light" ? "text-near-black" : "text-white"}`}>
+          Let's work together! Drop me a message.
+        </p>
+
+        <form ref={formRef} onSubmit={handleSubmit} className="mt-6 flex flex-col gap-6">
+          <label className="flex flex-col">
+            <span className={`font-medium mb-2 ${theme === "light" ? "text-primary-light" : "text-primary-dark"}`}>
+              Your Name
+            </span>
             <input
-              type='text'
-              name='name'
+              type="text"
+              name="name"
               required
               value={form.name}
               onChange={handleChange}
               placeholder="What's your name?"
-              className={`bg-white border py-4 px-6
-               placeholder:text-gray rounded-lg 
-               outline-none
-               font-medium
-               focus:outline-none focus:ring-2 ${theme === "light" ? "focus:ring-primary-light" : "focus:ring-primary-dark"}
-              ${theme === "light" ? "border-primary-light" : "border-primary-dark"}
-               `}
+              className={`border border-near-black py-3 px-4 rounded-lg focus:outline-none focus:ring-2 focus:border-none
+                ${theme === "light" ? "focus:ring-primary-light" : "focus:ring-primary-dark"} 
+                transition-all duration-300 ease-in-out`}
             />
           </label>
-          <label className='flex flex-col'>
-            <span className={`${theme === "light" ? "text-near-black" : "text-white"} font-medium mb-4`}>Your Email</span>
+          <label className="flex flex-col">
+            <span className={`font-medium mb-2 ${theme === "light" ? "text-primary-light" : "text-primary-dark"}`}>
+              Your Email
+            </span>
             <input
-              type='email'
-              name='email'
+              type="email"
+              name="email"
+              required
               value={form.email}
               onChange={handleChange}
-              placeholder="What's your web address? So I can get back to you."
-              className={`bg-white border py-4 px-6
-                placeholder:text-gray rounded-lg 
-                outline-none
-                font-medium
-                focus:outline-none focus:ring-2 ${theme === "light" ? "focus:ring-primary-light" : "focus:ring-primary-dark"}
-               ${theme === "light" ? "border-primary-light" : "border-primary-dark"}
-                `}
-              required
+              placeholder="Your email address"
+              className={`py-3 px-4 rounded-lg focus:outline-none focus:ring-2 border border-near-black focus:border-none
+                ${theme === "light" ? "focus:ring-primary-light" : "focus:ring-primary-dark"} 
+                transition-all duration-300 ease-in-out`}
             />
           </label>
-          <label className='flex flex-col'>
-            <span className={`${theme === "light" ? "text-near-black" : "text-white"} font-medium mb-4`}>Your Message</span>
+          <label className="flex flex-col">
+            <span className={`font-medium mb-2 ${theme === "light" ? "text-primary-light" : "text-primary-dark"}`}>
+              Your Message
+            </span>
             <textarea
               required
-              rows={7}
-              name='message'
+              rows={6}
+              name="message"
               value={form.message}
               onChange={handleChange}
-              placeholder='What would you like to say? Include phone number or web address for me to get back to you.'
-              className={`bg-white border py-4 px-6
-                placeholder:text-gray rounded-lg 
-                outline-none
-                font-medium
-                focus:outline-none focus:ring-2 ${theme === "light" ? "focus:ring-primary-light" : "focus:ring-primary-dark"}
-               ${theme === "light" ? "border-primary-light" : "border-primary-dark"}
-                `}
+              placeholder="Write your message here..."
+              className={`py-3 px-4 rounded-lg focus:outline-none focus:ring-2 border border-near-black focus:border-none
+                ${theme === "light" ? "focus:ring-primary-light" : "focus:ring-primary-dark"} 
+                transition-all duration-300 ease-in-out`}
             />
           </label>
-          <div className="flex justify-evenly">
-          
-            <button
-              type='submit'
-              className={`py-2 px-6 rounded-full font-bold transition duration-300 ease-in-out shadow-lg ${loading ? "bg-gray" : `bg-${theme === "light" ? "primary-light text-white" : "primary-dark text-near-black"} hover:scale-105`} 
-              sm:py-3 sm:px-8 md:py-4 md:px-10`}
+
+          <button
+              type="submit"
+              className={`w-full py-3 rounded-lg font-semibold text-lg shadow-md transition-all 
+                ${loading ? "bg-gray cursor-not-allowed text-near-black" : `${theme === "light" ? "bg-primary-light" : "bg-primary-dark"} text-white hover:scale-105 focus:ring-primary`}
+              `}
               disabled={loading}
             >
-            {loading ? "Sending..." : "Send"}
-          </button>
-          </div>
+              {loading ? "Sending..." : "Send Message"}
+            </button>
         </form>
       </motion.div>
     </div>

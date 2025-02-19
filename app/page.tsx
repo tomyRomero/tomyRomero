@@ -8,53 +8,46 @@ import Tech from '@/components/Tech';
 import Contact from '@/components/contact/Contact';
 import { useAppContext } from '@/lib/AppContext';
 import Experience from '@/components/Experience';
-import StarsCanvas from '@/components/canvas/Stars';
-import { useRef, useState } from 'react';
 
 
 export default function Home() {
-  
   const { theme, aboutRef, projectsRef, contactRef, experienceRef } = useAppContext();
-  const [showStars, setShowStars] = useState(false);
 
-  const toggleStars = () => {
-    setShowStars(!showStars);
-  };
-  
-  try{
-    return (
-      <div className={`relative z-0 flex flex-col mt-10 ${theme === "light" ? '' : 'bg-near-black'} overflow-hidden`}>
-          {/* Stars Canvas as background */}
-          {/* Disabled for now due to lack of brwowser support for moblie devices */}
-          {/* {showStars && <StarsCanvas />} */}
-          
-          {/* Main Content */}
-          <HeroSection showStars={showStars} toggleStars={toggleStars} projectsRef={projectsRef}  />
-          <Photos />
-          <div ref={aboutRef}><About /></div>
-          <Tech />
-          <div ref={experienceRef}><Experience /></div>
-          <div ref={projectsRef}><Projects /></div>
-          <div ref={contactRef}><Contact /> </div>
+  return (
+    <div
+      className={`relative z-0 flex flex-col mt-10 ${
+        theme === "light" ? "bg-white/70" : "bg-near-black"
+      } overflow-hidden items-center`}
+    >
+      {/* Main Content */}
+      <HeroSection projectsRef={projectsRef} />
+      <Photos />
+      <div ref={aboutRef} className="w-full">
+        <About />
       </div>
-      )
-  } catch (error) {
-    alert("failed to load stars");
-
-    return (
-      <div className={`relative z-0 flex flex-col mt-10 ${theme === "light" ? '' : 'bg-near-black'} overflow-hidden`}>
-        
-          {/* Main Content */}
-          <HeroSection showStars={showStars} toggleStars={toggleStars} projectsRef={projectsRef}  />
-          <Photos />
-          <div ref={aboutRef}><About /></div>
-          <Tech />
-          <div ref={experienceRef}><Experience /></div>
-          <div ref={projectsRef}><Projects /></div>
-          <div ref={contactRef}><Contact /> </div>
-          
+      <Tech />
+      <div ref={experienceRef}>
+        <Experience />
       </div>
-    )
-  }
-
+      <div ref={projectsRef}>
+        <Projects />
+      </div>
+      <div ref={contactRef}>
+        <Contact />
+      </div>
+      <footer
+        className={`w-full h-20 flex justify-center items-center border-t ${
+          theme === "light" ? "border-primary-light" : "border-primary-dark"
+        }`}
+      >
+        <p
+          className={`text-body1 ${
+            theme === "light" ? "text-near-black" : "text-white"
+          }`}
+        >
+          ©Tomy Romero. All rights reserved.
+        </p>
+      </footer>
+    </div>
+  );
 }
