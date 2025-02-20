@@ -37,10 +37,7 @@ export default function Home() {
       <div ref={contactRef}>
         <Contact />
       </div>
-      <footer
-        className={`w-full h-20 flex justify-center items-center border-t ${
-          theme === "light" ? "border-primary-light" : "border-primary-dark"
-        }`}
+      <footer className='pb-4'
       >
         <p
           className={`text-body1 ${

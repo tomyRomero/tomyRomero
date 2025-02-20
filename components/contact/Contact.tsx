@@ -51,7 +51,7 @@ export default function Contact() {
       {contactDetails.map((contact, index) => (
         <div
           key={index}
-          className="relative p-6 bg-white rounded-2xl shadow-lg transition-transform hover:scale-105"
+          className="relative p-6 bg-white rounded-2xl shadow-[0px_-2px_4px_rgba(0,0,0,0.2),0px_4px_6px_rgba(0,0,0,0.1)] transition-transform hover:scale-105"
         >
           <h3
             className={`text-heading6-bold mb-2 ${

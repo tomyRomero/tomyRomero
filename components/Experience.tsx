@@ -38,7 +38,7 @@ export default function Experience() {
               transition={{ duration: 0.6, ease: "easeOut", delay: index * 0.2 }}
               className="w-full flex justify-center"
             >
-              <Card className="w-full max-w-[500px] rounded-xl shadow-xl transition-all duration-300 transform hover:rotate-x-12 hover:rotate-y-8 hover:shadow-2xl">
+              <Card className="border border-none shadow-[0px_-2px_4px_rgba(0,0,0,0.2),0px_4px_6px_rgba(0,0,0,0.1)] w-full max-w-[500px] rounded-xl  transition-all duration-300 transform">
                 <CardContent className="p-6">
                   <div className="flex flex-col md:flex-row md:justify-between md:items-center mb-4">
                     <div className="mb-4 md:mb-0">
