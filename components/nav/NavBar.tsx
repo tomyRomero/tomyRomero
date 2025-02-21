@@ -33,7 +33,7 @@ const NavBar = () => {
       </div>
 
       {/* Links Section */}
-      <ul className={`${theme === "light" ? "text-near-black bg-near-black/10" : "text-white bg-white/10"} p-2 px-4 sm:px-6 rounded-full flex space-x-4 sm:space-x-6 md:space-x-8 font-medium hidden md:flex`}>
+      <ul className={`shadow-[0px_2px_8px_rgba(0,0,0,0.1),0px_-2px_8px_rgba(0,0,0,0.1)] ${theme === "light" ? "text-near-black shadow-near-black/50" : "text-white shadow-white/50"} p-2 px-4 sm:px-6 rounded-full flex space-x-4 sm:space-x-6 md:space-x-8 font-medium hidden md:flex`}>
         {navLinks.map(({ title, path }, i) => (
           <li key={i}>
             <button 
