@@ -35,8 +35,8 @@ export default function ImageSlider({ images }: any) {
   
     return (
     <>
-      <div className={`relative max-w-[980px] mx-auto ${theme === "light" ? "border-primary-light" : "border-primary-dark"} 
-      border-[2px] md:border-[3px] rounded-[5px] md:rounded-[10px]` }>
+      <div className={`relative max-w-[980px] mx-auto shadow-[0px_-2px_4px_rgba(0,0,0,0.2),0px_4px_6px_rgba(0,0,0,0.1)] ${theme === "light" ? "shadow-primary-light" : "shadow-primary-dark"} 
+       rounded-[5px] md:rounded-[10px]` }>
         {/* Pass the ref to the Slider component */}
         <Slider {...settings} ref={sliderRef} 
         >

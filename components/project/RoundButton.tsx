@@ -24,7 +24,7 @@ return (
       variant === 'lg'
         ? 'w-[173px] text-[18px] tracking-[1.08px]'
         : 'w-[87px] text-[12px] tracking-[0.72px]'
-    } aspect-square rounded-3xl border-[3px] ${theme === "light" ?  '' : 'text-white hover:bg-primary-dark'} ${
+    } aspect-square rounded-3xl shadow-[0px_-2px_4px_rgba(0,0,0,0.2),0px_4px_6px_rgba(0,0,0,0.1)] ${theme === "light" ?  'shadow-primary-light' : 'text-white shadow-primary-dark'} ${
       theme === 'light'
         ? 'border-primary-light hover:text-white'
         : 'border-primary-dark hover:text-white'

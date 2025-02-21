@@ -29,7 +29,7 @@ export default function ProjectDescription({ text, features, github, live, isLiv
         </div>
         <div className="space-y-4">
           <h3 className={`text-heading3-bold md:text-heading2-bold ${theme === "light" ? 'text-primary-light' : 'text-primary-dark'}`}>Key Features:</h3>
-          <ul className="grid gap-2 text-muted-foreground">
+          <ul className="grid gap-2">
             {features.map((feature: string, index: number) => (
               <li key={index}>
                 <CheckIcon

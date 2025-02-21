@@ -57,11 +57,11 @@ const page = ({ params }: { params: { title: string } }) => {
             <div className="flex items-center justify-start mb-4">
               <button
                 onClick={() => handleNavClick("projects")}
-                className={`flex items-center p-2 md:p-3 lg:p-4 rounded-full border-2 
+                className={`flex items-center p-2 md:p-3 lg:p-4 rounded-full shadow-[0px_-2px_4px_rgba(0,0,0,0.2),0px_4px_6px_rgba(0,0,0,0.1)]
                   transition-transform transform hover:scale-110 ease-in-out duration-300 
                   ${theme === "light" 
-                    ? "border-primary-light bg-transparent hover:bg-primary-light hover:bg-opacity-20" 
-                    : "border-primary-dark bg-near-black bg-opacity-20 hover:bg-primary-dark hover:bg-opacity-20"
+                    ? " bg-transparent shadow-primary-light hover:bg-primary-light hover:bg-opacity-20" 
+                    : "shadow-primary-dark bg-near-black bg-opacity-20 hover:bg-primary-dark hover:bg-opacity-20"
                   }`}
               >
                 <Image

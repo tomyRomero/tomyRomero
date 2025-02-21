@@ -26,12 +26,23 @@ const SliderControls: React.FC<ImageControlsProps> = ({ slider }) => {
     return (
       <>
       <br></br>
-        <div className={`mb-[30px] md:mb-[50px] ${theme === "light" ? "bg-primary-light" : "bg-primary-dark"} rounded-xl py-4`}>
+        <div className={`mb-[30px] md:mb-[50px] shadow-[0px_-2px_4px_rgba(0,0,0,0.2),0px_4px_6px_rgba(0,0,0,0.1)] ${theme === "light" ? "shadow-primary-light" : "shadow-primary-dark"} rounded-xl py-4`}>
             <div className="flex justify-between w-full px-[20px] md:px-[37px] h-full">
-                <button onClick={prevSlide} className="slider-button">
-                    <Image src={"/assets/advance.png"} alt="arrow" width={40} height={40} className="rotate-180 w-[30px] md:w-[40px]" />
+                <button
+                onClick={prevSlide}
+                className={`slider-button p-2 rounded-full ${theme === "light" ? "!bg-primary-light" : "!bg-primary-dark"} shadow-md hover:shadow-lg transform transition-all duration-300`}
+                >
+                <Image
+                    src={"/assets/advance.png"}
+                    alt="arrow"
+                    width={40}
+                    height={40}
+                    className="rotate-180 w-[30px] md:w-[40px]"
+                    
+                />
                 </button>
-                <button onClick={nextSlide} className="slider-button">
+                <button onClick={nextSlide} 
+                 className={`slider-button p-2 rounded-full ${theme === "light" ? "!bg-primary-light" : "!bg-primary-dark"} shadow-md hover:shadow-lg transform transition-all duration-300`}>
                     <Image src={"/assets/advance.png"} alt="arrow" width={40} height={40} className="w-[30px] md:w-[40px]" />
                 </button>
             </div>
