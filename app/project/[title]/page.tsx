@@ -60,8 +60,8 @@ const page = ({ params }: { params: { title: string } }) => {
                 className={`flex items-center p-2 md:p-3 lg:p-4 rounded-full shadow-[0px_-2px_4px_rgba(0,0,0,0.2),0px_4px_6px_rgba(0,0,0,0.1)]
                   transition-transform transform hover:scale-110 ease-in-out duration-300 
                   ${theme === "light" 
-                    ? " bg-transparent shadow-primary-light hover:bg-primary-light hover:bg-opacity-20" 
-                    : "shadow-primary-dark bg-near-black bg-opacity-20 hover:bg-primary-dark hover:bg-opacity-20"
+                    ? " bg-transparent shadow-near-black hover:bg-primary-light hover:bg-opacity-20" 
+                    : "shadow-white bg-near-black bg-opacity-20 hover:bg-primary-dark hover:bg-opacity-20"
                   }`}
               >
                 <Image
@@ -72,7 +72,7 @@ const page = ({ params }: { params: { title: string } }) => {
                   className="w-6"
                 />
                 <span
-                  className={`hidden md:inline-block font-semibold ${theme === "light" ? "text-primary-light" : "text-primary-dark"}`}
+                  className={`hidden md:inline-block font-semibold ${theme === "light" ? "text-near-black" : "text-white"}`}
                 >
                   Go Back
                 </span>

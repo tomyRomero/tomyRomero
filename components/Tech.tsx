@@ -32,8 +32,8 @@ const Tech = () => {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }}
         className={`relative z-10 px-6 py-3 font-bold text-lg shadow-[0px_-2px_4px_rgba(0,0,0,0.2),0px_4px_6px_rgba(0,0,0,0.1)]
-          ${theme === "light" ? "text-primary-light" : "text-primary-dark"} 
-          ${theme === "light" ? "shadow-primary-light" : "shadow-primary-dark"} 
+          ${theme === "light" ? "text-near-black" : "text-white"} 
+          ${theme === "light" ? "shadow-near-black" : "shadow-white"} 
            rounded-xl transition-all duration-300 ease-in-out mb-6`}
       >
         🚀 Tech Stack
