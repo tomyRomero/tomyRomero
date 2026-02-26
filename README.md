@@ -1,8 +1,10 @@
-# Hi there, I'm Tomy Romero 👋 
+# Hi, I'm Tomy Romero 👋  
 
-I'm a passionate 🚀 Software Engineer based in the U.S. 🌍  
-I love to 🎨 paint, sketch, and play 🏀 basketball.  
-My main passion is creating things — whether that’s full-stack systems, AI projects, or clean user experiences.
+Full-Stack Software Engineer specializing in ASP.NET, C#, and SQL Server.  
+Currently building scalable healthcare systems at MEDsys Software Solutions.  
+
+I enjoy designing efficient backend architectures, optimizing databases,  
+and delivering clean, maintainable end-to-end solutions.
 
 ---
 
@@ -48,11 +50,20 @@ My main passion is creating things — whether that’s full-stack systems, AI p
 
 ## 🎓 Education
 
-- **University of the Virgin Islands 🎓**  
-  Bachelor of Science in Computer Science — 3.11 GPA  
+### **University of the Virgin Islands 🎓**  
+Bachelor of Science in Computer Science — 3.11 GPA  
 
-- **AWS Academy Graduate**  
-  AWS Academy Cloud Foundations  
+---
+
+### 📜 Licenses & Certifications
+
+**AWS Academy Graduate — AWS Academy Cloud Foundations**  
+Issued by Amazon Web Services (AWS) Academy  
+
+**Microsoft SQL Server Specialization**  
+Issued: February 2026  
+Credential ID: 7SIMAY3OEGQN  
+🔗 https://www.coursera.org/account/accomplishments/specialization/7SIMAY3OEGQN  
 
 ---
 
