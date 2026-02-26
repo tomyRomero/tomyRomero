@@ -1,21 +1,69 @@
 # Hi there, I'm Tomy Romero 👋 
 
-I'm a passionate 🚀 junior dev based in the U.S. 🌍 I love to 🎨 paint, sketch and play 🏀 basketball. My main passion is creating things. 
+I'm a passionate 🚀 Software Engineer based in the U.S. 🌍  
+I love to 🎨 paint, sketch, and play 🏀 basketball.  
+My main passion is creating things — whether that’s full-stack systems, AI projects, or clean user experiences.
+
+---
 
 ## 📋 Table of Contents
 
-1. 🌐 [Portfolio](#portfolio)
-2. ⚙️ [Technologies & Tools](#technologies)
-3. 🎓 [Education](#education)
-4. 🚀 [Projects](#projects)
-5. 📫 [Connect with me](#connect)
-6. 🌱 [Currently Learning](#currently-learning)
-7. 🎉 [Fun Fact](#fun-fact)
+1. 🧑‍💼 [Experience](#experience)
+2. 🎓 [Education](#education)
+3. 🌐 [Portfolio](#portfolio)
+4. 🔧 [Technologies & Tools](#technologies)
+5. 🚀 [Projects](#projects)
+6. 📫 [Connect with me](#connect)
+7. 🌱 [Currently Learning](#currently-learning)
+8. 🎉 [Fun Fact](#fun-fact)
 
-## <a name="portfolio" target="_blank"> 🌐 Portfolio</a>
-Check out my [**Live Portfolio Site**](https://tomyromero.vercel.app/) to explore more.
+---
 
-## <a name="technologies">🔧 Technologies & Tools</a>
+## 🧑‍💼 Experience
+
+### **Software Engineer 1 — MEDsys Software Solutions**  
+📍 Remote | April 2025 – Present  
+- Build, maintain, and debug full-stack features for a home-care healthcare management system  
+- Design and optimize data models and complex queries supporting scheduling, billing, authorizations, and reporting workflows  
+- Collaborate in an Agile, DevOps-driven environment to deliver scalable, end-to-end solutions  
+- Work primarily with ASP.NET, C#, SQL Server, and modern frontend technologies  
+
+---
+
+### **Software Developer Intern — LocalChef**  
+📍 Remote | January 2025 – April 2025  
+- Contributed to full-stack web application features in a fast-paced startup environment  
+- Collaborated with senior engineers to implement scalable frontend and backend solutions  
+- Assisted in feature development, testing, and deployment  
+
+---
+
+### **Software Developer Trainee — Revature**  
+📍 June 2024 – September 2024  
+- Completed intensive full-stack training in C#, .NET, SQL Server, and frontend frameworks  
+- Developed enterprise-style applications in Agile team settings  
+- Strengthened knowledge of object-oriented design, REST APIs, and database architecture  
+
+---
+
+## 🎓 Education
+
+- **University of the Virgin Islands 🎓**  
+  Bachelor of Science in Computer Science — 3.11 GPA  
+
+- **AWS Academy Graduate**  
+  AWS Academy Cloud Foundations  
+
+---
+
+## 🌐 Portfolio
+
+Check out my **Live Portfolio Site**:  
+👉 https://tomyromero.vercel.app/
+
+---
+
+## 🔧 Technologies & Tools
 
 ![HTML 5](https://img.shields.io/badge/-HTML%205-E34F26?style=flat&logo=html5&logoColor=white)
 ![CSS 3](https://img.shields.io/badge/-CSS%203-1572B6?style=flat&logo=css3&logoColor=white)
@@ -31,48 +79,45 @@ Check out my [**Live Portfolio Site**](https://tomyromero.vercel.app/) to explor
 ![Git](https://img.shields.io/badge/-Git-F05032?style=flat&logo=git&logoColor=white)
 ![Docker](https://img.shields.io/badge/-Docker-2496ED?style=flat&logo=docker&logoColor=white)
 ![Next.js](https://img.shields.io/badge/-Next.js-000000?style=flat&logo=next.js&logoColor=white)
-![AWS S3](https://img.shields.io/badge/-AWS%20S3-232F3E?style=flat&logo=amazon-aws&logoColor=white) 
+![AWS S3](https://img.shields.io/badge/-AWS%20S3-232F3E?style=flat&logo=amazon-aws&logoColor=white)
 ![Amazon RDS](https://img.shields.io/badge/-Amazon%20RDS-232F3E?style=flat&)
 
-## <a name="education">🎓 Education</a>
+---
 
-![University Logo](/public/assets/uvi_icon.webp)
-- **University of the Virgin Islands 🎓 Bachelor of Science in Computer Science, 3.11 GPA** 
-- [Amazon Web Services (AWS) Academy Graduate - AWS Academy Cloud Foundations](https://www.credly.com/badges/49f35d3b-7ea8-40ee-afde-77c8e7725827)
+## 🚀 Projects
 
-## <a name="projects">🚀 Some of my top projects so far</a>
+### 🎨 ArtifyMe
+Transform imaginative sketches into AI-generated images using React Native, ASP.NET, SQL Server, and Python FastAPI with Stable Diffusion.  
+🔗 https://github.com/tomyRomero/artifyMe
 
-- [**ArtifyMe**](https://github.com/tomyRomero/artifyMe) 🎨 
-  - Transform imaginative sketches into AI-generated images , using react native , asp .net, SQL server, python fastapi w/ stable diffusion.
-  - [**ReadMe**](https://github.com/tomyRomero/artifyme/blob/main/README.md)
-  - [![Stars](https://img.shields.io/github/stars/tomyRomero/artifyMe?style=social)](https://github.com/tomyRomero/artifyMe/stargazers)
+### 📦 StoreOperations
+Full-stack e-commerce store powered by Next.js, Tailwind, MongoDB, and Stripe featuring an admin dashboard.  
+🔗 https://github.com/tomyRomero/storeOps
 
-- [**StoreOperations**](https://github.com/tomyRomero/storeOps) 📦 
-  - FullStack E-commerce Store powered by Next.js, Tailwind, MongoDB and Stripe, featuring an admin dashboard.
-  - [**ReadMe**](https://github.com/tomyRomero/storeOps/blob/main/README.md)
-  - [![Stars](https://img.shields.io/github/stars/tomyRomero/storeOps?style=social)](https://github.com/tomyRomero/storeOps/stargazers)
+### ⚡ Sparks
+Full-stack social media web app designed to help users discover and create new ideas with AI.  
+🔗 https://github.com/tomyRomero/sparks
 
-- [**Sparks**](https://github.com/tomyRomero/sparks) ⚡
-  - Sparks is a full stack social media web app that is designed to help users discover as well as create new ideas for all things creative with the help of AI
-  - [**ReadMe**](https://github.com/tomyRomero/sparks/blob/main/README.md)
-  - [![Stars](https://img.shields.io/github/stars/tomyRomero/sparks?style=social)](https://github.com/tomyRomero/sparks/stargazers)
+### 🎬 iMovies
+Collaborative CMS for managing movies with social features using ASP.NET Core and React.  
+🔗 https://github.com/240708-NET-FS/Project2_OMDb_API_Movies_CMS_Group1
 
-- [**iMovies**](https://github.com/240708-NET-FS/Project2_OMDb_API_Movies_CMS_Group1) 🎬
-  - As part of a collaborative team, I contributed to a content management system that allows users to manage a list of movies with social media features. Built using ASP.NET Core and React, the system enables users to add, view, edit, and delete movies, interact with the OMDb API, and share their movie lists with followers.
-  - [**ReadMe**](https://github.com/240708-NET-FS/Project2_OMDb_API_Movies_CMS_Group1/blob/main/README.md)
+---
 
-## <a name="connect">📫 Connect with me</a>
+## 📫 Connect with me
 
-[![LinkedIn](https://img.shields.io/badge/-LinkedIn-0A66C2?style=flat&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/tomy-romero-902476145/)
+💼 LinkedIn: https://www.linkedin.com/in/tomyromero/  
+📧 tomyfletcher99@hotmail.com  
 
-tomyfletcher99@hotmail.com
+---
 
-## <a name="fun-fact">🌱 I'm currently learning</a>
+## 🌱 Currently Learning
 
-- Docker
-- Azure
+- Docker  
+- Azure  
 
-🎉 Fun fact
+---
 
-I am bilingual, I can fluently speak Spanish as well! 🌐
+## 🎉 Fun Fact
 
+I am bilingual — I can fluently speak Spanish as well! 🌐
