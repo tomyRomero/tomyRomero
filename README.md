@@ -1,6 +1,6 @@
 # Hi, I'm Tomy Romero 👋  
 
-Full-Stack Software Engineer specializing in ASP.NET, C#, and SQL Server.  
+Full-Stack Software Engineer specializing in ASP.NET, C#, React and SQL Server.  
 Currently building scalable healthcare systems at MEDsys Software Solutions.  
 
 I enjoy designing efficient backend architectures, optimizing databases,  
@@ -118,7 +118,7 @@ Collaborative CMS for managing movies with social features using ASP.NET Core an
 
 ---
 
-## <a name="currently-learning">🌱 Currently Learning (Intermediate Topics)</a>
+## <a name="currently-learning">🌱 Currently Learning</a>
 
 - **Microservices Architecture**  
 - **Serverless Functions (AWS Lambda, Azure Functions)**  
