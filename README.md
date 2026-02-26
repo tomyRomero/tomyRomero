@@ -13,15 +13,15 @@ and delivering clean, maintainable end-to-end solutions.
 1. 🧑‍💼 [Experience](#experience)
 2. 🎓 [Education](#education)
 3. 🌐 [Portfolio](#portfolio)
-4. 🔧 [Technologies & Tools](#technologies--tools)
+4. 🔧 [Technologies & Tools](#technologies)
 5. 🚀 [Projects](#projects)
-6. 📫 [Connect with me](#connect-with-me)
+6. 📫 [Connect with me](#connect)
 7. 🌱 [Currently Learning](#currently-learning)
 8. 🎉 [Fun Fact](#fun-fact)
 
 ---
 
-## 🧑‍💼 Experience
+## <a name="experience">🧑‍💼 Experience</a>
 
 ### **Software Engineer 1 — MEDsys Software Solutions**  
 📍 Remote | April 2025 – Present  
@@ -30,15 +30,11 @@ and delivering clean, maintainable end-to-end solutions.
 - Collaborate in an Agile, DevOps-driven environment to deliver scalable, end-to-end solutions  
 - Work primarily with ASP.NET, C#, SQL Server, and modern frontend technologies  
 
----
-
 ### **Software Developer Intern — LocalChef**  
 📍 Remote | January 2025 – April 2025  
 - Contributed to full-stack web application features in a fast-paced startup environment  
 - Collaborated with senior engineers to implement scalable frontend and backend solutions  
 - Assisted in feature development, testing, and deployment  
-
----
 
 ### **Software Developer Trainee — Revature**  
 📍 June 2024 – September 2024  
@@ -48,12 +44,10 @@ and delivering clean, maintainable end-to-end solutions.
 
 ---
 
-## 🎓 Education
+## <a name="education">🎓 Education</a>
 
 ### **University of the Virgin Islands 🎓**  
 Bachelor of Science in Computer Science — 3.11 GPA  
-
----
 
 ### 📜 Licenses & Certifications
 
@@ -67,14 +61,13 @@ Credential ID: 7SIMAY3OEGQN
 
 ---
 
-## 🌐 Portfolio
+## <a name="portfolio" target="_blank">🌐 Portfolio</a>
 
-Check out my **Live Portfolio Site**:  
-👉 https://tomyromero.vercel.app/
+Check out my [**Live Portfolio Site**](https://tomyromero.vercel.app/) to explore more.
 
 ---
 
-## 🔧 Technologies & Tools
+## <a name="technologies">🔧 Technologies & Tools</a>
 
 ![HTML 5](https://img.shields.io/badge/-HTML%205-E34F26?style=flat&logo=html5&logoColor=white)
 ![CSS 3](https://img.shields.io/badge/-CSS%203-1572B6?style=flat&logo=css3&logoColor=white)
@@ -91,11 +84,11 @@ Check out my **Live Portfolio Site**:
 ![Docker](https://img.shields.io/badge/-Docker-2496ED?style=flat&logo=docker&logoColor=white)
 ![Next.js](https://img.shields.io/badge/-Next.js-000000?style=flat&logo=next.js&logoColor=white)
 ![AWS S3](https://img.shields.io/badge/-AWS%20S3-232F3E?style=flat&logo=amazon-aws&logoColor=white)
-![Amazon RDS](https://img.shields.io/badge/-Amazon%20RDS-232F3E?style=flat&)
+![Amazon RDS](https://img.shields.io/badge/-Amazon%20RDS-232F3E?style=flat/)
 
 ---
 
-## 🚀 Projects
+## <a name="projects">🚀 Projects</a>
 
 ### 🎨 ArtifyMe
 Transform imaginative sketches into AI-generated images using React Native, ASP.NET, SQL Server, and Python FastAPI with Stable Diffusion.  
@@ -118,14 +111,14 @@ Collaborative CMS for managing movies with social features using ASP.NET Core an
 
 ---
 
-## 📫 Connect with me
+## <a name="connect">📫 Connect with me</a>
 
 💼 LinkedIn: https://www.linkedin.com/in/tomyromero/  
 📧 tomyfletcher99@hotmail.com  
 
 ---
 
-## 🌱 Currently Learning (Intermediate Topics)
+## <a name="currently-learning">🌱 Currently Learning (Intermediate Topics)</a>
 
 - **Microservices Architecture**  
 - **Serverless Functions (AWS Lambda, Azure Functions)**  
@@ -133,6 +126,6 @@ Collaborative CMS for managing movies with social features using ASP.NET Core an
 
 ---
 
-## 🎉 Fun Fact
+## <a name="fun-fact">🎉 Fun Fact</a>
 
 I am bilingual — I can fluently speak Spanish as well! 🌐
