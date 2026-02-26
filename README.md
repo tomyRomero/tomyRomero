@@ -13,9 +13,9 @@ and delivering clean, maintainable end-to-end solutions.
 1. 🧑‍💼 [Experience](#experience)
 2. 🎓 [Education](#education)
 3. 🌐 [Portfolio](#portfolio)
-4. 🔧 [Technologies & Tools](#technologies)
+4. 🔧 [Technologies & Tools](#technologies--tools)
 5. 🚀 [Projects](#projects)
-6. 📫 [Connect with me](#connect)
+6. 📫 [Connect with me](#connect-with-me)
 7. 🌱 [Currently Learning](#currently-learning)
 8. 🎉 [Fun Fact](#fun-fact)
 
@@ -99,19 +99,22 @@ Check out my **Live Portfolio Site**:
 
 ### 🎨 ArtifyMe
 Transform imaginative sketches into AI-generated images using React Native, ASP.NET, SQL Server, and Python FastAPI with Stable Diffusion.  
-🔗 https://github.com/tomyRomero/artifyMe
+[ReadMe](https://github.com/tomyRomero/artifyme/blob/main/README.md)  
+![Stars](https://img.shields.io/github/stars/tomyRomero/artifyMe?style=social)
 
 ### 📦 StoreOperations
 Full-stack e-commerce store powered by Next.js, Tailwind, MongoDB, and Stripe featuring an admin dashboard.  
-🔗 https://github.com/tomyRomero/storeOps
+[ReadMe](https://github.com/tomyRomero/storeOps/blob/main/README.md)  
+![Stars](https://img.shields.io/github/stars/tomyRomero/storeOps?style=social)
 
 ### ⚡ Sparks
 Full-stack social media web app designed to help users discover and create new ideas with AI.  
-🔗 https://github.com/tomyRomero/sparks
+[ReadMe](https://github.com/tomyRomero/sparks/blob/main/README.md)  
+![Stars](https://img.shields.io/github/stars/tomyRomero/sparks?style=social)
 
 ### 🎬 iMovies
 Collaborative CMS for managing movies with social features using ASP.NET Core and React.  
-🔗 https://github.com/240708-NET-FS/Project2_OMDb_API_Movies_CMS_Group1
+[ReadMe](https://github.com/240708-NET-FS/Project2_OMDb_API_Movies_CMS_Group1/blob/main/README.md)  
 
 ---
 
@@ -122,10 +125,11 @@ Collaborative CMS for managing movies with social features using ASP.NET Core an
 
 ---
 
-## 🌱 Currently Learning
+## 🌱 Currently Learning (Intermediate Topics)
 
-- Docker  
-- Azure  
+- **Microservices Architecture**  
+- **Serverless Functions (AWS Lambda, Azure Functions)**  
+- **Advanced SQL Optimization & Indexing**  
 
 ---
 
