@@ -1,5 +1,6 @@
 'use client';
 import { useState, useEffect, useReducer, useCallback, useMemo, useRef } from 'react';
+import MobileView    from '@/components/MobileView';
 import Wallpaper     from '@/components/mac/Wallpaper';
 import MenuBar       from '@/components/mac/MenuBar';
 import WinShell      from '@/components/mac/WinShell';
@@ -14,11 +15,11 @@ import type { Win, WinAction } from '@/components/mac/winTypes';
 
 // ── Window definitions ────────────────────────────────────────────────────────
 const WIN_DEFS = [
-  { id: 'about',      title: 'About Me',   sz: { w: 470, h: 480 }, pos: { x: 60,  y: 52 } },
-  { id: 'projects',   title: 'Projects',   sz: { w: 580, h: 540 }, pos: { x: 250, y: 44 } },
-  { id: 'experience', title: 'Experience', sz: { w: 530, h: 510 }, pos: { x: 180, y: 64 } },
-  { id: 'skills',     title: 'Skills',     sz: { w: 460, h: 480 }, pos: { x: 110, y: 74 } },
-  { id: 'contact',    title: 'Contact',    sz: { w: 400, h: 420 }, pos: { x: 210, y: 84 } },
+  { id: 'about',      title: 'About Me',   sz: { w: 560, h: 630 }, pos: { x: 60,  y: 52 } },
+  { id: 'projects',   title: 'Projects',   sz: { w: 640, h: 580 }, pos: { x: 250, y: 44 } },
+  { id: 'experience', title: 'Experience', sz: { w: 590, h: 560 }, pos: { x: 180, y: 64 } },
+  { id: 'skills',     title: 'Skills',     sz: { w: 500, h: 520 }, pos: { x: 110, y: 74 } },
+  { id: 'contact',    title: 'Contact',    sz: { w: 440, h: 460 }, pos: { x: 210, y: 84 } },
 ];
 
 // Module-level z-index counter (intentionally outside React to avoid re-render issues)
@@ -30,16 +31,18 @@ function initWins(): Win[] {
     ...d,
     isOpen: false, isMin: false, isMax: false,
     defPos: { ...d.pos }, defSz: { ...d.sz },
-    z: 10, minning: false,
+    z: 10, minning: false, closing: false,
   }));
 }
 
 function winReducer(s: Win[], a: WinAction): Win[] {
   switch (a.type) {
     case 'OPEN':
-      return s.map(w => w.id === a.id ? { ...w, isOpen: true, isMin: false, minning: false, z: nz() } : w);
+      return s.map(w => w.id === a.id ? { ...w, isOpen: true, isMin: false, minning: false, closing: false, z: nz() } : w);
     case 'CLOSE':
-      return s.map(w => w.id === a.id ? { ...w, isOpen: false, isMin: false, isMax: false, minning: false } : w);
+      return s.map(w => w.id === a.id ? { ...w, isOpen: false, isMin: false, isMax: false, minning: false, closing: false } : w);
+    case 'CLOSE_START':
+      return s.map(w => w.id === a.id ? { ...w, closing: true } : w);
     case 'MIN_START':
       return s.map(w => w.id === a.id ? { ...w, minning: true } : w);
     case 'MIN_DONE':
@@ -62,9 +65,16 @@ function winReducer(s: Win[], a: WinAction): Win[] {
     case 'OPEN_ALL':
       return s.map((w, i) => ({ ...w, isOpen: true, isMin: false, minning: false, z: ZZ + i + 1 }));
     case 'CLOSE_ALL':
-      return s.map(w => ({ ...w, isOpen: false, isMin: false, isMax: false, minning: false }));
+      return s.map(w => ({ ...w, isOpen: false, isMin: false, isMax: false, minning: false, closing: false }));
     case 'MIN_ALL':
       return s.map(w => w.isOpen && !w.isMin ? { ...w, isMin: true, minning: false } : w);
+    case 'OPEN_AT': {
+      const newSz = (a.w && a.h) ? { w: a.w, h: a.h } : s.find(w => w.id === a.id)!.sz;
+      return s.map(w => w.id === a.id ? {
+        ...w, isOpen: true, isMin: false, minning: false, closing: false, z: nz(),
+        pos: { x: a.x, y: a.y }, sz: newSz, defPos: { x: a.x, y: a.y }, defSz: newSz,
+      } : w);
+    }
     case 'ARRANGE': {
       const open = s.filter(w => w.isOpen && !w.isMin);
       const cols = Math.ceil(Math.sqrt(open.length));
@@ -84,20 +94,35 @@ function winReducer(s: Win[], a: WinAction): Win[] {
 
 // ── Desktop App ───────────────────────────────────────────────────────────────
 export default function Home() {
-  const [dark, setDark] = useState(false);
+  const [dark, setDark]       = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const [wins, dispatch] = useReducer(winReducer, undefined, initWins);
   const [focused, setFocused] = useState<string | null>(null);
+
+  // Detect mobile viewport
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
 
   const focus = useCallback((id: string) => {
     setFocused(id);
     dispatch({ type: 'FOCUS', id });
   }, []);
 
-  // Stagger-open the first two windows on mount
+  // Open About Me centered on mount
   useEffect(() => {
-    const t1 = setTimeout(() => { dispatch({ type: 'OPEN', id: 'about' });    setFocused('about'); }, 500);
-    const t2 = setTimeout(() => { dispatch({ type: 'OPEN', id: 'projects' }); }, 950);
-    return () => { clearTimeout(t1); clearTimeout(t2); };
+    const t = setTimeout(() => {
+      const ww = Math.min(560, window.innerWidth - 80);
+      const wh = Math.min(630, window.innerHeight - 160);
+      const cx = Math.max(40, Math.round((window.innerWidth  - ww) / 2));
+      const cy = 28 + Math.max(8, Math.round((window.innerHeight - 28 - 100 - wh) / 2));
+      dispatch({ type: 'OPEN_AT', id: 'about', x: cx, y: cy, w: ww, h: wh });
+      setFocused('about');
+    }, 420);
+    return () => clearTimeout(t);
   }, []);
 
   // Keyboard shortcuts
@@ -121,6 +146,8 @@ export default function Home() {
     skills:     <SkillsWindow     dark={dark} />,
     contact:    <ContactWindow    dark={dark} />,
   }), [dark]);
+
+  if (isMobile) return <MobileView dark={dark} setDark={setDark} />;
 
   return (
     <div style={{ position: 'fixed', inset: 0, overflow: 'hidden' }}>

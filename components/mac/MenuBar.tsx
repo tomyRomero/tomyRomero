@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { T } from './tokens';
-import { ME } from '@/constants';
+import { ME, projects, skills } from '@/constants';
 import type { Win, WinAction } from './winTypes';
 
 const WIN_TITLES: Record<string, string> = {
@@ -97,9 +97,40 @@ export default function MenuBar({ dark, setDark, wins, dispatch }: Props) {
   const [clock, setClock]         = useState('');
   const [active, setActive]       = useState<string | null>(null);
   const [toast, setToast]         = useState<string | null>(null);
-  const [spotlight, setSpotlight] = useState(false);
-  const [spotQ, setSpotQ]         = useState('');
-  const [isFS, setIsFS]           = useState(false);   // fullscreen state
+  const [spotlight, setSpotlight]   = useState(false);
+  const [spotQ, setSpotQ]           = useState('');
+  const [spotSel, setSpotSel]       = useState(0);
+  const [isFS, setIsFS]             = useState(false);
+
+  // Build search index (stable — only changes when dispatch changes)
+  const searchItems = [
+    { category: 'Windows', label: 'About Me',    desc: 'Bio, photos, links',   icon: '👤', action: () => { dispatch({ type: 'OPEN', id: 'about' });      setSpotlight(false); setSpotQ(''); } },
+    { category: 'Windows', label: 'Projects',    desc: 'Shipped work',         icon: '📁', action: () => { dispatch({ type: 'OPEN', id: 'projects' });   setSpotlight(false); setSpotQ(''); } },
+    { category: 'Windows', label: 'Experience',  desc: 'Work history',         icon: '💼', action: () => { dispatch({ type: 'OPEN', id: 'experience' }); setSpotlight(false); setSpotQ(''); } },
+    { category: 'Windows', label: 'Skills',      desc: 'Tech stack',           icon: '⚡', action: () => { dispatch({ type: 'OPEN', id: 'skills' });     setSpotlight(false); setSpotQ(''); } },
+    { category: 'Windows', label: 'Contact',     desc: 'Get in touch',         icon: '✉️', action: () => { dispatch({ type: 'OPEN', id: 'contact' });    setSpotlight(false); setSpotQ(''); } },
+    ...projects.map(p => ({
+      category: 'Projects', label: p.title, desc: p.tagline, icon: p.emoji,
+      action: () => { dispatch({ type: 'OPEN', id: 'projects' }); setSpotlight(false); setSpotQ(''); },
+    })),
+    ...Object.entries(skills).flatMap(([cat, items]) =>
+      items.map(s => ({
+        category: 'Skills', label: s, desc: cat, icon: '⚙️',
+        action: () => { dispatch({ type: 'OPEN', id: 'skills' }); setSpotlight(false); setSpotQ(''); },
+      }))
+    ),
+    { category: 'Links', label: 'GitHub',   desc: ME.github,   icon: '⑂',  action: () => window.open(ME.github,  '_blank') },
+    { category: 'Links', label: 'LinkedIn', desc: ME.linkedin, icon: '🔗', action: () => window.open(ME.linkedin, '_blank') },
+    { category: 'Links', label: 'Email',    desc: ME.email,    icon: '📧', action: () => window.open(`mailto:${ME.email}`) },
+  ];
+
+  const spotResults = spotQ.trim()
+    ? searchItems.filter(it =>
+        it.label.toLowerCase().includes(spotQ.toLowerCase()) ||
+        it.desc?.toLowerCase().includes(spotQ.toLowerCase()) ||
+        it.category.toLowerCase().includes(spotQ.toLowerCase())
+      )
+    : [];
 
   // Clock ticker
   useEffect(() => {
@@ -250,46 +281,141 @@ export default function MenuBar({ dark, setDark, wins, dispatch }: Props) {
         <div
           style={{
             position: 'fixed', inset: 0, zIndex: 99999,
-            background: 'rgba(0,0,0,.38)', backdropFilter: 'blur(8px)',
+            background: 'rgba(0,0,0,.40)', backdropFilter: 'blur(8px)',
+            WebkitBackdropFilter: 'blur(8px)',
             display: 'flex', alignItems: 'flex-start',
-            justifyContent: 'center', paddingTop: '15vh',
+            justifyContent: 'center', paddingTop: '14vh',
           }}
-          onClick={() => { setSpotlight(false); setSpotQ(''); }}
+          onClick={() => { setSpotlight(false); setSpotQ(''); setSpotSel(0); }}
         >
           <div
             style={{
-              width: 600, background: tk.dropBg, borderRadius: 16,
+              width: 620, background: tk.dropBg, borderRadius: 16,
               border: `1px solid ${tk.border}`,
-              boxShadow: '0 32px 80px rgba(0,0,0,.38)', overflow: 'hidden',
+              boxShadow: '0 32px 80px rgba(0,0,0,.44)', overflow: 'hidden',
               animation: 'spotlightIn .16s ease',
             }}
             onClick={e => e.stopPropagation()}
           >
+            {/* Input row */}
             <div style={{
               display: 'flex', alignItems: 'center', gap: 10,
-              padding: '13px 18px', borderBottom: `1px solid ${tk.divider}`,
+              padding: '13px 18px',
+              borderBottom: spotResults.length > 0 ? `1px solid ${tk.divider}` : 'none',
             }}>
-              <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
-                <circle cx="6.5" cy="6.5" r="5" stroke={tk.textMuted} strokeWidth="1.4" />
-                <line x1="10.2" y1="10.2" x2="13.5" y2="13.5"
-                  stroke={tk.textMuted} strokeWidth="1.4" strokeLinecap="round" />
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <circle cx="6.8" cy="6.8" r="5.2" stroke={tk.textMuted} strokeWidth="1.5" />
+                <line x1="10.6" y1="10.6" x2="14" y2="14"
+                  stroke={tk.textMuted} strokeWidth="1.5" strokeLinecap="round" />
               </svg>
               <input
                 autoFocus
                 value={spotQ}
-                onChange={e => setSpotQ(e.target.value)}
-                placeholder="Search portfolio…"
-                onKeyDown={e => { if (e.key === 'Escape') { setSpotlight(false); setSpotQ(''); } }}
+                onChange={e => { setSpotQ(e.target.value); setSpotSel(0); }}
+                placeholder="Search projects, skills, windows…"
+                onKeyDown={e => {
+                  if (e.key === 'Escape') { setSpotlight(false); setSpotQ(''); setSpotSel(0); }
+                  if (e.key === 'ArrowDown') { e.preventDefault(); setSpotSel(i => Math.min(i + 1, spotResults.length - 1)); }
+                  if (e.key === 'ArrowUp')   { e.preventDefault(); setSpotSel(i => Math.max(i - 1, 0)); }
+                  if (e.key === 'Enter' && spotResults[spotSel]) { spotResults[spotSel].action(); setSpotSel(0); }
+                }}
                 style={{
                   flex: 1, border: 'none', background: 'transparent',
-                  fontSize: 16, color: tk.text,
+                  fontSize: 17, color: tk.text,
                   fontFamily: 'var(--font-sans), sans-serif', outline: 'none',
                 }}
               />
+              {spotQ && (
+                <button
+                  onClick={() => { setSpotQ(''); setSpotSel(0); }}
+                  style={{
+                    border: 'none', background: dark ? 'rgba(255,255,255,.14)' : 'rgba(0,0,0,.10)',
+                    borderRadius: '50%', width: 20, height: 20, cursor: 'pointer',
+                    color: tk.textMuted, fontSize: 12, display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  }}
+                >✕</button>
+              )}
             </div>
-            <div style={{ padding: '12px 18px', color: tk.textMuted, fontSize: 13 }}>
-              {spotQ ? `Searching for "${spotQ}"…` : 'Type to search projects, windows…'}
-            </div>
+
+            {/* Results */}
+            {spotResults.length > 0 ? (
+              <div style={{ maxHeight: 380, overflowY: 'auto' }}>
+                {/* Group by category */}
+                {(Array.from(new Set(spotResults.map(r => r.category)))).map(cat => {
+                  const items = spotResults.filter(r => r.category === cat);
+                  return (
+                    <div key={cat}>
+                      <div style={{
+                        padding: '8px 18px 4px', fontSize: 11,
+                        fontWeight: 600, letterSpacing: '.5px',
+                        color: tk.textMuted, textTransform: 'uppercase',
+                        fontFamily: 'var(--font-sans), sans-serif',
+                      }}>
+                        {cat}
+                      </div>
+                      {items.map(item => {
+                        const flatIdx = spotResults.indexOf(item);
+                        const isSel   = flatIdx === spotSel;
+                        return (
+                          <button
+                            key={item.label + item.category}
+                            onClick={item.action}
+                            onMouseEnter={() => setSpotSel(flatIdx)}
+                            style={{
+                              display: 'flex', alignItems: 'center', gap: 12,
+                              width: isSel ? 'calc(100% - 12px)' : '100%',
+                              padding: '8px 18px', border: 'none', cursor: 'pointer',
+                              background: isSel ? tk.hlColor : 'transparent',
+                              borderRadius: isSel ? 8 : 0,
+                              margin: isSel ? '0 6px' : '0',
+                              transition: 'background .1s',
+                              fontFamily: 'var(--font-sans), sans-serif',
+                              textAlign: 'left' as const,
+                            }}
+                          >
+                            <span style={{ fontSize: 22, lineHeight: 1, flexShrink: 0 }}>{item.icon}</span>
+                            <span style={{ flex: 1, minWidth: 0 }}>
+                              <span style={{
+                                display: 'block', fontSize: 14, fontWeight: 500,
+                                color: isSel ? '#fff' : tk.text,
+                              }}>
+                                {item.label}
+                              </span>
+                              {item.desc && (
+                                <span style={{
+                                  display: 'block', fontSize: 12,
+                                  color: isSel ? 'rgba(255,255,255,.70)' : tk.textMuted,
+                                  overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+                                }}>
+                                  {item.desc}
+                                </span>
+                              )}
+                            </span>
+                            {isSel && (
+                              <kbd style={{
+                                fontSize: 11, padding: '2px 7px', borderRadius: 5, flexShrink: 0,
+                                background: 'rgba(255,255,255,.20)', color: 'rgba(255,255,255,.80)',
+                                border: '1px solid rgba(255,255,255,.22)',
+                                fontFamily: 'var(--font-mono), monospace',
+                              }}>↵</kbd>
+                            )}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  );
+                })}
+                <div style={{ height: 6 }} />
+              </div>
+            ) : spotQ ? (
+              <div style={{ padding: '28px 18px', textAlign: 'center', color: tk.textMuted, fontSize: 14 }}>
+                No results for <strong style={{ color: tk.text }}>"{spotQ}"</strong>
+              </div>
+            ) : (
+              <div style={{ padding: '14px 18px', color: tk.textMuted, fontSize: 13 }}>
+                Search projects, skills, windows, links…
+              </div>
+            )}
           </div>
         </div>
       )}

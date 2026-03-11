@@ -3,44 +3,82 @@ import { useState, useEffect } from 'react';
 import { T } from './tokens';
 import type { Win, WinAction } from './winTypes';
 
-// ── Icons ─────────────────────────────────────────────────────────────────────
+// ── Icons — clear macOS-inspired symbols ──────────────────────────────────────
 const ICONS: Record<string, React.ReactNode> = {
+  // Person silhouette → Contacts / About
   about: (
-    <svg width="30" height="30" viewBox="0 0 24 24" fill="rgba(255,255,255,.95)">
-      <path d="M12 12c2.7 0 4-1.79 4-4s-1.3-4-4-4-4 1.79-4 4 1.3 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+      <circle cx="16" cy="11" r="6.5" fill="rgba(255,255,255,.96)" />
+      <path d="M2 30c0-7.73 6.27-14 14-14s14 6.27 14 14" fill="rgba(255,255,255,.88)" />
     </svg>
   ),
+  // Folder → Files / Projects
   projects: (
-    <svg width="30" height="30" viewBox="0 0 24 24" fill="rgba(255,255,255,.95)">
-      <path d="M10 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2h-8l-2-2z"/>
+    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+      <path
+        d="M3 9.5c0-1.66 1.34-3 3-3h7.5l2.5 2.5H29c1.1 0 2 .9 2 2v13c0 1.66-1.34 3-3 3H6c-1.66 0-3-1.34-3-3V9.5z"
+        fill="rgba(255,255,255,.92)"
+      />
+      {/* Subtle document lines inside folder */}
+      <line x1="9"  y1="18" x2="23" y2="18" stroke="rgba(30,140,90,.45)" strokeWidth="1.8" strokeLinecap="round" />
+      <line x1="9"  y1="22" x2="18" y2="22" stroke="rgba(30,140,90,.35)" strokeWidth="1.8" strokeLinecap="round" />
     </svg>
   ),
+  // Calendar → Dates / Experience
   experience: (
-    <svg width="30" height="30" viewBox="0 0 24 24" fill="rgba(255,255,255,.95)">
-      <path d="M20 6h-2.18c.07-.44.18-.88.18-1.36C18 3.15 16.85 2 15.5 2h-7C7.15 2 6 3.15 6 4.64c0 .48.11.92.18 1.36H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zM8 4.64C8 4.25 8.35 4 8.5 4h7c.15 0 .5.25.5.64V6H8V4.64zM20 19H4v-9h16v9z"/>
+    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+      {/* Calendar body */}
+      <rect x="3" y="7" width="26" height="22" rx="3" fill="rgba(255,255,255,.88)" />
+      {/* Header band */}
+      <rect x="3" y="7" width="26" height="7" rx="3" fill="rgba(255,255,255,.96)" />
+      <rect x="3" y="11" width="26" height="3"       fill="rgba(255,255,255,.96)" />
+      {/* Ring clips */}
+      <line x1="10" y1="4" x2="10" y2="11" stroke="rgba(90,30,200,.70)" strokeWidth="2.5" strokeLinecap="round" />
+      <line x1="22" y1="4" x2="22" y2="11" stroke="rgba(90,30,200,.70)" strokeWidth="2.5" strokeLinecap="round" />
+      {/* Day circle */}
+      <circle cx="16" cy="21" r="4" fill="rgba(90,30,200,.48)" />
     </svg>
   ),
+  // Terminal prompt → Code / Skills
   skills: (
-    <svg width="30" height="30" viewBox="0 0 24 24" fill="rgba(255,255,255,.95)">
-      <path d="M11 21h-1l1-7H7.5c-.58 0-.57-.32-.38-.66.19-.34.05-.08.07-.12C8.48 10.94 10.42 7.54 13 3h1l-1 7h3.5c.49 0 .56.33.47.51l-.07.15C12.96 17.55 11 21 11 21z"/>
+    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+      {/* Window frame */}
+      <rect x="2" y="4" width="28" height="24" rx="4" fill="rgba(0,0,0,.22)" stroke="rgba(255,255,255,.88)" strokeWidth="2" />
+      {/* Prompt caret */}
+      <path d="M8 13.5l5.5 4.5-5.5 4.5" stroke="rgba(255,255,255,.95)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+      {/* Cursor line */}
+      <line x1="16.5" y1="22" x2="24" y2="22" stroke="rgba(255,255,255,.78)" strokeWidth="2.5" strokeLinecap="round" />
     </svg>
   ),
+  // Envelope → Mail / Contact
   contact: (
-    <svg width="30" height="30" viewBox="0 0 24 24" fill="rgba(255,255,255,.95)">
-      <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+      {/* Envelope body */}
+      <rect x="2" y="8" width="28" height="18" rx="3" fill="rgba(255,255,255,.92)" />
+      {/* Flap V */}
+      <path d="M2 11l14 9 14-9" stroke="rgba(180,20,48,.44)" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   ),
 };
 
-const TrashSVG = ({ hot }: { hot: boolean }) => hot ? (
-  <svg width="30" height="30" viewBox="0 0 24 24" fill="rgba(255,230,80,.96)">
-    <path d="M17.66 11.2c-.23-.3-.51-.56-.77-.82-.67-.6-1.43-1.03-2.07-1.66-1.49-1.46-1.82-3.87-.93-5.72-1 .23-1.83.75-2.54 1.32C8.87 6.4 7.85 10.07 9.07 13.22c.04.1.08.2.08.33 0 .22-.15.42-.35.5-.23.1-.47.04-.66-.12-.06-.05-.1-.1-.14-.17C6.87 12.33 6.69 10.28 7.45 8.64c-1.67 1.36-2.58 3.66-2.45 5.83.06.5.12 1 .29 1.5.14.6.41 1.2.71 1.73 1.08 1.73 2.95 2.97 4.96 3.22 2.14.27 4.43-.12 6.07-1.6 1.83-1.66 2.47-4.32 1.53-6.6l-.13-.26c-.21-.46-.77-1.26-.77-1.26z"/>
-  </svg>
-) : (
-  <svg width="30" height="30" viewBox="0 0 24 24" fill="rgba(255,255,255,.88)">
-    <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
-  </svg>
-);
+const TrashSVG = ({ hot }: { hot: boolean }) => {
+  const body = hot ? 'rgba(255,230,80,.92)' : 'rgba(255,255,255,.88)';
+  const line = hot ? 'rgba(220,38,38,.52)'  : 'rgba(90,100,130,.40)';
+  return (
+    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+      {/* Handle */}
+      <rect x="11" y="4" width="10" height="3.5" rx="1.75" fill={hot ? 'rgba(255,230,80,.80)' : 'rgba(255,255,255,.70)'} />
+      {/* Lid */}
+      <rect x="5"  y="7" width="22" height="2.8" rx="1.4"  fill={body} />
+      {/* Can body */}
+      <path d="M8 9.8h16l-2 18H10L8 9.8z" fill={body} />
+      {/* Lines */}
+      <line x1="16"   y1="12.5" x2="16"   y2="24.5" stroke={line} strokeWidth="1.6" strokeLinecap="round" />
+      <line x1="12.5" y1="12.5" x2="13"   y2="24.5" stroke={line} strokeWidth="1.6" strokeLinecap="round" />
+      <line x1="19.5" y1="12.5" x2="19"   y2="24.5" stroke={line} strokeWidth="1.6" strokeLinecap="round" />
+    </svg>
+  );
+};
 
 // ── Dock item definitions ─────────────────────────────────────────────────────
 const DOCK_ITEMS = [
@@ -51,17 +89,14 @@ const DOCK_ITEMS = [
   { id:'contact',    label:'Contact',    bg:'linear-gradient(145deg,#8c0f2c 0%,#be123c 50%,#f87291 100%)', glow:'rgba(190,18,60,.48)' },
 ];
 
-const BASE = 60; // base icon size in px
+const BASE = 64; // base icon size in px
 
-// Only the hovered icon lifts; neighbors scale from bottom (transformOrigin handles visuals)
+// Only the hovered icon magnifies — no neighbour bunching
 function getScale(idx: number, hov: number | null) {
-  if (hov === null) return 1;
-  const d = Math.abs(idx - hov);
-  return d === 0 ? 1.52 : d === 1 ? 1.26 : d === 2 ? 1.08 : 1;
+  return hov !== null && idx === hov ? 1.38 : 1;
 }
 function getLift(idx: number, hov: number | null) {
-  // ONLY the hovered icon gets a y-lift; neighbors expand from their base via scale
-  return hov !== null && idx === hov ? -15 : 0;
+  return hov !== null && idx === hov ? -10 : 0;
 }
 
 interface Props { wins: Win[]; dark: boolean; dispatch: React.Dispatch<WinAction>; }
@@ -72,7 +107,6 @@ export default function Dock({ wins, dark, dispatch }: Props) {
   const [trHov, setTrHov]       = useState(false);
   const [trTarget, setTrTarget] = useState(false);   // window dragged near dock
   const [trAnim, setTrAnim]     = useState(false);
-  const minimized = wins.filter(w => w.isMin);
 
   // Listen for window-near-dock events (from WinShell drag)
   useEffect(() => {
@@ -100,7 +134,7 @@ export default function Dock({ wins, dark, dispatch }: Props) {
     idx: number; sz?: number; opacity?: number;
   }) => {
     const w      = wins.find(x => x.id === id);
-    const isOpen = w?.isOpen && !w?.isMin;
+    const isOpen = w?.isOpen || w?.isMin; // dot shows for both open and minimized
     const scale  = getScale(idx, hovIdx);
     const lift   = getLift(idx, hovIdx);
     const isH    = hovIdx === idx;
@@ -139,6 +173,7 @@ export default function Dock({ wins, dark, dispatch }: Props) {
         )}
 
         <button
+          data-dock-id={id}
           onClick={() => click(id)}
           style={{
             width: sz, height: sz, borderRadius: r,
@@ -184,8 +219,8 @@ export default function Dock({ wins, dark, dispatch }: Props) {
 
   // Trash button
   const isTrashHot = trTarget || trHov;
-  const trScale    = isTrashHot ? 1.52 : 1;
-  const trLift     = isTrashHot ? -15  : 0;
+  const trScale    = isTrashHot ? 1.38 : 1;
+  const trLift     = isTrashHot ? -10  : 0;
   const r          = Math.round(BASE * 0.225);
 
   return (
@@ -193,8 +228,8 @@ export default function Dock({ wins, dark, dispatch }: Props) {
       className="mac-dock"
       style={{
         position: 'fixed', bottom: 10, left: '50%', transform: 'translateX(-50%)',
-        display: 'flex', alignItems: 'flex-end', gap: 10,
-        padding: '10px 16px 9px',
+        display: 'flex', alignItems: 'flex-end', gap: 26,
+        padding: '10px 22px 9px',
         borderRadius: 24,
         background: dark ? 'rgba(16,16,22,.72)' : 'rgba(255,255,255,.62)',
         backdropFilter: 'blur(56px) saturate(2.2)',
@@ -209,25 +244,6 @@ export default function Dock({ wins, dark, dispatch }: Props) {
       {DOCK_ITEMS.map((item, i) => (
         <IconBtn key={item.id} {...item} idx={i} />
       ))}
-
-      {/* Minimized section */}
-      {minimized.length > 0 && (
-        <>
-          <div style={{
-            width: 1, height: 44, alignSelf: 'center', margin: '0 2px',
-            background: dark ? 'rgba(255,255,255,.16)' : 'rgba(0,0,0,.14)',
-          }} />
-          {minimized.map((w, i) => {
-            const def = DOCK_ITEMS.find(d => d.id === w.id);
-            return def
-              ? <IconBtn key={w.id + '-m'} {...def}
-                  idx={DOCK_ITEMS.length + 1 + i}
-                  sz={46} opacity={0.75}
-                />
-              : null;
-          })}
-        </>
-      )}
 
       {/* Divider */}
       <div style={{
@@ -264,7 +280,9 @@ export default function Dock({ wins, dark, dispatch }: Props) {
           </div>
         )}
 
-        <div style={{
+        <div
+          data-dock-trash="true"
+          style={{
           width: BASE, height: BASE, borderRadius: r,
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           background: trTarget

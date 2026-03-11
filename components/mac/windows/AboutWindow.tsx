@@ -1,25 +1,50 @@
 'use client';
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import Image from 'next/image';
 import { T } from '../tokens';
 import { Chip } from '../Atoms';
 import { ME, images, profilePhoto } from '@/constants';
 
-const CHIPS = ['ASP.NET Core', 'React', 'SQL Server', 'Azure', 'Healthcare IT', 'SaaS Builder', 'BI / Analytics'];
+const CHIPS = ['ASP.NET Core', 'React', 'SQL Server', 'Azure'];
+const TILTS = [-7, 4, -5, 8, -3, 6, -8, 3, -4, 7];
 
-// ── Lightbox ──────────────────────────────────────────────────────────────────
+// ── Lightbox (portal — renders at body level, no stacking-context issues) ─────
 function Lightbox({ startIdx, onClose }: { startIdx: number; onClose: () => void }) {
   const [idx, setIdx] = useState(startIdx);
-  const prev = () => setIdx(i => (i - 1 + images.length) % images.length);
-  const next = () => setIdx(i => (i + 1) % images.length);
+  const prev = useCallback(() => setIdx(i => (i - 1 + images.length) % images.length), []);
+  const next = useCallback(() => setIdx(i => (i + 1) % images.length), []);
   const cur  = images[idx];
 
-  return (
+  // Stable refs so the keydown closure never goes stale
+  const onCloseRef = useRef(onClose); onCloseRef.current = onClose;
+  const prevRef    = useRef(prev);    prevRef.current    = prev;
+  const nextRef    = useRef(next);    nextRef.current    = next;
+
+  useEffect(() => {
+    // Fully block WinShell drag/resize while lightbox is open
+    document.body.classList.add('lb-open');
+
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === 'Escape')      onCloseRef.current();
+      if (e.key === 'ArrowRight')  nextRef.current();
+      if (e.key === 'ArrowLeft')   prevRef.current();
+    };
+    window.addEventListener('keydown', handler);
+    return () => {
+      document.body.classList.remove('lb-open');
+      window.removeEventListener('keydown', handler);
+    };
+  }, []);
+
+  return createPortal(
     <div
       onClick={onClose}
+      onMouseDown={e => e.stopPropagation()}
       style={{
         position: 'fixed', inset: 0, zIndex: 99999,
         background: 'rgba(0,0,0,.92)', backdropFilter: 'blur(18px)',
+        WebkitBackdropFilter: 'blur(18px)',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         animation: 'fadeSlideIn .18s ease',
       }}
@@ -54,6 +79,15 @@ function Lightbox({ startIdx, onClose }: { startIdx: number; onClose: () => void
         border: '1px solid rgba(255,255,255,.10)',
       }}>
         {idx + 1} / {images.length}
+      </div>
+
+      {/* Keyboard hint */}
+      <div style={{
+        position: 'absolute', bottom: 22, right: 24,
+        color: 'rgba(255,255,255,.32)', fontSize: 11,
+        fontFamily: 'var(--font-mono),monospace',
+      }}>
+        ← → esc
       </div>
 
       {/* Close */}
@@ -100,155 +134,102 @@ function Lightbox({ startIdx, onClose }: { startIdx: number; onClose: () => void
           ))}
         </>
       )}
-    </div>
+    </div>,
+    document.body
   );
 }
 
-// ── Photo Carousel ────────────────────────────────────────────────────────────
-function PhotoCarousel({ dark }: { dark: boolean }) {
+// ── Tilted Photo Strip ─────────────────────────────────────────────────────────
+function TiltedPhotoStrip({ dark }: { dark: boolean }) {
   const tk = T(dark);
-  const [idx, setIdx]         = useState(0);
-  const [dir, setDir]         = useState<'right' | 'left'>('right');
-  const [animKey, setAnimKey] = useState(0);
-  const [lightbox, setLightbox] = useState(false);
-
-  const go = useCallback((newIdx: number, direction: 'right' | 'left') => {
-    setDir(direction);
-    setAnimKey(k => k + 1);
-    setIdx(newIdx);
-  }, []);
-
-  const prev = () => go((idx - 1 + images.length) % images.length, 'left');
-  const next = () => go((idx + 1) % images.length, 'right');
-  const cur  = images[idx];
+  const [lightbox, setLightbox] = useState<number | null>(null);
+  const [hov, setHov]           = useState<number | null>(null);
 
   return (
     <>
-      {lightbox && <Lightbox startIdx={idx} onClose={() => setLightbox(false)} />}
+      {lightbox !== null && <Lightbox startIdx={lightbox} onClose={() => setLightbox(null)} />}
 
       {/* Section header */}
-      <div style={{
-        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        marginBottom: 10,
-      }}>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
         <span style={{
           fontSize: 10.5, fontFamily: 'var(--font-mono),monospace',
           color: tk.accent, textTransform: 'uppercase', letterSpacing: '1.1px',
         }}>
           Photos
         </span>
-        <span style={{
-          fontSize: 11.5, fontFamily: 'var(--font-mono),monospace',
-          color: tk.textMuted,
-        }}>
-          {idx + 1} / {images.length}
+        <span style={{ fontSize: 11, color: tk.textMuted, fontFamily: 'var(--font-mono),monospace' }}>
+          {images.length} shots · scroll →
         </span>
       </div>
 
-      {/* Carousel frame */}
-      <div style={{ position: 'relative', width: '100%', marginBottom: 10 }}>
+      {/* Horizontal scrollable tilted strip */}
+      <div
+        style={{
+          overflowX: 'auto', paddingTop: 20, paddingBottom: 14,
+          scrollbarWidth: 'thin',
+          scrollbarColor: 'rgba(0,0,0,.18) transparent',
+        }}
+      >
         <div style={{
-          width: '100%', aspectRatio: '16/9', borderRadius: 12, overflow: 'hidden',
-          background: tk.cardBg, border: `1px solid ${tk.cardBorder}`,
-          position: 'relative',
+          display: 'flex', alignItems: 'flex-end', gap: 24,
+          width: 'max-content', paddingLeft: 8, paddingRight: 8,
         }}>
-          {/* Animated slide */}
-          <div
-            key={animKey}
-            style={{
-              position: 'absolute', inset: 0,
-              animation: `${dir === 'right' ? 'slideInFromRight' : 'slideInFromLeft'} .26s cubic-bezier(.22,1,.36,1)`,
-            }}
-          >
-            <Image
-              src={cur.img} alt={cur.alt}
-              fill style={{ objectFit: 'cover' }} sizes="420px"
-            />
-            {/* Caption overlay */}
-            {cur.title && (
-              <div style={{
-                position: 'absolute', bottom: 0, left: 0, right: 0,
-                padding: '20px 14px 10px',
-                background: 'linear-gradient(0deg,rgba(0,0,0,.55) 0%,transparent 100%)',
-                color: 'rgba(255,255,255,.90)', fontSize: 12,
-                fontFamily: 'var(--font-sans),sans-serif',
-              }}>
-                {cur.title}
-              </div>
-            )}
-          </div>
-
-          {/* Fullscreen button */}
-          <button
-            onClick={() => setLightbox(true)}
-            title="View fullscreen"
-            style={{
-              position: 'absolute', top: 8, right: 8, zIndex: 3,
-              width: 28, height: 28, borderRadius: 7,
-              background: 'rgba(0,0,0,.46)', backdropFilter: 'blur(6px)',
-              border: '1px solid rgba(255,255,255,.22)',
-              color: '#fff', cursor: 'pointer',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              transition: 'background .15s',
-            }}
-            onMouseEnter={e => (e.currentTarget.style.background = 'rgba(0,0,0,.70)')}
-            onMouseLeave={e => (e.currentTarget.style.background = 'rgba(0,0,0,.46)')}
-          >
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.2" strokeLinecap="round">
-              <path d="M8 3H5a2 2 0 00-2 2v3m18 0V5a2 2 0 00-2-2h-3m0 18h3a2 2 0 002-2v-3M3 16v3a2 2 0 002 2h3"/>
-            </svg>
-          </button>
-
-          {/* Prev / Next arrows */}
-          {images.length > 1 && (
-            <>
-              {([
-                { label: '‹', side: 'left',  action: prev },
-                { label: '›', side: 'right', action: next },
-              ] as const).map(({ label, side, action }) => (
-                <button
-                  key={label}
-                  onClick={action}
-                  style={{
-                    position: 'absolute', top: '50%', transform: 'translateY(-50%)',
-                    [side]: 8, zIndex: 2,
-                    width: 30, height: 30, borderRadius: '50%',
-                    background: 'rgba(0,0,0,.40)', backdropFilter: 'blur(6px)',
-                    border: '1px solid rgba(255,255,255,.20)',
-                    color: '#fff', cursor: 'pointer', fontSize: 19,
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    transition: 'background .15s, transform .15s',
-                  }}
-                  onMouseEnter={e => { e.currentTarget.style.background = 'rgba(0,0,0,.66)'; e.currentTarget.style.transform = 'translateY(-50%) scale(1.1)'; }}
-                  onMouseLeave={e => { e.currentTarget.style.background = 'rgba(0,0,0,.40)'; e.currentTarget.style.transform = 'translateY(-50%) scale(1)'; }}
-                >
-                  {label}
-                </button>
-              ))}
-            </>
-          )}
-        </div>
-
-        {/* Dot indicators */}
-        {images.length > 1 && (
-          <div style={{
-            display: 'flex', gap: 5, justifyContent: 'center',
-            marginTop: 9, alignItems: 'center',
-          }}>
-            {images.map((_, i) => (
-              <button
+          {images.map((img, i) => {
+            const tilt = TILTS[i % TILTS.length];
+            const isH  = hov === i;
+            return (
+              /* Wrapper div handles entrance animation; button handles hover tilt */
+              <div
                 key={i}
-                onClick={() => go(i, i > idx ? 'right' : 'left')}
                 style={{
-                  width: i === idx ? 16 : 5, height: 5, borderRadius: 3,
-                  border: 'none', padding: 0, cursor: 'pointer',
-                  background: i === idx ? tk.accent : (dark ? 'rgba(255,255,255,.22)' : 'rgba(0,0,0,.20)'),
-                  transition: 'width .20s ease, background .18s',
+                  flexShrink: 0,
+                  position: 'relative',
+                  zIndex: isH ? 10 : 1,
+                  animation: `photoIn .5s ${i * 0.055}s cubic-bezier(.16,1,.3,1) both`,
                 }}
-              />
-            ))}
-          </div>
-        )}
+              >
+                <button
+                  onMouseEnter={() => setHov(i)}
+                  onMouseLeave={() => setHov(null)}
+                  onClick={() => setLightbox(i)}
+                  style={{
+                    display: 'block',
+                    width: 128,
+                    padding: '7px 7px 26px',
+                    background: dark ? '#e8e4da' : '#faf8f3',
+                    border: 'none',
+                    borderRadius: 2,
+                    cursor: 'pointer',
+                    transform: `rotate(${isH ? 0 : tilt}deg) scale(${isH ? 1.12 : 1})`,
+                    transformOrigin: 'bottom center',
+                    transition: 'transform .22s cubic-bezier(.34,1.56,.64,1), box-shadow .18s ease',
+                    boxShadow: isH
+                      ? '0 22px 52px rgba(0,0,0,.46), 0 6px 18px rgba(0,0,0,.28)'
+                      : `0 ${4 + Math.abs(tilt) / 2}px ${10 + Math.abs(tilt) * 1.4}px rgba(0,0,0,${dark ? '.40' : '.24'})`,
+                  }}
+                >
+                  <div style={{
+                    position: 'relative', width: '100%', aspectRatio: '1',
+                    overflow: 'hidden', background: '#d0ccc4',
+                  }}>
+                    <Image src={img.img} alt={img.alt} fill style={{ objectFit: 'cover' }} sizes="114px" />
+                  </div>
+                  {img.title && (
+                    <div style={{
+                      marginTop: 5, fontSize: 9.5,
+                      color: dark ? '#444' : '#555',
+                      fontFamily: 'var(--font-sans),sans-serif',
+                      textAlign: 'center', lineHeight: 1.3, userSelect: 'none',
+                      overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+                    }}>
+                      {img.title}
+                    </div>
+                  )}
+                </button>
+              </div>
+            );
+          })}
+        </div>
       </div>
     </>
   );
@@ -339,8 +320,8 @@ export default function AboutWindow({ dark }: { dark: boolean }) {
         </span>
       </div>
 
-      {/* Photo carousel */}
-      <PhotoCarousel dark={dark} />
+      {/* Tilted photo strip */}
+      <TiltedPhotoStrip dark={dark} />
     </div>
   );
 }

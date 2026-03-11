@@ -24,7 +24,7 @@ export const ME = {
   github:    'https://github.com/tomyRomero',
   linkedin:  'https://www.linkedin.com/in/tomy-romero-seas/',
   portfolio: 'https://tomyromero.vercel.app',
-  bio: `Full-stack software engineer with roots in healthcare homecare and a builder's mindset. By day I architect backend systems at MEDsys — converting workflows into scalable .NET solutions and SQL server advanced queries. By night I build for the future. UVI graduate. SQL nerd.`,
+  bio: `Full-stack software engineer with roots in healthcare homecare and a builder's mindset. By day I architect backend frontend and database systems — converting workflows into scalable .NET solutions, frontend frameworks and SQL server advanced queries. By night I build for the future. UVI graduate. SQL nerd.`,
 };
 
 export const resumeLink = `https://docs.google.com/document/d/1NgKOp9uVqTW2ntBhMemJ5E-mporMj0cH9h6Cnki2nWA/edit?usp=sharing`;
@@ -358,8 +358,32 @@ export const education = [
 
 // ── Contact ───────────────────────────────────────────────────────────────────
 export const contactDetails = [
-  { type: 'Email',    value: 'tomyfletcher99@hotmail.com',                  href: 'mailto:tomyfletcher99@hotmail.com',        cv: 'tomyfletcher99@hotmail.com' },
-  { type: 'LinkedIn', value: 'Tomy Romero Seas',                            href: 'https://www.linkedin.com/in/tomy-romero-seas/', cv: 'https://www.linkedin.com/in/tomy-romero-seas/' },
-  { type: 'GitHub',   value: 'github.com/tomyRomero',                       href: 'https://github.com/tomyRomero',           cv: 'https://github.com/tomyRomero' },
-  { type: 'Location', value: 'South Woodstock, Connecticut',                href: '',                                        cv: '' },
+  { type: 'Email',    icon: '✉️', value: 'tomyfletcher99@hotmail.com',       href: 'mailto:tomyfletcher99@hotmail.com',            cv: 'tomyfletcher99@hotmail.com' },
+  { type: 'LinkedIn', icon: '🔗', value: 'Tomy Romero Seas',                 href: 'https://www.linkedin.com/in/tomy-romero-seas/', cv: 'https://www.linkedin.com/in/tomy-romero-seas/' },
+  { type: 'GitHub',   icon: '⑂',  value: 'github.com/tomyRomero',            href: 'https://github.com/tomyRomero',                cv: 'https://github.com/tomyRomero' },
+  { type: 'Location', icon: '📍', value: 'South Woodstock, Connecticut',     href: '',                                             cv: '' },
 ];
+
+// ── About page highlight chips ────────────────────────────────────────────────
+export const aboutChips = ['ASP.NET Core', 'React', 'SQL Server', 'Azure', 'Healthcare IT'];
+
+// ── Open-to-work status ───────────────────────────────────────────────────────
+export const openToWork = {
+  active: true,
+  label: 'Open to opportunities',
+};
+
+// ── Contact window CTA ────────────────────────────────────────────────────────
+export const contactCTA = '✉️  Send me an email';
+
+// ── Mobile footer line ────────────────────────────────────────────────────────
+export const footerLine = 'Built with Next.js';
+
+// ── Spotlight / search descriptions for each window ──────────────────────────
+export const windowDescriptions: Record<string, string> = {
+  about:      'Bio, photos, links',
+  projects:   'Shipped work',
+  experience: 'Work history',
+  skills:     'Tech stack',
+  contact:    'Get in touch',
+};

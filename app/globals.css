@@ -87,6 +87,22 @@ button:disabled {
   100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
 }
 
+/* Gradient wallpaper blob animations */
+@keyframes blob1 {
+  0%, 100% { transform: translate(0, 0) scale(1.00); }
+  30%       { transform: translate(9vw, -6vh) scale(1.10); }
+  65%       { transform: translate(-7vw, 5vh) scale(0.93); }
+}
+@keyframes blob2 {
+  0%, 100% { transform: translate(0, 0) scale(1.00); }
+  40%       { transform: translate(-11vw, 8vh) scale(1.14); }
+  80%       { transform: translate(8vw, -5vh) scale(0.90); }
+}
+@keyframes blob3 {
+  0%, 100% { transform: translate(0, 0) scale(1.00); }
+  50%       { transform: translate(10vw, 9vh) scale(1.08); }
+}
+
 /* Aurora wallpaper animations — large, dramatic movements */
 @keyframes aurora1 {
   0%, 100% { transform: translate(0vw, 0vh) scale(1.00); opacity: 0.72; }
@@ -114,6 +130,34 @@ button:disabled {
   0%, 100% { filter: hue-rotate(0deg)  brightness(1.00); }
   50%       { filter: hue-rotate(20deg) brightness(1.10); }
 }
+/* Tilted photo strip entrance */
+@keyframes photoIn {
+  0%   { opacity: 0; transform: translateY(20px) scale(.88); }
+  100% { opacity: 1; transform: translateY(0)    scale(1);   }
+}
+
+/* Nature wallpaper animations */
+@keyframes skyShift {
+  0%, 100% { filter: hue-rotate(0deg)  brightness(1.00); }
+  50%       { filter: hue-rotate(14deg) brightness(1.06); }
+}
+@keyframes hillBreathe {
+  0%, 100% { opacity: 0.75; }
+  50%       { opacity: 0.92; }
+}
+@keyframes cloudDrift1 {
+  0%   { transform: translateX(-300px); }
+  100% { transform: translateX(1740px); }
+}
+@keyframes cloudDrift2 {
+  0%   { transform: translateX(-400px); }
+  100% { transform: translateX(1840px); }
+}
+@keyframes moonGlow {
+  0%, 100% { box-shadow: 0 0 36px rgba(255,228,100,.42), 0 0 90px rgba(255,200,70,.18); }
+  50%       { box-shadow: 0 0 58px rgba(255,228,100,.64), 0 0 130px rgba(255,200,70,.30); }
+}
+
 /* Photo carousel slide transitions */
 @keyframes slideInFromRight {
   0%   { transform: translateX(100%); opacity: 0.6; }
