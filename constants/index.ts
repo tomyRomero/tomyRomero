@@ -18,13 +18,13 @@ export const socialLinks: SocialLink[] = [
 // ── Personal Info ────────────────────────────────────────────────────────────
 export const ME = {
   name:      'Tomy Romero Seas',
-  title:     'Software Engineer · SaaS Founder',
-  location:  'South Woodstock, Connecticut',
+  title:     'Software Engineer 1',
+  location:  'Jewett City, Connecticut',
   email:     'tomyfletcher99@hotmail.com',
   github:    'https://github.com/tomyRomero',
   linkedin:  'https://www.linkedin.com/in/tomy-romero-seas/',
   portfolio: 'https://tomyromero.vercel.app',
-  bio: `Full-stack software engineer with deep roots in healthcare IT and a builder's mindset. By day I architect backend systems at MEDsys — converting clinical workflows into scalable .NET solutions. By night I build for the future. UVI graduate. SQL nerd. Husband to a Coast Guard officer.`,
+  bio: `Full-stack software engineer with roots in healthcare homecare and a builder's mindset. By day I architect backend systems at MEDsys — converting workflows into scalable .NET solutions and SQL server advanced queries. By night I build for the future. UVI graduate. SQL nerd.`,
 };
 
 export const resumeLink = `https://docs.google.com/document/d/1NgKOp9uVqTW2ntBhMemJ5E-mporMj0cH9h6Cnki2nWA/edit?usp=sharing`;
