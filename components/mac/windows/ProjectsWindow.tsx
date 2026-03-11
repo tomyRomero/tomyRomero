@@ -1,5 +1,6 @@
 'use client';
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import Image from 'next/image';
 import { T } from '../tokens';
 import { Chip, WinTitle, Bullet, Label } from '../Atoms';
@@ -12,20 +13,36 @@ const STATUS_BADGE: Record<string, { bg: string; txt: string; lbl: string }> = {
   archived:     { bg: 'rgba(120,120,128,.1)', txt: '#888',    lbl: 'Archived' },
 };
 
-// ── Lightbox ──────────────────────────────────────────────────────────────────
+// ── Lightbox (portal — same pattern as AboutWindow) ───────────────────────────
 function Lightbox({ imgs, startIdx, onClose }: {
   imgs: string[]; startIdx: number; onClose: () => void;
 }) {
   const [idx, setIdx] = useState(startIdx);
-  const prev = () => setIdx(i => (i - 1 + imgs.length) % imgs.length);
-  const next = () => setIdx(i => (i + 1) % imgs.length);
+  const closeRef = useRef(onClose); closeRef.current = onClose;
+  const prev = useCallback(() => setIdx(i => (i - 1 + imgs.length) % imgs.length), [imgs.length]);
+  const next = useCallback(() => setIdx(i => (i + 1) % imgs.length), [imgs.length]);
+  const prevRef = useRef(prev); prevRef.current = prev;
+  const nextRef = useRef(next); nextRef.current = next;
 
-  return (
+  useEffect(() => {
+    document.body.classList.add('lb-open');
+    const h = (e: KeyboardEvent) => {
+      if (e.key === 'Escape')     closeRef.current();
+      if (e.key === 'ArrowRight') nextRef.current();
+      if (e.key === 'ArrowLeft')  prevRef.current();
+    };
+    window.addEventListener('keydown', h);
+    return () => { document.body.classList.remove('lb-open'); window.removeEventListener('keydown', h); };
+  }, []);
+
+  return createPortal(
     <div
       onClick={onClose}
+      onMouseDown={e => e.stopPropagation()}
       style={{
         position: 'fixed', inset: 0, zIndex: 99999,
         background: 'rgba(0,0,0,.90)', backdropFilter: 'blur(16px)',
+        WebkitBackdropFilter: 'blur(16px)',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         animation: 'fadeSlideIn .18s ease',
       }}
@@ -96,7 +113,8 @@ function Lightbox({ imgs, startIdx, onClose }: {
           ))}
         </>
       )}
-    </div>
+    </div>,
+    document.body
   );
 }
 

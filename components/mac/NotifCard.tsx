@@ -38,7 +38,7 @@ export default function NotifCard({ dark }: { dark: boolean }) {
       {/* Content */}
       <div style={{ flex: 1 }}>
         <div style={{ fontSize: 13.5, fontWeight: 600, color: tk.text }}>{ME.name}</div>
-        <div style={{ fontSize: 12, color: tk.textMuted, marginTop: 1 }}>Software Engineer · Founder</div>
+        <div style={{ fontSize: 12, color: tk.textMuted, marginTop: 1 }}>Software Engineer</div>
         <div style={{ display: 'flex', gap: 10, marginTop: 5 }}>
           {([['GitHub', ME.github], ['LinkedIn', ME.linkedin]] as [string, string][]).map(([l, h]) => (
             <a
