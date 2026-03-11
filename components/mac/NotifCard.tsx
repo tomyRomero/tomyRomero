@@ -64,7 +64,7 @@ export default function NotifCard({ dark }: { dark: boolean }) {
         style={{
           position: 'absolute', top: 8, right: 9, width: 18, height: 18,
           borderRadius: '50%', background: dark ? 'rgba(255,255,255,.1)' : 'rgba(0,0,0,.09)',
-          border: 'none', cursor: 'default', fontSize: 9, color: tk.textMuted,
+          border: 'none', cursor: 'pointer', fontSize: 9, color: tk.textMuted,
           display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: .55,
         }}
         onMouseEnter={e => (e.currentTarget.style.opacity = '1')}

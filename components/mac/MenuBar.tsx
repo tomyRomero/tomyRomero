@@ -9,6 +9,72 @@ const WIN_TITLES: Record<string, string> = {
   experience: 'Experience', skills: 'Skills', contact: 'Contact',
 };
 
+// ── Status bar icon components ────────────────────────────────────────────────
+function WifiIcon({ c }: { c: string }) {
+  return (
+    <svg width="17" height="13" viewBox="0 0 20 15" fill={c}>
+      <circle cx="10" cy="13.5" r="1.6" />
+      <path d="M6.7 10.2a4.8 4.8 0 016.6 0l1.35-1.35a6.85 6.85 0 00-9.3 0z" opacity=".78" />
+      <path d="M3.3 6.9a9.5 9.5 0 0113.4 0l1.35-1.35a11.5 11.5 0 00-16.1 0z" opacity=".44" />
+    </svg>
+  );
+}
+
+function BatteryIcon({ c }: { c: string }) {
+  return (
+    <svg width="26" height="13" viewBox="0 0 26 13" fill="none">
+      <rect x=".75" y=".75" width="21" height="11.5" rx="2.5" stroke={c} strokeWidth="1.2" />
+      <rect x="22" y="3.8" width="3" height="5.4" rx="1.2" fill={c} opacity=".55" />
+      <rect x="2.2" y="2.2" width="16" height="8.6" rx="1.5" fill="rgba(52,199,89,.92)" />
+    </svg>
+  );
+}
+
+function SunIcon({ c }: { c: string }) {
+  return (
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
+      stroke={c} strokeWidth="2" strokeLinecap="round">
+      <circle cx="12" cy="12" r="4.5" />
+      <line x1="12" y1="2"    x2="12" y2="4.5"  />
+      <line x1="12" y1="19.5" x2="12" y2="22"   />
+      <line x1="2"  y1="12"   x2="4.5" y2="12"  />
+      <line x1="19.5" y1="12" x2="22" y2="12"   />
+      <line x1="4.9"  y1="4.9"  x2="6.6"  y2="6.6"  />
+      <line x1="17.4" y1="17.4" x2="19.1" y2="19.1" />
+      <line x1="4.9"  y1="19.1" x2="6.6"  y2="17.4" />
+      <line x1="17.4" y1="6.6"  x2="19.1" y2="4.9"  />
+    </svg>
+  );
+}
+
+function MoonIcon({ c }: { c: string }) {
+  return (
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+      stroke={c} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" />
+    </svg>
+  );
+}
+
+function FullscreenEnterIcon({ c }: { c: string }) {
+  return (
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+      stroke={c} strokeWidth="2" strokeLinecap="round">
+      <path d="M8 3H5a2 2 0 00-2 2v3m18 0V5a2 2 0 00-2-2h-3m0 18h3a2 2 0 002-2v-3M3 16v3a2 2 0 002 2h3" />
+    </svg>
+  );
+}
+
+function FullscreenExitIcon({ c }: { c: string }) {
+  return (
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+      stroke={c} strokeWidth="2" strokeLinecap="round">
+      <path d="M8 3v3a2 2 0 01-2 2H3m18 0h-3a2 2 0 01-2-2V3m0 18v-3a2 2 0 012-2h3M3 16h3a2 2 0 012 2v3" />
+    </svg>
+  );
+}
+
+// ── Types ─────────────────────────────────────────────────────────────────────
 interface Props {
   dark: boolean;
   setDark: React.Dispatch<React.SetStateAction<boolean>>;
@@ -22,120 +88,171 @@ interface MenuItem {
   action?: () => void;
   disabled?: boolean;
   shortcut?: string;
+  icon?: React.ReactNode;
 }
 
+// ── Component ─────────────────────────────────────────────────────────────────
 export default function MenuBar({ dark, setDark, wins, dispatch }: Props) {
   const tk = T(dark);
-  const [clock, setClock] = useState('');
-  const [active, setActive] = useState<string | null>(null);
-  const [toast, setToast] = useState<string | null>(null);
+  const [clock, setClock]         = useState('');
+  const [active, setActive]       = useState<string | null>(null);
+  const [toast, setToast]         = useState<string | null>(null);
   const [spotlight, setSpotlight] = useState(false);
-  const [spotQ, setSpotQ] = useState('');
+  const [spotQ, setSpotQ]         = useState('');
+  const [isFS, setIsFS]           = useState(false);   // fullscreen state
 
+  // Clock ticker
   useEffect(() => {
     const tick = () => {
       const n = new Date();
-      const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-      const mons = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-      setClock(`${days[n.getDay()]} ${mons[n.getMonth()]} ${n.getDate()}  ${String(n.getHours()).padStart(2, '0')}:${String(n.getMinutes()).padStart(2, '0')}`);
+      const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+      const mons = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      setClock(`${days[n.getDay()]} ${mons[n.getMonth()]} ${n.getDate()}  ${String(n.getHours()).padStart(2,'0')}:${String(n.getMinutes()).padStart(2,'0')}`);
     };
     tick();
     const id = setInterval(tick, 1000);
     return () => clearInterval(id);
   }, []);
 
+  // Track fullscreen state
+  useEffect(() => {
+    const handler = () => setIsFS(!!document.fullscreenElement);
+    document.addEventListener('fullscreenchange', handler);
+    return () => document.removeEventListener('fullscreenchange', handler);
+  }, []);
+
   const showToast = (msg: string) => { setToast(msg); setTimeout(() => setToast(null), 2500); };
-  const copy = (txt: string, lbl: string) => navigator.clipboard?.writeText(txt).then(() => showToast(`✓ ${lbl} copied`));
+  const copy = (txt: string, lbl: string) =>
+    navigator.clipboard?.writeText(txt).then(() => showToast(`✓ ${lbl} copied`));
   const close = () => setActive(null);
-  const openWins = wins.filter(w => w.isOpen);
+
+  const toggleFS = () => {
+    if (isFS) { document.exitFullscreen?.(); }
+    else      { document.documentElement.requestFullscreen?.(); }
+    close();
+  };
+
+  const openWins = wins.filter(w => w.isOpen && !w.isMin);
 
   const MENUS: { id: string; label: string; bold?: boolean; items: MenuItem[] }[] = [
     {
       id: 'apple', label: '⌘', items: [
         { label: 'About This Portfolio', action: () => showToast('macOS-style Portfolio · Tomy Romero Seas · 2025') },
         { div: true },
-        { label: dark ? 'Light Mode ☀️' : 'Dark Mode 🌙', action: () => setDark(d => !d) },
+        { label: dark ? 'Switch to Light Mode' : 'Switch to Dark Mode',
+          action: () => { setDark(d => !d); close(); } },
         { div: true },
         { label: 'System Preferences…', disabled: true },
         { div: true },
-        { label: 'Sleep', disabled: true }, { label: 'Restart…', disabled: true }, { label: 'Shut Down…', disabled: true },
+        { label: 'Sleep',      disabled: true },
+        { label: 'Restart…',   disabled: true },
+        { label: 'Shut Down…', disabled: true },
       ],
     },
     {
       id: 'tomy', label: 'Tomy', bold: true, items: [
-        { label: 'About Tomy Romero Seas', action: () => { close(); dispatch({ type: 'OPEN', id: 'about' }); } },
+        { label: 'About Tomy Romero Seas',
+          action: () => { close(); dispatch({ type: 'OPEN', id: 'about' }); } },
         { div: true },
-        { label: 'Open Portfolio Site ↗', shortcut: '⌘O', action: () => window.open(ME.portfolio, '_blank') },
-        { label: 'Print / Save as PDF',   shortcut: '⌘P', action: () => window.print() },
+        { label: 'Print / Save as PDF', shortcut: '⌘P', action: () => { close(); window.print(); } },
         { div: true },
         { label: '✓ Open to Opportunities', disabled: true },
         { div: true },
-        { label: 'Hide Tomy', shortcut: '⌘H', action: () => { close(); dispatch({ type: 'MIN_ALL' }); } },
-        { label: 'Quit Tomy', shortcut: '⌘Q', action: () => { close(); dispatch({ type: 'CLOSE_ALL' }); } },
+        { label: 'Hide All Windows', shortcut: '⌘H',
+          action: () => { close(); dispatch({ type: 'MIN_ALL' }); } },
+        { label: 'Quit',               shortcut: '⌘Q',
+          action: () => { close(); dispatch({ type: 'CLOSE_ALL' }); } },
       ],
     },
     {
       id: 'file', label: 'File', items: [
-        { label: 'Open About…',      shortcut: '⌘1', action: () => { close(); dispatch({ type: 'OPEN', id: 'about' }); } },
-        { label: 'Open Projects…',   shortcut: '⌘2', action: () => { close(); dispatch({ type: 'OPEN', id: 'projects' }); } },
-        { label: 'Open Experience…', shortcut: '⌘3', action: () => { close(); dispatch({ type: 'OPEN', id: 'experience' }); } },
-        { label: 'Open Contact…',    shortcut: '⌘4', action: () => { close(); dispatch({ type: 'OPEN', id: 'contact' }); } },
+        { label: 'Open About…',      shortcut: '⌘1',
+          action: () => { close(); dispatch({ type: 'OPEN', id: 'about' }); } },
+        { label: 'Open Projects…',   shortcut: '⌘2',
+          action: () => { close(); dispatch({ type: 'OPEN', id: 'projects' }); } },
+        { label: 'Open Experience…', shortcut: '⌘3',
+          action: () => { close(); dispatch({ type: 'OPEN', id: 'experience' }); } },
+        { label: 'Open Skills…',     shortcut: '⌘4',
+          action: () => { close(); dispatch({ type: 'OPEN', id: 'skills' }); } },
+        { label: 'Open Contact…',    shortcut: '⌘5',
+          action: () => { close(); dispatch({ type: 'OPEN', id: 'contact' }); } },
         { div: true },
-        { label: 'Print Portfolio', shortcut: '⌘P', action: () => window.print() },
+        { label: 'Print Portfolio',  shortcut: '⌘P',
+          action: () => { close(); window.print(); } },
         { div: true },
-        { label: 'Close All Windows', shortcut: '⌘W', action: () => { close(); dispatch({ type: 'CLOSE_ALL' }); } },
+        { label: 'Close All Windows', shortcut: '⌘W',
+          action: () => { close(); dispatch({ type: 'CLOSE_ALL' }); } },
       ],
     },
     {
       id: 'edit', label: 'Edit', items: [
-        { label: 'Copy Email Address', shortcut: '⌘⇧E', action: () => copy(ME.email, 'Email') },
-        { label: 'Copy GitHub URL',    shortcut: '⌘⇧G', action: () => copy(ME.github, 'GitHub URL') },
-        { label: 'Copy LinkedIn URL',  shortcut: '⌘⇧L', action: () => copy(ME.linkedin, 'LinkedIn URL') },
+        { label: 'Copy Email Address', shortcut: '⌘⇧E',
+          action: () => copy(ME.email, 'Email') },
+        { label: 'Copy GitHub URL',    shortcut: '⌘⇧G',
+          action: () => copy(ME.github, 'GitHub URL') },
+        { label: 'Copy LinkedIn URL',  shortcut: '⌘⇧L',
+          action: () => copy(ME.linkedin, 'LinkedIn URL') },
         { div: true },
-        { label: 'Search (Spotlight)', shortcut: '⌘F', action: () => { setSpotlight(true); close(); } },
-        { div: true },
-        { label: 'Select All', shortcut: '⌘A', disabled: true },
+        { label: 'Spotlight Search',   shortcut: '⌘F',
+          action: () => { setSpotlight(true); close(); } },
       ],
     },
     {
       id: 'view', label: 'View', items: [
-        { label: dark ? 'Light Mode ☀️' : 'Dark Mode 🌙', shortcut: '⌘⇧T', action: () => { setDark(d => !d); close(); } },
+        { label: dark ? 'Switch to Light Mode' : 'Switch to Dark Mode',
+          shortcut: '⌘⇧T',
+          action: () => { setDark(d => !d); close(); } },
         { div: true },
-        { label: 'Enter Full Screen', shortcut: '⌃⌘F', action: () => document.documentElement.requestFullscreen?.() },
+        { label: isFS ? 'Exit Full Screen' : 'Enter Full Screen',
+          shortcut: '⌃⌘F', action: toggleFS },
       ],
     },
     {
       id: 'window', label: 'Window', items: [
-        { label: 'Minimize All',    shortcut: '⌘M',   action: () => { close(); dispatch({ type: 'MIN_ALL' }); } },
-        { label: 'Arrange in Grid', shortcut: '⌘⇧A',  action: () => { close(); dispatch({ type: 'ARRANGE' }); } },
-        { label: 'Open All',        shortcut: '⌘⇧O',  action: () => { close(); dispatch({ type: 'OPEN_ALL' }); } },
+        { label: 'Minimize All',    shortcut: '⌘M',
+          action: () => { close(); dispatch({ type: 'MIN_ALL' }); } },
+        { label: 'Arrange in Grid', shortcut: '⌘⇧A',
+          action: () => { close(); dispatch({ type: 'ARRANGE' }); } },
+        { label: 'Open All',        shortcut: '⌘⇧O',
+          action: () => { close(); dispatch({ type: 'OPEN_ALL' }); } },
         ...(openWins.length > 0 ? [{ div: true }] : []),
-        ...openWins.map(w => ({ label: WIN_TITLES[w.id] || w.title, action: () => { dispatch({ type: 'FOCUS', id: w.id }); close(); } })),
+        ...openWins.map(w => ({
+          label: WIN_TITLES[w.id] || w.title,
+          action: () => { dispatch({ type: 'FOCUS', id: w.id }); close(); },
+        })),
       ],
     },
     {
       id: 'help', label: 'Help', items: [
-        { label: 'About This Portfolio',  action: () => showToast('React portfolio · macOS Sequoia style · 2025') },
+        { label: 'About This Portfolio',
+          action: () => showToast('macOS-style portfolio built with Next.js · 2025') },
         { div: true },
-        { label: 'Traffic Light Guide',   action: () => showToast('🔴 Close  🟡 Minimize  🟢 Maximize') },
-        { label: 'Drag to Trash',         action: () => showToast('Drag any window to the 🗑️ in the dock to close it') },
+        { label: 'Traffic Light Guide',
+          action: () => showToast('🔴 Close  🟡 Minimize  🟢 Maximize / Restore') },
+        { label: 'Drag Title Bar to Move',
+          action: () => showToast('Drag any window\'s title bar to reposition it') },
+        { label: 'Drag Corner to Resize',
+          action: () => showToast('Drag the bottom-right corner of any window to resize') },
         { div: true },
-        { label: 'Contact Tomy ↗',        action: () => window.open(`mailto:${ME.email}?subject=Portfolio+Hello`) },
+        { label: 'Email Tomy ↗',
+          action: () => window.open(`mailto:${ME.email}?subject=Portfolio+Hello`) },
       ],
     },
   ];
 
   const dc = dark ? 'rgba(255,255,255,.28)' : 'rgba(0,0,0,.28)';
+  const ic = dark ? 'rgba(242,242,247,.65)' : 'rgba(28,28,30,.65)';
 
   return (
     <>
-      {/* Spotlight overlay */}
+      {/* ── Spotlight overlay ─────────────────────────────────────────────── */}
       {spotlight && (
         <div
           style={{
             position: 'fixed', inset: 0, zIndex: 99999,
             background: 'rgba(0,0,0,.38)', backdropFilter: 'blur(8px)',
-            display: 'flex', alignItems: 'flex-start', justifyContent: 'center', paddingTop: '15vh',
+            display: 'flex', alignItems: 'flex-start',
+            justifyContent: 'center', paddingTop: '15vh',
           }}
           onClick={() => { setSpotlight(false); setSpotQ(''); }}
         >
@@ -154,7 +271,8 @@ export default function MenuBar({ dark, setDark, wins, dispatch }: Props) {
             }}>
               <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
                 <circle cx="6.5" cy="6.5" r="5" stroke={tk.textMuted} strokeWidth="1.4" />
-                <line x1="10.2" y1="10.2" x2="13.5" y2="13.5" stroke={tk.textMuted} strokeWidth="1.4" strokeLinecap="round" />
+                <line x1="10.2" y1="10.2" x2="13.5" y2="13.5"
+                  stroke={tk.textMuted} strokeWidth="1.4" strokeLinecap="round" />
               </svg>
               <input
                 autoFocus
@@ -176,28 +294,29 @@ export default function MenuBar({ dark, setDark, wins, dispatch }: Props) {
         </div>
       )}
 
-      {/* Menu bar */}
+      {/* ── Menu bar ──────────────────────────────────────────────────────── */}
       <div
         className="mac-menubar"
         onClick={close}
         style={{
           position: 'fixed', top: 0, left: 0, right: 0, height: 28,
-          zIndex: 9998, display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          zIndex: 9998,
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           background: tk.menuBg,
-          backdropFilter: 'blur(32px) saturate(1.9)',
-          WebkitBackdropFilter: 'blur(32px) saturate(1.9)',
+          backdropFilter: 'blur(36px) saturate(2.0)',
+          WebkitBackdropFilter: 'blur(36px) saturate(2.0)',
           borderBottom: `1px solid ${tk.divider}`,
           color: tk.text, fontFamily: 'var(--font-sans), sans-serif',
         }}
       >
-        {/* Left menus */}
+        {/* Left: menu items */}
         <div style={{ display: 'flex', alignItems: 'center', height: '100%' }}>
           {MENUS.map(menu => (
             <div key={menu.id} style={{ position: 'relative', height: '100%' }}>
               <button
                 onClick={e => { e.stopPropagation(); setActive(active === menu.id ? null : menu.id); }}
                 style={{
-                  height: '100%', padding: '0 10px', border: 'none', cursor: 'default',
+                  height: '100%', padding: '0 10px', border: 'none', cursor: 'pointer',
                   fontFamily: 'var(--font-sans), sans-serif',
                   fontWeight: menu.bold ? 600 : 400,
                   fontSize: menu.id === 'apple' ? 17 : 13,
@@ -209,17 +328,18 @@ export default function MenuBar({ dark, setDark, wins, dispatch }: Props) {
               >
                 {menu.label}
               </button>
+
               {active === menu.id && (
                 <div
                   onClick={e => e.stopPropagation()}
                   style={{
                     position: 'absolute', top: 'calc(100% + 1px)',
                     left: menu.id === 'apple' ? 0 : -2,
-                    minWidth: 232, background: tk.dropBg,
-                    backdropFilter: 'blur(40px) saturate(2)',
-                    WebkitBackdropFilter: 'blur(40px) saturate(2)',
+                    minWidth: 244, background: tk.dropBg,
+                    backdropFilter: 'blur(44px) saturate(2)',
+                    WebkitBackdropFilter: 'blur(44px) saturate(2)',
                     border: `1px solid ${tk.divider}`, borderRadius: 9,
-                    boxShadow: '0 14px 48px rgba(0,0,0,.24),0 2px 8px rgba(0,0,0,.1)',
+                    boxShadow: '0 14px 52px rgba(0,0,0,.26),0 2px 8px rgba(0,0,0,.10)',
                     zIndex: 10000, paddingTop: 4, paddingBottom: 4,
                     animation: 'menuIn .14s ease',
                   }}
@@ -247,7 +367,8 @@ export default function MenuBar({ dark, setDark, wins, dispatch }: Props) {
                           style={{
                             width: '100%', display: 'flex', alignItems: 'center',
                             justifyContent: 'space-between', padding: '1px 14px',
-                            border: 'none', background: 'transparent', cursor: 'default',
+                            border: 'none', background: 'transparent',
+                            cursor: item.disabled ? 'default' : 'pointer',
                             color: item.disabled ? dc : tk.text,
                             fontSize: 13, minHeight: 23,
                             fontFamily: 'var(--font-sans), sans-serif', textAlign: 'left',
@@ -256,7 +377,10 @@ export default function MenuBar({ dark, setDark, wins, dispatch }: Props) {
                         >
                           <span>{item.label}</span>
                           {item.shortcut && (
-                            <span style={{ fontSize: 11, opacity: .5, marginLeft: 16, fontFamily: 'var(--font-mono), monospace' }}>
+                            <span style={{
+                              fontSize: 11, opacity: .48, marginLeft: 16,
+                              fontFamily: 'var(--font-mono), monospace',
+                            }}>
                               {item.shortcut}
                             </span>
                           )}
@@ -269,36 +393,70 @@ export default function MenuBar({ dark, setDark, wins, dispatch }: Props) {
           ))}
         </div>
 
-        {/* Right status area */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10, paddingRight: 16, color: tk.text }}>
+        {/* Right: status icons */}
+        <div style={{
+          display: 'flex', alignItems: 'center', gap: 6,
+          paddingRight: 14, height: '100%',
+        }}>
+          {/* WiFi */}
+          <div style={{ display: 'flex', alignItems: 'center', opacity: .70, padding: '0 2px' }}>
+            <WifiIcon c={tk.text} />
+          </div>
+
+          {/* Battery */}
+          <div style={{ display: 'flex', alignItems: 'center', opacity: .78, padding: '0 2px' }}>
+            <BatteryIcon c={tk.text} />
+          </div>
+
+          {/* Spotlight */}
           <button
             onClick={e => { e.stopPropagation(); setSpotlight(s => !s); }}
-            title="Spotlight ⌘F"
-            style={{ border: 'none', background: 'transparent', cursor: 'default', padding: '2px 4px', color: tk.textSub, display: 'flex', alignItems: 'center' }}
+            title="Spotlight  ⌘F"
+            style={{
+              border: 'none', background: 'transparent', cursor: 'pointer',
+              padding: '3px 5px', display: 'flex', alignItems: 'center',
+              color: ic, borderRadius: 4,
+              transition: 'opacity .15s',
+            }}
+            onMouseEnter={e => (e.currentTarget.style.opacity = '1')}
+            onMouseLeave={e => (e.currentTarget.style.opacity = '.85')}
           >
             <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-              <circle cx="5.5" cy="5.5" r="4" stroke="currentColor" strokeWidth="1.4" />
-              <line x1="8.5" y1="8.5" x2="11.5" y2="11.5" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+              <circle cx="5.5" cy="5.5" r="4" stroke={ic} strokeWidth="1.5" />
+              <line x1="8.5" y1="8.5" x2="11.5" y2="11.5" stroke={ic} strokeWidth="1.5" strokeLinecap="round" />
             </svg>
           </button>
+
+          {/* Dark/Light toggle */}
           <button
             onClick={e => { e.stopPropagation(); setDark(d => !d); }}
-            title={dark ? 'Light Mode' : 'Dark Mode'}
-            style={{ border: 'none', background: 'transparent', cursor: 'default', fontSize: 13, padding: '2px', color: tk.textSub }}
+            title={dark ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
+            style={{
+              border: 'none', background: 'transparent', cursor: 'pointer',
+              padding: '3px 5px', display: 'flex', alignItems: 'center',
+              color: ic, borderRadius: 4,
+              transition: 'opacity .15s',
+            }}
+            onMouseEnter={e => (e.currentTarget.style.opacity = '1')}
+            onMouseLeave={e => (e.currentTarget.style.opacity = '.85')}
           >
-            {dark ? '☀️' : '🌙'}
+            {dark ? <SunIcon c={ic} /> : <MoonIcon c={ic} />}
           </button>
-          <span style={{ opacity: .65, fontSize: 14 }}>🔋</span>
+
+          {/* Clock */}
           <span style={{
-            fontFamily: 'var(--font-mono), monospace',
-            fontSize: 11.5, letterSpacing: .3, opacity: .85,
+            fontFamily: 'var(--font-sans), sans-serif',
+            fontSize: 12, letterSpacing: '0.01em',
+            color: tk.text, opacity: .82,
+            fontWeight: 400,
+            paddingLeft: 2,
           }}>
             {clock}
           </span>
         </div>
       </div>
 
-      {/* Toast notification */}
+      {/* ── Toast ─────────────────────────────────────────────────────────── */}
       {toast && (
         <div style={{
           position: 'fixed', top: 38, left: '50%', zIndex: 99998,

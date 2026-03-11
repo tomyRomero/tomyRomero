@@ -18,6 +18,24 @@ html, body {
   font-family: var(--font-sans), system-ui, sans-serif;
 }
 
+/* Interactive cursor for all clickable elements */
+button:not(:disabled),
+a,
+[role="button"],
+[data-clickable] {
+  cursor: pointer !important;
+}
+button:disabled {
+  cursor: default !important;
+}
+
+/* Allow text selection in window content areas */
+.mac-window a,
+.mac-window button:not(:disabled),
+.mac-window [data-clickable] {
+  user-select: auto;
+}
+
 /* Thin scrollbars for window content areas */
 ::-webkit-scrollbar { width: 5px; height: 5px; }
 ::-webkit-scrollbar-track { background: transparent; }
@@ -67,6 +85,47 @@ html, body {
 @keyframes spotlightIn {
   0%   { opacity: 0; transform: translate(-50%, -48%) scale(.94); }
   100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+
+/* Aurora wallpaper animations — large, dramatic movements */
+@keyframes aurora1 {
+  0%, 100% { transform: translate(0vw, 0vh) scale(1.00); opacity: 0.72; }
+  20%       { transform: translate(14vw, -9vh)  scale(1.16); opacity: 0.88; }
+  40%       { transform: translate(5vw,  12vh)  scale(0.86); opacity: 0.76; }
+  60%       { transform: translate(-12vw, 7vh)  scale(1.12); opacity: 0.82; }
+  80%       { transform: translate(-3vw, -8vh)  scale(0.92); opacity: 0.70; }
+}
+@keyframes aurora2 {
+  0%, 100% { transform: translate(0vw,  0vh)  scale(1.00); opacity: 0.66; }
+  25%       { transform: translate(-17vw, 9vh) scale(1.21); opacity: 0.84; }
+  50%       { transform: translate(10vw, -13vh) scale(0.83); opacity: 0.68; }
+  75%       { transform: translate(15vw,  10vh) scale(1.10); opacity: 0.78; }
+}
+@keyframes aurora3 {
+  0%, 100% { transform: translate(0vw,  0vh)  scale(1.00); opacity: 0.60; }
+  35%       { transform: translate(12vw, 17vh) scale(1.18); opacity: 0.80; }
+  70%       { transform: translate(-15vw,-7vh) scale(0.88); opacity: 0.64; }
+}
+@keyframes auroraPulse {
+  0%, 100% { opacity: 0.38; }
+  50%       { opacity: 0.76; }
+}
+@keyframes gradientShift {
+  0%, 100% { filter: hue-rotate(0deg)  brightness(1.00); }
+  50%       { filter: hue-rotate(20deg) brightness(1.10); }
+}
+/* Photo carousel slide transitions */
+@keyframes slideInFromRight {
+  0%   { transform: translateX(100%); opacity: 0.6; }
+  100% { transform: translateX(0);    opacity: 1;   }
+}
+@keyframes slideInFromLeft {
+  0%   { transform: translateX(-100%); opacity: 0.6; }
+  100% { transform: translateX(0);     opacity: 1;   }
+}
+@keyframes fadeSlideIn {
+  0%   { opacity: 0; transform: scale(0.97); }
+  100% { opacity: 1; transform: scale(1);    }
 }
 
 /* Print styles */
