@@ -238,6 +238,14 @@ function TiltedPhotoStrip({ dark }: { dark: boolean }) {
 // ── Main window ───────────────────────────────────────────────────────────────
 export default function AboutWindow({ dark }: { dark: boolean }) {
   const tk = T(dark);
+  // Defer the heavy photo strip until after the first paint so it doesn't
+  // block LCP — images only start loading once the bio/header are visible.
+  const [showPhotos, setShowPhotos] = useState(true);
+  useEffect(() => {
+    setShowPhotos(false);
+    const t = setTimeout(() => setShowPhotos(true), 300);
+    return () => clearTimeout(t);
+  }, []);
 
   return (
     <div style={{ padding: '22px 24px', color: tk.text }}>
@@ -249,7 +257,7 @@ export default function AboutWindow({ dark }: { dark: boolean }) {
           boxShadow: '0 6px 24px rgba(212,148,58,.22)',
           position: 'relative',
         }}>
-          <Image src={profilePhoto} alt="Tomy Romero" fill style={{ objectFit: 'cover' }} sizes="76px" />
+          <Image src={profilePhoto} alt="Tomy Romero" fill style={{ objectFit: 'cover' }} sizes="76px" priority />
         </div>
         <div>
           <h1 style={{
@@ -320,8 +328,8 @@ export default function AboutWindow({ dark }: { dark: boolean }) {
         </span>
       </div>
 
-      {/* Tilted photo strip */}
-      <TiltedPhotoStrip dark={dark} />
+      {/* Tilted photo strip — deferred so it doesn't block initial paint */}
+      {showPhotos && <TiltedPhotoStrip dark={dark} />}
     </div>
   );
 }

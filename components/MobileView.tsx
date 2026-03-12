@@ -1,9 +1,7 @@
 'use client';
 import { useState } from 'react';
 import Image from 'next/image';
-import { ME, images, projects, experiences, skills, contactDetails, profilePhoto } from '@/constants';
-
-const CHIPS = ['ASP.NET Core', 'React', 'SQL Server', 'Azure', 'Healthcare IT', 'SaaS Builder'];
+import { ME, images, projects, experiences, skills, contactDetails, profilePhoto, aboutChips } from '@/constants';
 
 function SectionLabel({ text }: { text: string }) {
   return (
@@ -120,7 +118,7 @@ export default function MobileView({ dark, setDark }: { dark: boolean; setDark: 
 
         {/* Tech chips */}
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 22 }}>
-          {CHIPS.map(chip => (
+          {aboutChips.map(chip => (
             <span key={chip} style={{
               padding: '5px 12px', borderRadius: 8, fontSize: 12,
               background: accentBg, border: `1px solid ${accentBorder}`,
@@ -150,7 +148,7 @@ export default function MobileView({ dark, setDark }: { dark: boolean; setDark: 
         <SectionLabel text="Projects" />
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 36 }}>
           {projects.map(p => (
-            <a key={p.title} href={p.link} target="_blank" rel="noopener noreferrer" style={{
+            <a key={p.title} href={`/project/${encodeURIComponent(p.title)}`} style={{
               display: 'block', textDecoration: 'none',
               background: cardBg, border: `1px solid ${cardBorder}`,
               borderRadius: 14, padding: '16px 18px',
@@ -161,7 +159,7 @@ export default function MobileView({ dark, setDark }: { dark: boolean; setDark: 
                   <div style={{ fontSize: 15, fontWeight: 600, color: text }}>{p.title}</div>
                   <div style={{ fontSize: 12, color: accent, marginTop: 2 }}>{p.tagline}</div>
                 </div>
-                <span style={{ fontSize: 11, color: textMuted }}>{p.year}</span>
+                <span style={{ fontSize: 20, color: textMuted }}>›</span>
               </div>
               <div style={{ fontSize: 13, color: textSub, lineHeight: 1.64 }}>{p.description}</div>
               <div style={{

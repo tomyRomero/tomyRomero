@@ -147,42 +147,36 @@ export default function WinShell({ win, dark, dispatch, focused, onFocus, childr
 
   // ── Drag & resize event listeners ─────────────────────────────────────────
   useEffect(() => {
-    const mv = (e: MouseEvent) => {
+    const applyMove = (clientX: number, clientY: number) => {
       if (!el.current) return;
-      if (document.body.classList.contains('lb-open')) {
-        drag.current    = false;
-        rzRight.current = false; rzBottom.current = false;
-        rzLeft.current  = false; rzTop.current    = false;
-        return;
-      }
       if (drag.current) {
-        lastMouseY.current = e.clientY;
-        el.current.style.left = Math.max(0, e.clientX - dOff.current.x) + 'px';
-        el.current.style.top  = Math.max(28, e.clientY - dOff.current.y) + 'px';
-        const nearDock = e.clientY > window.innerHeight - DOCK_ZONE;
+        lastMouseY.current = clientY;
+        el.current.style.left = Math.max(0, clientX - dOff.current.x) + 'px';
+        el.current.style.top  = Math.max(28, clientY - dOff.current.y) + 'px';
+        const nearDock = clientY > window.innerHeight - DOCK_ZONE;
         window.dispatchEvent(new CustomEvent('winNearDock', { detail: { near: nearDock } }));
       }
       if (rzRight.current) {
-        el.current.style.width = Math.max(320, rzStart.current.w + e.clientX - rzStart.current.x) + 'px';
+        el.current.style.width = Math.max(320, rzStart.current.w + clientX - rzStart.current.x) + 'px';
       }
       if (rzBottom.current) {
-        el.current.style.height = Math.max(200, rzStart.current.h + e.clientY - rzStart.current.y) + 'px';
+        el.current.style.height = Math.max(200, rzStart.current.h + clientY - rzStart.current.y) + 'px';
       }
       if (rzLeft.current) {
-        const dx   = e.clientX - rzStart.current.x;
+        const dx   = clientX - rzStart.current.x;
         const newW = Math.max(320, rzStart.current.w - dx);
         el.current.style.width = newW + 'px';
         el.current.style.left  = (rzStart.current.left + rzStart.current.w - newW) + 'px';
       }
       if (rzTop.current) {
-        const dy   = e.clientY - rzStart.current.y;
+        const dy   = clientY - rzStart.current.y;
         const newH = Math.max(200, rzStart.current.h - dy);
         el.current.style.height = newH + 'px';
         el.current.style.top    = Math.max(28, rzStart.current.top + rzStart.current.h - newH) + 'px';
       }
     };
 
-    const up = () => {
+    const applyUp = () => {
       if (!el.current) return;
       if (drag.current) {
         window.dispatchEvent(new CustomEvent('winNearDock', { detail: { near: false } }));
@@ -204,6 +198,33 @@ export default function WinShell({ win, dark, dispatch, focused, onFocus, childr
       }
     };
 
+    const mv = (e: MouseEvent) => {
+      if (document.body.classList.contains('lb-open')) {
+        drag.current = false; rzRight.current = false;
+        rzBottom.current = false; rzLeft.current = false; rzTop.current = false;
+        return;
+      }
+      applyMove(e.clientX, e.clientY);
+    };
+
+    const up = () => applyUp();
+
+    const mvTouch = (e: TouchEvent) => {
+      if (!e.touches.length) return;
+      if (document.body.classList.contains('lb-open')) {
+        drag.current = false; rzRight.current = false;
+        rzBottom.current = false; rzLeft.current = false; rzTop.current = false;
+        return;
+      }
+      if (drag.current || rzRight.current || rzBottom.current || rzLeft.current || rzTop.current) {
+        e.preventDefault();
+      }
+      const t = e.touches[0];
+      applyMove(t.clientX, t.clientY);
+    };
+
+    const upTouch = () => applyUp();
+
     const resetDrag = () => {
       drag.current    = false;
       rzRight.current = false; rzBottom.current = false;
@@ -213,10 +234,14 @@ export default function WinShell({ win, dark, dispatch, focused, onFocus, childr
 
     window.addEventListener('mousemove',     mv);
     window.addEventListener('mouseup',       up);
+    window.addEventListener('touchmove',     mvTouch, { passive: false } as AddEventListenerOptions);
+    window.addEventListener('touchend',      upTouch);
     window.addEventListener('lightboxActive', resetDrag);
     return () => {
       window.removeEventListener('mousemove',     mv);
       window.removeEventListener('mouseup',       up);
+      window.removeEventListener('touchmove',     mvTouch);
+      window.removeEventListener('touchend',      upTouch);
       window.removeEventListener('lightboxActive', resetDrag);
     };
   }, [win.id, dispatch]);
@@ -229,6 +254,19 @@ export default function WinShell({ win, dark, dispatch, focused, onFocus, childr
     e.preventDefault(); e.stopPropagation();
     rzStart.current = {
       x: e.clientX, y: e.clientY,
+      w: el.current!.offsetWidth, h: el.current!.offsetHeight,
+      left: parseInt(el.current!.style.left) || win.pos.x,
+      top:  parseInt(el.current!.style.top)  || win.pos.y,
+    };
+    onFocus(win.id);
+  };
+
+  const startRzTouch = (e: React.TouchEvent) => {
+    if (document.body.classList.contains('lb-open')) return;
+    e.preventDefault(); e.stopPropagation();
+    const t = e.touches[0];
+    rzStart.current = {
+      x: t.clientX, y: t.clientY,
       w: el.current!.offsetWidth, h: el.current!.offsetHeight,
       left: parseInt(el.current!.style.left) || win.pos.x,
       top:  parseInt(el.current!.style.top)  || win.pos.y,
@@ -277,6 +315,15 @@ export default function WinShell({ win, dark, dispatch, focused, onFocus, childr
           onFocus(win.id);
           e.preventDefault();
         }}
+        onTouchStart={e => {
+          if ((e.target as HTMLElement).closest('[data-tl]') || win.isMax) return;
+          if (document.body.classList.contains('lb-open')) return;
+          drag.current = true;
+          const t = e.touches[0];
+          const r = el.current!.getBoundingClientRect();
+          dOff.current = { x: t.clientX - r.left, y: t.clientY - r.top };
+          onFocus(win.id);
+        }}
         onDoubleClick={() => dispatch({ type: 'TOGGLE_MAX', id: win.id })}
         style={{
           height: 44, background: tk.titleBg,
@@ -317,41 +364,49 @@ export default function WinShell({ win, dark, dispatch, focused, onFocus, childr
           {/* Left edge */}
           <div
             onMouseDown={e => { startRz(e); rzLeft.current = true; }}
+            onTouchStart={e => { startRzTouch(e); rzLeft.current = true; }}
             style={{ position: 'absolute', left: 0, top: 44, bottom: 12, width: 6, cursor: 'ew-resize', zIndex: 3 }}
           />
           {/* Right edge */}
           <div
             onMouseDown={e => { startRz(e); rzRight.current = true; }}
+            onTouchStart={e => { startRzTouch(e); rzRight.current = true; }}
             style={{ position: 'absolute', right: 0, top: 44, bottom: 12, width: 6, cursor: 'ew-resize', zIndex: 3 }}
           />
           {/* Bottom edge */}
           <div
             onMouseDown={e => { startRz(e); rzBottom.current = true; }}
+            onTouchStart={e => { startRzTouch(e); rzBottom.current = true; }}
             style={{ position: 'absolute', bottom: 0, left: 12, right: 12, height: 6, cursor: 'ns-resize', zIndex: 3 }}
           />
           {/* Top edge */}
           <div
             onMouseDown={e => { startRz(e); rzTop.current = true; }}
+            onTouchStart={e => { startRzTouch(e); rzTop.current = true; }}
             style={{ position: 'absolute', top: 0, left: 12, right: 12, height: 4, cursor: 'ns-resize', zIndex: 5 }}
           />
           {/* Top-left corner */}
           <div
             onMouseDown={e => { startRz(e); rzLeft.current = true; rzTop.current = true; }}
+            onTouchStart={e => { startRzTouch(e); rzLeft.current = true; rzTop.current = true; }}
             style={{ position: 'absolute', left: 0, top: 0, width: 14, height: 14, cursor: 'nw-resize', zIndex: 6 }}
           />
           {/* Top-right corner */}
           <div
             onMouseDown={e => { startRz(e); rzRight.current = true; rzTop.current = true; }}
+            onTouchStart={e => { startRzTouch(e); rzRight.current = true; rzTop.current = true; }}
             style={{ position: 'absolute', right: 0, top: 0, width: 14, height: 14, cursor: 'ne-resize', zIndex: 6 }}
           />
           {/* Bottom-left corner */}
           <div
             onMouseDown={e => { startRz(e); rzLeft.current = true; rzBottom.current = true; }}
+            onTouchStart={e => { startRzTouch(e); rzLeft.current = true; rzBottom.current = true; }}
             style={{ position: 'absolute', left: 0, bottom: 0, width: 18, height: 18, cursor: 'sw-resize', zIndex: 4 }}
           />
           {/* Bottom-right corner */}
           <div
             onMouseDown={e => { startRz(e); rzRight.current = true; rzBottom.current = true; }}
+            onTouchStart={e => { startRzTouch(e); rzRight.current = true; rzBottom.current = true; }}
             style={{ position: 'absolute', right: 0, bottom: 0, width: 18, height: 18, cursor: 'se-resize', zIndex: 4 }}
           >
             <svg style={{ position: 'absolute', right: 4, bottom: 4 }} width="8" height="8" viewBox="0 0 8 8">
