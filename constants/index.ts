@@ -12,7 +12,7 @@ interface SocialLink {
 
 export const socialLinks: SocialLink[] = [
   { title: 'GitHub',   href: 'https://github.com/tomyRomero',                     icon: FaGithub },
-  { title: 'LinkedIn', href: 'https://www.linkedin.com/in/tomy-romero-seas/', icon: FaLinkedin },
+  { title: 'LinkedIn', href: 'https://www.linkedin.com/in/tomyromero/', icon: FaLinkedin },
 ];
 
 // ── Personal Info ────────────────────────────────────────────────────────────
@@ -22,12 +22,11 @@ export const ME = {
   location:  'Jewett City, Connecticut',
   email:     'tomyfletcher99@hotmail.com',
   github:    'https://github.com/tomyRomero',
-  linkedin:  'https://www.linkedin.com/in/tomy-romero-seas/',
+  linkedin:  'https://www.linkedin.com/in/tomyromero/',
   portfolio: 'https://tomyromero.vercel.app',
-  bio: `Full-stack software engineer with roots in healthcare homecare and a builder's mindset. By day I architect backend frontend and database systems — converting workflows into scalable .NET solutions, frontend frameworks and SQL server advanced queries. By night I build for the future. UVI graduate. SQL nerd.`,
+  bio: `Full-stack software engineer with roots in healthcare homecare and a builder's mindset. By day I architect backend, frontend and database systems — converting workflows into scalable solutions. By night I build for the future. UVI graduate. SQL nerd.`,
 };
 
-export const resumeLink = `https://docs.google.com/document/d/1NgKOp9uVqTW2ntBhMemJ5E-mporMj0cH9h6Cnki2nWA/edit?usp=sharing`;
 
 export const intro = `Full-stack software engineer specializing in ASP.NET Core, React, and SQL Server. Passionate about building scalable systems and clean user experiences.`;
 
@@ -43,10 +42,10 @@ export const navLinks = [
 
 // ── Skills (grouped for Skills window) ──────────────────────────────────────
 export const skills: Record<string, string[]> = {
-  'Languages':    ['C#', 'JavaScript', 'TypeScript', 'SQL', 'Python', 'HTML/CSS'],
-  'Backend':      ['ASP.NET Core', 'Web API', 'Entity Framework', 'Node.js', 'Spring Boot', 'FastAPI'],
-  'Frontend':     ['React', 'React Native', 'Next.js', 'Tailwind CSS', 'Vite'],
-  'Data & Cloud': ['SQL Server', 'Azure', 'AWS', 'MySQL', 'PostgreSQL'],
+  'Languages':    ['C#', 'JavaScript/TypeScript', 'SQL', 'HTML/CSS'],
+  'Backend':      ['ASP.NET Core', 'Web API', 'Entity Framework', 'Node.js'],
+  'Frontend':     ['React', 'React Native', 'Next.js', 'Tailwind CSS'],
+  'Data & Cloud': ['SQL Server', 'Azure', 'AWS'],
   'Tools':        ['Git', 'Docker', 'CI/CD', 'Agile', 'SSMS', 'VS Code', 'Visual Studio'],
 };
 
@@ -304,9 +303,9 @@ export const experiences = [
     location: 'Remote · Connecticut',
     description: [
       'Architect and maintain full-stack features for a home-care healthcare management system.',
-      'Design complex SQL Server migrations and integrate JavaScript logic into clinical intake workflows.',
+      'Design complex SQL Server migrations and integrate JavaScript logic into workflows.',
       'Work with C# ASP.NET Core, SQL Server, and SSMS in a DevOps-driven environment.',
-      'Collaborate with clinical stakeholders to translate requirements into scalable solutions.',
+      'Collaborate with business to translate requirements into scalable solutions.',
     ],
     tech: ['C# .NET', 'SQL Server', 'JavaScript', 'ASP.NET Core', 'SSMS'],
   },
@@ -343,14 +342,13 @@ export const education = [
   {
     institution: 'University of the Virgin Islands',
     degree:      'Bachelor of Science',
-    field:       'Computer Science / Information Systems',
-    period:      'Graduated 2024',
+    field:       'Computer Science',
+    period:      'Graduated 2023',
     location:    'U.S. Virgin Islands',
     logo:        '🎓',
     gpa:         '3.11',
     bullets: [
-      'Strong focus on data analysis, SQL Server, and software engineering',
-      'Active in software engineering and robotics communities on campus',
+      'Student Gonvernment Assocation Junior Senator',
       "Dean's List recipient — multiple semesters",
     ],
   },
@@ -359,13 +357,13 @@ export const education = [
 // ── Contact ───────────────────────────────────────────────────────────────────
 export const contactDetails = [
   { type: 'Email',    icon: '✉️', value: 'tomyfletcher99@hotmail.com',       href: 'mailto:tomyfletcher99@hotmail.com',            cv: 'tomyfletcher99@hotmail.com' },
-  { type: 'LinkedIn', icon: '🔗', value: 'Tomy Romero Seas',                 href: 'https://www.linkedin.com/in/tomy-romero-seas/', cv: 'https://www.linkedin.com/in/tomy-romero-seas/' },
+  { type: 'LinkedIn', icon: '🔗', value: 'Tomy Romero Seas',                 href: 'https://www.linkedin.com/in/tomyromero/', cv: 'https://www.linkedin.com/in/tomyromero/' },
   { type: 'GitHub',   icon: '⑂',  value: 'github.com/tomyRomero',            href: 'https://github.com/tomyRomero',                cv: 'https://github.com/tomyRomero' },
-  { type: 'Location', icon: '📍', value: 'South Woodstock, Connecticut',     href: '',                                             cv: '' },
+  { type: 'Location', icon: '📍', value: 'Jewett City, Connecticut',     href: '',                                             cv: '' },
 ];
 
 // ── About page highlight chips ────────────────────────────────────────────────
-export const aboutChips = ['ASP.NET Core', 'React', 'SQL Server', 'Azure', 'Healthcare IT'];
+export const aboutChips = ['ASP.NET Core', 'React', 'SQL Server', 'Azure', 'Healthcare IT', 'SaaS Builder'];
 
 // ── Open-to-work status ───────────────────────────────────────────────────────
 export const openToWork = {

@@ -5,7 +5,7 @@ import Wallpaper     from '@/components/mac/Wallpaper';
 import MenuBar       from '@/components/mac/MenuBar';
 import WinShell      from '@/components/mac/WinShell';
 import Dock          from '@/components/mac/Dock';
-import NotifCard     from '@/components/mac/NotifCard';
+import Widgets       from '@/components/mac/Widgets';
 import AboutWindow      from '@/components/mac/windows/AboutWindow';
 import ProjectsWindow   from '@/components/mac/windows/ProjectsWindow';
 import ExperienceWindow from '@/components/mac/windows/ExperienceWindow';
@@ -98,8 +98,9 @@ export default function Home() {
   const [isMobile, setIsMobile] = useState(false);
   const [wins, dispatch] = useReducer(winReducer, undefined, initWins);
   const [focused, setFocused] = useState<string | null>(null);
+  const [calPop, setCalPop]   = useState(false);
 
-  // Detect mobile viewport
+  // Detect mobile viewport (< 768 = phones; ≥ 768 = iPad / desktop — see macOS view with touch support)
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 768);
     check();
@@ -155,7 +156,7 @@ export default function Home() {
       <Wallpaper dark={dark} />
 
       {/* Menu bar */}
-      <MenuBar dark={dark} setDark={setDark} wins={wins} dispatch={dispatch} />
+      <MenuBar dark={dark} setDark={setDark} wins={wins} dispatch={dispatch} calPop={calPop} setCalPop={setCalPop} />
 
       {/* Desktop canvas */}
       <div
@@ -174,10 +175,10 @@ export default function Home() {
             {CONTENT[win.id as keyof typeof CONTENT]}
           </WinShell>
         ))}
-      </div>
 
-      {/* Notification card */}
-      <NotifCard dark={dark} />
+        {/* Desktop widgets */}
+        <Widgets dark={dark} dispatch={dispatch} openCal={() => setCalPop(true)} />
+      </div>
 
       {/* Dock */}
       <Dock wins={wins} dark={dark} dispatch={dispatch} />

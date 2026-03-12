@@ -24,19 +24,17 @@ const ICONS: Record<string, React.ReactNode> = {
       <line x1="9"  y1="22" x2="18" y2="22" stroke="rgba(30,140,90,.35)" strokeWidth="1.8" strokeLinecap="round" />
     </svg>
   ),
-  // Calendar → Dates / Experience
+  // Briefcase → Work / Experience
   experience: (
     <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-      {/* Calendar body */}
-      <rect x="3" y="7" width="26" height="22" rx="3" fill="rgba(255,255,255,.88)" />
-      {/* Header band */}
-      <rect x="3" y="7" width="26" height="7" rx="3" fill="rgba(255,255,255,.96)" />
-      <rect x="3" y="11" width="26" height="3"       fill="rgba(255,255,255,.96)" />
-      {/* Ring clips */}
-      <line x1="10" y1="4" x2="10" y2="11" stroke="rgba(90,30,200,.70)" strokeWidth="2.5" strokeLinecap="round" />
-      <line x1="22" y1="4" x2="22" y2="11" stroke="rgba(90,30,200,.70)" strokeWidth="2.5" strokeLinecap="round" />
-      {/* Day circle */}
-      <circle cx="16" cy="21" r="4" fill="rgba(90,30,200,.48)" />
+      {/* Handle */}
+      <rect x="11" y="4" width="10" height="6" rx="2.5" fill="none" stroke="rgba(255,255,255,.88)" strokeWidth="2" />
+      {/* Briefcase body */}
+      <rect x="3" y="10" width="26" height="18" rx="3.5" fill="rgba(255,255,255,.90)" />
+      {/* Center horizontal band */}
+      <rect x="3" y="17" width="26" height="4" fill="rgba(90,30,200,.22)" />
+      {/* Clasp */}
+      <rect x="13.5" y="16" width="5" height="6" rx="1.5" fill="rgba(255,255,255,.95)" stroke="rgba(90,30,200,.55)" strokeWidth="1.5" />
     </svg>
   ),
   // Terminal prompt → Code / Skills
@@ -149,10 +147,10 @@ export default function Dock({ wins, dark, dispatch }: Props) {
         onMouseEnter={() => setHovIdx(idx)}
         onMouseLeave={() => setHovIdx(null)}
       >
-        {/* Tooltip */}
+        {/* Tooltip — floats well above the magnified icon (scale 1.38 × 64 + 10px lift ≈ 98px) */}
         {isH && (
           <div style={{
-            position: 'absolute', bottom: sz + 18, left: '50%',
+            position: 'absolute', bottom: Math.round(sz * 1.38) + 20, left: '50%',
             transform: 'translateX(-50%)',
             padding: '5px 11px', borderRadius: 8,
             background: dark ? 'rgba(16,16,20,.96)' : 'rgba(8,8,10,.93)',
@@ -262,7 +260,7 @@ export default function Dock({ wins, dark, dispatch }: Props) {
       >
         {isTrashHot && (
           <div style={{
-            position: 'absolute', bottom: BASE + 18, left: '50%',
+            position: 'absolute', bottom: Math.round(BASE * 1.38) + 20, left: '50%',
             transform: 'translateX(-50%)',
             padding: '5px 11px', borderRadius: 8,
             background: trTarget ? 'rgba(200,30,50,.96)' : (dark ? 'rgba(16,16,20,.96)' : 'rgba(8,8,10,.93)'),
