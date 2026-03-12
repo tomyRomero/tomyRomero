@@ -354,6 +354,26 @@ export const education = [
   },
 ];
 
+// ── Certifications ────────────────────────────────────────────────────────────
+export const certifications = [
+  {
+    name:         'Microsoft SQL Server Specialization',
+    issuer:       'Microsoft',
+    logo:         '🪟',
+    issued:       'Feb 2026',
+    credentialId: '7SIMAY3OEGQN',
+    url:          'https://www.coursera.org/account/accomplishments/specialization/7SIMAY3OEGQN',
+  },
+  {
+    name:         'AWS Academy Cloud Foundations',
+    issuer:       'Amazon Web Services (AWS)',
+    logo:         '☁️',
+    issued:       'Sep 2022',
+    credentialId: null,
+    url:          'https://www.credly.com/badges/49f35d3b-7ea8-40ee-afde-77c8e7725827',
+  },
+];
+
 // ── Contact ───────────────────────────────────────────────────────────────────
 export const contactDetails = [
   { type: 'Email',    icon: '✉️', value: 'tomyfletcher99@hotmail.com',       href: 'mailto:tomyfletcher99@hotmail.com',            cv: 'tomyfletcher99@hotmail.com' },

@@ -1,7 +1,7 @@
 'use client';
 import { T } from '../tokens';
 import { Chip, WinTitle, Bullet } from '../Atoms';
-import { experiences, education } from '@/constants';
+import { experiences, education, certifications } from '@/constants';
 
 export default function ExperienceWindow({ dark }: { dark: boolean }) {
   const tk = T(dark);
@@ -89,6 +89,58 @@ export default function ExperienceWindow({ dark }: { dark: boolean }) {
             </div>
           </div>
         ))}
+      </div>
+      {/* Certifications */}
+      <div style={{ borderTop: `1px solid ${tk.divider}`, paddingTop: 20, marginTop: 20 }}>
+        <div style={{
+          fontSize: 13, fontWeight: 600, color: tk.textMuted,
+          textTransform: 'uppercase' as const, letterSpacing: '1px', marginBottom: 14,
+          fontFamily: 'var(--font-mono), monospace',
+        }}>
+          Certifications
+        </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          {certifications.map(cert => (
+            <div
+              key={cert.name}
+              style={{
+                display: 'flex', alignItems: 'center', gap: 14,
+                padding: '13px 16px', background: tk.cardBg,
+                border: `1px solid ${tk.cardBorder}`, borderRadius: 12,
+              }}
+            >
+              <span style={{ fontSize: 22, flexShrink: 0 }}>{cert.logo}</span>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ fontWeight: 600, fontSize: 13.5, color: tk.text }}>{cert.name}</div>
+                <div style={{ fontSize: 12, color: tk.accent, marginTop: 2 }}>{cert.issuer}</div>
+                <div style={{ fontSize: 11.5, color: tk.textMuted, marginTop: 2 }}>
+                  Issued {cert.issued}
+                  {cert.credentialId && (
+                    <span style={{ marginLeft: 8, fontFamily: 'var(--font-mono), monospace' }}>
+                      · ID {cert.credentialId}
+                    </span>
+                  )}
+                </div>
+              </div>
+              <a
+                href={cert.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  flexShrink: 0, padding: '5px 12px', borderRadius: 8, fontSize: 11.5,
+                  fontFamily: 'var(--font-mono), monospace',
+                  background: tk.accentBg, border: `1px solid ${tk.accentBorder}`,
+                  color: tk.accent, textDecoration: 'none', fontWeight: 500,
+                  transition: 'opacity .15s', whiteSpace: 'nowrap' as const,
+                }}
+                onMouseEnter={e => (e.currentTarget.style.opacity = '.70')}
+                onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
+              >
+                View ↗
+              </a>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
