@@ -37,15 +37,15 @@ function SectionLabel({ text, accent }: { text: string; accent: string }) {
 
 export default function ProjectPage({ params }: { params: { title: string } }) {
   const router = useRouter();
-  const [dark, setDark] = useState(() => {
-    if (typeof window === 'undefined') return false;
-    const saved = localStorage.getItem('dark');
-    return saved !== null ? saved === 'true' : false;
-  });
+  const [dark, setDark] = useState(false);
   const [imgIdx, setImgIdx] = useState(0);
   const [lightbox, setLightbox] = useState(false);
 
-  // Persist toggle so going back to desktop stays in sync
+  // Restore + persist dark mode
+  useEffect(() => {
+    const saved = localStorage.getItem('dark');
+    if (saved !== null) setDark(saved === 'true');
+  }, []);
   useEffect(() => { localStorage.setItem('dark', String(dark)); }, [dark]);
 
   const decodedTitle = decodeURIComponent(params.title);

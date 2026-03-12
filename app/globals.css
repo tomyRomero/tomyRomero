@@ -59,6 +59,18 @@ button:disabled {
   0%   { opacity: 0; transform: translateX(-50%) translateY(-8px); }
   100% { opacity: 1; transform: translateX(-50%) translateY(0); }
 }
+@keyframes welcomeIn {
+  0%   { opacity: 0; transform: translateY(22px) scale(.96); }
+  100% { opacity: 1; transform: translateY(0)    scale(1);   }
+}
+@keyframes welcomeOut {
+  0%   { opacity: 1; transform: translateY(0)    scale(1);   }
+  100% { opacity: 0; transform: translateY(14px) scale(.97); }
+}
+@keyframes drainBar {
+  from { width: 100%; }
+  to   { width: 0%;   }
+}
 @keyframes notifIn {
   0%   { opacity: 0; transform: translateX(110%); }
   100% { opacity: 1; transform: translateX(0); }
