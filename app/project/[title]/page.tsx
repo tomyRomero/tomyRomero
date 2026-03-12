@@ -37,18 +37,16 @@ function SectionLabel({ text, accent }: { text: string; accent: string }) {
 
 export default function ProjectPage({ params }: { params: { title: string } }) {
   const router = useRouter();
-  const [dark, setDark] = useState(false);
+  const [dark, setDark] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    const saved = localStorage.getItem('dark');
+    return saved !== null ? saved === 'true' : false;
+  });
   const [imgIdx, setImgIdx] = useState(0);
   const [lightbox, setLightbox] = useState(false);
 
-  // Follow system preference for dark mode
-  useEffect(() => {
-    const mq = window.matchMedia('(prefers-color-scheme: dark)');
-    setDark(mq.matches);
-    const handler = (e: MediaQueryListEvent) => setDark(e.matches);
-    mq.addEventListener('change', handler);
-    return () => mq.removeEventListener('change', handler);
-  }, []);
+  // Persist toggle so going back to desktop stays in sync
+  useEffect(() => { localStorage.setItem('dark', String(dark)); }, [dark]);
 
   const decodedTitle = decodeURIComponent(params.title);
   const detail = projectDetails.find(p => p.title === decodedTitle);

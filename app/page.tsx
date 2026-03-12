@@ -94,11 +94,18 @@ function winReducer(s: Win[], a: WinAction): Win[] {
 
 // ── Desktop App ───────────────────────────────────────────────────────────────
 export default function Home() {
-  const [dark, setDark]       = useState(false);
+  const [dark, setDark]       = useState(() => {
+    if (typeof window === 'undefined') return false;
+    const saved = localStorage.getItem('dark');
+    return saved !== null ? saved === 'true' : false;
+  });
   const [isMobile, setIsMobile] = useState(false);
   const [wins, dispatch] = useReducer(winReducer, undefined, initWins);
   const [focused, setFocused] = useState<string | null>(null);
   const [calPop, setCalPop]   = useState(false);
+
+  // Persist dark mode so project pages stay in sync
+  useEffect(() => { localStorage.setItem('dark', String(dark)); }, [dark]);
 
   // Detect mobile viewport (< 768 = phones; ≥ 768 = iPad / desktop — see macOS view with touch support)
   useEffect(() => {
