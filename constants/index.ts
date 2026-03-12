@@ -348,7 +348,7 @@ export const education = [
     logo:        '🎓',
     gpa:         '3.11',
     bullets: [
-      'Student Gonvernment Assocation Junior Senator',
+      'Student Government Association Junior Senator',
       "Dean's List recipient — multiple semesters",
     ],
   },

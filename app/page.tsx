@@ -5,6 +5,7 @@ import Wallpaper     from '@/components/mac/Wallpaper';
 import MenuBar       from '@/components/mac/MenuBar';
 import WinShell      from '@/components/mac/WinShell';
 import Dock          from '@/components/mac/Dock';
+import WelcomeToast  from '@/components/mac/WelcomeToast';
 import Widgets       from '@/components/mac/Widgets';
 import AboutWindow      from '@/components/mac/windows/AboutWindow';
 import ProjectsWindow   from '@/components/mac/windows/ProjectsWindow';
@@ -94,17 +95,17 @@ function winReducer(s: Win[], a: WinAction): Win[] {
 
 // ── Desktop App ───────────────────────────────────────────────────────────────
 export default function Home() {
-  const [dark, setDark]       = useState(() => {
-    if (typeof window === 'undefined') return false;
-    const saved = localStorage.getItem('dark');
-    return saved !== null ? saved === 'true' : false;
-  });
+  const [dark, setDark]       = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [wins, dispatch] = useReducer(winReducer, undefined, initWins);
   const [focused, setFocused] = useState<string | null>(null);
   const [calPop, setCalPop]   = useState(false);
 
-  // Persist dark mode so project pages stay in sync
+  // Restore + persist dark mode (useEffect avoids SSR hydration mismatch)
+  useEffect(() => {
+    const saved = localStorage.getItem('dark');
+    if (saved !== null) setDark(saved === 'true');
+  }, []);
   useEffect(() => { localStorage.setItem('dark', String(dark)); }, [dark]);
 
   // Detect mobile viewport (< 768 = phones; ≥ 768 = iPad / desktop — see macOS view with touch support)
@@ -189,6 +190,9 @@ export default function Home() {
 
       {/* Dock */}
       <Dock wins={wins} dark={dark} dispatch={dispatch} />
+
+      {/* First-visit welcome tooltip */}
+      <WelcomeToast dark={dark} />
     </div>
   );
 }
