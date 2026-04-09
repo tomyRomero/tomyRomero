@@ -130,7 +130,14 @@ export default function WelcomeToast({ dark }: { dark: boolean }) {
           }}>
             Click the{' '}
             <span style={{ color: tk.accent, fontWeight: 600 }}>icons in the dock below</span>
-            {' '}to open windows and get to know me. Windows are draggable.
+            {' '}to open windows. Try{' '}
+            <span style={{
+              color: tk.textSub, fontWeight: 600,
+              fontFamily: 'var(--font-mono),monospace', fontSize: 11.5,
+              background: dark ? 'rgba(255,255,255,.08)' : 'rgba(0,0,0,.06)',
+              padding: '1px 5px', borderRadius: 4,
+            }}>⌘K</span>
+            {' '}to search.
           </p>
 
           {/* Progress bar */}

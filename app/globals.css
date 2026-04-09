@@ -184,6 +184,74 @@ button:disabled {
   100% { opacity: 1; transform: scale(1);    }
 }
 
+/* Shimmer animation for accent elements */
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+/* Glow pulse for interactive elements */
+@keyframes glowPulse {
+  0%, 100% { box-shadow: 0 0 12px rgba(212,148,58,.15), 0 4px 8px rgba(0,0,0,.12); }
+  50%       { box-shadow: 0 0 24px rgba(212,148,58,.28), 0 4px 14px rgba(0,0,0,.18); }
+}
+
+/* Staggered content fade-in */
+@keyframes contentFadeIn {
+  0%   { opacity: 0; transform: translateY(12px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* Gradient border rotation */
+@keyframes borderRotate {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Scale pop for hover interactions */
+@keyframes scalePop {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.03); }
+  100% { transform: scale(1); }
+}
+
+/* Float animation for decorative elements */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-6px); }
+}
+
+/* Page intro animation — wallpaper fade in */
+@keyframes introFade {
+  0%   { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+/* Dock slide up intro */
+@keyframes dockSlideUp {
+  0%   { opacity: 0; transform: translateX(-50%) translateY(40px); }
+  100% { opacity: 1; transform: translateX(-50%) translateY(0); }
+}
+
+/* Menu bar slide down intro */
+@keyframes menuSlideDown {
+  0%   { opacity: 0; transform: translateY(-100%); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+/* Dark/light mode crossfade — no color transition to preserve gradient text */
+.theme-transition,
+.theme-transition *,
+.theme-transition *::before,
+.theme-transition *::after {
+  transition: background-color .3s ease, border-color .3s ease, box-shadow .3s ease !important;
+}
+/* Gradient text elements must not transition background at all */
+.theme-transition .grad-text {
+  transition: none !important;
+}
+
 /* Print styles */
 @media print {
   .mac-dock, .mac-menubar, .mac-notif { display: none !important; }
@@ -198,6 +266,33 @@ button:disabled {
     page-break-inside: avoid;
   }
   html, body { overflow: auto !important; height: auto !important; }
+}
+
+/* Accessibility: focus visible outlines */
+:focus-visible {
+  outline: 2px solid #D4943A;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Skip to content link (hidden until focused) */
+.skip-to-content {
+  position: fixed;
+  top: -100px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 10px 24px;
+  background: #D4943A;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 0 0 12px 12px;
+  z-index: 99999;
+  text-decoration: none;
+  transition: top .2s ease;
+}
+.skip-to-content:focus {
+  top: 0;
 }
 
 /* Utility: hide scrollbar */

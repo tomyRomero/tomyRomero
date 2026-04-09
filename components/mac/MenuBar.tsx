@@ -1,5 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { T } from './tokens';
 import { ME, projects, skills } from '@/constants';
 import type { Win, WinAction } from './winTypes';
@@ -138,6 +139,12 @@ export default function MenuBar({ dark, setDark, wins, dispatch, calPop, setCalP
     { category: 'Links', label: 'GitHub',   desc: ME.github,   icon: '⑂',  action: () => window.open(ME.github,  '_blank') },
     { category: 'Links', label: 'LinkedIn', desc: ME.linkedin, icon: '🔗', action: () => window.open(ME.linkedin, '_blank') },
     { category: 'Links', label: 'Email',    desc: ME.email,    icon: '📧', action: () => window.open(`mailto:${ME.email}`) },
+    // Easter eggs
+    { category: 'Secret', label: 'Hello!',     desc: 'You found a secret! Thanks for exploring ✨',     icon: '🎉', action: () => { showToast('🎉 You found an easter egg!'); setSpotlight(false); setSpotQ(''); } },
+    { category: 'Secret', label: 'Coffee',     desc: 'Fueled by coffee and curiosity ☕',               icon: '☕', action: () => { showToast('☕ Cheers!'); setSpotlight(false); setSpotQ(''); } },
+    { category: 'Secret', label: 'Hire Me',    desc: 'I\'d love to work with you!',                     icon: '🚀', action: () => { dispatch({ type: 'OPEN', id: 'contact' }); setSpotlight(false); setSpotQ(''); } },
+    { category: 'Secret', label: 'Dark Mode',  desc: 'Toggle the lights',                               icon: '🌙', action: () => { setDark(d => !d); setSpotlight(false); setSpotQ(''); } },
+    { category: 'Secret', label: 'Open All',   desc: 'Show everything at once',                         icon: '✦',  action: () => { dispatch({ type: 'OPEN_ALL' }); setSpotlight(false); setSpotQ(''); } },
   ];
 
   const spotResults = spotQ.trim()
@@ -312,13 +319,12 @@ export default function MenuBar({ dark, setDark, wins, dispatch, calPop, setCalP
 
   return (
     <>
-      {/* ── Spotlight overlay ─────────────────────────────────────────────── */}
-      {spotlight && (
+      {/* ── Spotlight overlay (portaled to body so it's above everything) ── */}
+      {spotlight && createPortal(
         <div
           style={{
-            position: 'fixed', inset: 0, zIndex: 99999,
-            background: 'rgba(0,0,0,.40)', backdropFilter: 'blur(8px)',
-            WebkitBackdropFilter: 'blur(8px)',
+            position: 'fixed', inset: 0, zIndex: 999999,
+            background: 'rgba(0,0,0,.01)',
             display: 'flex', alignItems: 'flex-start',
             justifyContent: 'center', paddingTop: '14vh',
           }}
@@ -453,7 +459,8 @@ export default function MenuBar({ dark, setDark, wins, dispatch, calPop, setCalP
               </div>
             )}
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* ── Menu bar ──────────────────────────────────────────────────────── */}

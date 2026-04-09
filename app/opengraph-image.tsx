@@ -10,7 +10,7 @@ export default function Image() {
     (
       <div
         style={{
-          background: 'linear-gradient(145deg,#060b1a 0%,#0d1226 55%,#12091e 100%)',
+          background: 'linear-gradient(145deg,#020614 0%,#0a0e24 35%,#110a22 65%,#08061a 100%)',
           width: '100%', height: '100%',
           display: 'flex', flexDirection: 'column',
           alignItems: 'center', justifyContent: 'center',
@@ -18,17 +18,32 @@ export default function Image() {
           position: 'relative',
         }}
       >
-        {/* Gold bar */}
+        {/* Decorative gradient blobs */}
         <div style={{
-          position: 'absolute', top: 0, left: 0, right: 0, height: 8,
-          background: 'linear-gradient(90deg,#D4943A,#f5c87a,#D4943A)',
+          position: 'absolute', top: -80, left: -80,
+          width: 400, height: 400, borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(100,20,240,.25) 0%, transparent 70%)',
+          filter: 'blur(60px)',
+        }} />
+        <div style={{
+          position: 'absolute', bottom: -60, right: -60,
+          width: 350, height: 350, borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(0,180,220,.18) 0%, transparent 70%)',
+          filter: 'blur(60px)',
+        }} />
+
+        {/* Gold gradient bar */}
+        <div style={{
+          position: 'absolute', top: 0, left: 0, right: 0, height: 6,
+          background: 'linear-gradient(90deg,#b8720a,#D4943A,#f5c87a,#D4943A,#b8720a)',
         }} />
 
         {/* Corner URL */}
         <div style={{
           position: 'absolute', bottom: 36, right: 52,
-          fontSize: 18, color: 'rgba(242,242,247,.28)',
+          fontSize: 18, color: 'rgba(240,240,245,.24)',
           letterSpacing: '.5px',
+          fontWeight: 500,
         }}>
           tomyromero.vercel.app
         </div>
@@ -36,19 +51,22 @@ export default function Image() {
         {/* Avatar */}
         <div style={{
           width: 108, height: 108, borderRadius: 26,
-          background: 'linear-gradient(135deg,#D4943A 0%,#7a4c10 100%)',
+          background: 'linear-gradient(135deg,#D4943A 0%,#e8a94e 50%,#7a4c10 100%)',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           fontSize: 40, color: '#fff', fontWeight: 700,
           marginBottom: 32,
-          boxShadow: '0 12px 40px rgba(212,148,58,.45)',
+          boxShadow: '0 0 40px rgba(212,148,58,.35), 0 12px 40px rgba(212,148,58,.30)',
         }}>
           TR
         </div>
 
-        {/* Name */}
+        {/* Name with subtle gradient */}
         <div style={{
-          fontSize: 62, fontWeight: 700, color: '#f2f2f7',
+          fontSize: 62, fontWeight: 700,
           letterSpacing: '-2px', marginBottom: 14, lineHeight: 1,
+          background: 'linear-gradient(135deg, #f0f0f5 0%, #D4943A 100%)',
+          backgroundClip: 'text',
+          color: 'transparent',
         }}>
           Tomy Romero Seas
         </div>
@@ -57,7 +75,7 @@ export default function Image() {
         <div style={{
           fontSize: 26, color: '#D4943A', fontWeight: 500, marginBottom: 28,
         }}>
-          Software Engineer 1 · MEDsys Software Solutions
+          Software Engineer · MEDsys Software Solutions
         </div>
 
         {/* Tech pills row */}
@@ -65,8 +83,8 @@ export default function Image() {
           {['ASP.NET Core', 'React', 'SQL Server', 'TypeScript', 'Azure'].map(t => (
             <div key={t} style={{
               padding: '8px 18px', borderRadius: 100,
-              background: 'rgba(212,148,58,.12)',
-              border: '1px solid rgba(212,148,58,.30)',
+              background: 'rgba(212,148,58,.10)',
+              border: '1px solid rgba(212,148,58,.25)',
               color: '#D4943A', fontSize: 16, fontWeight: 500,
             }}>
               {t}
@@ -81,7 +99,7 @@ export default function Image() {
         }}>
           <div style={{
             width: 10, height: 10, borderRadius: '50%',
-            background: '#34c759', boxShadow: '0 0 8px #34c759',
+            background: '#34c759', boxShadow: '0 0 10px #34c759',
           }} />
           <div style={{ fontSize: 17, color: '#34c759', letterSpacing: '.3px' }}>
             Open to opportunities

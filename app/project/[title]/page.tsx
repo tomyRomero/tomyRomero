@@ -5,32 +5,45 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { projectDetails, projects } from '@/constants';
 
-// ── Tokens (mirrors MobileView) ───────────────────────────────────────────────
 function useTokens(dark: boolean) {
   return {
-    bg:           dark ? '#0a0d14'                         : '#f0ede8',
-    text:         dark ? '#f2f2f7'                         : '#1a1a1e',
-    textMuted:    dark ? 'rgba(255,255,255,.50)'           : 'rgba(0,0,0,.50)',
-    textSub:      dark ? 'rgba(255,255,255,.70)'           : 'rgba(0,0,0,.72)',
-    cardBg:       dark ? 'rgba(255,255,255,.06)'           : 'rgba(0,0,0,.04)',
-    cardBorder:   dark ? 'rgba(255,255,255,.10)'           : 'rgba(0,0,0,.08)',
+    bg:           dark ? '#060a14'                         : '#f2efe9',
+    text:         dark ? '#f0f0f5'                         : '#1a1a1e',
+    textMuted:    dark ? 'rgba(255,255,255,.48)'           : 'rgba(0,0,0,.48)',
+    textSub:      dark ? 'rgba(255,255,255,.72)'           : 'rgba(0,0,0,.72)',
+    cardBg:       dark ? 'rgba(255,255,255,.045)'          : 'rgba(0,0,0,.025)',
+    cardBorder:   dark ? 'rgba(255,255,255,.08)'           : 'rgba(0,0,0,.07)',
     accent:       '#d4943a',
-    accentBg:     dark ? 'rgba(212,148,58,.12)'            : 'rgba(212,148,58,.09)',
-    accentBorder: dark ? 'rgba(212,148,58,.28)'            : 'rgba(212,148,58,.22)',
-    navBg:        dark ? 'rgba(10,13,20,.94)'              : 'rgba(240,237,232,.94)',
-    pillBg:       dark ? 'rgba(255,255,255,.08)'           : 'rgba(0,0,0,.05)',
-    pillBorder:   dark ? 'rgba(255,255,255,.12)'           : 'rgba(0,0,0,.08)',
+    accentBg:     dark ? 'rgba(212,148,58,.12)'            : 'rgba(212,148,58,.08)',
+    accentBorder: dark ? 'rgba(212,148,58,.26)'            : 'rgba(212,148,58,.20)',
+    accentGrad:   'linear-gradient(135deg, #D4943A 0%, #f5c87a 50%, #D4943A 100%)',
+    accentGrad2:  'linear-gradient(135deg, #D4943A 0%, #e8a94e 100%)',
+    accentGlow:   dark
+      ? '0 0 20px rgba(212,148,58,.18), 0 4px 12px rgba(212,148,58,.12)'
+      : '0 0 16px rgba(212,148,58,.12), 0 4px 10px rgba(212,148,58,.08)',
+    navBg:        dark ? 'rgba(6,10,20,.94)'               : 'rgba(242,239,233,.94)',
+    pillBg:       dark ? 'rgba(255,255,255,.07)'           : 'rgba(0,0,0,.04)',
+    pillBorder:   dark ? 'rgba(255,255,255,.10)'           : 'rgba(0,0,0,.08)',
   };
 }
 
-function SectionLabel({ text, accent }: { text: string; accent: string }) {
+function SectionLabel({ text, tk }: { text: string; tk: ReturnType<typeof useTokens> }) {
   return (
     <div style={{
-      fontSize: 11, letterSpacing: '1.3px', textTransform: 'uppercase' as const,
-      fontFamily: 'var(--font-mono),monospace', color: accent,
+      display: 'flex', alignItems: 'center', gap: 10,
       marginBottom: 14, marginTop: 6,
     }}>
-      {text}
+      <span style={{
+        fontSize: 11, letterSpacing: '1.4px', textTransform: 'uppercase' as const,
+        fontFamily: 'var(--font-mono),monospace', color: tk.accent,
+        fontWeight: 600,
+      }}>
+        {text}
+      </span>
+      <div style={{
+        flex: 1, height: 1,
+        background: `linear-gradient(90deg, ${tk.accentBorder}, transparent)`,
+      }} />
     </div>
   );
 }
@@ -41,7 +54,6 @@ export default function ProjectPage({ params }: { params: { title: string } }) {
   const [imgIdx, setImgIdx] = useState(0);
   const [lightbox, setLightbox] = useState(false);
 
-  // Restore + persist dark mode
   useEffect(() => {
     const saved = localStorage.getItem('dark');
     if (saved !== null) setDark(saved === 'true');
@@ -67,10 +79,11 @@ export default function ProjectPage({ params }: { params: { title: string } }) {
         <button
           onClick={() => router.back()}
           style={{
-            padding: '10px 22px', borderRadius: 10, fontSize: 13,
-            background: tk.accentBg, border: `1px solid ${tk.accentBorder}`,
-            color: tk.accent, cursor: 'pointer',
+            padding: '10px 22px', borderRadius: 12, fontSize: 13,
+            background: tk.accentGrad2, border: 'none',
+            color: '#fff', cursor: 'pointer',
             fontFamily: 'var(--font-mono),monospace',
+            boxShadow: tk.accentGlow,
           }}
         >
           ← Go back
@@ -97,7 +110,7 @@ export default function ProjectPage({ params }: { params: { title: string } }) {
         display: 'flex', alignItems: 'center', justifyContent: 'space-between',
         padding: '13px 20px',
         background: tk.navBg,
-        backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)',
+        backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)',
         borderBottom: `1px solid ${tk.cardBorder}`,
       }}>
         <button
@@ -108,10 +121,16 @@ export default function ProjectPage({ params }: { params: { title: string } }) {
             borderRadius: 10, padding: '7px 14px', cursor: 'pointer',
             fontSize: 13, color: tk.textSub,
             fontFamily: 'var(--font-sans),sans-serif',
-            transition: 'opacity .15s',
+            transition: 'all .15s',
           }}
-          onMouseEnter={e => (e.currentTarget.style.opacity = '.70')}
-          onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
+          onMouseEnter={e => {
+            e.currentTarget.style.borderColor = tk.accentBorder;
+            e.currentTarget.style.color = tk.accent;
+          }}
+          onMouseLeave={e => {
+            e.currentTarget.style.borderColor = tk.cardBorder;
+            e.currentTarget.style.color = tk.textSub;
+          }}
         >
           <span style={{ fontSize: 15 }}>←</span> Back
         </button>
@@ -138,67 +157,90 @@ export default function ProjectPage({ params }: { params: { title: string } }) {
       {/* ── Page body ───────────────────────────────────────────────────────── */}
       <div style={{ maxWidth: 540, margin: '0 auto', padding: '0 20px 80px' }}>
 
-        {/* Hero */}
-        <div style={{ padding: '32px 0 24px' }}>
+        {/* Hero card */}
+        <div style={{
+          padding: '28px 0 24px',
+        }}>
           <div style={{
-            display: 'flex', alignItems: 'center', gap: 14, marginBottom: 14,
+            position: 'relative',
+            background: tk.cardBg, border: `1px solid ${tk.cardBorder}`,
+            borderRadius: 18, padding: '22px 22px 18px',
+            overflow: 'hidden',
           }}>
-            {summary && (
-              <div style={{
-                width: 56, height: 56, borderRadius: 16, flexShrink: 0,
-                background: tk.accentBg, border: `1px solid ${tk.accentBorder}`,
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: 28,
-              }}>
-                {summary.emoji}
-              </div>
-            )}
-            <div>
-              <h1 style={{
-                fontFamily: 'var(--font-serif),serif', fontSize: 26, fontWeight: 400,
-                letterSpacing: '-.3px', marginBottom: 4, color: tk.text,
-              }}>
-                {detail.title}
-              </h1>
-              <div style={{ fontSize: 13, color: tk.accent }}>{detail.type}</div>
-            </div>
-          </div>
+            {/* Top gradient bar */}
+            <div style={{
+              position: 'absolute', top: 0, left: 0, right: 0, height: 3,
+              background: tk.accentGrad,
+              borderRadius: '18px 18px 0 0',
+            }} />
 
-          {/* Meta row */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' as const }}>
-            <span style={{
-              padding: '3px 10px', borderRadius: 20, fontSize: 11,
-              fontFamily: 'var(--font-mono),monospace',
-              background: tk.accentBg, border: `1px solid ${tk.accentBorder}`,
-              color: tk.accent,
+            <div style={{
+              display: 'flex', alignItems: 'center', gap: 14, marginBottom: 14,
             }}>
-              {detail.year}
-            </span>
-            <span style={{
-              padding: '3px 10px', borderRadius: 20, fontSize: 11,
-              fontFamily: 'var(--font-mono),monospace',
-              background: detail.isLive
-                ? 'rgba(52,199,89,.10)' : tk.pillBg,
-              border: `1px solid ${detail.isLive ? 'rgba(52,199,89,.28)' : tk.pillBorder}`,
-              color: detail.isLive ? '#34c759' : tk.textMuted,
-            }}>
-              {detail.isLive ? '● Live' : '⑂ GitHub only'}
-            </span>
+              {summary && (
+                <div style={{
+                  width: 56, height: 56, borderRadius: 16, flexShrink: 0,
+                  background: tk.accentBg, border: `1px solid ${tk.accentBorder}`,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  fontSize: 28,
+                  boxShadow: tk.accentGlow,
+                }}>
+                  {summary.emoji}
+                </div>
+              )}
+              <div>
+                <h1 style={{
+                  fontFamily: 'var(--font-serif),serif', fontSize: 26, fontWeight: 400,
+                  letterSpacing: '-.3px', marginBottom: 4,
+                  background: dark
+                    ? 'linear-gradient(135deg, #f0f0f5 0%, #d4943a 100%)'
+                    : 'linear-gradient(135deg, #1a1a1e 0%, #d4943a 100%)',
+                  WebkitBackgroundClip: 'text',
+                  WebkitTextFillColor: 'transparent',
+                  backgroundClip: 'text',
+                }}>
+                  {detail.title}
+                </h1>
+                <div style={{ fontSize: 13, color: tk.accent }}>{detail.type}</div>
+              </div>
+            </div>
+
+            {/* Meta row */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' as const }}>
+              <span style={{
+                padding: '3px 10px', borderRadius: 20, fontSize: 11,
+                fontFamily: 'var(--font-mono),monospace',
+                background: tk.accentBg, border: `1px solid ${tk.accentBorder}`,
+                color: tk.accent,
+              }}>
+                {detail.year}
+              </span>
+              <span style={{
+                padding: '3px 10px', borderRadius: 20, fontSize: 11,
+                fontFamily: 'var(--font-mono),monospace',
+                background: detail.isLive
+                  ? 'rgba(52,199,89,.10)' : tk.pillBg,
+                border: `1px solid ${detail.isLive ? 'rgba(52,199,89,.26)' : tk.pillBorder}`,
+                color: detail.isLive ? '#34c759' : tk.textMuted,
+              }}>
+                {detail.isLive ? '● Live' : '⑂ GitHub only'}
+              </span>
+            </div>
           </div>
         </div>
 
         {/* ── Image gallery ────────────────────────────────────────────────── */}
         {images.length > 0 && (
           <>
-            <SectionLabel text="Gallery" accent={tk.accent} />
+            <SectionLabel text="Gallery" tk={tk} />
             <div style={{ marginBottom: 28 }}>
               {/* Main image */}
               <div
                 onClick={() => setLightbox(true)}
                 style={{
                   position: 'relative', width: '100%', aspectRatio: '16/10',
-                  borderRadius: 14, overflow: 'hidden',
-                  background: dark ? 'rgba(255,255,255,.05)' : 'rgba(0,0,0,.04)',
+                  borderRadius: 16, overflow: 'hidden',
+                  background: tk.cardBg,
                   border: `1px solid ${tk.cardBorder}`,
                   cursor: 'zoom-in', marginBottom: 10,
                 }}
@@ -210,7 +252,6 @@ export default function ProjectPage({ params }: { params: { title: string } }) {
                   style={{ objectFit: 'contain', padding: 4 }}
                   sizes="540px"
                 />
-                {/* Counter badge */}
                 <div style={{
                   position: 'absolute', bottom: 10, right: 10,
                   background: 'rgba(0,0,0,.60)', backdropFilter: 'blur(8px)',
@@ -232,6 +273,7 @@ export default function ProjectPage({ params }: { params: { title: string } }) {
                       background: tk.cardBg, border: `1px solid ${tk.cardBorder}`,
                       color: tk.textSub, fontSize: 16, cursor: 'pointer',
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      transition: 'all .15s',
                     }}
                   >‹</button>
 
@@ -245,7 +287,7 @@ export default function ProjectPage({ params }: { params: { title: string } }) {
                         onClick={() => setImgIdx(i)}
                         style={{
                           flexShrink: 0, width: 52, height: 36,
-                          borderRadius: 7, overflow: 'hidden', padding: 0,
+                          borderRadius: 8, overflow: 'hidden', padding: 0,
                           border: i === imgIdx
                             ? `2px solid ${tk.accent}`
                             : `1px solid ${tk.cardBorder}`,
@@ -270,6 +312,7 @@ export default function ProjectPage({ params }: { params: { title: string } }) {
                       background: tk.cardBg, border: `1px solid ${tk.cardBorder}`,
                       color: tk.textSub, fontSize: 16, cursor: 'pointer',
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      transition: 'all .15s',
                     }}
                   >›</button>
                 </div>
@@ -279,11 +322,11 @@ export default function ProjectPage({ params }: { params: { title: string } }) {
         )}
 
         {/* ── Description ──────────────────────────────────────────────────── */}
-        <SectionLabel text="About" accent={tk.accent} />
+        <SectionLabel text="About" tk={tk} />
         <div style={{
           background: tk.cardBg, border: `1px solid ${tk.cardBorder}`,
-          borderRadius: 14, padding: '16px 18px', marginBottom: 22,
-          fontSize: 14, lineHeight: 1.76, color: tk.textSub,
+          borderRadius: 16, padding: '18px 20px', marginBottom: 22,
+          fontSize: 14, lineHeight: 1.78, color: tk.textSub,
         }}>
           {detail.description}
         </div>
@@ -291,24 +334,24 @@ export default function ProjectPage({ params }: { params: { title: string } }) {
         {/* ── Features ─────────────────────────────────────────────────────── */}
         {detail.features && detail.features.length > 0 && (
           <>
-            <SectionLabel text="Features" accent={tk.accent} />
+            <SectionLabel text="Features" tk={tk} />
             <div style={{
               background: tk.cardBg, border: `1px solid ${tk.cardBorder}`,
-              borderRadius: 14, padding: '14px 18px', marginBottom: 22,
+              borderRadius: 16, padding: '16px 20px', marginBottom: 22,
             }}>
               {detail.features.map((f, i) => (
                 <div
                   key={i}
                   style={{
                     display: 'flex', gap: 10, fontSize: 13.5,
-                    color: tk.textSub, lineHeight: 1.65,
+                    color: tk.textSub, lineHeight: 1.68,
                     marginBottom: i < detail.features.length - 1 ? 10 : 0,
                     paddingBottom: i < detail.features.length - 1 ? 10 : 0,
                     borderBottom: i < detail.features.length - 1
                       ? `1px solid ${tk.cardBorder}` : 'none',
                   }}
                 >
-                  <span style={{ color: tk.accent, flexShrink: 0, marginTop: 3, fontSize: 11 }}>→</span>
+                  <span style={{ color: tk.accent, flexShrink: 0, marginTop: 1, fontSize: 12, fontWeight: 600 }}>&rsaquo;</span>
                   <span>{f}</span>
                 </div>
               ))}
@@ -319,7 +362,7 @@ export default function ProjectPage({ params }: { params: { title: string } }) {
         {/* ── Tech stack ───────────────────────────────────────────────────── */}
         {detail.tools && detail.tools.length > 0 && (
           <>
-            <SectionLabel text="Tech Stack" accent={tk.accent} />
+            <SectionLabel text="Tech Stack" tk={tk} />
             <div style={{
               display: 'flex', flexWrap: 'wrap' as const, gap: 8, marginBottom: 28,
             }}>
@@ -327,13 +370,14 @@ export default function ProjectPage({ params }: { params: { title: string } }) {
                 <div
                   key={i}
                   style={{
-                    position: 'relative', width: 36, height: 36,
-                    borderRadius: 9,
+                    position: 'relative', width: 38, height: 38,
+                    borderRadius: 10,
                     background: tk.cardBg, border: `1px solid ${tk.cardBorder}`,
                     overflow: 'hidden', flexShrink: 0,
+                    transition: 'all .18s',
                   }}
                 >
-                  <Image src={tool} alt={`tool-${i}`} fill style={{ objectFit: 'contain', padding: 5 }} sizes="36px" />
+                  <Image src={tool} alt={`tool-${i}`} fill style={{ objectFit: 'contain', padding: 5 }} sizes="38px" />
                 </div>
               ))}
             </div>
@@ -341,7 +385,7 @@ export default function ProjectPage({ params }: { params: { title: string } }) {
         )}
 
         {/* ── Links ────────────────────────────────────────────────────────── */}
-        <SectionLabel text="Links" accent={tk.accent} />
+        <SectionLabel text="Links" tk={tk} />
         <div style={{ display: 'flex', gap: 10 }}>
           {detail.githubrepo && (
             <a
@@ -349,14 +393,14 @@ export default function ProjectPage({ params }: { params: { title: string } }) {
               target="_blank" rel="noopener noreferrer"
               style={{
                 flex: 1, textAlign: 'center' as const,
-                padding: '12px 16px', borderRadius: 12, fontSize: 13,
+                padding: '13px 16px', borderRadius: 14, fontSize: 13.5, fontWeight: 600,
+                background: tk.accentGrad2,
+                border: 'none',
+                color: '#fff', textDecoration: 'none',
+                boxShadow: tk.accentGlow,
+                transition: 'all .18s',
                 fontFamily: 'var(--font-mono),monospace',
-                background: tk.accentBg, border: `1px solid ${tk.accentBorder}`,
-                color: tk.accent, textDecoration: 'none', fontWeight: 500,
-                transition: 'opacity .15s',
               }}
-              onMouseEnter={e => (e.currentTarget.style.opacity = '.75')}
-              onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
             >
               ⑂  GitHub
             </a>
@@ -367,15 +411,13 @@ export default function ProjectPage({ params }: { params: { title: string } }) {
               target="_blank" rel="noopener noreferrer"
               style={{
                 flex: 1, textAlign: 'center' as const,
-                padding: '12px 16px', borderRadius: 12, fontSize: 13,
-                fontFamily: 'var(--font-mono),monospace',
+                padding: '13px 16px', borderRadius: 14, fontSize: 13.5, fontWeight: 500,
                 background: 'rgba(52,199,89,.10)',
-                border: '1px solid rgba(52,199,89,.28)',
-                color: '#34c759', textDecoration: 'none', fontWeight: 500,
-                transition: 'opacity .15s',
+                border: '1px solid rgba(52,199,89,.24)',
+                color: '#34c759', textDecoration: 'none',
+                transition: 'all .18s',
+                fontFamily: 'var(--font-mono),monospace',
               }}
-              onMouseEnter={e => (e.currentTarget.style.opacity = '.75')}
-              onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
             >
               ↗  Live Demo
             </a>
@@ -392,6 +434,7 @@ export default function ProjectPage({ params }: { params: { title: string } }) {
             background: 'rgba(0,0,0,.92)', backdropFilter: 'blur(18px)',
             WebkitBackdropFilter: 'blur(18px)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
+            animation: 'fadeSlideIn .18s ease',
           }}
         >
           <div
@@ -404,31 +447,46 @@ export default function ProjectPage({ params }: { params: { title: string } }) {
               fill style={{ objectFit: 'contain', borderRadius: 10 }}
               sizes="92vw"
             />
-            {/* Prev / Next in lightbox */}
             {images.length > 1 && (
               <>
                 <button
                   onClick={prev}
                   style={{
-                    position: 'absolute', left: -50, top: '50%', transform: 'translateY(-50%)',
-                    width: 40, height: 40, borderRadius: '50%',
+                    position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)',
+                    width: 44, height: 44, borderRadius: '50%',
                     background: 'rgba(255,255,255,.14)', border: '1px solid rgba(255,255,255,.22)',
-                    color: '#fff', cursor: 'pointer', fontSize: 20,
+                    color: '#fff', cursor: 'pointer', fontSize: 22,
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    transition: 'background .15s',
                   }}
+                  onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,.28)')}
+                  onMouseLeave={e => (e.currentTarget.style.background = 'rgba(255,255,255,.14)')}
                 >‹</button>
                 <button
                   onClick={next}
                   style={{
-                    position: 'absolute', right: -50, top: '50%', transform: 'translateY(-50%)',
-                    width: 40, height: 40, borderRadius: '50%',
+                    position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)',
+                    width: 44, height: 44, borderRadius: '50%',
                     background: 'rgba(255,255,255,.14)', border: '1px solid rgba(255,255,255,.22)',
-                    color: '#fff', cursor: 'pointer', fontSize: 20,
+                    color: '#fff', cursor: 'pointer', fontSize: 22,
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    transition: 'background .15s',
                   }}
+                  onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,.28)')}
+                  onMouseLeave={e => (e.currentTarget.style.background = 'rgba(255,255,255,.14)')}
                 >›</button>
               </>
             )}
+          </div>
+          {/* Counter */}
+          <div style={{
+            position: 'absolute', bottom: 28, left: '50%', transform: 'translateX(-50%)',
+            background: 'rgba(0,0,0,.55)', backdropFilter: 'blur(8px)',
+            color: 'rgba(255,255,255,.80)', fontSize: 12, padding: '4px 14px',
+            borderRadius: 20, fontFamily: 'var(--font-mono),monospace',
+            border: '1px solid rgba(255,255,255,.12)',
+          }}>
+            {imgIdx + 1} / {images.length}
           </div>
           <button
             onClick={() => setLightbox(false)}
@@ -438,7 +496,10 @@ export default function ProjectPage({ params }: { params: { title: string } }) {
               background: 'rgba(255,255,255,.14)', border: '1px solid rgba(255,255,255,.22)',
               color: '#fff', cursor: 'pointer', fontSize: 18,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
+              transition: 'background .15s',
             }}
+            onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,.28)')}
+            onMouseLeave={e => (e.currentTarget.style.background = 'rgba(255,255,255,.14)')}
           >✕</button>
         </div>
       )}

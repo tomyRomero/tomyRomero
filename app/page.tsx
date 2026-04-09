@@ -156,15 +156,24 @@ export default function Home() {
     contact:    <ContactWindow    dark={dark} />,
   }), [dark]);
 
-  if (isMobile) return <MobileView dark={dark} setDark={setDark} />;
+  // Dark mode transition: add class briefly on toggle
+  const toggleDark = useCallback((v: boolean | ((prev: boolean) => boolean)) => {
+    document.documentElement.classList.add('theme-transition');
+    setDark(v);
+    setTimeout(() => document.documentElement.classList.remove('theme-transition'), 350);
+  }, []);
+
+  if (isMobile) return <MobileView dark={dark} setDark={(v: boolean) => toggleDark(v)} />;
 
   return (
     <div style={{ position: 'fixed', inset: 0, overflow: 'hidden' }}>
-      {/* Wallpaper */}
-      <Wallpaper dark={dark} />
+      {/* Wallpaper with intro fade */}
+      <div style={{ animation: 'introFade .8s ease both' }}>
+        <Wallpaper dark={dark} />
+      </div>
 
       {/* Menu bar */}
-      <MenuBar dark={dark} setDark={setDark} wins={wins} dispatch={dispatch} calPop={calPop} setCalPop={setCalPop} />
+      <MenuBar dark={dark} setDark={toggleDark} wins={wins} dispatch={dispatch} calPop={calPop} setCalPop={setCalPop} />
 
       {/* Desktop canvas */}
       <div

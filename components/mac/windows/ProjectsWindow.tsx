@@ -7,13 +7,13 @@ import { Chip, WinTitle, Bullet, Label } from '../Atoms';
 import { projects, projectDetails } from '@/constants';
 
 const STATUS_BADGE: Record<string, { bg: string; txt: string; lbl: string }> = {
-  shipped:      { bg: 'rgba(52,199,89,.12)',  txt: '#1da044', lbl: 'Shipped ✓' },
+  shipped:      { bg: 'rgba(52,199,89,.12)',  txt: '#1da044', lbl: 'Shipped' },
   'in-progress':{ bg: 'rgba(255,159,10,.12)', txt: '#d07a00', lbl: 'In Progress' },
-  ongoing:      { bg: 'rgba(212,148,58,.14)', txt: '#D4943A', lbl: 'Ongoing ⚡' },
+  ongoing:      { bg: 'rgba(212,148,58,.14)', txt: '#D4943A', lbl: 'Ongoing' },
   archived:     { bg: 'rgba(120,120,128,.1)', txt: '#888',    lbl: 'Archived' },
 };
 
-// ── Lightbox (portal — same pattern as AboutWindow) ───────────────────────────
+// ── Lightbox (portal) ────────────────────────────────────────────────────────
 function Lightbox({ imgs, startIdx, onClose }: {
   imgs: string[]; startIdx: number; onClose: () => void;
 }) {
@@ -47,7 +47,6 @@ function Lightbox({ imgs, startIdx, onClose }: {
         animation: 'fadeSlideIn .18s ease',
       }}
     >
-      {/* Image */}
       <div
         style={{ position: 'relative', width: '82vw', height: '78vh', flexShrink: 0 }}
         onClick={e => e.stopPropagation()}
@@ -58,7 +57,6 @@ function Lightbox({ imgs, startIdx, onClose }: {
         />
       </div>
 
-      {/* Counter */}
       <div style={{
         position: 'absolute', bottom: 28, left: '50%', transform: 'translateX(-50%)',
         background: 'rgba(0,0,0,.55)', backdropFilter: 'blur(8px)',
@@ -69,7 +67,6 @@ function Lightbox({ imgs, startIdx, onClose }: {
         {idx + 1} / {imgs.length}
       </div>
 
-      {/* Close */}
       <button
         onClick={onClose}
         style={{
@@ -86,7 +83,6 @@ function Lightbox({ imgs, startIdx, onClose }: {
         ✕
       </button>
 
-      {/* Prev / Next */}
       {imgs.length > 1 && (
         <>
           {[
@@ -163,13 +159,11 @@ function ImageCarousel({ imgs, dark }: { imgs: string[]; dark: boolean }) {
       {lightbox && <Lightbox imgs={imgs} startIdx={idx} onClose={() => setLightbox(false)} />}
 
       <div style={{ position: 'relative', width: '100%', marginBottom: 14 }}>
-        {/* Main image frame */}
         <div style={{
-          width: '100%', aspectRatio: '16/9', borderRadius: 10, overflow: 'hidden',
+          width: '100%', aspectRatio: '16/9', borderRadius: 12, overflow: 'hidden',
           background: tk.cardBg, border: `1px solid ${tk.cardBorder}`,
           position: 'relative',
         }}>
-          {/* Animated slide wrapper */}
           <div
             key={animKey}
             style={{
@@ -183,7 +177,6 @@ function ImageCarousel({ imgs, dark }: { imgs: string[]; dark: boolean }) {
             />
           </div>
 
-          {/* Fullscreen button */}
           <button
             onClick={() => setLightbox(true)}
             title="View fullscreen"
@@ -204,7 +197,6 @@ function ImageCarousel({ imgs, dark }: { imgs: string[]; dark: boolean }) {
             </svg>
           </button>
 
-          {/* Prev / Next arrows */}
           {imgs.length > 1 && (
             <>
               {navBtn('‹', prev, 'left')}
@@ -213,7 +205,6 @@ function ImageCarousel({ imgs, dark }: { imgs: string[]; dark: boolean }) {
           )}
         </div>
 
-        {/* Dot indicators */}
         {imgs.length > 1 && (
           <div style={{
             display: 'flex', gap: 6, justifyContent: 'center',
@@ -250,7 +241,6 @@ function ProjectDetail({ title, onBack, dark }: { title: string; onBack: () => v
 
   return (
     <div style={{ padding: '18px 22px', animation: 'slideRight .22s ease', color: tk.text }}>
-      {/* Back */}
       <button
         onClick={onBack}
         style={{
@@ -269,32 +259,44 @@ function ProjectDetail({ title, onBack, dark }: { title: string; onBack: () => v
         All Projects
       </button>
 
-      {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12, marginBottom: 14 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-          <span style={{ fontSize: 38, lineHeight: 1, flexShrink: 0 }}>{proj.emoji}</span>
-          <div>
-            <h1 style={{
-              fontFamily: 'var(--font-serif),serif', fontSize: 24, fontWeight: 400,
-              letterSpacing: '-.4px', color: tk.text, lineHeight: 1.1,
-            }}>
-              {proj.title}
-            </h1>
-            <div style={{ fontSize: 13.5, color: tk.textMuted, marginTop: 3 }}>{proj.tagline}</div>
+      {/* Header with gradient border */}
+      <div style={{
+        position: 'relative',
+        background: tk.cardBg,
+        border: `1px solid ${tk.cardBorder}`,
+        borderRadius: 14, padding: '16px 18px', marginBottom: 18,
+        overflow: 'hidden',
+      }}>
+        <div style={{
+          position: 'absolute', top: 0, left: 0, right: 0, height: 2,
+          background: tk.accentGrad,
+        }} />
+        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+            <span style={{ fontSize: 38, lineHeight: 1, flexShrink: 0 }}>{proj.emoji}</span>
+            <div>
+              <h1 style={{
+                fontFamily: 'var(--font-serif),serif', fontSize: 24, fontWeight: 400,
+                letterSpacing: '-.4px', color: tk.text, lineHeight: 1.1,
+              }}>
+                {proj.title}
+              </h1>
+              <div style={{ fontSize: 13.5, color: tk.textMuted, marginTop: 3 }}>{proj.tagline}</div>
+            </div>
           </div>
+          <span style={{
+            fontSize: 10.5, fontFamily: 'var(--font-mono),monospace',
+            padding: '3px 10px', borderRadius: 20,
+            background: sc.bg, color: sc.txt, flexShrink: 0, marginTop: 4,
+          }}>
+            {sc.lbl}
+          </span>
         </div>
-        <span style={{
-          fontSize: 10.5, fontFamily: 'var(--font-mono),monospace',
-          padding: '3px 10px', borderRadius: 20,
-          background: sc.bg, color: sc.txt, flexShrink: 0, marginTop: 4,
-        }}>
-          {sc.lbl}
-        </span>
       </div>
 
       {proj.year && (
         <div style={{ fontSize: 11.5, fontFamily: 'var(--font-mono),monospace', color: tk.textMuted, marginBottom: 14 }}>
-          📅 {proj.year}
+          {proj.year}
         </div>
       )}
 
@@ -326,28 +328,30 @@ function ProjectDetail({ title, onBack, dark }: { title: string; onBack: () => v
           <a href={detail.githubrepo} target="_blank" rel="noopener noreferrer"
             style={{
               display: 'inline-flex', alignItems: 'center', gap: 7,
-              padding: '9px 18px', borderRadius: 10, fontSize: 13.5, fontWeight: 500,
-              background: tk.accentBg, border: `1px solid ${tk.accentBorder}`,
-              color: tk.accent, textDecoration: 'none', transition: 'opacity .15s',
+              padding: '10px 20px', borderRadius: 12, fontSize: 13.5, fontWeight: 500,
+              background: tk.accentGrad2,
+              border: 'none',
+              color: '#fff', textDecoration: 'none', transition: 'all .18s',
+              boxShadow: tk.accentGlow,
             }}
-            onMouseEnter={e => (e.currentTarget.style.opacity = '.7')}
-            onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
+            onMouseEnter={e => { e.currentTarget.style.opacity = '.85'; e.currentTarget.style.transform = 'translateY(-1px)'; }}
+            onMouseLeave={e => { e.currentTarget.style.opacity = '1'; e.currentTarget.style.transform = 'none'; }}
           >
-            ⑂  View on GitHub ↗
+            ⑂  View on GitHub
           </a>
         )}
         {detail.isLive && detail.livelink && (
           <a href={detail.livelink} target="_blank" rel="noopener noreferrer"
             style={{
               display: 'inline-flex', alignItems: 'center', gap: 7,
-              padding: '9px 18px', borderRadius: 10, fontSize: 13.5, fontWeight: 500,
+              padding: '10px 20px', borderRadius: 12, fontSize: 13.5, fontWeight: 500,
               background: tk.cardBg, border: `1px solid ${tk.cardBorder}`,
-              color: tk.text, textDecoration: 'none', transition: 'opacity .15s',
+              color: tk.text, textDecoration: 'none', transition: 'all .18s',
             }}
-            onMouseEnter={e => (e.currentTarget.style.opacity = '.7')}
-            onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
+            onMouseEnter={e => { e.currentTarget.style.borderColor = tk.accentBorder; e.currentTarget.style.transform = 'translateY(-1px)'; }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = tk.cardBorder; e.currentTarget.style.transform = 'none'; }}
           >
-            🌐 Live Demo ↗
+            Live Demo ↗
           </a>
         )}
       </div>
@@ -368,33 +372,48 @@ export default function ProjectsWindow({ dark }: { dark: boolean }) {
     <div style={{ padding: '20px 22px', color: tk.text }}>
       <WinTitle dark={dark}>My <em style={{ color: tk.accent, fontStyle: 'italic' }}>Projects</em></WinTitle>
 
-      {projects.map(p => {
+      {projects.map((p, idx) => {
         const sc = STATUS_BADGE[p.status] || STATUS_BADGE.shipped;
+        const isFeatured = idx === 0;
         return (
           <div
             key={p.title}
             onClick={() => setDetail(p.title)}
             style={{
+              position: 'relative',
               display: 'flex', alignItems: 'center', gap: 14,
-              padding: '12px 14px', borderRadius: 12, marginBottom: 10,
-              background: tk.cardBg, border: `1px solid ${tk.cardBorder}`,
+              padding: isFeatured ? '14px 16px' : '12px 14px',
+              borderRadius: 14, marginBottom: 10,
+              background: tk.cardBg,
+              border: `1px solid ${isFeatured ? tk.accentBorder : tk.cardBorder}`,
               cursor: 'pointer', transition: 'all .18s ease',
+              overflow: 'hidden',
             }}
             onMouseEnter={e => {
               const el = e.currentTarget as HTMLDivElement;
               el.style.borderColor = tk.accentBorder;
-              el.style.background  = dark ? 'rgba(255,255,255,.07)' : 'rgba(212,148,58,.045)';
+              el.style.background  = tk.cardHover;
               el.style.transform   = 'translateX(3px)';
+              el.style.boxShadow   = tk.accentGlow;
             }}
             onMouseLeave={e => {
               const el = e.currentTarget as HTMLDivElement;
-              el.style.borderColor = tk.cardBorder;
+              el.style.borderColor = isFeatured ? tk.accentBorder : tk.cardBorder;
               el.style.background  = tk.cardBg;
               el.style.transform   = 'none';
+              el.style.boxShadow   = 'none';
             }}
           >
+            {/* Featured indicator */}
+            {isFeatured && (
+              <div style={{
+                position: 'absolute', top: 0, left: 0, right: 0, height: 2,
+                background: tk.accentGrad,
+              }} />
+            )}
+
             <div style={{
-              width: 56, height: 42, borderRadius: 8, overflow: 'hidden',
+              width: 56, height: 42, borderRadius: 10, overflow: 'hidden',
               flexShrink: 0, position: 'relative',
               background: tk.cardBg, border: `1px solid ${tk.cardBorder}`,
             }}>
@@ -437,7 +456,7 @@ export default function ProjectsWindow({ dark }: { dark: boolean }) {
               }}>
                 {sc.lbl}
               </span>
-              <svg width="5" height="9" viewBox="0 0 5 9" fill="none" style={{ opacity: .30 }}>
+              <svg width="5" height="9" viewBox="0 0 5 9" fill="none" style={{ opacity: .40 }}>
                 <path d="M1 1l3.5 3.5L1 8" stroke={tk.accent} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
             </div>

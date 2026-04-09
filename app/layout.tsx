@@ -161,11 +161,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       className={`${instrumentSerif.variable} ${dmSans.variable} ${ibmPlexMono.variable}`}
     >
       <body>
+        <a href="#main-content" className="skip-to-content">Skip to content</a>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        {children}
+        <main id="main-content">
+          {children}
+        </main>
         <Analytics />
       </body>
     </html>

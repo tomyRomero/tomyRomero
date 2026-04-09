@@ -4,9 +4,8 @@ import { createPortal } from 'react-dom';
 import Image from 'next/image';
 import { T } from '../tokens';
 import { Chip } from '../Atoms';
-import { ME, images, profilePhoto } from '@/constants';
+import { ME, images, profilePhoto, aboutChips } from '@/constants';
 
-const CHIPS = ['ASP.NET Core', 'React', 'SQL Server', 'Azure'];
 const TILTS = [-7, 4, -5, 8, -3, 6, -8, 3, -4, 7];
 
 // ── Lightbox (portal — renders at body level, no stacking-context issues) ─────
@@ -16,15 +15,12 @@ function Lightbox({ startIdx, onClose }: { startIdx: number; onClose: () => void
   const next = useCallback(() => setIdx(i => (i + 1) % images.length), []);
   const cur  = images[idx];
 
-  // Stable refs so the keydown closure never goes stale
   const onCloseRef = useRef(onClose); onCloseRef.current = onClose;
   const prevRef    = useRef(prev);    prevRef.current    = prev;
   const nextRef    = useRef(next);    nextRef.current    = next;
 
   useEffect(() => {
-    // Fully block WinShell drag/resize while lightbox is open
     document.body.classList.add('lb-open');
-
     const handler = (e: KeyboardEvent) => {
       if (e.key === 'Escape')      onCloseRef.current();
       if (e.key === 'ArrowRight')  nextRef.current();
@@ -154,8 +150,14 @@ function TiltedPhotoStrip({ dark }: { dark: boolean }) {
         <span style={{
           fontSize: 10.5, fontFamily: 'var(--font-mono),monospace',
           color: tk.accent, textTransform: 'uppercase', letterSpacing: '1.1px',
+          display: 'flex', alignItems: 'center', gap: 8,
         }}>
           Photos
+          <span style={{
+            height: 1, width: 24,
+            background: `linear-gradient(90deg, ${tk.accentBorder}, transparent)`,
+            display: 'inline-block',
+          }} />
         </span>
         <span style={{ fontSize: 11, color: tk.textMuted, fontFamily: 'var(--font-mono),monospace' }}>
           {images.length} shots · scroll →
@@ -178,7 +180,6 @@ function TiltedPhotoStrip({ dark }: { dark: boolean }) {
             const tilt = TILTS[i % TILTS.length];
             const isH  = hov === i;
             return (
-              /* Wrapper div handles entrance animation; button handles hover tilt */
               <div
                 key={i}
                 style={{
@@ -235,11 +236,40 @@ function TiltedPhotoStrip({ dark }: { dark: boolean }) {
   );
 }
 
+// ── Stat card ─────────────────────────────────────────────────────────────────
+function StatCard({ label, value, dark }: { label: string; value: string; dark: boolean }) {
+  const tk = T(dark);
+  return (
+    <div style={{
+      flex: 1, textAlign: 'center',
+      padding: '12px 8px', borderRadius: 12,
+      background: tk.cardBg, border: `1px solid ${tk.cardBorder}`,
+      transition: 'all .18s',
+    }}>
+      <div className="grad-text" style={{
+        fontSize: 22, fontWeight: 700, lineHeight: 1,
+        fontFamily: 'var(--font-mono),monospace',
+        background: tk.accentGrad,
+        WebkitBackgroundClip: 'text',
+        WebkitTextFillColor: 'transparent',
+        backgroundClip: 'text',
+      }}>
+        {value}
+      </div>
+      <div style={{
+        fontSize: 10, color: tk.textMuted, marginTop: 5,
+        fontFamily: 'var(--font-mono),monospace',
+        textTransform: 'uppercase', letterSpacing: '.6px',
+      }}>
+        {label}
+      </div>
+    </div>
+  );
+}
+
 // ── Main window ───────────────────────────────────────────────────────────────
 export default function AboutWindow({ dark }: { dark: boolean }) {
   const tk = T(dark);
-  // Defer the heavy photo strip until after the first paint so it doesn't
-  // block LCP — images only start loading once the bio/header are visible.
   const [showPhotos, setShowPhotos] = useState(true);
   useEffect(() => {
     setShowPhotos(false);
@@ -249,49 +279,97 @@ export default function AboutWindow({ dark }: { dark: boolean }) {
 
   return (
     <div style={{ padding: '22px 24px', color: tk.text }}>
-      {/* Header: avatar + name */}
-      <div style={{ display: 'flex', gap: 16, alignItems: 'flex-start', marginBottom: 20 }}>
+      {/* Header: avatar + name with gradient accent bar */}
+      <div style={{
+        position: 'relative',
+        background: tk.cardBg,
+        border: `1px solid ${tk.cardBorder}`,
+        borderRadius: 16,
+        padding: '20px 20px 16px',
+        marginBottom: 20,
+        overflow: 'hidden',
+      }}>
+        {/* Top gradient bar */}
         <div style={{
-          width: 76, height: 76, borderRadius: 20, flexShrink: 0, overflow: 'hidden',
-          border: '2px solid rgba(212,148,58,.28)',
-          boxShadow: '0 6px 24px rgba(212,148,58,.22)',
-          position: 'relative',
-        }}>
-          <Image src={profilePhoto} alt="Tomy Romero" fill style={{ objectFit: 'cover' }} sizes="76px" priority />
-        </div>
-        <div>
-          <h1 style={{
-            fontFamily: 'var(--font-serif),serif', fontSize: 24, fontWeight: 400,
-            letterSpacing: '-.4px', color: tk.text, lineHeight: 1.15,
+          position: 'absolute', top: 0, left: 0, right: 0, height: 3,
+          background: tk.accentGrad,
+          borderRadius: '16px 16px 0 0',
+        }} />
+
+        <div style={{ display: 'flex', gap: 16, alignItems: 'flex-start' }}>
+          <div style={{
+            width: 80, height: 80, borderRadius: 20, flexShrink: 0, overflow: 'hidden',
+            border: '2.5px solid rgba(212,148,58,.30)',
+            boxShadow: tk.accentGlow,
+            position: 'relative',
           }}>
-            {ME.name}
-          </h1>
-          <div style={{ color: tk.accent, fontSize: 13.5, fontWeight: 500, marginTop: 4 }}>{ME.title}</div>
-          <div style={{ color: tk.textMuted, fontSize: 12.5, marginTop: 4, display: 'flex', alignItems: 'center', gap: 5 }}>
-            <svg width="9" height="12" viewBox="0 0 9 12" fill={tk.accent} style={{ flexShrink: 0 }}>
-              <path d="M4.5 0C2 0 0 2 0 4.5c0 3.5 4.5 7.5 4.5 7.5S9 8 9 4.5C9 2 7 0 4.5 0zm0 6a1.5 1.5 0 110-3 1.5 1.5 0 010 3z"/>
-            </svg>
-            {ME.location}
+            <Image src={profilePhoto} alt="Tomy Romero" fill style={{ objectFit: 'cover' }} sizes="80px" priority />
+          </div>
+          <div style={{ flex: 1 }}>
+            <h1 style={{
+              fontFamily: 'var(--font-serif),serif', fontSize: 26, fontWeight: 400,
+              letterSpacing: '-.5px', lineHeight: 1.15,
+              color: tk.text,
+            }}>
+              {ME.name}
+            </h1>
+            <div style={{
+              color: tk.accent, fontSize: 14, fontWeight: 500, marginTop: 5,
+              fontFamily: 'var(--font-sans),sans-serif',
+            }}>
+              {ME.title}
+            </div>
+            <div style={{
+              color: tk.textMuted, fontSize: 12.5, marginTop: 5,
+              display: 'flex', alignItems: 'center', gap: 5,
+            }}>
+              <svg width="9" height="12" viewBox="0 0 9 12" fill={tk.accent} style={{ flexShrink: 0 }}>
+                <path d="M4.5 0C2 0 0 2 0 4.5c0 3.5 4.5 7.5 4.5 7.5S9 8 9 4.5C9 2 7 0 4.5 0zm0 6a1.5 1.5 0 110-3 1.5 1.5 0 010 3z"/>
+              </svg>
+              {ME.location}
+            </div>
           </div>
         </div>
+
+        {/* Open to work — integrated into header card */}
+        <div style={{
+          display: 'inline-flex', alignItems: 'center', gap: 7,
+          background: 'rgba(52,199,89,.10)', border: '1px solid rgba(52,199,89,.22)',
+          padding: '5px 14px', borderRadius: 20, marginTop: 14,
+        }}>
+          <div style={{
+            width: 6, height: 6, borderRadius: '50%', background: '#34c759',
+            boxShadow: '0 0 8px #34c759', animation: 'pulse 2s infinite',
+          }} />
+          <span style={{ fontSize: 11.5, color: '#34c759', fontFamily: 'var(--font-mono),monospace' }}>
+            Open to opportunities
+          </span>
+        </div>
+      </div>
+
+      {/* Quick stats row */}
+      <div style={{ display: 'flex', gap: 10, marginBottom: 18 }}>
+        <StatCard label="Experience" value="1+" dark={dark} />
+        <StatCard label="Projects" value="4" dark={dark} />
+        <StatCard label="Tech Stack" value="25+" dark={dark} />
       </div>
 
       {/* Bio */}
       <div style={{
         background: tk.cardBg, border: `1px solid ${tk.cardBorder}`,
-        borderRadius: 12, padding: '14px 16px',
-        fontSize: 13.5, lineHeight: 1.74, color: tk.textSub, marginBottom: 18,
+        borderRadius: 14, padding: '16px 18px',
+        fontSize: 13.5, lineHeight: 1.78, color: tk.textSub, marginBottom: 18,
       }}>
         {ME.bio}
       </div>
 
       {/* Tech chips */}
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7, marginBottom: 18 }}>
-        {CHIPS.map(t => <Chip key={t} amber dark={dark}>{t}</Chip>)}
+        {aboutChips.map(t => <Chip key={t} amber dark={dark}>{t}</Chip>)}
       </div>
 
       {/* Links */}
-      <div style={{ display: 'flex', gap: 9, flexWrap: 'wrap', marginBottom: 18 }}>
+      <div style={{ display: 'flex', gap: 9, flexWrap: 'wrap', marginBottom: 24 }}>
         {([
           ['⑂  GitHub',   ME.github],
           ['🔗  LinkedIn', ME.linkedin],
@@ -299,36 +377,27 @@ export default function AboutWindow({ dark }: { dark: boolean }) {
           <a
             key={l} href={h} target="_blank" rel="noopener noreferrer"
             style={{
-              padding: '7px 16px', borderRadius: 9, fontSize: 12.5,
+              padding: '8px 18px', borderRadius: 10, fontSize: 12.5,
               fontFamily: 'var(--font-mono),monospace',
               background: tk.accentBg, border: `1px solid ${tk.accentBorder}`,
               color: tk.accent, textDecoration: 'none', fontWeight: 500,
-              transition: 'opacity .15s',
+              transition: 'all .18s',
             }}
-            onMouseEnter={e => (e.currentTarget.style.opacity = '.7')}
-            onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
+            onMouseEnter={e => {
+              e.currentTarget.style.background = tk.accentBorder;
+              e.currentTarget.style.transform = 'translateY(-1px)';
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.background = tk.accentBg;
+              e.currentTarget.style.transform = 'none';
+            }}
           >
             {l}
           </a>
         ))}
       </div>
 
-      {/* Open to work */}
-      <div style={{
-        display: 'inline-flex', alignItems: 'center', gap: 8,
-        background: 'rgba(52,199,89,.10)', border: '1px solid rgba(52,199,89,.24)',
-        padding: '7px 16px', borderRadius: 22, marginBottom: 24,
-      }}>
-        <div style={{
-          width: 7, height: 7, borderRadius: '50%', background: '#34c759',
-          boxShadow: '0 0 6px #34c759', animation: 'pulse 2s infinite',
-        }} />
-        <span style={{ fontSize: 12.5, color: '#34c759', fontFamily: 'var(--font-mono),monospace' }}>
-          Open to opportunities
-        </span>
-      </div>
-
-      {/* Tilted photo strip — deferred so it doesn't block initial paint */}
+      {/* Tilted photo strip */}
       {showPhotos && <TiltedPhotoStrip dark={dark} />}
     </div>
   );
