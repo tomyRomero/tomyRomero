@@ -118,7 +118,7 @@ export default function ContactWindow({ dark }: { dark: boolean }) {
           width: 7, height: 7, borderRadius: '50%', background: '#34c759',
           boxShadow: '0 0 8px #34c759', animation: 'pulse 2s infinite',
         }} />
-        <span style={{ fontSize: 12.5, color: '#34c759', fontFamily: 'var(--font-mono), monospace' }}>
+        <span style={{ fontSize: 12.5, color: dark ? '#34c759' : '#15803d', fontFamily: 'var(--font-mono), monospace' }}>
           Open to opportunities
         </span>
       </div>

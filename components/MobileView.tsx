@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import Image from 'next/image';
-import { ME, images, projects, experiences, skills, contactDetails, profilePhoto, aboutChips } from '@/constants';
+import { ME, images, projects, experiences, education, certifications, skills, contactDetails, profilePhoto, aboutChips } from '@/constants';
 
 function SectionLabel({ text }: { text: string }) {
   return (
@@ -9,13 +9,13 @@ function SectionLabel({ text }: { text: string }) {
       display: 'flex', alignItems: 'center', gap: 10,
       marginBottom: 16, marginTop: 6,
     }}>
-      <span style={{
+      <h2 style={{
         fontSize: 11, letterSpacing: '1.4px', textTransform: 'uppercase',
         fontFamily: 'var(--font-mono),monospace', color: '#d4943a',
         fontWeight: 600,
       }}>
         {text}
-      </span>
+      </h2>
       <div style={{
         flex: 1, height: 1,
         background: 'linear-gradient(90deg, rgba(212,148,58,.30), transparent)',
@@ -61,9 +61,17 @@ function FadeInSection({ children, delay = 0 }: { children: React.ReactNode; del
 export default function MobileView({ dark, setDark }: { dark: boolean; setDark: (v: boolean) => void }) {
   const [lightboxIdx, setLightboxIdx] = useState<number | null>(null);
 
+  // Close the photo lightbox on Escape (keyboard / assistive-tech operability)
+  useEffect(() => {
+    if (lightboxIdx === null) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setLightboxIdx(null); };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [lightboxIdx]);
+
   const bg          = dark ? '#060a14'                                    : '#f2efe9';
   const text        = dark ? '#f0f0f5'                                    : '#1a1a1e';
-  const textMuted   = dark ? 'rgba(255,255,255,.48)'                      : 'rgba(0,0,0,.48)';
+  const textMuted   = dark ? 'rgba(255,255,255,.55)'                      : 'rgba(0,0,0,.58)';
   const textSub     = dark ? 'rgba(255,255,255,.72)'                      : 'rgba(0,0,0,.72)';
   const cardBg      = dark ? 'rgba(255,255,255,.05)'                      : 'rgba(0,0,0,.03)';
   const cardBorder  = dark ? 'rgba(255,255,255,.08)'                      : 'rgba(0,0,0,.07)';
@@ -90,7 +98,7 @@ export default function MobileView({ dark, setDark }: { dark: boolean; setDark: 
     }}>
 
       {/* ── Sticky nav ─────────────────────────────────────────────────────── */}
-      <nav style={{
+      <nav aria-label="Primary" style={{
         position: 'sticky', top: 0, zIndex: 100,
         display: 'flex', justifyContent: 'space-between', alignItems: 'center',
         padding: '13px 20px',
@@ -99,7 +107,7 @@ export default function MobileView({ dark, setDark }: { dark: boolean; setDark: 
         borderBottom: `1px solid ${cardBorder}`,
       }}>
         <span style={{ fontSize: 17, fontWeight: 700, letterSpacing: '-0.3px' }}>
-          <span style={{
+          <span className="grad-text" style={{
             background: accentGrad,
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',
@@ -114,6 +122,7 @@ export default function MobileView({ dark, setDark }: { dark: boolean; setDark: 
             style={{ color: textMuted, textDecoration: 'none', fontSize: 13 }}>LinkedIn</a>
           <button
             onClick={() => setDark(!dark)}
+            aria-label={dark ? 'Switch to light mode' : 'Switch to dark mode'}
             style={{
               background: cardBg, border: `1px solid ${cardBorder}`,
               borderRadius: 8, padding: '5px 10px', cursor: 'pointer',
@@ -138,7 +147,7 @@ export default function MobileView({ dark, setDark }: { dark: boolean; setDark: 
           }}>
             <Image src={profilePhoto} alt="Tomy Romero" fill style={{ objectFit: 'cover' }} sizes="106px" />
           </div>
-          <h1 style={{
+          <h1 key={dark ? 'd' : 'l'} className="grad-text" style={{
             fontFamily: 'var(--font-serif),serif', fontSize: 30, fontWeight: 400,
             letterSpacing: '-0.5px', marginBottom: 8,
             background: dark
@@ -167,7 +176,7 @@ export default function MobileView({ dark, setDark }: { dark: boolean; setDark: 
             padding: '7px 16px', borderRadius: 22,
           }}>
             <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#34c759', boxShadow: '0 0 8px #34c759', animation: 'pulse 2s infinite' }} />
-            <span style={{ fontSize: 12.5, color: '#34c759', fontFamily: 'var(--font-mono),monospace' }}>
+            <span style={{ fontSize: 12.5, color: dark ? '#34c759' : '#15803d', fontFamily: 'var(--font-mono),monospace' }}>
               Open to opportunities
             </span>
           </div>
@@ -186,7 +195,7 @@ export default function MobileView({ dark, setDark }: { dark: boolean; setDark: 
               flex: 1, textAlign: 'center', padding: '12px 8px',
               background: cardBg, border: `1px solid ${cardBorder}`, borderRadius: 14,
             }}>
-              <div style={{
+              <div className="grad-text" style={{
                 fontSize: 20, fontWeight: 700, lineHeight: 1,
                 fontFamily: 'var(--font-mono),monospace',
                 background: accentGrad,
@@ -330,6 +339,59 @@ export default function MobileView({ dark, setDark }: { dark: boolean; setDark: 
                 ))}
               </div>
             </div>
+          ))}
+        </div>
+        </FadeInSection>
+
+        {/* ── Education & Certifications ──────────────────────────────────── */}
+        <FadeInSection>
+        <SectionLabel text="Education & Certs" />
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 36 }}>
+          {education.map(edu => (
+            <div key={edu.institution} style={{
+              background: cardBg, border: `1px solid ${cardBorder}`,
+              borderRadius: 16, padding: '18px 20px',
+              position: 'relative', overflow: 'hidden',
+            }}>
+              <div style={{
+                position: 'absolute', left: 0, top: 0, bottom: 0, width: 3,
+                background: accentGrad, borderRadius: '16px 0 0 16px',
+              }} />
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12, marginLeft: 4 }}>
+                <span style={{ fontSize: 24, flexShrink: 0, lineHeight: 1 }}>{edu.logo}</span>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontSize: 14.5, fontWeight: 600, color: text }}>{edu.institution}</div>
+                  <div style={{ fontSize: 13, color: accent, marginTop: 2 }}>{edu.degree} in {edu.field}</div>
+                  <div style={{ fontSize: 11.5, color: textMuted, marginTop: 2 }}>
+                    {edu.period} · {edu.location} · GPA {edu.gpa}
+                  </div>
+                  <ul style={{ margin: '8px 0 0', paddingLeft: 18, color: textSub, fontSize: 12.5, lineHeight: 1.7 }}>
+                    {edu.bullets.map((b, j) => <li key={j}>{b}</li>)}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          ))}
+          {certifications.map(cert => (
+            <a
+              key={cert.name}
+              href={cert.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
+                display: 'flex', alignItems: 'center', gap: 12, textDecoration: 'none',
+                background: cardBg, border: `1px solid ${cardBorder}`,
+                borderRadius: 16, padding: '14px 18px',
+              }}
+            >
+              <span style={{ fontSize: 22, flexShrink: 0 }}>{cert.logo}</span>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ fontSize: 13.5, fontWeight: 600, color: text }}>{cert.name}</div>
+                <div style={{ fontSize: 12, color: accent, marginTop: 2 }}>{cert.issuer}</div>
+                <div style={{ fontSize: 11.5, color: textMuted, marginTop: 2 }}>Issued {cert.issued}</div>
+              </div>
+              <span style={{ fontSize: 14, color: accent, flexShrink: 0 }}>↗</span>
+            </a>
           ))}
         </div>
         </FadeInSection>
@@ -490,6 +552,9 @@ export default function MobileView({ dark, setDark }: { dark: boolean; setDark: 
       {lightboxIdx !== null && (
         <div
           onClick={() => setLightboxIdx(null)}
+          role="dialog"
+          aria-modal="true"
+          aria-label={images[lightboxIdx].title ? `Photo: ${images[lightboxIdx].title}` : 'Photo viewer'}
           style={{
             position: 'fixed', inset: 0, zIndex: 99999,
             background: 'rgba(0,0,0,.92)', backdropFilter: 'blur(18px)',
@@ -519,6 +584,7 @@ export default function MobileView({ dark, setDark }: { dark: boolean; setDark: 
           </div>
           <button
             onClick={() => setLightboxIdx(null)}
+            aria-label="Close"
             style={{
               position: 'absolute', top: 20, right: 20,
               width: 38, height: 38, borderRadius: '50%',

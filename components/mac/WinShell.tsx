@@ -33,6 +33,7 @@ function TrafficLights({ win, dispatch }: { win: Win; dispatch: React.Dispatch<W
         onMouseEnter={e => (e.currentTarget.style.filter = 'brightness(.82)')}
         onMouseLeave={e => (e.currentTarget.style.filter = 'none')}
         title="Close"
+        aria-label="Close window"
       >
         {hov && (
           <svg width="6" height="6" viewBox="0 0 6 6" fill="none">
@@ -48,6 +49,7 @@ function TrafficLights({ win, dispatch }: { win: Win; dispatch: React.Dispatch<W
         onMouseEnter={e => (e.currentTarget.style.filter = 'brightness(.82)')}
         onMouseLeave={e => (e.currentTarget.style.filter = 'none')}
         title="Minimize"
+        aria-label="Minimize window"
       >
         {hov && (
           <svg width="7" height="2" viewBox="0 0 7 2">
@@ -62,6 +64,7 @@ function TrafficLights({ win, dispatch }: { win: Win; dispatch: React.Dispatch<W
         onMouseEnter={e => (e.currentTarget.style.filter = 'brightness(.82)')}
         onMouseLeave={e => (e.currentTarget.style.filter = 'none')}
         title={win.isMax ? 'Restore' : 'Maximize'}
+        aria-label={win.isMax ? 'Restore window' : 'Maximize window'}
       >
         {hov && (
           win.isMax
@@ -182,6 +185,7 @@ export default function WinShell({ win, dark, dispatch, focused, onFocus, childr
         window.dispatchEvent(new CustomEvent('winNearDock', { detail: { near: false } }));
         const droppedInDock = lastMouseY.current > window.innerHeight - DOCK_ZONE;
         if (droppedInDock) {
+          window.dispatchEvent(new Event('dockTrashShake'));
           dispatch({ type: 'CLOSE', id: win.id });
         } else {
           dispatch({ type: 'MOVE', id: win.id, x: parseInt(el.current.style.left) || 0, y: parseInt(el.current.style.top) || 0 });

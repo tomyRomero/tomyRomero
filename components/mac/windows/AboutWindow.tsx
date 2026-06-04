@@ -169,7 +169,7 @@ function TiltedPhotoStrip({ dark }: { dark: boolean }) {
         style={{
           overflowX: 'auto', paddingTop: 20, paddingBottom: 14,
           scrollbarWidth: 'thin',
-          scrollbarColor: 'rgba(0,0,0,.18) transparent',
+          scrollbarColor: `${dark ? 'rgba(255,255,255,.18)' : 'rgba(0,0,0,.18)'} transparent`,
         }}
       >
         <div style={{
@@ -306,13 +306,13 @@ export default function AboutWindow({ dark }: { dark: boolean }) {
             <Image src={profilePhoto} alt="Tomy Romero" fill style={{ objectFit: 'cover' }} sizes="80px" priority />
           </div>
           <div style={{ flex: 1 }}>
-            <h1 style={{
+            <h2 style={{
               fontFamily: 'var(--font-serif),serif', fontSize: 26, fontWeight: 400,
               letterSpacing: '-.5px', lineHeight: 1.15,
               color: tk.text,
             }}>
               {ME.name}
-            </h1>
+            </h2>
             <div style={{
               color: tk.accent, fontSize: 14, fontWeight: 500, marginTop: 5,
               fontFamily: 'var(--font-sans),sans-serif',
@@ -341,7 +341,7 @@ export default function AboutWindow({ dark }: { dark: boolean }) {
             width: 6, height: 6, borderRadius: '50%', background: '#34c759',
             boxShadow: '0 0 8px #34c759', animation: 'pulse 2s infinite',
           }} />
-          <span style={{ fontSize: 11.5, color: '#34c759', fontFamily: 'var(--font-mono),monospace' }}>
+          <span style={{ fontSize: 11.5, color: dark ? '#34c759' : '#15803d', fontFamily: 'var(--font-mono),monospace' }}>
             Open to opportunities
           </span>
         </div>

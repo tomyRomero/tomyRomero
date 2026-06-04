@@ -275,12 +275,12 @@ function ProjectDetail({ title, onBack, dark }: { title: string; onBack: () => v
           <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
             <span style={{ fontSize: 38, lineHeight: 1, flexShrink: 0 }}>{proj.emoji}</span>
             <div>
-              <h1 style={{
+              <h2 style={{
                 fontFamily: 'var(--font-serif),serif', fontSize: 24, fontWeight: 400,
                 letterSpacing: '-.4px', color: tk.text, lineHeight: 1.1,
               }}>
                 {proj.title}
-              </h1>
+              </h2>
               <div style={{ fontSize: 13.5, color: tk.textMuted, marginTop: 3 }}>{proj.tagline}</div>
             </div>
           </div>

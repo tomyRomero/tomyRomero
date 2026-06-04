@@ -102,7 +102,7 @@ export default function ExperienceWindow({ dark }: { dark: boolean }) {
             <div style={{ flex: 1 }}>
               <div style={{ fontWeight: 600, fontSize: 14.5, color: tk.text }}>{edu.institution}</div>
               <div style={{ fontSize: 13, color: tk.accent, marginTop: 2 }}>
-                {edu.degree} — {edu.field}
+                {edu.degree} in {edu.field}
               </div>
               <div style={{ fontSize: 12, color: tk.textMuted, marginTop: 2 }}>
                 {edu.period} · {edu.location} · GPA {edu.gpa}

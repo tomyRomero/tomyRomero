@@ -119,6 +119,22 @@ export default function MenuBar({ dark, setDark, wins, dispatch, calPop, setCalP
     }
   }, [calPop]);
 
+  // Global Spotlight shortcut: ⌘K / Ctrl+K, plus ⌘F / Ctrl+F (which also suppresses the
+  // browser's native find bar). Exclude the ⌃⌘F chord so the View menu's Full Screen
+  // accelerator isn't hijacked.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (!(e.metaKey || e.ctrlKey)) return;
+      const k = e.key.toLowerCase();
+      if (k === 'k' || (k === 'f' && !(e.metaKey && e.ctrlKey))) {
+        e.preventDefault();
+        setSpotlight(s => !s);
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
+
   // Build search index (stable — only changes when dispatch changes)
   const searchItems = [
     { category: 'Windows', label: 'About Me',    desc: 'Bio, photos, links',   icon: '👤', action: () => { dispatch({ type: 'OPEN', id: 'about' });      setSpotlight(false); setSpotQ(''); } },
@@ -254,7 +270,7 @@ export default function MenuBar({ dark, setDark, wins, dispatch, calPop, setCalP
         { label: 'Print Portfolio',  shortcut: '⌘P',
           action: () => { close(); window.print(); } },
         { div: true },
-        { label: 'Close All Windows', shortcut: '⌘W',
+        { label: 'Close All Windows', shortcut: '⌘⇧W',
           action: () => { close(); dispatch({ type: 'CLOSE_ALL' }); } },
       ],
     },
@@ -267,7 +283,7 @@ export default function MenuBar({ dark, setDark, wins, dispatch, calPop, setCalP
         { label: 'Copy LinkedIn URL',  shortcut: '⌘⇧L',
           action: () => copy(ME.linkedin, 'LinkedIn URL') },
         { div: true },
-        { label: 'Spotlight Search',   shortcut: '⌘F',
+        { label: 'Spotlight Search',   shortcut: '⌘K',
           action: () => { setSpotlight(true); close(); } },
       ],
     },
@@ -693,7 +709,7 @@ export default function MenuBar({ dark, setDark, wins, dispatch, calPop, setCalP
           {/* Spotlight */}
           <button
             onClick={e => { e.stopPropagation(); setSpotlight(s => !s); }}
-            title="Spotlight  ⌘F"
+            title="Spotlight  ⌘K"
             style={{
               border: 'none', background: 'transparent', cursor: 'pointer',
               padding: '3px 5px', display: 'flex', alignItems: 'center',

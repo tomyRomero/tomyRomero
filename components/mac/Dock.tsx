@@ -77,6 +77,103 @@ function getLift(idx: number, hov: number | null) {
   return hov !== null && idx === hov ? -10 : 0;
 }
 
+// Defined at module scope (NOT inside Dock) so React keeps the same component
+// identity across Dock re-renders — otherwise the icon subtree remounts on every
+// hover/drag and the magnification/lift transitions snap instead of animating.
+function IconBtn({
+  id, label, bg, glow, idx, sz = BASE, opacity = 1,
+  wins, hovIdx, setHovIdx, dark, tk, onClick,
+}: {
+  id: string; label: string; bg: string; glow: string;
+  idx: number; sz?: number; opacity?: number;
+  wins: Win[]; hovIdx: number | null; setHovIdx: (n: number | null) => void;
+  dark: boolean; tk: ReturnType<typeof T>; onClick: (id: string) => void;
+}) {
+  const w      = wins.find(x => x.id === id);
+  const isOpen = w?.isOpen || w?.isMin;
+  const scale  = getScale(idx, hovIdx);
+  const lift   = getLift(idx, hovIdx);
+  const isH    = hovIdx === idx;
+  const r      = Math.round(sz * 0.225);
+
+  return (
+    <div
+      style={{
+        position: 'relative', display: 'flex', flexDirection: 'column',
+        alignItems: 'center', width: sz, flexShrink: 0,
+      }}
+      onMouseEnter={() => setHovIdx(idx)}
+      onMouseLeave={() => setHovIdx(null)}
+    >
+      {isH && (
+        <div style={{
+          position: 'absolute', bottom: Math.round(sz * 1.38) + 20, left: '50%',
+          transform: 'translateX(-50%)',
+          padding: '5px 12px', borderRadius: 8,
+          background: dark ? 'rgba(10,10,14,.96)' : 'rgba(8,8,10,.93)',
+          color: '#f2f2f7', fontSize: 12, fontWeight: 500,
+          whiteSpace: 'nowrap', fontFamily: 'var(--font-sans),sans-serif',
+          backdropFilter: 'blur(16px)',
+          border: '1px solid rgba(255,255,255,.10)',
+          boxShadow: '0 4px 18px rgba(0,0,0,.44)',
+          animation: 'fadeIn .12s ease', pointerEvents: 'none', zIndex: 2,
+        }}>
+          {label}
+          <div style={{
+            position: 'absolute', bottom: -5, left: '50%', transform: 'translateX(-50%)',
+            borderLeft: '5px solid transparent', borderRight: '5px solid transparent',
+            borderTop: `5px solid ${dark ? 'rgba(10,10,14,.96)' : 'rgba(8,8,10,.93)'}`,
+          }} />
+        </div>
+      )}
+
+      <button
+        data-dock-id={id}
+        onClick={() => onClick(id)}
+        aria-label={`Open ${label}`}
+        style={{
+          width: sz, height: sz, borderRadius: r,
+          background: bg,
+          border: 'none',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          transform: `scale(${scale}) translateY(${lift}px)`,
+          transformOrigin: 'bottom center',
+          transition: 'transform .20s cubic-bezier(.34,1.56,.64,1), box-shadow .18s ease',
+          boxShadow: isH
+            ? `0 16px 44px ${glow}, 0 4px 14px rgba(0,0,0,.24), inset 0 1px 0 rgba(255,255,255,.28)`
+            : `0 4px 12px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.20)`,
+          cursor: 'pointer',
+          position: 'relative', overflow: 'hidden', opacity,
+        }}
+      >
+        {/* Specular sheen */}
+        <div style={{
+          position: 'absolute', top: 0, left: '-6%', right: '6%', height: '54%',
+          background: 'linear-gradient(170deg,rgba(255,255,255,.30) 0%,rgba(255,255,255,.08) 50%,transparent 100%)',
+          borderRadius: `${r}px ${r}px 0 0`,
+          pointerEvents: 'none',
+        }} />
+        {/* Bottom depth */}
+        <div style={{
+          position: 'absolute', bottom: 0, left: 0, right: 0, height: '28%',
+          background: 'linear-gradient(0deg,rgba(0,0,0,.22) 0%,transparent 100%)',
+          borderRadius: `0 0 ${r}px ${r}px`,
+          pointerEvents: 'none',
+        }} />
+        {ICONS[id]}
+      </button>
+
+      {/* Running indicator dot */}
+      <div style={{
+        width: 4, height: 4, borderRadius: '50%', marginTop: 5,
+        background: isOpen ? tk.accent : 'transparent',
+        boxShadow: isOpen ? `0 0 6px ${tk.accent}` : 'none',
+        opacity: isOpen ? 1 : 0, transition: 'opacity .2s', flexShrink: 0,
+      }} />
+    </div>
+  );
+}
+
 interface Props { wins: Win[]; dark: boolean; dispatch: React.Dispatch<WinAction>; }
 
 export default function Dock({ wins, dark, dispatch }: Props) {
@@ -95,103 +192,22 @@ export default function Dock({ wins, dark, dispatch }: Props) {
     return () => window.removeEventListener('winNearDock', handler);
   }, []);
 
+  // Play the trash "shake" when a window is dropped into the dock to delete it
+  useEffect(() => {
+    const onShake = () => {
+      setTrAnim(true);
+      setTimeout(() => setTrAnim(false), 560);
+    };
+    window.addEventListener('dockTrashShake', onShake);
+    return () => window.removeEventListener('dockTrashShake', onShake);
+  }, []);
+
   const click = (id: string) => {
     const w = wins.find(x => x.id === id);
     if (!w) return;
     if (w.isMin) dispatch({ type: 'RESTORE', id });
     else if (w.isOpen) dispatch({ type: 'FOCUS', id });
     else dispatch({ type: 'OPEN', id });
-  };
-
-  const IconBtn = ({
-    id, label, bg, glow, idx, sz = BASE, opacity = 1,
-  }: {
-    id: string; label: string; bg: string; glow: string;
-    idx: number; sz?: number; opacity?: number;
-  }) => {
-    const w      = wins.find(x => x.id === id);
-    const isOpen = w?.isOpen || w?.isMin;
-    const scale  = getScale(idx, hovIdx);
-    const lift   = getLift(idx, hovIdx);
-    const isH    = hovIdx === idx;
-    const r      = Math.round(sz * 0.225);
-
-    return (
-      <div
-        style={{
-          position: 'relative', display: 'flex', flexDirection: 'column',
-          alignItems: 'center', width: sz, flexShrink: 0,
-        }}
-        onMouseEnter={() => setHovIdx(idx)}
-        onMouseLeave={() => setHovIdx(null)}
-      >
-        {isH && (
-          <div style={{
-            position: 'absolute', bottom: Math.round(sz * 1.38) + 20, left: '50%',
-            transform: 'translateX(-50%)',
-            padding: '5px 12px', borderRadius: 8,
-            background: dark ? 'rgba(10,10,14,.96)' : 'rgba(8,8,10,.93)',
-            color: '#f2f2f7', fontSize: 12, fontWeight: 500,
-            whiteSpace: 'nowrap', fontFamily: 'var(--font-sans),sans-serif',
-            backdropFilter: 'blur(16px)',
-            border: '1px solid rgba(255,255,255,.10)',
-            boxShadow: '0 4px 18px rgba(0,0,0,.44)',
-            animation: 'fadeIn .12s ease', pointerEvents: 'none', zIndex: 2,
-          }}>
-            {label}
-            <div style={{
-              position: 'absolute', bottom: -5, left: '50%', transform: 'translateX(-50%)',
-              borderLeft: '5px solid transparent', borderRight: '5px solid transparent',
-              borderTop: `5px solid ${dark ? 'rgba(10,10,14,.96)' : 'rgba(8,8,10,.93)'}`,
-            }} />
-          </div>
-        )}
-
-        <button
-          data-dock-id={id}
-          onClick={() => click(id)}
-          aria-label={`Open ${label}`}
-          style={{
-            width: sz, height: sz, borderRadius: r,
-            background: bg,
-            border: 'none',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            transform: `scale(${scale}) translateY(${lift}px)`,
-            transformOrigin: 'bottom center',
-            transition: 'transform .20s cubic-bezier(.34,1.56,.64,1), box-shadow .18s ease',
-            boxShadow: isH
-              ? `0 16px 44px ${glow}, 0 4px 14px rgba(0,0,0,.24), inset 0 1px 0 rgba(255,255,255,.28)`
-              : `0 4px 12px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.20)`,
-            cursor: 'pointer',
-            position: 'relative', overflow: 'hidden', opacity,
-          }}
-        >
-          {/* Specular sheen */}
-          <div style={{
-            position: 'absolute', top: 0, left: '-6%', right: '6%', height: '54%',
-            background: 'linear-gradient(170deg,rgba(255,255,255,.30) 0%,rgba(255,255,255,.08) 50%,transparent 100%)',
-            borderRadius: `${r}px ${r}px 0 0`,
-            pointerEvents: 'none',
-          }} />
-          {/* Bottom depth */}
-          <div style={{
-            position: 'absolute', bottom: 0, left: 0, right: 0, height: '28%',
-            background: 'linear-gradient(0deg,rgba(0,0,0,.22) 0%,transparent 100%)',
-            borderRadius: `0 0 ${r}px ${r}px`,
-            pointerEvents: 'none',
-          }} />
-          {ICONS[id]}
-        </button>
-
-        {/* Running indicator dot */}
-        <div style={{
-          width: 4, height: 4, borderRadius: '50%', marginTop: 5,
-          background: isOpen ? tk.accent : 'transparent',
-          boxShadow: isOpen ? `0 0 6px ${tk.accent}` : 'none',
-          opacity: isOpen ? 1 : 0, transition: 'opacity .2s', flexShrink: 0,
-        }} />
-      </div>
-    );
   };
 
   const isTrashHot = trTarget || trHov;
@@ -220,7 +236,11 @@ export default function Dock({ wins, dark, dispatch }: Props) {
       }}
     >
       {DOCK_ITEMS.map((item, i) => (
-        <IconBtn key={item.id} {...item} idx={i} />
+        <IconBtn
+          key={item.id} {...item} idx={i}
+          wins={wins} hovIdx={hovIdx} setHovIdx={setHovIdx}
+          dark={dark} tk={tk} onClick={click}
+        />
       ))}
 
       {/* Divider */}

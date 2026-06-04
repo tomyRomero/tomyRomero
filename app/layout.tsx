@@ -10,8 +10,8 @@ export const metadata: Metadata = {
   metadataBase: new URL(BASE),
 
   title: {
-    default:  'Tomy Romero Seas — Software Engineer',
-    template: '%s — Tomy Romero Seas',
+    default:  'Tomy Romero Seas · Software Engineer',
+    template: '%s · Tomy Romero Seas',
   },
 
   description:
@@ -60,8 +60,8 @@ export const metadata: Metadata = {
     type:        'website',
     locale:      'en_US',
     url:         BASE,
-    siteName:    'Tomy Romero Seas — Portfolio',
-    title:       'Tomy Romero Seas — Software Engineer',
+    siteName:    'Tomy Romero Seas · Portfolio',
+    title:       'Tomy Romero Seas · Software Engineer',
     description:
       'Full-stack software engineer specializing in ASP.NET Core, React, and SQL Server. ' +
       'Open to new opportunities.',
@@ -69,13 +69,13 @@ export const metadata: Metadata = {
       url:    '/opengraph-image',
       width:  1200,
       height: 630,
-      alt:    'Tomy Romero Seas — Software Engineer Portfolio',
+      alt:    'Tomy Romero Seas · Software Engineer Portfolio',
     }],
   },
 
   twitter: {
     card:        'summary_large_image',
-    title:       'Tomy Romero Seas — Software Engineer',
+    title:       'Tomy Romero Seas · Software Engineer',
     description: 'Full-stack software engineer · ASP.NET Core · React · SQL Server · Open to work.',
     images:      ['/opengraph-image'],
   },
@@ -92,7 +92,7 @@ const jsonLd = {
       '@id':      `${BASE}/#person`,
       name:       'Tomy Romero Seas',
       url:        BASE,
-      image:      `${BASE}/assets/tomyRomero.jpeg`,
+      image:      `${BASE}/assets/tomyRomeroGrad.jpeg`,
       jobTitle:   'Software Engineer 1',
       worksFor: {
         '@type': 'Organization',
@@ -123,7 +123,7 @@ const jsonLd = {
       '@type':     'WebSite',
       '@id':       `${BASE}/#website`,
       url:         BASE,
-      name:        'Tomy Romero Seas — Portfolio',
+      name:        'Tomy Romero Seas · Portfolio',
       description: 'Full-stack software engineer portfolio',
       publisher:   { '@id': `${BASE}/#person` },
     },

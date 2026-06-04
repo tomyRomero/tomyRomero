@@ -9,7 +9,7 @@ export const T = (dark: boolean) => ({
   cardHover:    dark ? 'rgba(255,255,255,0.075)'  : 'rgba(212,148,58,0.05)',
   text:         dark ? '#f0f0f5'                  : '#1a1a1e',
   textSub:      dark ? 'rgba(240,240,245,.72)'    : 'rgba(26,26,30,.70)',
-  textMuted:    dark ? 'rgba(240,240,245,.42)'    : 'rgba(26,26,30,.42)',
+  textMuted:    dark ? 'rgba(240,240,245,.55)'    : 'rgba(26,26,30,.62)',
   border:       dark ? 'rgba(255,255,255,0.08)'   : 'rgba(0,0,0,0.07)',
   borderFoc:    dark ? 'rgba(255,255,255,0.18)'   : 'rgba(0,0,0,0.16)',
   cardBorder:   dark ? 'rgba(255,255,255,0.07)'   : 'rgba(0,0,0,0.06)',

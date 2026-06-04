@@ -9,7 +9,7 @@ function useTokens(dark: boolean) {
   return {
     bg:           dark ? '#060a14'                         : '#f2efe9',
     text:         dark ? '#f0f0f5'                         : '#1a1a1e',
-    textMuted:    dark ? 'rgba(255,255,255,.48)'           : 'rgba(0,0,0,.48)',
+    textMuted:    dark ? 'rgba(255,255,255,.55)'           : 'rgba(0,0,0,.58)',
     textSub:      dark ? 'rgba(255,255,255,.72)'           : 'rgba(0,0,0,.72)',
     cardBg:       dark ? 'rgba(255,255,255,.045)'          : 'rgba(0,0,0,.025)',
     cardBorder:   dark ? 'rgba(255,255,255,.08)'           : 'rgba(0,0,0,.07)',
@@ -33,13 +33,13 @@ function SectionLabel({ text, tk }: { text: string; tk: ReturnType<typeof useTok
       display: 'flex', alignItems: 'center', gap: 10,
       marginBottom: 14, marginTop: 6,
     }}>
-      <span style={{
+      <h2 style={{
         fontSize: 11, letterSpacing: '1.4px', textTransform: 'uppercase' as const,
         fontFamily: 'var(--font-mono),monospace', color: tk.accent,
         fontWeight: 600,
       }}>
         {text}
-      </span>
+      </h2>
       <div style={{
         flex: 1, height: 1,
         background: `linear-gradient(90deg, ${tk.accentBorder}, transparent)`,
@@ -63,6 +63,26 @@ export default function ProjectPage({ params }: { params: { title: string } }) {
   const decodedTitle = decodeURIComponent(params.title);
   const detail = projectDetails.find(p => p.title === decodedTitle);
   const summary = projects.find(p => p.title === decodedTitle);
+
+  // Dark-mode toggle with the same smooth crossfade the desktop/mobile views use
+  const toggleDark = () => {
+    document.documentElement.classList.add('theme-transition');
+    setDark(d => !d);
+    setTimeout(() => document.documentElement.classList.remove('theme-transition'), 350);
+  };
+
+  // Keyboard support for the gallery lightbox (Escape closes, arrows navigate)
+  const lightboxCount = detail ? detail.images.filter(Boolean).length : 0;
+  useEffect(() => {
+    if (!lightbox || lightboxCount === 0) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape')           setLightbox(false);
+      else if (e.key === 'ArrowLeft')   setImgIdx(i => (i - 1 + lightboxCount) % lightboxCount);
+      else if (e.key === 'ArrowRight')  setImgIdx(i => (i + 1) % lightboxCount);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [lightbox, lightboxCount]);
 
   const tk = useTokens(dark);
 
@@ -143,7 +163,8 @@ export default function ProjectPage({ params }: { params: { title: string } }) {
         </div>
 
         <button
-          onClick={() => setDark(d => !d)}
+          onClick={toggleDark}
+          aria-label={dark ? 'Switch to light mode' : 'Switch to dark mode'}
           style={{
             background: tk.cardBg, border: `1px solid ${tk.cardBorder}`,
             borderRadius: 8, padding: '5px 10px', cursor: 'pointer',
@@ -189,7 +210,7 @@ export default function ProjectPage({ params }: { params: { title: string } }) {
                 </div>
               )}
               <div>
-                <h1 style={{
+                <h1 key={dark ? 'd' : 'l'} className="grad-text" style={{
                   fontFamily: 'var(--font-serif),serif', fontSize: 26, fontWeight: 400,
                   letterSpacing: '-.3px', marginBottom: 4,
                   background: dark
@@ -221,7 +242,7 @@ export default function ProjectPage({ params }: { params: { title: string } }) {
                 background: detail.isLive
                   ? 'rgba(52,199,89,.10)' : tk.pillBg,
                 border: `1px solid ${detail.isLive ? 'rgba(52,199,89,.26)' : tk.pillBorder}`,
-                color: detail.isLive ? '#34c759' : tk.textMuted,
+                color: detail.isLive ? (dark ? '#34c759' : '#15803d') : tk.textMuted,
               }}>
                 {detail.isLive ? '● Live' : '⑂ GitHub only'}
               </span>
@@ -268,6 +289,7 @@ export default function ProjectPage({ params }: { params: { title: string } }) {
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                   <button
                     onClick={prev}
+                    aria-label="Previous image"
                     style={{
                       width: 34, height: 34, borderRadius: 10, flexShrink: 0,
                       background: tk.cardBg, border: `1px solid ${tk.cardBorder}`,
@@ -285,6 +307,7 @@ export default function ProjectPage({ params }: { params: { title: string } }) {
                       <button
                         key={i}
                         onClick={() => setImgIdx(i)}
+                        aria-label={`View image ${i + 1}`}
                         style={{
                           flexShrink: 0, width: 52, height: 36,
                           borderRadius: 8, overflow: 'hidden', padding: 0,
@@ -307,6 +330,7 @@ export default function ProjectPage({ params }: { params: { title: string } }) {
 
                   <button
                     onClick={next}
+                    aria-label="Next image"
                     style={{
                       width: 34, height: 34, borderRadius: 10, flexShrink: 0,
                       background: tk.cardBg, border: `1px solid ${tk.cardBorder}`,
@@ -414,7 +438,7 @@ export default function ProjectPage({ params }: { params: { title: string } }) {
                 padding: '13px 16px', borderRadius: 14, fontSize: 13.5, fontWeight: 500,
                 background: 'rgba(52,199,89,.10)',
                 border: '1px solid rgba(52,199,89,.24)',
-                color: '#34c759', textDecoration: 'none',
+                color: dark ? '#34c759' : '#15803d', textDecoration: 'none',
                 transition: 'all .18s',
                 fontFamily: 'var(--font-mono),monospace',
               }}
@@ -429,6 +453,9 @@ export default function ProjectPage({ params }: { params: { title: string } }) {
       {lightbox && (
         <div
           onClick={() => setLightbox(false)}
+          role="dialog"
+          aria-modal="true"
+          aria-label={`${detail.title} gallery`}
           style={{
             position: 'fixed', inset: 0, zIndex: 99999,
             background: 'rgba(0,0,0,.92)', backdropFilter: 'blur(18px)',
@@ -451,6 +478,7 @@ export default function ProjectPage({ params }: { params: { title: string } }) {
               <>
                 <button
                   onClick={prev}
+                  aria-label="Previous image"
                   style={{
                     position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)',
                     width: 44, height: 44, borderRadius: '50%',
@@ -464,6 +492,7 @@ export default function ProjectPage({ params }: { params: { title: string } }) {
                 >‹</button>
                 <button
                   onClick={next}
+                  aria-label="Next image"
                   style={{
                     position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)',
                     width: 44, height: 44, borderRadius: '50%',
@@ -490,6 +519,7 @@ export default function ProjectPage({ params }: { params: { title: string } }) {
           </div>
           <button
             onClick={() => setLightbox(false)}
+            aria-label="Close"
             style={{
               position: 'absolute', top: 20, right: 20,
               width: 38, height: 38, borderRadius: '50%',

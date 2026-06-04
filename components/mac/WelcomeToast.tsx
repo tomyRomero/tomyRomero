@@ -121,7 +121,7 @@ export default function WelcomeToast({ dark }: { dark: boolean }) {
             margin: 0, fontSize: 13, lineHeight: 1.68,
             color: tk.textSub, fontFamily: 'var(--font-sans),sans-serif',
           }}>
-            Hey there — I&apos;m <span style={{ color: tk.text, fontWeight: 600 }}>Tomy</span>,
+            Hey there, I&apos;m <span style={{ color: tk.text, fontWeight: 600 }}>Tomy</span>,
             a full-stack software engineer.
           </p>
           <p style={{

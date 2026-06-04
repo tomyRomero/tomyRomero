@@ -270,7 +270,7 @@ export default function Widgets({ dark, dispatch, openCal }: { dark: boolean; di
               flexShrink: 0, animation: 'pulse 2s infinite',
             }} />
             <span style={{
-              fontSize: 10.5, color: '#34c759',
+              fontSize: 10.5, color: dark ? '#34c759' : '#15803d',
               fontFamily: 'var(--font-mono), monospace',
             }}>
               Open to opportunities

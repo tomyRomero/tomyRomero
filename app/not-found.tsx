@@ -72,7 +72,7 @@ export default function NotFound() {
         </div>
 
         {/* 404 number with gradient */}
-        <div style={{
+        <div className="grad-text" style={{
           fontSize: 72, fontWeight: 800, lineHeight: 1,
           fontFamily: 'var(--font-mono), monospace',
           background: accentGrad,

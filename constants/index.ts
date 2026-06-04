@@ -24,7 +24,7 @@ export const ME = {
   github:    'https://github.com/tomyRomero',
   linkedin:  'https://www.linkedin.com/in/tomyromero/',
   portfolio: 'https://tomyromero.vercel.app',
-  bio: `Full-stack software engineer with roots in healthcare homecare and a builder's mindset. By day I architect backend, frontend and database systems — converting workflows into scalable solutions. By night I build for the future. UVI graduate. SQL nerd.`,
+  bio: `Full-stack software engineer with roots in healthcare homecare and a builder's mindset. By day I architect backend, frontend and database systems, converting workflows into scalable solutions. By night I build for the future. UVI graduate. SQL nerd.`,
 };
 
 
@@ -50,7 +50,7 @@ export const skills: Record<string, string[]> = {
 };
 
 // ── Home Page Pictures ───────────────────────────────────────────────────────
-import tomy       from '../public/assets/tomyRomero.jpeg';
+import tomy       from '../public/assets/tomyRomeroGrad.jpeg';
 import uvi        from '../public/assets/uvi.jpeg';
 import president  from '../public/assets/presidentUvi.jpeg';
 import deanslist  from '../public/assets/deanslist.jpeg';
@@ -104,7 +104,7 @@ export const projects = [
     status:      'shipped' as const,
     year:        '2024',
     techStack:   'React, Next.js, AWS, Stripe',
-    projectIcon: '/assets/storeOps-icon.svg',
+    projectIcon: '/assets/github.svg',
     image:       '/storeOps/cart.png',
     description: 'Full-stack CRUD e-commerce platform featuring dual interfaces and Stripe payments.',
     link:        'https://github.com/tomyRomero/storeOps',
@@ -349,13 +349,21 @@ export const education = [
     gpa:         '3.11',
     bullets: [
       'Student Government Association Junior Senator',
-      "Dean's List recipient — multiple semesters",
+      "Dean's List recipient for multiple semesters",
     ],
   },
 ];
 
 // ── Certifications ────────────────────────────────────────────────────────────
 export const certifications = [
+  {
+    name:         'AWS Cloud Quest: Cloud Practitioner',
+    issuer:       'Amazon Web Services (AWS)',
+    logo:         '☁️',
+    issued:       'Apr 2026',
+    credentialId: null,
+    url:          'https://www.credly.com/badges/a3e1cf34-d475-4f11-a3a9-fd19e0038af7/public_url',
+  },
   {
     name:         'Microsoft SQL Server Specialization',
     issuer:       'Microsoft',

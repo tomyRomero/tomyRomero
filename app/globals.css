@@ -94,9 +94,12 @@ button:disabled {
   0%   { opacity: 0; }
   100% { opacity: 1; }
 }
+/* Spotlight panel is flex-centered (not absolutely positioned), so the
+   entrance keyframe must not apply a -50%/-50% translate — that caused a
+   brief off-center jump on open. Settle to transform:none instead. */
 @keyframes spotlightIn {
-  0%   { opacity: 0; transform: translate(-50%, -48%) scale(.94); }
-  100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  0%   { opacity: 0; transform: scale(.96) translateY(-6px); }
+  100% { opacity: 1; transform: none; }
 }
 
 /* Gradient wallpaper blob animations */
@@ -247,8 +250,21 @@ button:disabled {
 .theme-transition *::after {
   transition: background-color .3s ease, border-color .3s ease, box-shadow .3s ease !important;
 }
-/* Gradient text elements must not transition background at all */
-.theme-transition .grad-text {
+
+/* Gradient-clipped text (-webkit-background-clip: text) must NEVER be transitioned
+   or GPU-composited during a theme swap. WebKit/Blink rasterize the clipped glyphs
+   into a layer texture when an element transitions; with a transparent text-fill the
+   result is a grainy/blurred block (most visible on small / low-DPI screens).
+   Excluding these elements — and pinning their rasterization — keeps the text crisp. */
+.grad-text {
+  transition: none !important;
+  animation: none !important;
+  will-change: auto !important;
+}
+.theme-transition .grad-text,
+.theme-transition .grad-text *,
+.theme-transition .grad-text::before,
+.theme-transition .grad-text::after {
   transition: none !important;
 }
 
@@ -298,3 +314,16 @@ button:disabled {
 /* Utility: hide scrollbar */
 .hide-scrollbar::-webkit-scrollbar { display: none; }
 .hide-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
+
+/* Respect the user's reduced-motion preference. The site is animation-heavy
+   (infinite wallpaper blobs/aurora, pulsing dots, shimmer, drifting clouds);
+   for users who request reduced motion we neutralize decorative animation and
+   long transitions while keeping the UI fully functional. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

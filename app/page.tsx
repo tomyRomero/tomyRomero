@@ -64,7 +64,9 @@ function winReducer(s: Win[], a: WinAction): Win[] {
     case 'RESIZE':
       return s.map(w => w.id === a.id ? { ...w, sz: { w: a.w, h: a.h } } : w);
     case 'OPEN_ALL':
-      return s.map((w, i) => ({ ...w, isOpen: true, isMin: false, minning: false, z: ZZ + i + 1 }));
+      // Use nz() per window so the module-level counter advances past all assigned
+      // z-values; otherwise the next FOCUS/OPEN sits *below* these and click-to-front breaks.
+      return s.map(w => ({ ...w, isOpen: true, isMin: false, minning: false, z: nz() }));
     case 'CLOSE_ALL':
       return s.map(w => ({ ...w, isOpen: false, isMin: false, isMax: false, minning: false, closing: false }));
     case 'MIN_ALL':
@@ -138,10 +140,12 @@ export default function Home() {
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if (!(e.metaKey || e.ctrlKey)) return;
-      if (e.shiftKey && e.key === 'o') { e.preventDefault(); dispatch({ type: 'OPEN_ALL' }); }
-      if (e.shiftKey && e.key === 'w') { e.preventDefault(); dispatch({ type: 'CLOSE_ALL' }); }
-      if (e.shiftKey && e.key === 'a') { e.preventDefault(); dispatch({ type: 'ARRANGE' }); }
-      if (e.key === 'm') { e.preventDefault(); dispatch({ type: 'MIN_ALL' }); }
+      // Normalize: with Shift held, e.key is uppercase ('O'/'W'/'A'), so compare lowercased
+      const k = e.key.toLowerCase();
+      if (e.shiftKey && k === 'o') { e.preventDefault(); dispatch({ type: 'OPEN_ALL' }); }
+      if (e.shiftKey && k === 'w') { e.preventDefault(); dispatch({ type: 'CLOSE_ALL' }); }
+      if (e.shiftKey && k === 'a') { e.preventDefault(); dispatch({ type: 'ARRANGE' }); }
+      if (k === 'm') { e.preventDefault(); dispatch({ type: 'MIN_ALL' }); }
     };
     window.addEventListener('keydown', handler);
     return () => window.removeEventListener('keydown', handler);
