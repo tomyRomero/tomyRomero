@@ -1,34 +1,57 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import Image from 'next/image';
 import { T } from './tokens';
+import { profilePhoto } from '@/constants';
 
 const DURATION = 7000; // ms before auto-dismiss
 
 export default function WelcomeToast({ dark }: { dark: boolean }) {
   const tk = T(dark);
-  const [visible,  setVisible]  = useState(false);
-  const [leaving,  setLeaving]  = useState(false);
+  const [visible, setVisible] = useState(false);
+  const [leaving, setLeaving] = useState(false);
+  const [paused,  setPaused]  = useState(false);
+  const [runId,   setRunId]   = useState(0);
+
+  // Auto-dismiss with hover-pause: track how much time is left so pausing
+  // the cursor over the card pauses both the timer and the drain bar.
+  const timer     = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const remaining = useRef(DURATION);
+  const startedAt = useRef(0);
+
+  const armTimer = () => {
+    startedAt.current = Date.now();
+    timer.current = setTimeout(dismiss, remaining.current);
+  };
 
   useEffect(() => {
     if (!localStorage.getItem('welcomed')) {
-      const t = setTimeout(() => setVisible(true), 900);
+      const t = setTimeout(() => { setVisible(true); setRunId(r => r + 1); }, 900);
       return () => clearTimeout(t);
     }
   }, []);
 
   // Replay on demand (Help menu → Show Welcome Tip), even after first visit
   useEffect(() => {
-    const replay = () => { setLeaving(false); setVisible(true); };
+    const replay = () => {
+      if (timer.current) clearTimeout(timer.current);
+      remaining.current = DURATION;
+      setLeaving(false);
+      setPaused(false);
+      setVisible(true);
+      setRunId(r => r + 1);
+    };
     window.addEventListener('welcomeReplay', replay);
     return () => window.removeEventListener('welcomeReplay', replay);
   }, []);
 
   useEffect(() => {
     if (!visible) return;
-    const t = setTimeout(dismiss, DURATION);
-    return () => clearTimeout(t);
+    remaining.current = DURATION;
+    armTimer();
+    return () => { if (timer.current) clearTimeout(timer.current); };
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [visible]);
+  }, [visible, runId]);
 
   function dismiss() {
     setLeaving(true);
@@ -37,6 +60,16 @@ export default function WelcomeToast({ dark }: { dark: boolean }) {
       localStorage.setItem('welcomed', '1');
     }, 380);
   }
+
+  const pause = () => {
+    if (timer.current) clearTimeout(timer.current);
+    remaining.current = Math.max(600, remaining.current - (Date.now() - startedAt.current));
+    setPaused(true);
+  };
+  const resume = () => {
+    armTimer();
+    setPaused(false);
+  };
 
   if (!visible) return null;
 
@@ -55,6 +88,8 @@ export default function WelcomeToast({ dark }: { dark: boolean }) {
       }}
     >
       <div
+        onMouseEnter={pause}
+        onMouseLeave={resume}
         style={{
           width: 310,
           pointerEvents: 'auto',
@@ -77,16 +112,14 @@ export default function WelcomeToast({ dark }: { dark: boolean }) {
             display: 'flex', alignItems: 'center',
             justifyContent: 'space-between', marginBottom: 11,
           }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
-              {/* Monogram */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              {/* Real photo, not a logo — this is a person saying hi */}
               <div style={{
-                width: 26, height: 26, borderRadius: 8, flexShrink: 0,
-                background: tk.accentGrad2,
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: 12, fontWeight: 700, color: '#fff',
-                fontFamily: 'var(--font-sans),sans-serif',
+                width: 28, height: 28, borderRadius: '50%', flexShrink: 0,
+                overflow: 'hidden', position: 'relative',
+                border: `1px solid ${tk.border}`,
               }}>
-                T
+                <Image src={profilePhoto} alt="Tomy Romero" fill style={{ objectFit: 'cover' }} sizes="28px" />
               </div>
               <span style={{
                 fontSize: 13.5, fontWeight: 700, color: tk.text,
@@ -142,17 +175,18 @@ export default function WelcomeToast({ dark }: { dark: boolean }) {
             {' '}to search.
           </p>
 
-          {/* Progress bar */}
+          {/* Progress bar — pauses while hovered */}
           <div style={{
             marginTop: 14, height: 3, borderRadius: 99,
             background: dark ? 'rgba(255,255,255,.08)' : 'rgba(0,0,0,.07)',
             overflow: 'hidden',
           }}>
-            <div style={{
+            <div key={runId} style={{
               height: '100%',
               background: tk.accentGrad2,
               borderRadius: 99,
               animation: `drainBar ${DURATION}ms linear both`,
+              animationPlayState: paused ? 'paused' : 'running',
             }} />
           </div>
         </div>

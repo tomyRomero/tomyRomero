@@ -1,9 +1,17 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { DM_Sans, IBM_Plex_Mono } from 'next/font/google';
 import './globals.css';
 import { Analytics } from '@vercel/analytics/react';
 
 const BASE = 'https://tomyromero.vercel.app';
+
+// Browser chrome (mobile URL bar etc.) matches the site background per theme
+export const viewport: Viewport = {
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#f4f5f7' },
+    { media: '(prefers-color-scheme: dark)',  color: '#0a0c11' },
+  ],
+};
 
 // ── Metadata ──────────────────────────────────────────────────────────────────
 export const metadata: Metadata = {

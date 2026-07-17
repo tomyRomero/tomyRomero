@@ -219,7 +219,7 @@ export default function MobileView({ dark, setDark }: { dark: boolean; setDark: 
 
         {/* External links */}
         <div style={{ display: 'flex', gap: 10, marginBottom: 36 }}>
-          {([['GitHub', ME.github], ['LinkedIn', ME.linkedin]] as [string, string][]).map(([label, href]) => (
+          {([['GitHub', ME.github], ['LinkedIn', ME.linkedin], ['Email', `mailto:${ME.email}`]] as [string, string][]).map(([label, href]) => (
             <a key={label} href={href} target="_blank" rel="noopener noreferrer" style={{
               flex: 1, textAlign: 'center',
               padding: '11px 16px', borderRadius: 12, fontSize: 13,

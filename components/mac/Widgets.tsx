@@ -1,5 +1,6 @@
 'use client';
 import { useState, useEffect } from 'react';
+import Image from 'next/image';
 import { T } from './tokens';
 import { ME, experiences, projects, yearsExperience } from '@/constants';
 import type { WinAction } from './winTypes';
@@ -266,6 +267,48 @@ export default function Widgets({ dark, dispatch, openCal }: { dark: boolean; di
             }}>
               Open to opportunities
             </span>
+          </div>
+        </div>
+      </div>
+
+      {/* ── Featured project ─────────────────────────────────────────────── */}
+      <div
+        role="button"
+        tabIndex={0}
+        onClick={() => open('projects')}
+        onKeyDown={e => e.key === 'Enter' && open('projects')}
+        style={{ ...glass, cursor: 'pointer', transition: 'all .18s' }}
+        onMouseEnter={e => {
+          e.currentTarget.style.borderColor = tk.accentBorder;
+          e.currentTarget.style.transform = 'translateY(-1px)';
+        }}
+        onMouseLeave={e => {
+          e.currentTarget.style.borderColor = tk.border;
+          e.currentTarget.style.transform = 'none';
+        }}
+      >
+        <div style={{ position: 'relative', width: '100%', aspectRatio: '16/9', background: tk.cardBg }}>
+          <Image src={projects[0].image} alt={projects[0].title} fill style={{ objectFit: 'cover' }} sizes="192px" />
+        </div>
+        <div style={{ padding: '10px 13px 12px' }}>
+          <div style={{
+            fontSize: 9.5, color: tk.textMuted, fontWeight: 600,
+            letterSpacing: '.6px', textTransform: 'uppercase', marginBottom: 4,
+          }}>
+            Featured Project
+          </div>
+          <div style={{ display: 'flex', alignItems: 'baseline', gap: 6 }}>
+            <span style={{ fontSize: 12.5, fontWeight: 700, color: tk.text }}>{projects[0].title}</span>
+            <span style={{ fontSize: 10, color: tk.textMuted, fontFamily: 'var(--font-mono), monospace' }}>
+              {projects[0].year}
+            </span>
+          </div>
+          <div style={{
+            fontSize: 10.5, color: tk.textSub, marginTop: 3, lineHeight: 1.5,
+            overflow: 'hidden', display: '-webkit-box',
+            WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' as const,
+          }}>
+            {projects[0].tagline}
           </div>
         </div>
       </div>
