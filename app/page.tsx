@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect, useReducer, useCallback, useMemo, useSyncExternalStore } from 'react';
 import MobileView    from '@/components/MobileView';
-import Wallpaper, { WALLPAPERS, type WallpaperVariant } from '@/components/mac/Wallpaper';
+import Wallpaper, { BubbleField, WALLPAPERS, type WallpaperVariant } from '@/components/mac/Wallpaper';
 import MenuBar       from '@/components/mac/MenuBar';
 import WinShell      from '@/components/mac/WinShell';
 import Dock          from '@/components/mac/Dock';
@@ -133,7 +133,7 @@ export default function Home() {
   const [wins, dispatch] = useReducer(winReducer, undefined, initWins);
   const [focused, setFocused] = useState<string | null>(null);
   const [calPop, setCalPop]   = useState(false);
-  const [wallpaper, setWallpaper] = useState<WallpaperVariant>('mesh');
+  const [wallpaper, setWallpaper] = useState<WallpaperVariant>('splash');
 
   // Restore + persist wallpaper choice
   useEffect(() => {
@@ -242,6 +242,10 @@ export default function Home() {
         onClick={() => setFocused(null)}
         style={{ position: 'fixed', top: 28, left: 0, right: 0, bottom: 80, zIndex: 1 }}
       >
+        {/* Interactive bubbles: clickable in empty desktop space, always
+            below windows and widgets */}
+        {wallpaper === 'bubbles' && <BubbleField dark={dark} />}
+
         {wins.map(win => (
           <WinShell
             key={win.id}

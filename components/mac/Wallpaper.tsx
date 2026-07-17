@@ -1,6 +1,7 @@
 'use client';
+import { useState, useRef } from 'react';
 
-// Four selectable wallpapers, switchable from the ⌘ menu. All CSS/SVG,
+// Selectable wallpapers, switchable from the ⌘ menu. All CSS/SVG,
 // zero image assets. Each has a light and dark treatment.
 export type WallpaperVariant = 'mesh' | 'dunes' | 'blobs' | 'quiet' | 'bubbles' | 'splash';
 
@@ -147,8 +148,10 @@ function Quiet({ dark }: { dark: boolean }) {
   );
 }
 
-// ── Bubbles: slow underwater rise with drift ─────────────────────────────────
-// Deterministic config (no randomness at render time, so SSR and client match)
+// ── Bubbles: interactive field, rendered by the desktop INSIDE the window
+// canvas (below windows/widgets) so bubbles are clickable in empty space but
+// never intercept clicks on real content. Deterministic config — no
+// randomness at render time, so SSR and client match.
 const BUBBLES = [
   { left: '6%',  size: 46, dur: 16, delay: 0,    sway: 40  },
   { left: '15%', size: 22, dur: 11, delay: 3,    sway: -30 },
@@ -164,18 +167,43 @@ const BUBBLES = [
   { left: '48%', size: 12, dur: 8,  delay: 9,    sway: 14  },
 ];
 
-function Bubbles({ dark }: { dark: boolean }) {
+const POP_DROPS = [
+  { x: 40, y: 0 }, { x: 20, y: -34 }, { x: -20, y: -34 },
+  { x: -40, y: 0 }, { x: -20, y: 34 }, { x: 20, y: 34 },
+];
+
+export function BubbleField({ dark }: { dark: boolean }) {
+  // gen[i] bumps on pop → remounts that bubble so it respawns from the bottom
+  const [gen, setGen] = useState<number[]>(() => BUBBLES.map(() => 0));
+  const [bursts, setBursts] = useState<{ id: number; x: number; y: number; size: number }[]>([]);
+  const burstId = useRef(0);
+
+  const pop = (i: number, e: React.MouseEvent<HTMLButtonElement>) => {
+    const r = e.currentTarget.getBoundingClientRect();
+    const id = ++burstId.current;
+    // Canvas-relative coords (the canvas starts 28px below the viewport top)
+    setBursts(b => [...b, { id, x: r.left + r.width / 2, y: r.top - 28 + r.height / 2, size: r.width }]);
+    setGen(g => g.map((v, j) => (j === i ? v + 1 : v)));
+    setTimeout(() => setBursts(b => b.filter(x => x.id !== id)), 650);
+  };
+
   return (
-    <>
+    <div style={{ position: 'absolute', inset: 0, zIndex: 2, pointerEvents: 'none' }} aria-hidden="true">
       {BUBBLES.map((b, i) => (
-        <div
-          key={i}
+        <button
+          key={`${i}:${gen[i]}`}
+          className="wp-bubble"
+          tabIndex={-1}
+          onClick={e => pop(i, e)}
           style={{
             position: 'absolute',
             left: b.left,
             bottom: -(b.size + 24),
             width: b.size, height: b.size,
             borderRadius: '50%',
+            padding: 0,
+            pointerEvents: 'auto',
+            cursor: 'pointer',
             background: dark
               ? 'radial-gradient(circle at 30% 30%, rgba(255,255,255,.32), rgba(160,220,255,.10) 45%, rgba(160,220,255,.03) 70%, transparent 100%)'
               : 'radial-gradient(circle at 30% 30%, rgba(255,255,255,.85), rgba(120,170,220,.14) 45%, transparent 70%)',
@@ -183,24 +211,72 @@ function Bubbles({ dark }: { dark: boolean }) {
               ? '1px solid rgba(190,230,255,.28)'
               : '1px solid rgba(110,160,210,.30)',
             opacity: 0,
-            animation: `bubbleRise ${b.dur}s linear ${b.delay}s infinite`,
+            // Popped bubbles respawn quickly instead of waiting a full cycle
+            animation: `bubbleRise ${b.dur}s linear ${gen[i] === 0 ? b.delay : 1 + (i % 4)}s infinite`,
             ['--sway' as string]: `${b.sway}px`,
           } as React.CSSProperties}
         />
       ))}
-    </>
+
+      {/* Pop bursts: expanding ring + droplets flying outward */}
+      {bursts.map(b => (
+        <div key={b.id} style={{ position: 'absolute', left: b.x, top: b.y, width: 0, height: 0, zIndex: 3 }}>
+          <div style={{
+            position: 'absolute', left: -b.size / 2, top: -b.size / 2,
+            width: b.size, height: b.size, borderRadius: '50%',
+            border: dark ? '2px solid rgba(200,235,255,.7)' : '2px solid rgba(90,150,210,.7)',
+            animation: 'bubblePopRing .45s ease-out both',
+          }} />
+          {POP_DROPS.map((d, k) => (
+            <div key={k} style={{
+              position: 'absolute', left: -3, top: -3, width: 6, height: 6,
+              borderRadius: '50%',
+              background: dark ? 'rgba(210,240,255,.85)' : 'rgba(110,165,215,.85)',
+              animation: 'bubblePopDrop .5s ease-out both',
+              ['--dx' as string]: `${d.x * (b.size / 40)}px`,
+              ['--dy' as string]: `${d.y * (b.size / 40)}px`,
+            } as React.CSSProperties} />
+          ))}
+        </div>
+      ))}
+    </div>
   );
 }
 
-// ── Splash: paint splats landing on a canvas ─────────────────────────────────
-// Each splash: outer <g> owns placement (attribute transform survives the CSS
-// animation), inner <g> runs the elastic entrance around its own center.
-const SPLASHES = [
-  { x: 280,  y: 620, r: -14, s: 1.15, color: '#0A84FF', delay: .1  },
-  { x: 1130, y: 260, r: 28,  s: 1.0,  color: '#FF375F', delay: .4  },
-  { x: 470,  y: 190, r: 66,  s: .72,  color: '#FFD60A', delay: .7  },
-  { x: 990,  y: 650, r: -40, s: .88,  color: '#30D158', delay: 1.0 },
-  { x: 720,  y: 430, r: 12,  s: .60,  color: '#BF5AF2', delay: 1.3 },
+// The wallpaper layer itself contributes only the ocean gradient; the
+// interactive bubbles live in the desktop canvas (see BubbleField above).
+function Bubbles() {
+  return null;
+}
+
+// ── Splash: a living painting. Each splat cycles forever: a drop falls,
+// lands with a squash-and-overshoot, ejecta flies out, the splat lingers,
+// fades, and repeats. Negative delays desync the cycles so the canvas is
+// already partially painted at load with new paint landing continuously. ──
+const SPLAT_PATHS = [
+  'M-54,-34 C-38,-70 24,-76 52,-46 C88,-58 112,-16 84,8 C104,40 64,74 30,58 C16,88 -36,86 -50,54 C-92,58 -106,12 -76,-6 C-96,-42 -74,-60 -54,-34 Z',
+  'M-46,-42 C-18,-64 30,-62 48,-34 C82,-42 96,-4 72,16 C88,48 48,68 22,52 C4,78 -40,70 -44,42 C-80,40 -88,-2 -62,-14 C-78,-44 -64,-54 -46,-42 Z',
+  'M-50,-28 C-44,-62 10,-72 40,-52 C74,-64 100,-28 80,-2 C100,26 72,60 40,50 C28,76 -20,80 -38,54 C-72,62 -94,24 -70,2 C-86,-28 -66,-44 -50,-28 Z',
+];
+
+const EJECTA = [
+  { x: 78, y: -52 }, { x: -84, y: -40 }, { x: 96, y: 24 },
+  { x: -70, y: 48 }, { x: 30, y: -90 },
+];
+
+const SPLATS = [
+  { x: 150,  y: 180, rot: -12, s: .52, color: '#0A84FF', cyc: 13, delay: -1  },
+  { x: 1290, y: 210, rot: 30,  s: .45, color: '#FF375F', cyc: 15, delay: -6  },
+  { x: 520,  y: 120, rot: 70,  s: .34, color: '#FFD60A', cyc: 12, delay: -9  },
+  { x: 1060, y: 140, rot: -35, s: .38, color: '#30D158', cyc: 16, delay: -3  },
+  { x: 260,  y: 700, rot: 15,  s: .50, color: '#BF5AF2', cyc: 14, delay: -11 },
+  { x: 760,  y: 240, rot: -60, s: .30, color: '#FF375F', cyc: 17, delay: -13 },
+  { x: 1340, y: 520, rot: 8,   s: .42, color: '#0A84FF', cyc: 12, delay: -5  },
+  { x: 640,  y: 760, rot: 40,  s: .46, color: '#FFD60A', cyc: 15, delay: -8  },
+  { x: 980,  y: 640, rot: -20, s: .36, color: '#64D2FF', cyc: 13, delay: -4  },
+  { x: 420,  y: 430, rot: 55,  s: .30, color: '#30D158', cyc: 13, delay: -2  },
+  { x: 1180, y: 780, rot: -45, s: .40, color: '#BF5AF2', cyc: 16, delay: -10 },
+  { x: 90,   y: 470, rot: 25,  s: .33, color: '#FF9F0A', cyc: 14, delay: -7  },
 ];
 
 function Splash({ dark }: { dark: boolean }) {
@@ -209,30 +285,45 @@ function Splash({ dark }: { dark: boolean }) {
       style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}
       viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true"
     >
-      {SPLASHES.map((sp, i) => (
-        <g key={i} transform={`translate(${sp.x} ${sp.y}) rotate(${sp.r}) scale(${sp.s})`}>
+      {SPLATS.map((sp, i) => (
+        <g key={i} transform={`translate(${sp.x} ${sp.y}) rotate(${sp.rot}) scale(${sp.s})`}>
+          {/* Falling drop — accelerates into the impact point */}
+          <circle
+            className="wp-splat-drop"
+            r="11" fill={sp.color} opacity="0"
+            style={{ animation: `splatDrop ${sp.cyc}s linear ${sp.delay}s infinite` }}
+          />
+          {/* Splat body — squashes on impact, overshoots, settles */}
           <g
+            className="wp-splat-body"
+            fill={sp.color}
+            opacity={dark ? .82 : .9}
             style={{
-              animation: `splashIn .7s cubic-bezier(.34,1.56,.64,1) ${sp.delay}s both`,
+              animation: `splatBody ${sp.cyc}s linear ${sp.delay}s infinite`,
               transformBox: 'fill-box',
               transformOrigin: 'center',
             }}
-            fill={sp.color}
-            opacity={dark ? .82 : .9}
           >
-            {/* Irregular splat body from overlapping ellipses */}
-            <ellipse rx="112" ry="78" />
-            <ellipse rx="66" ry="96" transform="rotate(38) translate(24 -10)" />
-            <ellipse rx="84" ry="52" transform="rotate(-24) translate(-30 22)" />
-            {/* Satellite droplets */}
-            <circle r="14" cx="148" cy="-34" />
-            <circle r="8"  cx="-158" cy="42" />
-            <circle r="6"  cx="96"  cy="112" />
-            <circle r="4"  cx="-104" cy="-96" />
-            {/* Drip */}
-            <rect x="-10" y="58" width="20" height="96" rx="10" />
-            <circle r="12" cx="0" cy="158" />
+            <path d={SPLAT_PATHS[i % SPLAT_PATHS.length]} />
+            <circle r="9" cx="118" cy="-40" />
+            <circle r="5" cx="-124" cy="30" />
+            <circle r="4" cx="70" cy="96" />
+            <rect x="-7" y="48" width="14" height="70" rx="7" />
+            <circle r="8" cx="0" cy="122" />
           </g>
+          {/* Ejecta — droplets thrown out at impact */}
+          {EJECTA.map((d, k) => (
+            <circle
+              key={k}
+              className="wp-splat-ej"
+              r="5" fill={sp.color} opacity="0"
+              style={{
+                animation: `splatEject ${sp.cyc}s ease-out ${sp.delay}s infinite`,
+                ['--ex' as string]: `${d.x}px`,
+                ['--ey' as string]: `${d.y}px`,
+              } as React.CSSProperties}
+            />
+          ))}
         </g>
       ))}
     </svg>

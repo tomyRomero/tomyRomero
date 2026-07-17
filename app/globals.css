@@ -140,12 +140,36 @@ button:disabled {
   100% { transform: translate(var(--sway, 20px), -112vh); opacity: 0; }
 }
 
-/* Splash wallpaper — paint lands with an elastic overshoot. Fill mode 'both'
-   means reduced-motion shows the finished painting instantly. */
-@keyframes splashIn {
-  0%   { transform: scale(0); opacity: 0; }
-  60%  { transform: scale(1.12); opacity: 1; }
-  100% { transform: scale(1); opacity: 1; }
+/* Bubble pop burst — expanding ring + droplets flying outward */
+@keyframes bubblePopRing {
+  0%   { transform: scale(.55); opacity: .9; }
+  100% { transform: scale(1.7); opacity: 0; }
+}
+@keyframes bubblePopDrop {
+  0%   { transform: translate(0, 0) scale(1); opacity: .95; }
+  100% { transform: translate(var(--dx, 30px), var(--dy, 0)) scale(.4); opacity: 0; }
+}
+
+/* Splash wallpaper — one full paint cycle per splat: drop falls (0-4%),
+   impact squash + overshoot (4-8.5%), linger, fade, repeat */
+@keyframes splatDrop {
+  0%         { transform: translateY(-820px); opacity: 1; animation-timing-function: cubic-bezier(.55, 0, .9, .6); }
+  4%         { transform: translateY(0); opacity: 1; }
+  4.6%, 100% { transform: translateY(0); opacity: 0; }
+}
+@keyframes splatBody {
+  0%, 3.9%  { transform: scale(0); opacity: 0; }
+  4%        { transform: scale(.4); opacity: 1; }
+  5.5%      { transform: scale(1.22, .82); }
+  7%        { transform: scale(.94, 1.06); }
+  8.5%      { transform: scale(1); }
+  86%       { transform: scale(1); opacity: 1; }
+  96%, 100% { transform: scale(1); opacity: 0; }
+}
+@keyframes splatEject {
+  0%, 3.9%  { transform: translate(0, 0) scale(0); opacity: 0; }
+  4%        { transform: translate(0, 0) scale(1); opacity: .95; }
+  9%, 100%  { transform: translate(var(--ex, 60px), var(--ey, -40px)) scale(.3); opacity: 0; }
 }
 
 /* Wallpaper dune drift — slow horizontal sway per layer */
@@ -272,5 +296,11 @@ button:disabled {
      the toast would vanish instantly for reduced-motion users. */
   .toast-drain {
     animation-duration: 7000ms !important;
+  }
+  /* Wallpaper effects degrade to their base styles under reduced motion:
+     bubbles/drops/ejecta have base opacity 0 (clean gradient), splat bodies
+     are visible at rest (a finished static painting). */
+  .wp-bubble, .wp-splat-drop, .wp-splat-body, .wp-splat-ej {
+    animation: none !important;
   }
 }
