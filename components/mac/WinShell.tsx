@@ -93,6 +93,16 @@ interface Props {
   children: React.ReactNode;
 }
 
+// True when the cursor is close to the dock's trash icon — a generous halo
+// around the icon itself, so windows can be dropped on the trash without
+// dragging all the way to the screen edge.
+function isNearTrash(x: number, y: number) {
+  const el = document.querySelector('[data-dock-trash]');
+  if (!el) return false;
+  const r = (el as HTMLElement).getBoundingClientRect();
+  return x > r.left - 80 && x < r.right + 80 && y > r.top - 130;
+}
+
 export default function WinShell({ win, dark, dispatch, focused, onFocus, children }: Props) {
   const tk = T(dark);
   const el         = useRef<HTMLDivElement>(null);
@@ -103,9 +113,7 @@ export default function WinShell({ win, dark, dispatch, focused, onFocus, childr
   const rzTop      = useRef(false);
   const dOff       = useRef({ x: 0, y: 0 });
   const rzStart    = useRef({ x: 0, y: 0, w: 0, h: 0, left: 0, top: 0 });
-  const lastMouseY = useRef(0);
-
-  const DOCK_ZONE = 110;
+  const lastMouse  = useRef({ x: 0, y: 0 });
 
   // ── Minimize animation: fly toward dock icon ───────────────────────────────
   useEffect(() => {
@@ -161,11 +169,10 @@ export default function WinShell({ win, dark, dispatch, focused, onFocus, childr
     const applyMove = (clientX: number, clientY: number) => {
       if (!el.current) return;
       if (drag.current) {
-        lastMouseY.current = clientY;
+        lastMouse.current = { x: clientX, y: clientY };
         el.current.style.left = Math.max(0, clientX - dOff.current.x) + 'px';
         el.current.style.top  = Math.max(28, clientY - dOff.current.y) + 'px';
-        const nearDock = clientY > window.innerHeight - DOCK_ZONE;
-        window.dispatchEvent(new CustomEvent('winNearDock', { detail: { near: nearDock } }));
+        window.dispatchEvent(new CustomEvent('winNearDock', { detail: { near: isNearTrash(clientX, clientY) } }));
       }
       if (rzRight.current) {
         el.current.style.width = Math.max(320, rzStart.current.w + clientX - rzStart.current.x) + 'px';
@@ -191,7 +198,7 @@ export default function WinShell({ win, dark, dispatch, focused, onFocus, childr
       if (!el.current) return;
       if (drag.current) {
         window.dispatchEvent(new CustomEvent('winNearDock', { detail: { near: false } }));
-        const droppedInDock = lastMouseY.current > window.innerHeight - DOCK_ZONE;
+        const droppedInDock = isNearTrash(lastMouse.current.x, lastMouse.current.y);
         if (droppedInDock) {
           window.dispatchEvent(new Event('dockTrashShake'));
           dispatch({ type: 'CLOSE', id: win.id });

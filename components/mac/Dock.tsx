@@ -322,7 +322,7 @@ export default function Dock({ wins, dark, dispatch }: Props) {
             border: '1px solid rgba(255,255,255,.12)',
             boxShadow: '0 4px 18px rgba(0,0,0,.44)', pointerEvents: 'none', zIndex: 2,
           }}>
-            {trTarget ? 'Release to Close' : 'Trash'}
+            {trTarget ? 'Release to Close' : 'Trash · drop a window here to close it'}
             <div style={{
               position: 'absolute', bottom: -5, left: '50%', transform: 'translateX(-50%)',
               borderLeft: '5px solid transparent', borderRight: '5px solid transparent',
@@ -333,6 +333,11 @@ export default function Dock({ wins, dark, dispatch }: Props) {
 
         <div
           data-dock-trash="true"
+          role="button"
+          tabIndex={0}
+          aria-label="Trash. Drag a window here to close it."
+          onClick={() => window.dispatchEvent(new Event('dockTrashShake'))}
+          onKeyDown={e => { if (e.key === 'Enter') window.dispatchEvent(new Event('dockTrashShake')); }}
           style={{
           width: BASE, height: BASE, borderRadius: r,
           display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -351,7 +356,7 @@ export default function Dock({ wins, dark, dispatch }: Props) {
               ? '0 16px 40px rgba(15,25,45,.45), inset 0 1px 0 rgba(255,255,255,.14)'
               : '0 4px 12px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.10)',
           animation: trAnim ? 'trashShake .55s ease' : 'none',
-          cursor: 'default',
+          cursor: 'pointer',
           position: 'relative', overflow: 'hidden',
         }}>
           <div style={{
