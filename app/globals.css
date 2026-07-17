@@ -119,15 +119,19 @@ button:disabled {
   100% { opacity: 1; transform: none; }
 }
 
-/* Wallpaper wash drift — large soft color spots */
-@keyframes washA {
-  0%, 100% { transform: translate(0, 0) scale(1.00); }
-  33%       { transform: translate(7vw, -5vh) scale(1.08); }
-  66%       { transform: translate(-6vw, 4vh) scale(0.94); }
+/* Aurora wallpaper — swaying curtains, twinkling stars, shooting stars */
+@keyframes auroraSway {
+  0%   { transform: skewX(-12deg) translateX(-3vw) scaleY(1);    opacity: .55; }
+  100% { transform: skewX(-6deg)  translateX(3vw)  scaleY(1.06); opacity: .95; }
 }
-@keyframes washB {
-  0%, 100% { transform: translate(0, 0) scale(1.00); }
-  50%       { transform: translate(-9vw, 6vh) scale(1.10); }
+@keyframes twinkle {
+  0%, 100% { opacity: .2; }
+  50%      { opacity: 1; }
+}
+@keyframes shootStar {
+  0%       { transform: rotate(-32deg) translateX(0); opacity: 0; }
+  1.5%     { opacity: .9; }
+  9%, 100% { transform: rotate(-32deg) translateX(52vw); opacity: 0; }
 }
 
 /* Bubbles wallpaper — rise with an S-curve drift. Base opacity is 0, so
@@ -323,7 +327,8 @@ button:disabled {
      bubbles/drops/rings/ejecta/drips have base opacity 0 (clean gradient or
      static painting), splat bodies are visible at rest. */
   .wp-bubble, .wp-splat-drop, .wp-splat-ring, .wp-splat-body,
-  .wp-splat-drip, .wp-splat-ejx, .wp-splat-ejy {
+  .wp-splat-drip, .wp-splat-ejx, .wp-splat-ejy,
+  .wp-curtain, .wp-star, .wp-shoot {
     animation: none !important;
   }
 }

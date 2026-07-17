@@ -3,74 +3,33 @@ import { useState, useRef } from 'react';
 
 // Selectable wallpapers, switchable from the ⌘ menu. All CSS/SVG,
 // zero image assets. Each has a light and dark treatment.
-export type WallpaperVariant = 'mesh' | 'dunes' | 'blobs' | 'quiet' | 'bubbles' | 'splash';
+export type WallpaperVariant = 'splash' | 'bubbles' | 'aurora' | 'dunes';
 
 export const WALLPAPERS: { id: WallpaperVariant; label: string }[] = [
-  { id: 'mesh',    label: 'Mesh'    },
-  { id: 'dunes',   label: 'Dunes'   },
-  { id: 'blobs',   label: 'Blobs'   },
-  { id: 'quiet',   label: 'Quiet'   },
-  { id: 'bubbles', label: 'Bubbles' },
   { id: 'splash',  label: 'Splash'  },
+  { id: 'bubbles', label: 'Bubbles' },
+  { id: 'aurora',  label: 'Aurora'  },
+  { id: 'dunes',   label: 'Dunes'   },
 ];
 
 const BASES: Record<WallpaperVariant, { dark: string; light: string }> = {
-  mesh: {
-    dark:  'linear-gradient(160deg, #070a1e 0%, #0d1130 50%, #0a0d26 100%)',
-    light: 'linear-gradient(160deg, #e3ecfa 0%, #eef2fb 50%, #e6eefa 100%)',
-  },
-  dunes: {
-    dark:  'linear-gradient(170deg, #05081a 0%, #0a0e2c 50%, #0c102f 100%)',
-    light: 'linear-gradient(170deg, #d9e9fb 0%, #ecf3fc 55%, #dfeaf7 100%)',
-  },
-  blobs: {
-    dark:  'linear-gradient(145deg, #020614 0%, #0a0e24 35%, #110a22 65%, #08061a 100%)',
-    light: 'linear-gradient(145deg, #e2ecf8 0%, #eef0f6 35%, #e7e4f4 65%, #e0ecf0 100%)',
-  },
-  quiet: {
-    dark:  'linear-gradient(165deg, #08090d 0%, #0e1016 45%, #0a0b10 100%)',
-    light: 'linear-gradient(165deg, #eef1f6 0%, #e7ebf2 45%, #ebeef4 100%)',
+  splash: {
+    dark:  'linear-gradient(165deg, #141416 0%, #0e0e10 100%)',
+    light: 'linear-gradient(165deg, #f8f8f6 0%, #f1f1ee 100%)',
   },
   bubbles: {
     dark:  'linear-gradient(180deg, #03121e 0%, #072a3f 60%, #0a3a52 100%)',
     light: 'linear-gradient(180deg, #e2f1f8 0%, #cfe7f2 55%, #c0dcEB 100%)',
   },
-  splash: {
-    dark:  'linear-gradient(165deg, #141416 0%, #0e0e10 100%)',
-    light: 'linear-gradient(165deg, #f8f8f6 0%, #f1f1ee 100%)',
+  aurora: {
+    dark:  'linear-gradient(180deg, #020409 0%, #07101f 55%, #0a1626 100%)',
+    light: 'linear-gradient(180deg, #dfe5f4 0%, #f0e6ee 55%, #f6eee6 100%)',
+  },
+  dunes: {
+    dark:  'linear-gradient(170deg, #05081a 0%, #0a0e2c 50%, #0c102f 100%)',
+    light: 'linear-gradient(170deg, #d9e9fb 0%, #ecf3fc 55%, #dfeaf7 100%)',
   },
 };
-
-// Soft radial color spot used by mesh / blobs / quiet
-function Wash({ w, pos, color, blur, anim }: {
-  w: string; pos: React.CSSProperties; color: string; blur: number; anim: string;
-}) {
-  return (
-    <div style={{
-      position: 'absolute', width: w, height: w, borderRadius: '50%',
-      ...pos,
-      background: `radial-gradient(circle, ${color} 0%, transparent 68%)`,
-      filter: `blur(${blur}px)`,
-      animation: anim,
-    }} />
-  );
-}
-
-// ── Mesh: Sequoia-style soft color field ─────────────────────────────────────
-function Mesh({ dark }: { dark: boolean }) {
-  return (
-    <>
-      <Wash w="62vw" pos={{ left: '-16vw', top: '-18vw' }} blur={95} anim="washA 46s ease-in-out infinite"
-        color={dark ? 'rgba(64,110,255,.36)' : 'rgba(120,160,240,.45)'} />
-      <Wash w="56vw" pos={{ right: '-14vw', top: '10vh' }} blur={100} anim="washB 58s ease-in-out infinite"
-        color={dark ? 'rgba(120,80,255,.28)' : 'rgba(160,150,245,.36)'} />
-      <Wash w="48vw" pos={{ left: '16vw', bottom: '-14vh' }} blur={95} anim="washA 64s ease-in-out infinite reverse"
-        color={dark ? 'rgba(0,190,230,.22)' : 'rgba(120,200,235,.32)'} />
-      <Wash w="34vw" pos={{ left: '36vw', top: '26vh' }} blur={85} anim="washB 52s ease-in-out infinite reverse"
-        color={dark ? 'rgba(255,120,190,.10)' : 'rgba(250,180,210,.22)'} />
-    </>
-  );
-}
 
 // ── Dunes: Big Sur-style layered hills ───────────────────────────────────────
 function Dunes({ dark }: { dark: boolean }) {
@@ -122,28 +81,76 @@ function Dunes({ dark }: { dark: boolean }) {
   );
 }
 
-// ── Blobs: the original high-energy look, retuned to the blue system ────────
-function Blobs({ dark }: { dark: boolean }) {
-  return (
-    <>
-      <Wash w="65vw" pos={{ left: '-18vw', top: '-14vw' }} blur={80} anim="washA 38s ease-in-out infinite"
-        color={dark ? 'rgba(90,40,245,.46)' : 'rgba(100,170,255,.44)'} />
-      <Wash w="58vw" pos={{ right: '-12vw', top: '18vh' }} blur={90} anim="washB 46s ease-in-out infinite"
-        color={dark ? 'rgba(0,180,220,.38)' : 'rgba(80,200,220,.32)'} />
-      <Wash w="54vw" pos={{ left: '18vw', bottom: '-12vh' }} blur={78} anim="washA 42s ease-in-out infinite reverse"
-        color={dark ? 'rgba(190,50,225,.32)' : 'rgba(165,145,255,.38)'} />
-    </>
-  );
-}
+// ── Aurora: northern-lights curtains over a twinkling starfield ──────────────
+// Deterministic star positions (shared PRNG) so SSR and client match.
+const STARS = (() => {
+  const rnd = mulberry32(999);
+  return Array.from({ length: 46 }, () => ({
+    left: rnd() * 100,
+    top: rnd() * 62,
+    size: rnd() < 0.18 ? 2.5 : 1.5,
+    dur: 2.5 + rnd() * 4,
+    delay: rnd() * 6,
+    base: 0.25 + rnd() * 0.4,
+  }));
+})();
 
-// ── Quiet: near-monochrome minimal ───────────────────────────────────────────
-function Quiet({ dark }: { dark: boolean }) {
+const CURTAINS = [
+  { left: '4%',  w: '24vw', dur: 14, delay: 0,  darkC: ['rgba(64,224,180,.30)', 'rgba(80,150,255,.16)'], lightC: ['rgba(120,210,190,.24)', 'rgba(160,180,250,.14)'] },
+  { left: '26%', w: '30vw', dur: 18, delay: -6, darkC: ['rgba(80,230,140,.24)', 'rgba(64,224,200,.14)'], lightC: ['rgba(250,170,190,.22)', 'rgba(240,200,160,.12)'] },
+  { left: '52%', w: '26vw', dur: 16, delay: -3, darkC: ['rgba(150,100,255,.24)', 'rgba(220,100,220,.12)'], lightC: ['rgba(190,160,250,.20)', 'rgba(250,180,210,.12)'] },
+  { left: '74%', w: '28vw', dur: 21, delay: -9, darkC: ['rgba(80,150,255,.22)', 'rgba(64,224,180,.14)'], lightC: ['rgba(150,200,240,.20)', 'rgba(140,220,200,.12)'] },
+];
+
+const SHOOTS = [
+  { left: '12%', top: '8%',  dur: 9,  delay: 2  },
+  { left: '58%', top: '14%', dur: 13, delay: 7.5 },
+];
+
+function Aurora({ dark }: { dark: boolean }) {
   return (
     <>
-      <Wash w="70vw" pos={{ left: '-20vw', top: '-24vw' }} blur={80} anim="washB 60s ease-in-out infinite"
-        color={dark ? 'rgba(70,110,205,.20)' : 'rgba(96,140,220,.20)'} />
-      <Wash w="60vw" pos={{ right: '-16vw', bottom: '-18vw' }} blur={90} anim="washA 70s ease-in-out infinite reverse"
-        color={dark ? 'rgba(96,104,180,.14)' : 'rgba(150,158,180,.16)'} />
+      {/* Curtains */}
+      {CURTAINS.map((c, i) => {
+        const [a, b] = dark ? c.darkC : c.lightC;
+        return (
+          <div key={i} className="wp-curtain" style={{
+            position: 'absolute',
+            left: c.left, top: '-12vh',
+            width: c.w, height: '120vh',
+            background: `linear-gradient(180deg, transparent 0%, ${a} 28%, ${b} 58%, transparent 88%)`,
+            filter: 'blur(46px)',
+            mixBlendMode: dark ? 'screen' : 'normal',
+            animation: `auroraSway ${c.dur}s ease-in-out ${c.delay}s infinite alternate`,
+            opacity: .8,
+          }} />
+        );
+      })}
+
+      {/* Stars — dark mode only (a dawn sky has none visible) */}
+      {dark && STARS.map((s, i) => (
+        <div key={i} className="wp-star" style={{
+          position: 'absolute',
+          left: `${s.left.toFixed(1)}%`, top: `${s.top.toFixed(1)}%`,
+          width: s.size, height: s.size, borderRadius: '50%',
+          background: 'rgba(235,242,255,.9)',
+          opacity: s.base,
+          animation: `twinkle ${s.dur.toFixed(1)}s ease-in-out ${s.delay.toFixed(1)}s infinite`,
+        }} />
+      ))}
+
+      {/* Occasional shooting stars — dark mode only */}
+      {dark && SHOOTS.map((sh, i) => (
+        <div key={i} className="wp-shoot" style={{
+          position: 'absolute',
+          left: sh.left, top: sh.top,
+          width: 90, height: 2, borderRadius: 2,
+          background: 'linear-gradient(90deg, rgba(255,255,255,.9), transparent)',
+          transform: 'rotate(-32deg)',
+          opacity: 0,
+          animation: `shootStar ${sh.dur}s linear ${sh.delay}s infinite`,
+        }} />
+      ))}
     </>
   );
 }
@@ -305,8 +312,15 @@ function makeSplat(seed: number) {
     const ang = (i / spokes) * Math.PI * 2 + (rnd() - 0.5) * 0.28;
     let r = base * (0.72 + rnd() * 0.55);
     if (rnd() < 0.34) {
-      // A finger: long tongue with satellite droplets shed along its direction
-      r = base * (1.7 + rnd() * 1.5);
+      // A finger: tongue with satellite droplets shed along its direction.
+      // Surface tension rounds real finger ends into clubs, so cap the tip
+      // with a droplet circle — no sharp points.
+      r = base * (1.55 + rnd() * 1.15);
+      satellites.push({
+        x: Math.cos(ang) * (r - 2),
+        y: Math.sin(ang) * (r - 2),
+        r: 5.5 + rnd() * 3,
+      });
       const nDrops = 1 + Math.floor(rnd() * 2);
       for (let k = 0; k < nDrops; k++) {
         const dist = r * (1.18 + rnd() * 0.55 + k * 0.3);
@@ -440,7 +454,7 @@ function Splash({ dark }: { dark: boolean }) {
 }
 
 const SCENES: Record<WallpaperVariant, (p: { dark: boolean }) => React.ReactNode> = {
-  mesh: Mesh, dunes: Dunes, blobs: Blobs, quiet: Quiet, bubbles: Bubbles, splash: Splash,
+  splash: Splash, bubbles: Bubbles, aurora: Aurora, dunes: Dunes,
 };
 
 export default function Wallpaper({ dark, variant }: { dark: boolean; variant: WallpaperVariant }) {
