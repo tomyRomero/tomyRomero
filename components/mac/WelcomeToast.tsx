@@ -16,6 +16,13 @@ export default function WelcomeToast({ dark }: { dark: boolean }) {
     }
   }, []);
 
+  // Replay on demand (Help menu → Show Welcome Tip), even after first visit
+  useEffect(() => {
+    const replay = () => { setLeaving(false); setVisible(true); };
+    window.addEventListener('welcomeReplay', replay);
+    return () => window.removeEventListener('welcomeReplay', replay);
+  }, []);
+
   useEffect(() => {
     if (!visible) return;
     const t = setTimeout(dismiss, DURATION);

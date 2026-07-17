@@ -109,16 +109,18 @@ button:disabled {
   100% { opacity: 1; transform: none; }
 }
 
-/* Gradient wallpaper blob animations */
-@keyframes blob1 {
-  0%, 100% { transform: translate(0, 0) scale(1.00); }
-  30%       { transform: translate(9vw, -6vh) scale(1.10); }
-  65%       { transform: translate(-7vw, 5vh) scale(0.93); }
+/* Wallpaper dune drift — slow horizontal sway per layer */
+@keyframes duneA {
+  0%, 100% { transform: translateX(0); }
+  50%       { transform: translateX(-24px); }
 }
-@keyframes blob2 {
-  0%, 100% { transform: translate(0, 0) scale(1.00); }
-  40%       { transform: translate(-11vw, 8vh) scale(1.14); }
-  80%       { transform: translate(8vw, -5vh) scale(0.90); }
+@keyframes duneB {
+  0%, 100% { transform: translateX(0); }
+  50%       { transform: translateX(28px); }
+}
+@keyframes duneC {
+  0%, 100% { transform: translateX(0); }
+  50%       { transform: translateX(-18px); }
 }
 /* Tilted photo strip entrance */
 @keyframes photoIn {

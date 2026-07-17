@@ -330,6 +330,8 @@ export default function MenuBar({ dark, setDark, wins, dispatch, calPop, setCalP
       id: 'help', label: 'Help', items: [
         { label: 'About This Portfolio',
           action: () => showToast(`macOS-style portfolio built with Next.js · ${new Date().getFullYear()}`) },
+        { label: 'Show Welcome Tip',
+          action: () => { close(); window.dispatchEvent(new Event('welcomeReplay')); } },
         { div: true },
         { label: 'Traffic Light Guide',
           action: () => showToast('🔴 Close  🟡 Minimize  🟢 Maximize / Restore') },

@@ -1,41 +1,83 @@
 'use client';
 
-// Quiet, professional wallpaper: a near-monochrome base with two large,
-// slow-drifting color washes. Light mode is cool porcelain; dark mode is
-// graphite with a faint blue cast. All CSS — no image assets.
+// Big Sur-inspired wallpaper: three layered dunes with depth gradients, a
+// light-source glow, and slow horizontal drift. Dark mode is deep indigo
+// night; light mode is airy daylight blues with a soft sun. All SVG/CSS,
+// no image assets.
 export default function Wallpaper({ dark }: { dark: boolean }) {
+  const g = dark
+    ? {
+        base:  'linear-gradient(170deg, #05081a 0%, #0a0e2c 50%, #0c102f 100%)',
+        glow:  'radial-gradient(circle, rgba(120,150,255,.18) 0%, rgba(120,150,255,.05) 55%, transparent 100%)',
+        far:   ['#35479e', '#161d4e'],
+        mid:   ['#5340c4', '#1e164e'],
+        near:  ['#1e78e0', '#0b2a5c'],
+      }
+    : {
+        base:  'linear-gradient(170deg, #d9e9fb 0%, #ecf3fc 55%, #dfeaf7 100%)',
+        glow:  'radial-gradient(circle, rgba(255,244,214,.65) 0%, rgba(255,238,200,.22) 55%, transparent 100%)',
+        far:   ['#cadef6', '#a9c2e6'],
+        mid:   ['#bcc9f0', '#93a9db'],
+        near:  ['#86abe2', '#517cba'],
+      };
+
   return (
     <div style={{
       position: 'fixed', inset: 0, zIndex: 0, overflow: 'hidden',
-      background: dark
-        ? 'linear-gradient(165deg, #08090d 0%, #0e1016 45%, #0a0b10 100%)'
-        : 'linear-gradient(165deg, #eef1f6 0%, #e7ebf2 45%, #ebeef4 100%)',
+      background: g.base,
     }}>
-      {/* Primary wash — soft blue, upper left */}
+      {/* Light source — moonlight / sun, upper right */}
       <div style={{
         position: 'absolute',
-        width: '70vw', height: '70vw',
+        width: '55vw', height: '55vw',
+        right: '-12vw', top: '-22vw',
         borderRadius: '50%',
-        left: '-20vw', top: '-24vw',
-        background: dark
-          ? 'radial-gradient(circle, rgba(70,110,205,.20) 0%, rgba(70,110,205,.06) 55%, transparent 100%)'
-          : 'radial-gradient(circle, rgba(96,140,220,.20) 0%, rgba(96,140,220,.06) 55%, transparent 100%)',
-        filter: 'blur(80px)',
-        animation: 'blob1 52s ease-in-out infinite',
+        background: g.glow,
+        filter: 'blur(40px)',
+        pointerEvents: 'none',
       }} />
 
-      {/* Secondary wash — muted slate, lower right */}
-      <div style={{
-        position: 'absolute',
-        width: '60vw', height: '60vw',
-        borderRadius: '50%',
-        right: '-16vw', bottom: '-18vw',
-        background: dark
-          ? 'radial-gradient(circle, rgba(96,104,180,.14) 0%, rgba(96,104,180,.05) 55%, transparent 100%)'
-          : 'radial-gradient(circle, rgba(150,158,180,.16) 0%, rgba(150,158,180,.05) 55%, transparent 100%)',
-        filter: 'blur(90px)',
-        animation: 'blob2 64s ease-in-out infinite',
-      }} />
+      {/* Dune layers */}
+      <svg
+        style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}
+        viewBox="0 0 1440 900"
+        preserveAspectRatio="xMidYMid slice"
+        aria-hidden="true"
+      >
+        <defs>
+          <linearGradient id="wp-far" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stopColor={g.far[0]} />
+            <stop offset="1" stopColor={g.far[1]} />
+          </linearGradient>
+          <linearGradient id="wp-mid" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stopColor={g.mid[0]} />
+            <stop offset="1" stopColor={g.mid[1]} />
+          </linearGradient>
+          <linearGradient id="wp-near" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stopColor={g.near[0]} />
+            <stop offset="1" stopColor={g.near[1]} />
+          </linearGradient>
+        </defs>
+
+        <g style={{ animation: 'duneA 52s ease-in-out infinite' }}>
+          <path
+            d="M-80 500 C 200 420, 470 460, 740 525 C 1010 590, 1260 545, 1520 455 L1520 900 L-80 900 Z"
+            fill="url(#wp-far)" opacity=".75"
+          />
+        </g>
+        <g style={{ animation: 'duneB 64s ease-in-out infinite' }}>
+          <path
+            d="M-80 640 C 220 545, 520 690, 830 630 C 1100 578, 1300 690, 1520 625 L1520 900 L-80 900 Z"
+            fill="url(#wp-mid)" opacity=".85"
+          />
+        </g>
+        <g style={{ animation: 'duneC 42s ease-in-out infinite' }}>
+          <path
+            d="M-80 775 C 280 685, 640 815, 960 745 C 1200 693, 1360 785, 1520 750 L1520 900 L-80 900 Z"
+            fill="url(#wp-near)" opacity=".95"
+          />
+        </g>
+      </svg>
 
       {/* Noise texture */}
       <div style={{
@@ -50,7 +92,7 @@ export default function Wallpaper({ dark }: { dark: boolean }) {
       {/* Vignette */}
       <div style={{
         position: 'absolute', inset: 0,
-        background: `radial-gradient(ellipse at center, transparent 55%, ${dark ? 'rgba(0,0,0,.42)' : 'rgba(20,30,50,.05)'} 100%)`,
+        background: `radial-gradient(ellipse at center, transparent 55%, ${dark ? 'rgba(0,0,0,.42)' : 'rgba(20,30,50,.06)'} 100%)`,
         pointerEvents: 'none',
       }} />
     </div>
