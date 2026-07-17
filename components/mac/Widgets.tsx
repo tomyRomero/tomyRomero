@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { T } from './tokens';
 import { ME, experiences, projects, yearsExperience } from '@/constants';
-import type { WinAction } from './winTypes';
 
 // ── Analog clock SVG ──────────────────────────────────────────────────────────
 function AnalogClock({ dark }: { dark: boolean }) {
@@ -104,11 +103,23 @@ function AnalogClock({ dark }: { dark: boolean }) {
 }
 
 // ── Widgets column ────────────────────────────────────────────────────────────
-export default function Widgets({ dark, dispatch, openCal }: { dark: boolean; dispatch: React.Dispatch<WinAction>; openCal: () => void }) {
+export default function Widgets({ dark, openCal, onOpen }: {
+  dark: boolean; openCal: () => void; onOpen: (id: string) => void;
+}) {
   const tk = T(dark);
   const currentRole = experiences[0];
+  const featured    = projects[0];
 
-  const open = (id: string) => dispatch({ type: 'OPEN', id });
+  const open = (id: string) => onOpen(id);
+
+  // Open the Projects window, then jump into the featured project's detail
+  // view once the window has mounted (the event listener lives inside it).
+  const openFeatured = () => {
+    onOpen('projects');
+    setTimeout(() => {
+      window.dispatchEvent(new CustomEvent('openProjectDetail', { detail: { title: featured.title } }));
+    }, 90);
+  };
 
   const glass: React.CSSProperties = {
     background: tk.winBg,
@@ -275,8 +286,8 @@ export default function Widgets({ dark, dispatch, openCal }: { dark: boolean; di
       <div
         role="button"
         tabIndex={0}
-        onClick={() => open('projects')}
-        onKeyDown={e => e.key === 'Enter' && open('projects')}
+        onClick={openFeatured}
+        onKeyDown={e => e.key === 'Enter' && openFeatured()}
         style={{ ...glass, cursor: 'pointer', transition: 'all .18s' }}
         onMouseEnter={e => {
           e.currentTarget.style.borderColor = tk.accentBorder;
@@ -287,8 +298,17 @@ export default function Widgets({ dark, dispatch, openCal }: { dark: boolean; di
           e.currentTarget.style.transform = 'none';
         }}
       >
-        <div style={{ position: 'relative', width: '100%', aspectRatio: '16/9', background: tk.cardBg }}>
-          <Image src={projects[0].image} alt={projects[0].title} fill style={{ objectFit: 'cover' }} sizes="192px" />
+        {/* Blurred cover of the same shot behind a contained foreground, so
+            portrait app screenshots preview without letterbox bars */}
+        <div style={{ position: 'relative', width: '100%', aspectRatio: '16/10', overflow: 'hidden', background: tk.cardBg }}>
+          <Image
+            src={featured.image} alt="" aria-hidden fill sizes="192px"
+            style={{ objectFit: 'cover', filter: 'blur(16px) saturate(1.3)', transform: 'scale(1.25)', opacity: .8 }}
+          />
+          <Image
+            src={featured.image} alt={featured.title} fill sizes="192px"
+            style={{ objectFit: 'contain', padding: 5 }}
+          />
         </div>
         <div style={{ padding: '10px 13px 12px' }}>
           <div style={{
@@ -298,9 +318,9 @@ export default function Widgets({ dark, dispatch, openCal }: { dark: boolean; di
             Featured Project
           </div>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: 6 }}>
-            <span style={{ fontSize: 12.5, fontWeight: 700, color: tk.text }}>{projects[0].title}</span>
+            <span style={{ fontSize: 12.5, fontWeight: 700, color: tk.text }}>{featured.title}</span>
             <span style={{ fontSize: 10, color: tk.textMuted, fontFamily: 'var(--font-mono), monospace' }}>
-              {projects[0].year}
+              {featured.year}
             </span>
           </div>
           <div style={{
@@ -308,7 +328,7 @@ export default function Widgets({ dark, dispatch, openCal }: { dark: boolean; di
             overflow: 'hidden', display: '-webkit-box',
             WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' as const,
           }}>
-            {projects[0].tagline}
+            {featured.tagline}
           </div>
         </div>
       </div>

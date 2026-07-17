@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect, useReducer, useCallback, useMemo, useRef } from 'react';
+import { useState, useEffect, useReducer, useCallback, useMemo, useSyncExternalStore } from 'react';
 import MobileView    from '@/components/MobileView';
 import Wallpaper, { WALLPAPERS, type WallpaperVariant } from '@/components/mac/Wallpaper';
 import MenuBar       from '@/components/mac/MenuBar';
@@ -26,6 +26,16 @@ const WIN_DEFS = [
 // Module-level z-index counter (intentionally outside React to avoid re-render issues)
 let ZZ = 200;
 const nz = () => ++ZZ;
+
+// Viewport check via useSyncExternalStore: on client-side mounts (e.g. mobile
+// back-navigation from a project page) the snapshot is read synchronously, so
+// the correct view renders on the very first frame — no desktop flicker.
+const subscribeResize = (cb: () => void) => {
+  window.addEventListener('resize', cb);
+  return () => window.removeEventListener('resize', cb);
+};
+const isMobileSnapshot = () => window.innerWidth < 768;
+const serverSnapshot = () => false;
 
 function initWins(): Win[] {
   return WIN_DEFS.map(d => ({
@@ -98,7 +108,7 @@ function winReducer(s: Win[], a: WinAction): Win[] {
 // ── Desktop App ───────────────────────────────────────────────────────────────
 export default function Home() {
   const [dark, setDark]       = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
+  const isMobile = useSyncExternalStore(subscribeResize, isMobileSnapshot, serverSnapshot);
   const [wins, dispatch] = useReducer(winReducer, undefined, initWins);
   const [focused, setFocused] = useState<string | null>(null);
   const [calPop, setCalPop]   = useState(false);
@@ -119,14 +129,6 @@ export default function Home() {
     else setDark(window.matchMedia('(prefers-color-scheme: dark)').matches);
   }, []);
   useEffect(() => { localStorage.setItem('dark', String(dark)); }, [dark]);
-
-  // Detect mobile viewport (< 768 = phones; ≥ 768 = iPad / desktop — see macOS view with touch support)
-  useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < 768);
-    check();
-    window.addEventListener('resize', check);
-    return () => window.removeEventListener('resize', check);
-  }, []);
 
   const focus = useCallback((id: string) => {
     setFocused(id);
@@ -233,7 +235,16 @@ export default function Home() {
         ))}
 
         {/* Desktop widgets */}
-        <Widgets dark={dark} dispatch={dispatch} openCal={() => setCalPop(true)} />
+        <Widgets
+          dark={dark}
+          openCal={() => setCalPop(true)}
+          onOpen={(id: string) => {
+            const w = wins.find(x => x.id === id);
+            if (w?.isMin) dispatch({ type: 'RESTORE', id });
+            else dispatch({ type: 'OPEN', id });
+            focus(id);
+          }}
+        />
       </div>
 
       {/* Dock */}

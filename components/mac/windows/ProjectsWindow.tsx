@@ -364,6 +364,17 @@ export default function ProjectsWindow({ dark }: { dark: boolean }) {
   const tk = T(dark);
   const [detail, setDetail] = useState<string | null>(null);
 
+  // Deep link from outside (e.g. the Featured Project widget): jump straight
+  // to a specific project's detail view.
+  useEffect(() => {
+    const h = (e: Event) => {
+      const t = (e as CustomEvent<{ title: string }>).detail?.title;
+      if (t && projects.some(p => p.title === t)) setDetail(t);
+    };
+    window.addEventListener('openProjectDetail', h);
+    return () => window.removeEventListener('openProjectDetail', h);
+  }, []);
+
   if (detail) {
     return <ProjectDetail title={detail} onBack={() => setDetail(null)} dark={dark} />;
   }
