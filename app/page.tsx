@@ -34,7 +34,11 @@ const subscribeResize = (cb: () => void) => {
   window.addEventListener('resize', cb);
   return () => window.removeEventListener('resize', cb);
 };
-const isMobileSnapshot = () => window.innerWidth < 768;
+// Phones — including landscape phones, whose height can't fit windows + dock
+const isMobileSnapshot = () => window.innerWidth < 768 || window.innerHeight < 520;
+// Compact widths (iPad portrait): desktop works, but the widgets column
+// would overlap windows, so it hides
+const isCompactSnapshot = () => window.innerWidth < 1000;
 const serverSnapshot = () => false;
 
 function initWins(): Win[] {
@@ -108,7 +112,8 @@ function winReducer(s: Win[], a: WinAction): Win[] {
 // ── Desktop App ───────────────────────────────────────────────────────────────
 export default function Home() {
   const [dark, setDark]       = useState(false);
-  const isMobile = useSyncExternalStore(subscribeResize, isMobileSnapshot, serverSnapshot);
+  const isMobile  = useSyncExternalStore(subscribeResize, isMobileSnapshot, serverSnapshot);
+  const isCompact = useSyncExternalStore(subscribeResize, isCompactSnapshot, serverSnapshot);
   const [wins, dispatch] = useReducer(winReducer, undefined, initWins);
   const [focused, setFocused] = useState<string | null>(null);
   const [calPop, setCalPop]   = useState(false);
@@ -234,8 +239,9 @@ export default function Home() {
           </WinShell>
         ))}
 
-        {/* Desktop widgets */}
-        <Widgets
+        {/* Desktop widgets — hidden on compact widths (iPad portrait) where
+            they would overlap windows */}
+        {!isCompact && <Widgets
           dark={dark}
           openCal={() => setCalPop(true)}
           onOpen={(id: string) => {
@@ -244,7 +250,7 @@ export default function Home() {
             else dispatch({ type: 'OPEN', id });
             focus(id);
           }}
-        />
+        />}
       </div>
 
       {/* Dock */}

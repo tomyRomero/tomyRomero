@@ -132,7 +132,7 @@ export default function MobileView({ dark, setDark }: { dark: boolean; setDark: 
             border: `1px solid ${cardBorder}`,
             boxShadow: '0 8px 28px rgba(0,0,0,.16)',
           }}>
-            <Image src={profilePhoto} alt="Tomy Romero" fill style={{ objectFit: 'cover' }} sizes="106px" />
+            <Image src={profilePhoto} alt="Tomy Romero" fill style={{ objectFit: 'cover' }} sizes="106px" priority />
           </div>
           <h1 style={{
             fontSize: 27, fontWeight: 700,
