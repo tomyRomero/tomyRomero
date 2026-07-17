@@ -130,32 +130,6 @@ button:disabled {
   50%       { transform: translate(-9vw, 6vh) scale(1.10); }
 }
 
-/* Rain wallpaper — runners fall under gravity (accelerating timing on the
-   element), wiggle side to side, beads and bokeh shimmer */
-@keyframes rainFall {
-  0%   { transform: translateY(0); opacity: 0; }
-  4%   { opacity: 1; }
-  88%  { opacity: 1; }
-  100% { transform: translateY(118vh); opacity: 0; }
-}
-@keyframes rainWiggle {
-  0%   { transform: translateX(calc(var(--rw, 5px) * -1)); }
-  100% { transform: translateX(var(--rw, 5px)); }
-}
-@keyframes beadFade {
-  0%, 100% { opacity: .25; }
-  50%      { opacity: .7; }
-}
-
-/* Lava wallpaper — blobs rise and sink inside the goo filter */
-@keyframes lavaRise {
-  0%   { transform: translateY(0); }
-  100% { transform: translateY(var(--rise, -400px)); }
-}
-@keyframes lavaWobble {
-  0%   { transform: scale(1, .94); }
-  100% { transform: scale(.94, 1.08); }
-}
 
 /* Bubbles wallpaper — rise with an S-curve drift. Base opacity is 0, so
    reduced-motion (which collapses the animation) leaves a clean gradient. */
@@ -337,8 +311,7 @@ button:disabled {
      bubbles/drops/rings/ejecta/drips have base opacity 0 (clean gradient or
      static painting), splat bodies are visible at rest. */
   .wp-bubble, .wp-splat-drop, .wp-splat-ring, .wp-splat-body,
-  .wp-splat-drip, .wp-splat-ejx, .wp-splat-ejy,
-  .wp-bokeh, .wp-bead, .wp-rain-run, .wp-lava-rise, .wp-lava-wob {
+  .wp-splat-drip, .wp-splat-ejx, .wp-splat-ejy {
     animation: none !important;
   }
 }
