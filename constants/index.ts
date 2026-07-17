@@ -7,7 +7,7 @@ export const ME = {
   github:    'https://github.com/tomyRomero',
   linkedin:  'https://www.linkedin.com/in/tomyromero/',
   portfolio: 'https://tomyromero.vercel.app',
-  bio: `Full-stack engineer building healthcare software at MEDsys. I work across C#/.NET services, React frontends, and the SQL Server schemas underneath scheduling, billing, and authorizations. Nights and weekends I ship my own projects end to end. UVI graduate. SQL nerd.`,
+  bio: `Full-stack engineer building home care software at MEDsys. I work across C#/.NET services, React frontends, and the SQL Server schemas underneath scheduling, billing, and authorizations. Nights and weekends I ship my own projects end to end. UVI graduate. SQL nerd.`,
 };
 
 // First year of professional software work — drives the "years" stats everywhere
@@ -236,7 +236,7 @@ export const experiences = [
     date:    'April 2025 – Present',
     location: 'Remote · Connecticut',
     description: [
-      'Build, maintain, and debug full-stack features for a home-care healthcare management system.',
+      'Build, maintain, and debug full-stack features for a home care management system.',
       'Design and optimize SQL Server data models and complex queries behind scheduling, billing, authorization, and reporting workflows.',
       'Ship features end to end with C#, ASP.NET Core, and JavaScript in a DevOps-driven environment.',
       'Work directly with business stakeholders to scope requirements and deliver new features.',
@@ -329,4 +329,4 @@ export const contactBlurb =
   'Hiring for a full-stack role, or just want to talk shop about .NET, React, or SQL? My inbox is open, and email is the fastest way to reach me.';
 
 // ── About page highlight chips ────────────────────────────────────────────────
-export const aboutChips = ['ASP.NET Core', 'React', 'SQL Server', 'Azure', 'Healthcare IT', 'SaaS Builder'];
+export const aboutChips = ['ASP.NET Core', 'React', 'SQL Server', 'Azure', 'Home Care Tech', 'SaaS Builder'];

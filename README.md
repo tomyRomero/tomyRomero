@@ -1,7 +1,7 @@
 # Hi, I'm Tomy Romero 👋  
 
 Full-Stack Software Engineer specializing in ASP.NET, C#, React and SQL Server.  
-Currently building healthcare systems at MEDsys Software Solutions.  
+Currently building home care software at MEDsys Software Solutions.  
 
 I like building the unglamorous parts well: backend architecture, database design,  
 and the glue that makes a feature actually ship.
@@ -25,7 +25,7 @@ and the glue that makes a feature actually ship.
 
 ### **Software Engineer 1 — MEDsys Software Solutions**  
 📍 Remote | April 2025 – Present  
-- Build, maintain, and debug full-stack features for a home-care healthcare management system  
+- Build, maintain, and debug full-stack features for a home care management system  
 - Design and optimize data models and complex queries supporting scheduling, billing, authorizations, and reporting workflows  
 - Collaborate in an Agile, DevOps-driven environment to deliver scalable, end-to-end solutions  
 - Work primarily with ASP.NET, C#, SQL Server, and modern frontend technologies  

@@ -16,7 +16,7 @@ export const metadata: Metadata = {
 
   description:
     'Full-stack software engineer specializing in ASP.NET Core, React, and SQL Server. ' +
-    'Currently building healthcare systems at MEDsys Software Solutions in Connecticut. ' +
+    'Currently building home care software at MEDsys Software Solutions in Connecticut. ' +
     'Open to new opportunities.',
 
   keywords: [
@@ -34,7 +34,7 @@ export const metadata: Metadata = {
     'Connecticut software engineer',
     'portfolio',
     'web developer',
-    'healthcare software',
+    'home care software',
     'UVI graduate',
   ],
 
