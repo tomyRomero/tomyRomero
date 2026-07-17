@@ -14,12 +14,12 @@ export default function Icon() {
           background: 'transparent',
         }}
       >
-        {/* Soft amber glow so it reads on both light and dark browser UIs */}
+        {/* Soft blue glow so it reads on both light and dark browser UIs */}
         <div style={{
           position: 'absolute',
           width: 380, height: 380,
           borderRadius: '50%',
-          background: 'radial-gradient(circle, rgba(212,148,58,.22) 0%, rgba(212,148,58,.06) 50%, transparent 72%)',
+          background: 'radial-gradient(circle, rgba(10,132,255,.22) 0%, rgba(10,132,255,.06) 50%, transparent 72%)',
           display: 'flex',
         }} />
 
@@ -28,7 +28,7 @@ export default function Icon() {
           fontSize: 210,
           fontWeight: 800,
           fontFamily: 'system-ui, sans-serif',
-          color: '#D4943A',
+          color: '#0A84FF',
           letterSpacing: '-10px',
           lineHeight: 1,
         }}>

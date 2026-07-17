@@ -246,13 +246,10 @@ function StatCard({ label, value, dark }: { label: string; value: string; dark: 
       background: tk.cardBg, border: `1px solid ${tk.cardBorder}`,
       transition: 'all .18s',
     }}>
-      <div className="grad-text" style={{
+      <div style={{
         fontSize: 22, fontWeight: 700, lineHeight: 1,
         fontFamily: 'var(--font-mono),monospace',
-        background: tk.accentGrad,
-        WebkitBackgroundClip: 'text',
-        WebkitTextFillColor: 'transparent',
-        backgroundClip: 'text',
+        color: tk.accent,
       }}>
         {value}
       </div>
@@ -281,34 +278,25 @@ export default function AboutWindow({ dark }: { dark: boolean }) {
     <div style={{ padding: '22px 24px', color: tk.text }}>
       {/* Header: avatar + name with gradient accent bar */}
       <div style={{
-        position: 'relative',
         background: tk.cardBg,
         border: `1px solid ${tk.cardBorder}`,
         borderRadius: 16,
         padding: '20px 20px 16px',
         marginBottom: 20,
-        overflow: 'hidden',
       }}>
-        {/* Top gradient bar */}
-        <div style={{
-          position: 'absolute', top: 0, left: 0, right: 0, height: 3,
-          background: tk.accentGrad,
-          borderRadius: '16px 16px 0 0',
-        }} />
-
         <div style={{ display: 'flex', gap: 16, alignItems: 'flex-start' }}>
           <div style={{
             width: 80, height: 80, borderRadius: 20, flexShrink: 0, overflow: 'hidden',
-            border: '2.5px solid rgba(212,148,58,.30)',
-            boxShadow: tk.accentGlow,
+            border: `1px solid ${tk.cardBorder}`,
+            boxShadow: '0 4px 14px rgba(0,0,0,.12)',
             position: 'relative',
           }}>
             <Image src={profilePhoto} alt="Tomy Romero" fill style={{ objectFit: 'cover' }} sizes="80px" priority />
           </div>
           <div style={{ flex: 1 }}>
             <h2 style={{
-              fontFamily: 'var(--font-serif),serif', fontSize: 26, fontWeight: 400,
-              letterSpacing: '-.5px', lineHeight: 1.15,
+              fontSize: 21, fontWeight: 600,
+              letterSpacing: '-.4px', lineHeight: 1.2,
               color: tk.text,
             }}>
               {ME.name}
@@ -371,8 +359,8 @@ export default function AboutWindow({ dark }: { dark: boolean }) {
       {/* Links */}
       <div style={{ display: 'flex', gap: 9, flexWrap: 'wrap', marginBottom: 24 }}>
         {([
-          ['⑂  GitHub',   ME.github],
-          ['🔗  LinkedIn', ME.linkedin],
+          ['GitHub',   ME.github],
+          ['LinkedIn', ME.linkedin],
         ] as [string, string][]).map(([l, h]) => (
           <a
             key={l} href={h} target="_blank" rel="noopener noreferrer"

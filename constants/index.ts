@@ -232,7 +232,7 @@ export const experiences = [
   {
     title:   'Software Engineer',
     company: 'MEDsys Software Solutions',
-    logo:    '🏥',
+    logo:    'M',
     date:    'April 2025 – Present',
     location: 'Remote · Connecticut',
     description: [
@@ -246,7 +246,7 @@ export const experiences = [
   {
     title:    'Software Developer Intern',
     company:  'LocalChef',
-    logo:     '🍽️',
+    logo:     'LC',
     date:     'January 2025 – April 2025',
     location: 'Remote',
     description: [
@@ -259,7 +259,7 @@ export const experiences = [
   {
     title:    'Software Developer Trainee',
     company:  'Revature',
-    logo:     '🏢',
+    logo:     'R',
     date:     'June 2024 – September 2024',
     location: 'Remote',
     description: [
@@ -279,7 +279,7 @@ export const education = [
     field:       'Computer Science',
     period:      'Graduated 2023',
     location:    'U.S. Virgin Islands',
-    logo:        '🎓',
+    logo:        'UVI',
     gpa:         '3.11',
     bullets: [
       'Student Government Association Junior Senator',
@@ -293,7 +293,7 @@ export const certifications = [
   {
     name:         'AWS Cloud Quest: Cloud Practitioner',
     issuer:       'Amazon Web Services (AWS)',
-    logo:         '☁️',
+    logo:         'AWS',
     issued:       'Apr 2026',
     credentialId: null,
     url:          'https://www.credly.com/badges/a3e1cf34-d475-4f11-a3a9-fd19e0038af7/public_url',
@@ -301,7 +301,7 @@ export const certifications = [
   {
     name:         'Microsoft SQL Server Specialization',
     issuer:       'Microsoft',
-    logo:         '📜',
+    logo:         'MS',
     issued:       'Feb 2026',
     credentialId: '7SIMAY3OEGQN',
     url:          'https://www.coursera.org/account/accomplishments/specialization/7SIMAY3OEGQN',
@@ -309,7 +309,7 @@ export const certifications = [
   {
     name:         'AWS Academy Cloud Foundations',
     issuer:       'Amazon Web Services (AWS)',
-    logo:         '☁️',
+    logo:         'AWS',
     issued:       'Sep 2022',
     credentialId: null,
     url:          'https://www.credly.com/badges/49f35d3b-7ea8-40ee-afde-77c8e7725827',

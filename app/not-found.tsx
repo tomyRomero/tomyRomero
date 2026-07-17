@@ -11,13 +11,13 @@ export default function NotFound() {
     else setDark(window.matchMedia('(prefers-color-scheme: dark)').matches);
   }, []);
 
-  const bg      = dark ? '#020614' : '#f2efe9';
-  const text    = dark ? '#f0f0f5' : '#1a1a1e';
-  const textSub = dark ? 'rgba(240,240,245,.60)' : 'rgba(26,26,30,.60)';
-  const accent  = '#D4943A';
+  const bg      = dark ? '#0a0c11' : '#f4f5f7';
+  const text    = dark ? '#eef0f4' : '#1a1c20';
+  const textSub = dark ? 'rgba(238,240,244,.60)' : 'rgba(26,28,32,.60)';
+  const accent  = dark ? '#78b3ff' : '#0068d6';
+  const accentSolid = dark ? '#0A84FF' : '#0071E3';
   const cardBg  = dark ? 'rgba(255,255,255,.045)' : 'rgba(0,0,0,.025)';
   const border  = dark ? 'rgba(255,255,255,.08)' : 'rgba(0,0,0,.07)';
-  const accentGrad = 'linear-gradient(135deg, #D4943A 0%, #f5c87a 50%, #D4943A 100%)';
 
   return (
     <div style={{
@@ -34,8 +34,8 @@ export default function NotFound() {
         position: 'absolute',
         width: '40vw', height: '40vw', borderRadius: '50%',
         background: dark
-          ? 'radial-gradient(circle, rgba(212,148,58,.12) 0%, transparent 70%)'
-          : 'radial-gradient(circle, rgba(212,148,58,.08) 0%, transparent 70%)',
+          ? 'radial-gradient(circle, rgba(70,110,205,.14) 0%, transparent 70%)'
+          : 'radial-gradient(circle, rgba(96,140,220,.12) 0%, transparent 70%)',
         filter: 'blur(60px)',
         pointerEvents: 'none',
       }} />
@@ -55,13 +55,6 @@ export default function NotFound() {
           : '0 24px 64px rgba(0,0,0,.10)',
         overflow: 'hidden',
       }}>
-        {/* Top gradient bar */}
-        <div style={{
-          position: 'absolute', top: 0, left: 0, right: 0, height: 3,
-          background: accentGrad,
-          borderRadius: '20px 20px 0 0',
-        }} />
-
         {/* Traffic lights */}
         <div style={{
           position: 'absolute', top: 16, left: 18,
@@ -72,22 +65,18 @@ export default function NotFound() {
           <div style={{ width: 12, height: 12, borderRadius: '50%', background: '#28c840' }} />
         </div>
 
-        {/* 404 number with gradient */}
-        <div className="grad-text" style={{
+        {/* 404 number */}
+        <div style={{
           fontSize: 72, fontWeight: 800, lineHeight: 1,
           fontFamily: 'var(--font-mono), monospace',
-          background: accentGrad,
-          WebkitBackgroundClip: 'text',
-          WebkitTextFillColor: 'transparent',
-          backgroundClip: 'text',
+          color: accent,
           marginBottom: 16, marginTop: 8,
         }}>
           404
         </div>
 
         <h1 style={{
-          fontFamily: 'var(--font-serif), serif',
-          fontSize: 24, fontWeight: 400,
+          fontSize: 22, fontWeight: 600,
           color: text, letterSpacing: '-.3px',
           marginBottom: 12,
         }}>
@@ -107,9 +96,9 @@ export default function NotFound() {
             display: 'inline-flex', alignItems: 'center', gap: 8,
             padding: '12px 28px', borderRadius: 14,
             fontSize: 14, fontWeight: 600,
-            background: 'linear-gradient(135deg, #D4943A 0%, #e8a94e 100%)',
+            background: accentSolid,
             color: '#fff', textDecoration: 'none',
-            boxShadow: '0 0 20px rgba(212,148,58,.18), 0 4px 12px rgba(212,148,58,.12)',
+            boxShadow: '0 4px 14px rgba(0,0,0,.14)',
             transition: 'all .18s',
             fontFamily: 'var(--font-sans), sans-serif',
           }}

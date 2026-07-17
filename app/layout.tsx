@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { Instrument_Serif, DM_Sans, IBM_Plex_Mono } from 'next/font/google';
+import { DM_Sans, IBM_Plex_Mono } from 'next/font/google';
 import './globals.css';
 import { Analytics } from '@vercel/analytics/react';
 
@@ -131,14 +131,6 @@ const jsonLd = {
 };
 
 // ── Fonts ─────────────────────────────────────────────────────────────────────
-const instrumentSerif = Instrument_Serif({
-  subsets: ['latin'],
-  weight:  ['400'],
-  style:   ['normal', 'italic'],
-  variable: '--font-serif',
-  display: 'swap',
-});
-
 const dmSans = DM_Sans({
   subsets:  ['latin'],
   weight:   ['300', '400', '500', '600'],
@@ -158,7 +150,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang="en"
-      className={`${instrumentSerif.variable} ${dmSans.variable} ${ibmPlexMono.variable}`}
+      className={`${dmSans.variable} ${ibmPlexMono.variable}`}
     >
       <body>
         <a href="#main-content" className="skip-to-content">Skip to content</a>

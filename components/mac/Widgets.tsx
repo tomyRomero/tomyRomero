@@ -86,17 +86,17 @@ function AnalogClock({ dark }: { dark: boolean }) {
       <line x1={cx} y1={cy} x2={mx} y2={my}
         stroke={handColor} strokeWidth="2" strokeLinecap="round" />
 
-      {/* Second hand — amber accent */}
+      {/* Second hand — accent */}
       <line x1={cx} y1={cy} x2={sx} y2={sy}
-        stroke="#D4943A" strokeWidth="1.2" strokeLinecap="round" />
+        stroke={tk.accent} strokeWidth="1.2" strokeLinecap="round" />
       <line
         x1={cx} y1={cy}
         x2={cx - (sx - cx) * 0.22}
         y2={cy - (sy - cy) * 0.22}
-        stroke="#D4943A" strokeWidth="1.2" strokeLinecap="round"
+        stroke={tk.accent} strokeWidth="1.2" strokeLinecap="round"
       />
 
-      <circle cx={cx} cy={cy} r="3.5" fill="#D4943A" />
+      <circle cx={cx} cy={cy} r="3.5" fill={tk.accent} />
       <circle cx={cx} cy={cy} r="1.5" fill={handColor} />
     </svg>
   );
@@ -173,11 +173,6 @@ export default function Widgets({ dark, dispatch, openCal }: { dark: boolean; di
           e.currentTarget.style.transform = 'none';
         }}
       >
-        {/* Gold accent bar */}
-        <div style={{
-          height: 3,
-          background: tk.accentGrad,
-        }} />
         <div style={{ padding: '12px 14px 13px' }}>
           {/* Avatar + name */}
           <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
@@ -186,7 +181,6 @@ export default function Widgets({ dark, dispatch, openCal }: { dark: boolean; di
               background: tk.accentGrad2,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               fontSize: 15, color: '#fff', fontWeight: 700, letterSpacing: -0.5,
-              boxShadow: tk.accentGlow,
             }}>
               TR
             </div>
@@ -207,10 +201,8 @@ export default function Widgets({ dark, dispatch, openCal }: { dark: boolean; di
           {/* Company */}
           <div style={{
             fontSize: 11.5, color: tk.textSub, marginTop: 8,
-            display: 'flex', alignItems: 'center', gap: 5,
           }}>
-            <span style={{ fontSize: 13 }}>{currentRole.logo}</span>
-            <span>{currentRole.company}</span>
+            {currentRole.company}
           </div>
 
           {/* Location */}
@@ -310,13 +302,10 @@ export default function Widgets({ dark, dispatch, openCal }: { dark: boolean; di
                 e.currentTarget.style.transform = 'none';
               }}
             >
-              <div className="grad-text" style={{
+              <div style={{
                 fontSize: 20, fontWeight: 700, lineHeight: 1,
                 fontFamily: 'var(--font-mono), monospace',
-                background: tk.accentGrad,
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
+                color: tk.accent,
               }}>
                 {stat.value}
               </div>

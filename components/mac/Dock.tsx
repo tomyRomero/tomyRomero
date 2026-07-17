@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { T } from './tokens';
 import type { Win, WinAction } from './winTypes';
 
@@ -11,12 +11,12 @@ const ICONS: Record<string, React.ReactNode> = {
       <defs>
         <linearGradient id="dk-ab" x1="16" y1="3" x2="16" y2="30" gradientUnits="userSpaceOnUse">
           <stop offset="0" stopColor="#ffffff" />
-          <stop offset="1" stopColor="#d3e5ff" />
+          <stop offset="1" stopColor="#dbe3ef" />
         </linearGradient>
       </defs>
       <path d="M3.5 29.5c0-6.9 5.6-12.5 12.5-12.5s12.5 5.6 12.5 12.5" fill="url(#dk-ab)" fillOpacity=".92" />
       <circle cx="16" cy="10.4" r="6.3" fill="url(#dk-ab)" />
-      <circle cx="16" cy="10.4" r="6.3" stroke="rgba(20,60,150,.20)" strokeWidth=".8" />
+      <circle cx="16" cy="10.4" r="6.3" stroke="rgba(40,60,100,.22)" strokeWidth=".8" />
     </svg>
   ),
   projects: (
@@ -24,14 +24,12 @@ const ICONS: Record<string, React.ReactNode> = {
       <defs>
         <linearGradient id="dk-pr" x1="16" y1="11" x2="16" y2="27" gradientUnits="userSpaceOnUse">
           <stop offset="0" stopColor="#ffffff" />
-          <stop offset="1" stopColor="#d5f3e2" />
+          <stop offset="1" stopColor="#dbe3ef" />
         </linearGradient>
       </defs>
-      {/* Back panel with tab */}
       <path d="M3 8.6C3 7.2 4.2 6 5.6 6h6.1c.7 0 1.4.28 1.9.78l1.7 1.72h10.1c1.4 0 2.6 1.2 2.6 2.6v1.9H3V8.6z" fill="rgba(255,255,255,.68)" />
-      {/* Front face */}
       <path d="M3 11.6h26v11.8c0 1.4-1.2 2.6-2.6 2.6H5.6C4.2 26 3 24.8 3 23.4V11.6z" fill="url(#dk-pr)" />
-      <path d="M3 11.6h26v1.1H3z" fill="rgba(15,110,70,.10)" />
+      <path d="M3 11.6h26v1.1H3z" fill="rgba(40,60,100,.10)" />
     </svg>
   ),
   experience: (
@@ -39,29 +37,28 @@ const ICONS: Record<string, React.ReactNode> = {
       <defs>
         <linearGradient id="dk-ex" x1="16" y1="9" x2="16" y2="28" gradientUnits="userSpaceOnUse">
           <stop offset="0" stopColor="#ffffff" />
-          <stop offset="1" stopColor="#e7dcfc" />
+          <stop offset="1" stopColor="#dfe6f2" />
         </linearGradient>
       </defs>
       <rect x="11.5" y="4.5" width="9" height="5.5" rx="2.2" stroke="rgba(255,255,255,.92)" strokeWidth="2" />
       <rect x="3" y="9" width="26" height="19" rx="3.6" fill="url(#dk-ex)" />
-      <path d="M3 16.4h26v2.4H3z" fill="rgba(90,30,200,.15)" />
-      <rect x="13.4" y="15.3" width="5.2" height="5.8" rx="1.6" fill="#fff" stroke="rgba(90,30,200,.48)" strokeWidth="1.4" />
+      <path d="M3 16.4h26v2.4H3z" fill="rgba(40,60,100,.12)" />
+      <rect x="13.4" y="15.3" width="5.2" height="5.8" rx="1.6" fill="#fff" stroke="rgba(40,60,100,.40)" strokeWidth="1.4" />
     </svg>
   ),
   skills: (
     <svg width="33" height="33" viewBox="0 0 32 32" fill="none">
       <defs>
         <linearGradient id="dk-sk" x1="16" y1="4" x2="16" y2="28" gradientUnits="userSpaceOnUse">
-          <stop offset="0" stopColor="rgba(34,28,16,.94)" />
-          <stop offset="1" stopColor="rgba(14,11,5,.96)" />
+          <stop offset="0" stopColor="rgba(255,255,255,.16)" />
+          <stop offset="1" stopColor="rgba(255,255,255,.05)" />
         </linearGradient>
       </defs>
       <rect x="2.5" y="4.5" width="27" height="23" rx="4" fill="url(#dk-sk)" stroke="rgba(255,255,255,.85)" strokeWidth="1.6" />
-      {/* Mini traffic lights */}
       <circle cx="7.2"  cy="9" r="1.1" fill="#ff5f57" />
       <circle cx="10.8" cy="9" r="1.1" fill="#ffbd2e" />
       <circle cx="14.4" cy="9" r="1.1" fill="#28ca41" />
-      <path d="M7.5 15.2l4.6 3.6-4.6 3.6" stroke="#ffd489" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M7.5 15.2l4.6 3.6-4.6 3.6" stroke="#9ec8ff" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
       <line x1="15.6" y1="22.4" x2="23.2" y2="22.4" stroke="rgba(255,255,255,.85)" strokeWidth="2.2" strokeLinecap="round" />
     </svg>
   ),
@@ -70,12 +67,12 @@ const ICONS: Record<string, React.ReactNode> = {
       <defs>
         <linearGradient id="dk-co" x1="16" y1="7" x2="16" y2="26" gradientUnits="userSpaceOnUse">
           <stop offset="0" stopColor="#ffffff" />
-          <stop offset="1" stopColor="#ffe0e4" />
+          <stop offset="1" stopColor="#dbe3ef" />
         </linearGradient>
       </defs>
       <rect x="2.5" y="7" width="27" height="18.5" rx="3.2" fill="url(#dk-co)" />
-      <path d="M3.6 9.4L16 18.2 28.4 9.4" stroke="rgba(190,25,55,.48)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-      <rect x="2.5" y="7" width="27" height="18.5" rx="3.2" stroke="rgba(150,20,45,.14)" strokeWidth=".8" />
+      <path d="M3.6 9.4L16 18.2 28.4 9.4" stroke="rgba(40,60,100,.35)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      <rect x="2.5" y="7" width="27" height="18.5" rx="3.2" stroke="rgba(40,60,100,.14)" strokeWidth=".8" />
     </svg>
   ),
 };
@@ -95,52 +92,53 @@ const TrashSVG = ({ hot }: { hot: boolean }) => {
   );
 };
 
-// ── Dock items with refined gradients ─────────────────────────────────────────
+// ── Uniform frosted-graphite tiles (one accent system, no candy colors) ──────
+const TILE_BG   = 'linear-gradient(160deg, rgba(88,96,112,.94) 0%, rgba(42,46,58,.96) 100%)';
+const TILE_GLOW = 'rgba(15,25,45,.45)';
+
 const DOCK_ITEMS = [
-  { id:'about',      label:'About Me',   bg:'linear-gradient(145deg,#1a3fd4 0%,#3b82f6 50%,#60a5fa 100%)', glow:'rgba(59,130,246,.50)' },
-  { id:'projects',   label:'Projects',   bg:'linear-gradient(145deg,#047857 0%,#059669 50%,#34d399 100%)', glow:'rgba(5,150,105,.44)' },
-  { id:'experience', label:'Experience', bg:'linear-gradient(145deg,#5b21b6 0%,#7c3aed 50%,#a78bfa 100%)', glow:'rgba(124,58,237,.44)' },
-  { id:'skills',     label:'Skills',     bg:'linear-gradient(145deg,#92400e 0%,#d4943a 50%,#f5c87a 100%)', glow:'rgba(212,148,58,.44)' },
-  { id:'contact',    label:'Contact',    bg:'linear-gradient(145deg,#9f1239 0%,#e11d48 50%,#fb7185 100%)', glow:'rgba(225,29,72,.44)' },
+  { id: 'about',      label: 'About Me'   },
+  { id: 'projects',   label: 'Projects'   },
+  { id: 'experience', label: 'Experience' },
+  { id: 'skills',     label: 'Skills'     },
+  { id: 'contact',    label: 'Contact'    },
 ];
 
 const BASE = 64;
 
-// Magnification with distance falloff — neighbors of the hovered icon scale
-// too, like the real macOS dock, instead of one icon popping alone.
-const MAG_SCALE = [1.34, 1.16, 1.05];
-const MAG_LIFT  = [-12, -5, -1];
-
-function getScale(idx: number, hov: number | null) {
-  if (hov === null) return 1;
-  return MAG_SCALE[Math.abs(idx - hov)] ?? 1;
-}
-function getLift(idx: number, hov: number | null) {
-  if (hov === null) return 0;
-  return MAG_LIFT[Math.abs(idx - hov)] ?? 0;
+// Continuous magnification: scale is a smooth function of the horizontal
+// distance between the cursor and each icon's center, like the real dock.
+// No discrete per-icon jumps, so nothing snaps or flickers.
+function magnify(mx: number | null, el: HTMLElement | null) {
+  if (mx === null || !el) return { scale: 1, lift: 0 };
+  const r = el.getBoundingClientRect();
+  const d = Math.abs(mx - (r.left + r.width / 2));
+  const t = Math.max(0, 1 - d / 150);
+  const e = t * t * (3 - 2 * t); // smoothstep
+  return { scale: 1 + 0.30 * e, lift: -11 * e };
 }
 
 // Defined at module scope (NOT inside Dock) so React keeps the same component
-// identity across Dock re-renders — otherwise the icon subtree remounts on every
-// hover/drag and the magnification/lift transitions snap instead of animating.
+// identity across Dock re-renders — otherwise the icon subtree remounts on
+// every hover and the transitions snap instead of animating.
 function IconBtn({
-  id, label, bg, glow, idx, sz = BASE, opacity = 1,
+  id, label, idx, mx, sz = BASE,
   wins, hovIdx, setHovIdx, dark, tk, onClick,
 }: {
-  id: string; label: string; bg: string; glow: string;
-  idx: number; sz?: number; opacity?: number;
+  id: string; label: string; idx: number; mx: number | null; sz?: number;
   wins: Win[]; hovIdx: number | null; setHovIdx: (n: number | null) => void;
   dark: boolean; tk: ReturnType<typeof T>; onClick: (id: string) => void;
 }) {
+  const wrapRef = useRef<HTMLDivElement>(null);
   const w      = wins.find(x => x.id === id);
   const isOpen = w?.isOpen || w?.isMin;
-  const scale  = getScale(idx, hovIdx);
-  const lift   = getLift(idx, hovIdx);
   const isH    = hovIdx === idx;
   const r      = Math.round(sz * 0.225);
+  const { scale, lift } = magnify(mx, wrapRef.current);
 
   return (
     <div
+      ref={wrapRef}
       style={{
         position: 'relative', display: 'flex', flexDirection: 'column',
         alignItems: 'center', width: sz, flexShrink: 0,
@@ -150,11 +148,11 @@ function IconBtn({
     >
       {isH && (
         <div style={{
-          position: 'absolute', bottom: Math.round(sz * 1.34) + 20, left: '50%',
+          position: 'absolute', bottom: Math.round(sz * 1.3) + 20, left: '50%',
           transform: 'translateX(-50%)',
           padding: '5px 12px', borderRadius: 8,
-          background: dark ? 'rgba(10,10,14,.96)' : 'rgba(8,8,10,.93)',
-          color: '#f2f2f7', fontSize: 12, fontWeight: 500,
+          background: dark ? 'rgba(12,13,17,.96)' : 'rgba(10,11,14,.93)',
+          color: '#f2f3f6', fontSize: 12, fontWeight: 500,
           whiteSpace: 'nowrap', fontFamily: 'var(--font-sans),sans-serif',
           backdropFilter: 'blur(16px)',
           border: '1px solid rgba(255,255,255,.10)',
@@ -165,7 +163,7 @@ function IconBtn({
           <div style={{
             position: 'absolute', bottom: -5, left: '50%', transform: 'translateX(-50%)',
             borderLeft: '5px solid transparent', borderRight: '5px solid transparent',
-            borderTop: `5px solid ${dark ? 'rgba(10,10,14,.96)' : 'rgba(8,8,10,.93)'}`,
+            borderTop: `5px solid ${dark ? 'rgba(12,13,17,.96)' : 'rgba(10,11,14,.93)'}`,
           }} />
         </div>
       )}
@@ -176,23 +174,27 @@ function IconBtn({
         aria-label={`Open ${label}`}
         style={{
           width: sz, height: sz, borderRadius: r,
-          background: bg,
-          border: 'none',
+          background: TILE_BG,
+          border: '1px solid rgba(255,255,255,.14)',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           transform: `scale(${scale}) translateY(${lift}px)`,
           transformOrigin: 'bottom center',
-          transition: 'transform .20s cubic-bezier(.34,1.56,.64,1), box-shadow .18s ease',
+          // Fast linear follow while the cursor is over the dock; springy
+          // settle when it leaves.
+          transition: mx !== null
+            ? 'transform .08s linear, box-shadow .18s ease'
+            : 'transform .30s cubic-bezier(.22,1,.36,1), box-shadow .18s ease',
           boxShadow: isH
-            ? `0 16px 44px ${glow}, 0 4px 14px rgba(0,0,0,.24), inset 0 1px 0 rgba(255,255,255,.28)`
-            : `0 4px 12px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.20)`,
+            ? `0 16px 40px ${TILE_GLOW}, 0 4px 14px rgba(0,0,0,.24), inset 0 1px 0 rgba(255,255,255,.22)`
+            : `0 4px 12px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.16)`,
           cursor: 'pointer',
-          position: 'relative', overflow: 'hidden', opacity,
+          position: 'relative', overflow: 'hidden',
         }}
       >
         {/* Specular sheen */}
         <div style={{
           position: 'absolute', top: 0, left: '-6%', right: '6%', height: '54%',
-          background: 'linear-gradient(170deg,rgba(255,255,255,.30) 0%,rgba(255,255,255,.08) 50%,transparent 100%)',
+          background: 'linear-gradient(170deg,rgba(255,255,255,.20) 0%,rgba(255,255,255,.05) 50%,transparent 100%)',
           borderRadius: `${r}px ${r}px 0 0`,
           pointerEvents: 'none',
         }} />
@@ -210,7 +212,6 @@ function IconBtn({
       <div style={{
         width: 4, height: 4, borderRadius: '50%', marginTop: 5,
         background: isOpen ? tk.accent : 'transparent',
-        boxShadow: isOpen ? `0 0 6px ${tk.accent}` : 'none',
         opacity: isOpen ? 1 : 0, transition: 'opacity .2s', flexShrink: 0,
       }} />
     </div>
@@ -222,9 +223,11 @@ interface Props { wins: Win[]; dark: boolean; dispatch: React.Dispatch<WinAction
 export default function Dock({ wins, dark, dispatch }: Props) {
   const tk = T(dark);
   const [hovIdx, setHovIdx]     = useState<number | null>(null);
+  const [mx, setMx]             = useState<number | null>(null);
   const [trHov, setTrHov]       = useState(false);
   const [trTarget, setTrTarget] = useState(false);
   const [trAnim, setTrAnim]     = useState(false);
+  const trashRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handler = (e: Event) => {
@@ -254,8 +257,9 @@ export default function Dock({ wins, dark, dispatch }: Props) {
   };
 
   const isTrashHot = trTarget || trHov;
-  const trScale    = isTrashHot ? 1.38 : 1;
-  const trLift     = isTrashHot ? -10  : 0;
+  const trMag      = magnify(mx, trashRef.current);
+  const trScale    = trTarget ? 1.30 : trMag.scale;
+  const trLift     = trTarget ? -11  : trMag.lift;
   const r          = Math.round(BASE * 0.225);
 
   return (
@@ -263,12 +267,14 @@ export default function Dock({ wins, dark, dispatch }: Props) {
       className="mac-dock"
       role="navigation"
       aria-label="Application dock"
+      onMouseMove={e => setMx(e.clientX)}
+      onMouseLeave={() => { setMx(null); setHovIdx(null); }}
       style={{
         position: 'fixed', bottom: 10, left: '50%', transform: 'translateX(-50%)',
         display: 'flex', alignItems: 'flex-end', gap: 26,
         padding: '10px 22px 9px',
         borderRadius: 24,
-        background: dark ? 'rgba(10,10,16,.75)' : 'rgba(255,255,255,.65)',
+        background: dark ? 'rgba(12,13,18,.75)' : 'rgba(255,255,255,.65)',
         backdropFilter: 'blur(60px) saturate(2.4)',
         WebkitBackdropFilter: 'blur(60px) saturate(2.4)',
         border: `1px solid ${dark ? 'rgba(255,255,255,.12)' : 'rgba(255,255,255,.90)'}`,
@@ -281,7 +287,7 @@ export default function Dock({ wins, dark, dispatch }: Props) {
     >
       {DOCK_ITEMS.map((item, i) => (
         <IconBtn
-          key={item.id} {...item} idx={i}
+          key={item.id} {...item} idx={i} mx={mx}
           wins={wins} hovIdx={hovIdx} setHovIdx={setHovIdx}
           dark={dark} tk={tk} onClick={click}
         />
@@ -297,6 +303,7 @@ export default function Dock({ wins, dark, dispatch }: Props) {
 
       {/* Trash */}
       <div
+        ref={trashRef}
         style={{
           position: 'relative', display: 'flex', flexDirection: 'column',
           alignItems: 'center', width: BASE, flexShrink: 0,
@@ -306,11 +313,11 @@ export default function Dock({ wins, dark, dispatch }: Props) {
       >
         {isTrashHot && (
           <div style={{
-            position: 'absolute', bottom: Math.round(BASE * 1.38) + 20, left: '50%',
+            position: 'absolute', bottom: Math.round(BASE * 1.3) + 20, left: '50%',
             transform: 'translateX(-50%)',
             padding: '5px 11px', borderRadius: 8,
-            background: trTarget ? 'rgba(200,30,50,.96)' : (dark ? 'rgba(10,10,14,.96)' : 'rgba(8,8,10,.93)'),
-            color: '#f2f2f7', fontSize: 12, fontWeight: 500,
+            background: trTarget ? 'rgba(200,30,50,.96)' : (dark ? 'rgba(12,13,17,.96)' : 'rgba(10,11,14,.93)'),
+            color: '#f2f3f6', fontSize: 12, fontWeight: 500,
             whiteSpace: 'nowrap', fontFamily: 'var(--font-sans),sans-serif',
             border: '1px solid rgba(255,255,255,.12)',
             boxShadow: '0 4px 18px rgba(0,0,0,.44)', pointerEvents: 'none', zIndex: 2,
@@ -319,7 +326,7 @@ export default function Dock({ wins, dark, dispatch }: Props) {
             <div style={{
               position: 'absolute', bottom: -5, left: '50%', transform: 'translateX(-50%)',
               borderLeft: '5px solid transparent', borderRight: '5px solid transparent',
-              borderTop: `5px solid ${trTarget ? 'rgba(200,30,50,.96)' : (dark ? 'rgba(10,10,14,.96)' : 'rgba(8,8,10,.93)')}`,
+              borderTop: `5px solid ${trTarget ? 'rgba(200,30,50,.96)' : (dark ? 'rgba(12,13,17,.96)' : 'rgba(10,11,14,.93)')}`,
             }} />
           </div>
         )}
@@ -331,14 +338,17 @@ export default function Dock({ wins, dark, dispatch }: Props) {
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           background: trTarget
             ? 'linear-gradient(145deg,#7f1d1d 0%,#dc2626 50%,#ef4444 100%)'
-            : 'linear-gradient(145deg,#1e2532 0%,#374151 50%,#6b7280 100%)',
+            : TILE_BG,
+          border: '1px solid rgba(255,255,255,.14)',
           transform: `scale(${trScale}) translateY(${trLift}px)`,
           transformOrigin: 'bottom center',
-          transition: 'transform .20s cubic-bezier(.34,1.56,.64,1), background .22s ease, box-shadow .18s',
+          transition: mx !== null && !trTarget
+            ? 'transform .08s linear, background .22s ease, box-shadow .18s'
+            : 'transform .30s cubic-bezier(.22,1,.36,1), background .22s ease, box-shadow .18s',
           boxShadow: trTarget
             ? '0 16px 40px rgba(220,38,38,.62), inset 0 1px 0 rgba(255,255,255,.22)'
             : isTrashHot
-              ? '0 16px 40px rgba(107,114,128,.40), inset 0 1px 0 rgba(255,255,255,.14)'
+              ? `0 16px 40px ${TILE_GLOW}, inset 0 1px 0 rgba(255,255,255,.14)`
               : '0 4px 12px rgba(0,0,0,.28), inset 0 1px 0 rgba(255,255,255,.10)',
           animation: trAnim ? 'trashShake .55s ease' : 'none',
           cursor: 'default',
@@ -346,7 +356,7 @@ export default function Dock({ wins, dark, dispatch }: Props) {
         }}>
           <div style={{
             position: 'absolute', top: 0, left: '-6%', right: '6%', height: '54%',
-            background: 'linear-gradient(170deg,rgba(255,255,255,.22) 0%,transparent 100%)',
+            background: 'linear-gradient(170deg,rgba(255,255,255,.18) 0%,transparent 100%)',
             borderRadius: `${r}px ${r}px 0 0`, pointerEvents: 'none',
           }} />
           <div style={{

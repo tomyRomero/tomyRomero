@@ -23,21 +23,13 @@ export function Chip({ children, amber, dark }: { children: React.ReactNode; amb
 export function WinTitle({ children, dark }: { children: React.ReactNode; dark: boolean }) {
   const tk = T(dark);
   return (
-    <div style={{ marginBottom: 22 }}>
-      <h2 style={{
-        fontFamily: 'var(--font-serif), serif', fontSize: 24, fontWeight: 400,
-        letterSpacing: '-.4px', color: tk.text, lineHeight: 1.2,
-        marginBottom: 0,
-      }}>
-        {children}
-      </h2>
-      {/* Accent underline */}
-      <div style={{
-        width: 36, height: 2.5, borderRadius: 2,
-        background: tk.accentGrad,
-        marginTop: 10, opacity: 0.7,
-      }} />
-    </div>
+    <h2 style={{
+      fontSize: 19, fontWeight: 600,
+      letterSpacing: '-.3px', color: tk.text, lineHeight: 1.2,
+      marginBottom: 18,
+    }}>
+      {children}
+    </h2>
   );
 }
 
@@ -61,15 +53,30 @@ export function Label({ children, dark }: { children: React.ReactNode; dark: boo
   return (
     <div style={{
       fontSize: 10.5, fontFamily: 'var(--font-mono), monospace',
-      color: tk.accent, textTransform: 'uppercase' as const,
+      color: tk.textMuted, textTransform: 'uppercase' as const,
       letterSpacing: '1.2px', marginBottom: 10,
       display: 'flex', alignItems: 'center', gap: 8,
     }}>
       <span>{children}</span>
-      <div style={{
-        flex: 1, height: 1,
-        background: `linear-gradient(90deg, ${tk.accentBorder}, transparent)`,
-      }} />
+      <div style={{ flex: 1, height: 1, background: tk.divider }} />
     </div>
+  );
+}
+
+// Typographic replacement for emoji logos: a small rounded tile with a
+// monospace mark ("M", "AWS", "UVI", …)
+export function Lettermark({ text, dark, size = 34 }: { text: string; dark: boolean; size?: number }) {
+  const tk = T(dark);
+  return (
+    <span style={{
+      width: size, height: size, borderRadius: Math.round(size * 0.26),
+      background: tk.pillBg, border: `1px solid ${tk.pillBorder}`,
+      display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+      fontSize: text.length > 2 ? Math.round(size * 0.28) : Math.round(size * 0.36),
+      fontWeight: 600, color: tk.textSub, flexShrink: 0,
+      fontFamily: 'var(--font-mono), monospace', letterSpacing: '-.2px',
+    }}>
+      {text}
+    </span>
   );
 }

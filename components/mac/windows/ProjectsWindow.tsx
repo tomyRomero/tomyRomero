@@ -9,7 +9,7 @@ import { projects, projectDetails } from '@/constants';
 const STATUS_BADGE: Record<string, { bg: string; txt: string; lbl: string }> = {
   shipped:      { bg: 'rgba(52,199,89,.12)',  txt: '#1da044', lbl: 'Shipped' },
   'in-progress':{ bg: 'rgba(255,159,10,.12)', txt: '#d07a00', lbl: 'In Progress' },
-  ongoing:      { bg: 'rgba(212,148,58,.14)', txt: '#D4943A', lbl: 'Ongoing' },
+  ongoing:      { bg: 'rgba(64,140,255,.14)', txt: '#4a94e8', lbl: 'Ongoing' },
   archived:     { bg: 'rgba(120,120,128,.1)', txt: '#888',    lbl: 'Archived' },
 };
 
@@ -259,25 +259,25 @@ function ProjectDetail({ title, onBack, dark }: { title: string; onBack: () => v
         All Projects
       </button>
 
-      {/* Header with gradient border */}
+      {/* Header */}
       <div style={{
-        position: 'relative',
         background: tk.cardBg,
         border: `1px solid ${tk.cardBorder}`,
         borderRadius: 14, padding: '16px 18px', marginBottom: 18,
-        overflow: 'hidden',
       }}>
-        <div style={{
-          position: 'absolute', top: 0, left: 0, right: 0, height: 2,
-          background: tk.accentGrad,
-        }} />
         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-            <span style={{ fontSize: 38, lineHeight: 1, flexShrink: 0 }}>{proj.emoji}</span>
+            <div style={{
+              width: 52, height: 40, borderRadius: 10, overflow: 'hidden',
+              flexShrink: 0, position: 'relative',
+              border: `1px solid ${tk.cardBorder}`, background: tk.cardBg,
+            }}>
+              <Image src={proj.image} alt={proj.title} fill style={{ objectFit: 'cover' }} sizes="52px" />
+            </div>
             <div>
               <h2 style={{
-                fontFamily: 'var(--font-serif),serif', fontSize: 24, fontWeight: 400,
-                letterSpacing: '-.4px', color: tk.text, lineHeight: 1.1,
+                fontSize: 19, fontWeight: 600,
+                letterSpacing: '-.3px', color: tk.text, lineHeight: 1.15,
               }}>
                 {proj.title}
               </h2>
@@ -337,7 +337,7 @@ function ProjectDetail({ title, onBack, dark }: { title: string; onBack: () => v
             onMouseEnter={e => { e.currentTarget.style.opacity = '.85'; e.currentTarget.style.transform = 'translateY(-1px)'; }}
             onMouseLeave={e => { e.currentTarget.style.opacity = '1'; e.currentTarget.style.transform = 'none'; }}
           >
-            ⑂  View on GitHub
+            View on GitHub
           </a>
         )}
         {detail.isLive && detail.livelink && (
@@ -370,7 +370,7 @@ export default function ProjectsWindow({ dark }: { dark: boolean }) {
 
   return (
     <div style={{ padding: '20px 22px', color: tk.text }}>
-      <WinTitle dark={dark}>My <em style={{ color: tk.accent, fontStyle: 'italic' }}>Projects</em></WinTitle>
+      <WinTitle dark={dark}>Projects</WinTitle>
 
       {projects.map((p, idx) => {
         const sc = STATUS_BADGE[p.status] || STATUS_BADGE.shipped;
@@ -404,14 +404,6 @@ export default function ProjectsWindow({ dark }: { dark: boolean }) {
               el.style.boxShadow   = 'none';
             }}
           >
-            {/* Featured indicator */}
-            {isFeatured && (
-              <div style={{
-                position: 'absolute', top: 0, left: 0, right: 0, height: 2,
-                background: tk.accentGrad,
-              }} />
-            )}
-
             <div style={{
               width: 56, height: 42, borderRadius: 10, overflow: 'hidden',
               flexShrink: 0, position: 'relative',
@@ -422,8 +414,7 @@ export default function ProjectsWindow({ dark }: { dark: boolean }) {
 
             <div style={{ flex: 1, minWidth: 0 }}>
               <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
-                <span style={{ fontSize: 20, lineHeight: 1 }}>{p.emoji}</span>
-                <span style={{ fontFamily: 'var(--font-serif),serif', fontSize: 16, color: tk.text }}>
+                <span style={{ fontSize: 14.5, fontWeight: 600, color: tk.text }}>
                   {p.title}
                 </span>
                 {p.year && (

@@ -2,8 +2,9 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import Image from 'next/image';
 import { ME, images, projects, experiences, education, certifications, skills, contactDetails, contactBlurb, profilePhoto, aboutChips, totalSkills, yearsExperience } from '@/constants';
+import { Lettermark } from '@/components/mac/Atoms';
 
-function SectionLabel({ text }: { text: string }) {
+function SectionLabel({ text, dark }: { text: string; dark: boolean }) {
   return (
     <div style={{
       display: 'flex', alignItems: 'center', gap: 10,
@@ -11,14 +12,15 @@ function SectionLabel({ text }: { text: string }) {
     }}>
       <h2 style={{
         fontSize: 11, letterSpacing: '1.4px', textTransform: 'uppercase',
-        fontFamily: 'var(--font-mono),monospace', color: '#d4943a',
+        fontFamily: 'var(--font-mono),monospace',
+        color: dark ? 'rgba(238,240,244,.50)' : 'rgba(26,28,32,.50)',
         fontWeight: 600,
       }}>
         {text}
       </h2>
       <div style={{
         flex: 1, height: 1,
-        background: 'linear-gradient(90deg, rgba(212,148,58,.30), transparent)',
+        background: dark ? 'rgba(255,255,255,.08)' : 'rgba(0,0,0,.08)',
       }} />
     </div>
   );
@@ -69,27 +71,17 @@ export default function MobileView({ dark, setDark }: { dark: boolean; setDark: 
     return () => window.removeEventListener('keydown', onKey);
   }, [lightboxIdx]);
 
-  const bg          = dark ? '#060a14'                                    : '#f2efe9';
-  const text        = dark ? '#f0f0f5'                                    : '#1a1a1e';
+  const bg          = dark ? '#0a0c11'                                    : '#f4f5f7';
+  const text        = dark ? '#eef0f4'                                    : '#1a1c20';
   const textMuted   = dark ? 'rgba(255,255,255,.55)'                      : 'rgba(0,0,0,.58)';
   const textSub     = dark ? 'rgba(255,255,255,.72)'                      : 'rgba(0,0,0,.72)';
   const cardBg      = dark ? 'rgba(255,255,255,.05)'                      : 'rgba(0,0,0,.03)';
   const cardBorder  = dark ? 'rgba(255,255,255,.08)'                      : 'rgba(0,0,0,.07)';
-  const accent      = '#d4943a';
-  const accentBg    = dark ? 'rgba(212,148,58,.12)'                       : 'rgba(212,148,58,.08)';
-  const accentBorder= dark ? 'rgba(212,148,58,.26)'                       : 'rgba(212,148,58,.20)';
-  const accentGrad  = 'linear-gradient(135deg, #D4943A 0%, #f5c87a 50%, #D4943A 100%)';
-  const accentGrad2 = 'linear-gradient(135deg, #D4943A 0%, #e8a94e 100%)';
-  const navBg       = dark ? 'rgba(6,10,20,.94)'                          : 'rgba(242,239,233,.94)';
-
-  // Category colors for skills
-  const CATEGORY_COLORS: Record<string, [string, string]> = {
-    'Languages':    ['#6366f1', dark ? 'rgba(99,102,241,.12)' : 'rgba(99,102,241,.08)'],
-    'Backend':      ['#059669', dark ? 'rgba(5,150,105,.12)' : 'rgba(5,150,105,.08)'],
-    'Frontend':     ['#3b82f6', dark ? 'rgba(59,130,246,.12)' : 'rgba(59,130,246,.08)'],
-    'Data & Cloud': ['#D4943A', dark ? 'rgba(212,148,58,.12)' : 'rgba(212,148,58,.08)'],
-    'Tools':        ['#8b5cf6', dark ? 'rgba(139,92,246,.12)' : 'rgba(139,92,246,.08)'],
-  };
+  const accent      = dark ? '#78b3ff'                                    : '#0068d6';
+  const accentBg    = dark ? 'rgba(64,140,255,.12)'                       : 'rgba(0,104,214,.07)';
+  const accentBorder= dark ? 'rgba(100,160,255,.30)'                      : 'rgba(0,104,214,.20)';
+  const accentSolid = dark ? '#0A84FF'                                    : '#0071E3';
+  const navBg       = dark ? 'rgba(10,12,17,.94)'                         : 'rgba(244,245,247,.94)';
 
   return (
     <div style={{
@@ -107,12 +99,7 @@ export default function MobileView({ dark, setDark }: { dark: boolean; setDark: 
         borderBottom: `1px solid ${cardBorder}`,
       }}>
         <span style={{ fontSize: 17, fontWeight: 700, letterSpacing: '-0.3px' }}>
-          <span className="grad-text" style={{
-            background: accentGrad,
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            backgroundClip: 'text',
-          }}>T</span>
+          <span style={{ color: accent }}>T</span>
           <span style={{ color: text }}>R</span>
         </span>
         <div style={{ display: 'flex', gap: 14, alignItems: 'center' }}>
@@ -142,20 +129,14 @@ export default function MobileView({ dark, setDark }: { dark: boolean; setDark: 
           <div style={{
             position: 'relative', width: 106, height: 106,
             margin: '0 auto 20px', borderRadius: '50%', overflow: 'hidden',
-            border: '3px solid rgba(212,148,58,.30)',
-            boxShadow: '0 0 24px rgba(212,148,58,.20), 0 8px 32px rgba(212,148,58,.16)',
+            border: `1px solid ${cardBorder}`,
+            boxShadow: '0 8px 28px rgba(0,0,0,.16)',
           }}>
             <Image src={profilePhoto} alt="Tomy Romero" fill style={{ objectFit: 'cover' }} sizes="106px" />
           </div>
-          <h1 key={dark ? 'd' : 'l'} className="grad-text" style={{
-            fontFamily: 'var(--font-serif),serif', fontSize: 30, fontWeight: 400,
-            letterSpacing: '-0.5px', marginBottom: 8,
-            background: dark
-              ? 'linear-gradient(135deg, #f0f0f5 0%, #d4943a 100%)'
-              : 'linear-gradient(135deg, #1a1a1e 0%, #d4943a 100%)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            backgroundClip: 'text',
+          <h1 style={{
+            fontSize: 27, fontWeight: 700,
+            letterSpacing: '-0.5px', marginBottom: 8, color: text,
           }}>
             {ME.name}
           </h1>
@@ -195,13 +176,10 @@ export default function MobileView({ dark, setDark }: { dark: boolean; setDark: 
               flex: 1, textAlign: 'center', padding: '12px 8px',
               background: cardBg, border: `1px solid ${cardBorder}`, borderRadius: 14,
             }}>
-              <div className="grad-text" style={{
+              <div style={{
                 fontSize: 20, fontWeight: 700, lineHeight: 1,
                 fontFamily: 'var(--font-mono),monospace',
-                background: accentGrad,
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
+                color: accent,
               }}>
                 {stat.value}
               </div>
@@ -221,12 +199,7 @@ export default function MobileView({ dark, setDark }: { dark: boolean; setDark: 
           background: cardBg, border: `1px solid ${cardBorder}`,
           borderRadius: 16, padding: '18px 20px', marginBottom: 22,
           fontSize: 14, lineHeight: 1.78, color: textSub,
-          position: 'relative', overflow: 'hidden',
         }}>
-          <div style={{
-            position: 'absolute', top: 0, left: 0, right: 0, height: 2.5,
-            background: accentGrad, borderRadius: '16px 16px 0 0',
-          }} />
           {ME.bio}
         </div>
 
@@ -246,7 +219,7 @@ export default function MobileView({ dark, setDark }: { dark: boolean; setDark: 
 
         {/* External links */}
         <div style={{ display: 'flex', gap: 10, marginBottom: 36 }}>
-          {([['⑂  GitHub', ME.github], ['🔗  LinkedIn', ME.linkedin]] as [string, string][]).map(([label, href]) => (
+          {([['GitHub', ME.github], ['LinkedIn', ME.linkedin]] as [string, string][]).map(([label, href]) => (
             <a key={label} href={href} target="_blank" rel="noopener noreferrer" style={{
               flex: 1, textAlign: 'center',
               padding: '11px 16px', borderRadius: 12, fontSize: 13,
@@ -261,25 +234,20 @@ export default function MobileView({ dark, setDark }: { dark: boolean; setDark: 
 
         {/* ── Projects ───────────────────────────────────────────────────── */}
         <FadeInSection>
-        <SectionLabel text="Projects" />
+        <SectionLabel text="Projects" dark={dark} />
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 36 }}>
           {projects.map((p, idx) => (
             <a key={p.title} href={`/project/${encodeURIComponent(p.title)}`} style={{
               display: 'block', textDecoration: 'none',
               background: cardBg, border: `1px solid ${idx === 0 ? accentBorder : cardBorder}`,
               borderRadius: 16, padding: '18px 20px',
-              position: 'relative', overflow: 'hidden',
             }}>
-              {idx === 0 && (
-                <div style={{
-                  position: 'absolute', top: 0, left: 0, right: 0, height: 2,
-                  background: accentGrad,
-                }} />
-              )}
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
-                <span style={{ fontSize: 22 }}>{p.emoji}</span>
                 <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: 15, fontWeight: 600, color: text }}>{p.title}</div>
+                  <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
+                    <span style={{ fontSize: 15, fontWeight: 600, color: text }}>{p.title}</span>
+                    <span style={{ fontSize: 11, color: textMuted, fontFamily: 'var(--font-mono),monospace' }}>{p.year}</span>
+                  </div>
                   <div style={{ fontSize: 12, color: accent, marginTop: 2 }}>{p.tagline}</div>
                 </div>
                 <span style={{ fontSize: 20, color: textMuted }}>›</span>
@@ -298,24 +266,15 @@ export default function MobileView({ dark, setDark }: { dark: boolean; setDark: 
 
         {/* ── Experience ─────────────────────────────────────────────────── */}
         <FadeInSection>
-        <SectionLabel text="Experience" />
+        <SectionLabel text="Experience" dark={dark} />
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 36 }}>
           {experiences.map((exp, i) => (
             <div key={exp.company} style={{
-              background: cardBg, border: `1px solid ${cardBorder}`,
+              background: cardBg, border: `1px solid ${i === 0 ? accentBorder : cardBorder}`,
               borderRadius: 16, padding: '18px 20px',
-              position: 'relative', overflow: 'hidden',
             }}>
-              {/* Left accent bar for current role */}
-              {i === 0 && (
-                <div style={{
-                  position: 'absolute', left: 0, top: 0, bottom: 0, width: 3,
-                  background: accentGrad,
-                  borderRadius: '16px 0 0 16px',
-                }} />
-              )}
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12, marginBottom: 10, marginLeft: i === 0 ? 4 : 0 }}>
-                <span style={{ fontSize: 24, flexShrink: 0, lineHeight: 1 }}>{exp.logo}</span>
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12, marginBottom: 10 }}>
+                <Lettermark text={exp.logo} dark={dark} />
                 <div style={{ flex: 1 }}>
                   <div style={{ fontSize: 14.5, fontWeight: 600, color: text }}>{exp.title}</div>
                   <div style={{ fontSize: 13, color: accent, marginTop: 2 }}>{exp.company}</div>
@@ -324,10 +283,10 @@ export default function MobileView({ dark, setDark }: { dark: boolean; setDark: 
                   </div>
                 </div>
               </div>
-              <ul style={{ margin: 0, paddingLeft: 18, color: textSub, fontSize: 12.5, lineHeight: 1.72, marginLeft: i === 0 ? 4 : 0 }}>
+              <ul style={{ margin: 0, paddingLeft: 18, color: textSub, fontSize: 12.5, lineHeight: 1.72 }}>
                 {exp.description.map((d, j) => <li key={j}>{d}</li>)}
               </ul>
-              <div style={{ marginTop: 10, display: 'flex', flexWrap: 'wrap', gap: 6, marginLeft: i === 0 ? 4 : 0 }}>
+              <div style={{ marginTop: 10, display: 'flex', flexWrap: 'wrap', gap: 6 }}>
                 {exp.tech.map(t => (
                   <span key={t} style={{
                     padding: '3px 9px', borderRadius: 8, fontSize: 11,
@@ -345,20 +304,15 @@ export default function MobileView({ dark, setDark }: { dark: boolean; setDark: 
 
         {/* ── Education & Certifications ──────────────────────────────────── */}
         <FadeInSection>
-        <SectionLabel text="Education & Certs" />
+        <SectionLabel text="Education & Certs" dark={dark} />
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 36 }}>
           {education.map(edu => (
             <div key={edu.institution} style={{
               background: cardBg, border: `1px solid ${cardBorder}`,
               borderRadius: 16, padding: '18px 20px',
-              position: 'relative', overflow: 'hidden',
             }}>
-              <div style={{
-                position: 'absolute', left: 0, top: 0, bottom: 0, width: 3,
-                background: accentGrad, borderRadius: '16px 0 0 16px',
-              }} />
-              <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12, marginLeft: 4 }}>
-                <span style={{ fontSize: 24, flexShrink: 0, lineHeight: 1 }}>{edu.logo}</span>
+              <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
+                <Lettermark text={edu.logo} dark={dark} size={40} />
                 <div style={{ flex: 1 }}>
                   <div style={{ fontSize: 14.5, fontWeight: 600, color: text }}>{edu.institution}</div>
                   <div style={{ fontSize: 13, color: accent, marginTop: 2 }}>{edu.degree} in {edu.field}</div>
@@ -384,7 +338,7 @@ export default function MobileView({ dark, setDark }: { dark: boolean; setDark: 
                 borderRadius: 16, padding: '14px 18px',
               }}
             >
-              <span style={{ fontSize: 22, flexShrink: 0 }}>{cert.logo}</span>
+              <Lettermark text={cert.logo} dark={dark} />
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ fontSize: 13.5, fontWeight: 600, color: text }}>{cert.name}</div>
                 <div style={{ fontSize: 12, color: accent, marginTop: 2 }}>{cert.issuer}</div>
@@ -398,10 +352,10 @@ export default function MobileView({ dark, setDark }: { dark: boolean; setDark: 
 
         {/* ── Skills ─────────────────────────────────────────────────────── */}
         <FadeInSection>
-        <SectionLabel text="Skills" />
+        <SectionLabel text="Skills" dark={dark} />
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 36 }}>
           {Object.entries(skills).map(([cat, items]) => {
-            const [color, colorBg] = CATEGORY_COLORS[cat] || [accent, accentBg];
+            const color = accent, colorBg = accentBg;
             return (
               <div key={cat} style={{
                 background: cardBg, border: `1px solid ${cardBorder}`,
@@ -447,7 +401,7 @@ export default function MobileView({ dark, setDark }: { dark: boolean; setDark: 
 
         {/* ── Photos ─────────────────────────────────────────────────────── */}
         <FadeInSection>
-        <SectionLabel text="Photos" />
+        <SectionLabel text="Photos" dark={dark} />
         <div style={{ overflowX: 'auto', marginBottom: 36, paddingBottom: 10, scrollbarWidth: 'thin', scrollbarColor: 'rgba(0,0,0,.18) transparent' }}>
           <div style={{ display: 'flex', gap: 20, width: 'max-content', paddingBottom: 4, paddingTop: 12, paddingLeft: 4, paddingRight: 4 }}>
             {images.map((img, i) => {
@@ -487,19 +441,14 @@ export default function MobileView({ dark, setDark }: { dark: boolean; setDark: 
 
         {/* ── Contact ────────────────────────────────────────────────────── */}
         <FadeInSection>
-        <SectionLabel text="Contact" />
+        <SectionLabel text="Contact" dark={dark} />
 
         {/* Contact intro */}
         <div style={{
           background: cardBg, border: `1px solid ${cardBorder}`,
           borderRadius: 16, padding: '16px 18px', marginBottom: 12,
           fontSize: 13.5, color: textSub, lineHeight: 1.68,
-          position: 'relative', overflow: 'hidden',
         }}>
-          <div style={{
-            position: 'absolute', top: 0, left: 0, right: 0, height: 2,
-            background: accentGrad,
-          }} />
           {contactBlurb}
         </div>
 
@@ -531,13 +480,13 @@ export default function MobileView({ dark, setDark }: { dark: boolean; setDark: 
           style={{
             display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
             padding: '14px 24px', borderRadius: 14, fontSize: 14.5, fontWeight: 600,
-            background: accentGrad2,
+            background: accentSolid,
             color: '#fff', textDecoration: 'none',
-            boxShadow: '0 0 20px rgba(212,148,58,.18), 0 4px 12px rgba(212,148,58,.12)',
+            boxShadow: '0 4px 14px rgba(0,0,0,.14)',
             marginBottom: 32,
           }}
         >
-          ✉️  Send me an email
+          Send me an email
         </a>
 
         </FadeInSection>

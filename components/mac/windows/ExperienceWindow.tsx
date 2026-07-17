@@ -1,6 +1,6 @@
 'use client';
 import { T } from '../tokens';
-import { Chip, WinTitle, Bullet } from '../Atoms';
+import { Chip, WinTitle, Bullet, Lettermark } from '../Atoms';
 import { experiences, education, certifications } from '@/constants';
 
 export default function ExperienceWindow({ dark }: { dark: boolean }) {
@@ -8,7 +8,7 @@ export default function ExperienceWindow({ dark }: { dark: boolean }) {
 
   return (
     <div style={{ padding: '22px 24px', color: tk.text }}>
-      <WinTitle dark={dark}>Work <em style={{ color: tk.accent, fontStyle: 'italic' }}>History</em></WinTitle>
+      <WinTitle dark={dark}>Experience</WinTitle>
 
       {experiences.map((exp, i) => (
         <div
@@ -18,12 +18,11 @@ export default function ExperienceWindow({ dark }: { dark: boolean }) {
             animation: `contentFadeIn .4s ${i * 0.08}s ease both`,
           }}
         >
-          {/* Timeline dot with glow for current role */}
+          {/* Timeline dot — accent for current role */}
           <div style={{
             position: 'absolute', left: 0, top: 5, width: 10, height: 10, borderRadius: '50%',
             background: i === 0 ? tk.accent : tk.pillBorder,
-            border: `2px solid ${i === 0 ? 'rgba(212,148,58,.3)' : tk.divider}`,
-            boxShadow: i === 0 ? '0 0 10px rgba(212,148,58,.35)' : 'none',
+            border: `2px solid ${i === 0 ? tk.accentBorder : tk.divider}`,
           }} />
           {/* Timeline line — gradient for first segment */}
           {i < experiences.length - 1 && (
@@ -39,8 +38,8 @@ export default function ExperienceWindow({ dark }: { dark: boolean }) {
 
           {/* Header */}
           <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 8, marginBottom: 8 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 9 }}>
-              <span style={{ fontSize: 20 }}>{exp.logo}</span>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <Lettermark text={exp.logo} dark={dark} />
               <div>
                 <div style={{ fontSize: 15, fontWeight: 600, color: tk.text }}>{exp.company}</div>
                 <div style={{ fontSize: 13, color: tk.accent, marginTop: 1 }}>{exp.title}</div>
@@ -89,16 +88,9 @@ export default function ExperienceWindow({ dark }: { dark: boolean }) {
               display: 'flex', alignItems: 'flex-start', gap: 14,
               padding: '16px 18px', background: tk.cardBg,
               border: `1px solid ${tk.cardBorder}`, borderRadius: 14,
-              position: 'relative', overflow: 'hidden',
             }}
           >
-            {/* Subtle accent bar */}
-            <div style={{
-              position: 'absolute', left: 0, top: 0, bottom: 0, width: 3,
-              background: tk.accentGrad,
-              borderRadius: '14px 0 0 14px',
-            }} />
-            <span style={{ fontSize: 24, flexShrink: 0, marginLeft: 4 }}>{edu.logo}</span>
+            <Lettermark text={edu.logo} dark={dark} size={40} />
             <div style={{ flex: 1 }}>
               <div style={{ fontWeight: 600, fontSize: 14.5, color: tk.text }}>{edu.institution}</div>
               <div style={{ fontSize: 13, color: tk.accent, marginTop: 2 }}>
@@ -150,7 +142,7 @@ export default function ExperienceWindow({ dark }: { dark: boolean }) {
                 el.style.transform = 'none';
               }}
             >
-              <span style={{ fontSize: 22, flexShrink: 0 }}>{cert.logo}</span>
+              <Lettermark text={cert.logo} dark={dark} />
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ fontWeight: 600, fontSize: 13.5, color: tk.text }}>{cert.name}</div>
                 <div style={{ fontSize: 12, color: tk.accent, marginTop: 2 }}>{cert.issuer}</div>

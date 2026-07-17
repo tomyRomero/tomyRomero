@@ -63,12 +63,6 @@ export default function WelcomeToast({ dark }: { dark: boolean }) {
             : '0 16px 48px rgba(0,0,0,.18), 0 4px 16px rgba(0,0,0,.10)',
         }}
       >
-        {/* Amber accent bar */}
-        <div style={{
-          height: 3,
-          background: 'linear-gradient(90deg,#b8720a 0%,#D4943A 40%,#f5c87a 70%,#D4943A 100%)',
-        }} />
-
         <div style={{ padding: '14px 16px 16px' }}>
 
           {/* Header row */}
@@ -77,14 +71,15 @@ export default function WelcomeToast({ dark }: { dark: boolean }) {
             justifyContent: 'space-between', marginBottom: 11,
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
-              {/* Amber diamond icon */}
+              {/* Monogram */}
               <div style={{
                 width: 26, height: 26, borderRadius: 8, flexShrink: 0,
-                background: 'linear-gradient(135deg,#D4943A,#7a4c10)',
+                background: tk.accentGrad2,
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: 13, boxShadow: '0 2px 8px rgba(212,148,58,.38)',
+                fontSize: 12, fontWeight: 700, color: '#fff',
+                fontFamily: 'var(--font-sans),sans-serif',
               }}>
-                ✦
+                T
               </div>
               <span style={{
                 fontSize: 13.5, fontWeight: 700, color: tk.text,
@@ -148,7 +143,7 @@ export default function WelcomeToast({ dark }: { dark: boolean }) {
           }}>
             <div style={{
               height: '100%',
-              background: 'linear-gradient(90deg,#b8720a,#D4943A,#f5c87a)',
+              background: tk.accentGrad2,
               borderRadius: 99,
               animation: `drainBar ${DURATION}ms linear both`,
             }} />

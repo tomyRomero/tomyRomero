@@ -125,15 +125,15 @@ export default function Home() {
     dispatch({ type: 'FOCUS', id });
   }, []);
 
-  // Opening cascade. On large screens every window opens into a tidy grid so
-  // visitors see the whole portfolio without clicking anything; small screens
-  // get just About centered (five windows would be chaos there).
+  // Calm opening: About plus Projects, side by side with a slight overlap,
+  // so a visitor immediately sees who you are and what you've built without
+  // the whole desktop erupting. Everything else stays a dock click away.
   useEffect(() => {
     const timers: ReturnType<typeof setTimeout>[] = [];
     timers.push(setTimeout(() => {
       const vw = window.innerWidth, vh = window.innerHeight;
 
-      if (vw < 1100 || vh < 620) {
+      if (vw < 1150 || vh < 620) {
         const ww = Math.min(560, vw - 80);
         const wh = Math.min(630, vh - 160);
         const cx = Math.max(40, Math.round((vw - ww) / 2));
@@ -143,29 +143,19 @@ export default function Home() {
         return;
       }
 
-      // 3×2 grid that leaves the right edge clear for the widgets column.
-      // About opens last so it lands frontmost and focused.
-      const cols = 3;
-      const gw = vw - 232;
-      const cW = Math.floor((gw - 16) / cols);
-      const rH = Math.floor((vh - 158) / 2);
-      const slots = [
-        { id: 'projects',   col: 1, row: 0 },
-        { id: 'experience', col: 2, row: 0 },
-        { id: 'skills',     col: 0, row: 1 },
-        { id: 'contact',    col: 1, row: 1 },
-        { id: 'about',      col: 0, row: 0 },
-      ];
-      slots.forEach((s, i) => {
-        timers.push(setTimeout(() => {
-          dispatch({
-            type: 'OPEN_AT', id: s.id,
-            x: 16 + s.col * cW, y: 36 + s.row * rH,
-            w: cW - 12, h: rH - 12,
-          });
-          setFocused(s.id);
-        }, i * 140));
-      });
+      const zone = vw - 236;   // keep the widgets column clear
+      const aw = Math.min(540, zone - 120), ah = Math.min(600, vh - 170);
+      const pw = Math.min(620, zone - 120), ph = Math.min(560, vh - 200);
+      const ax = 40, ay = 48;
+      const px = Math.max(ax + 150, zone - pw);
+      const py = Math.min(ay + 34, Math.max(40, vh - ph - 100));
+
+      dispatch({ type: 'OPEN_AT', id: 'projects', x: px, y: py, w: pw, h: ph });
+      setFocused('projects');
+      timers.push(setTimeout(() => {
+        dispatch({ type: 'OPEN_AT', id: 'about', x: ax, y: ay, w: aw, h: ah });
+        setFocused('about');
+      }, 200));
     }, 420));
     return () => timers.forEach(clearTimeout);
   }, []);

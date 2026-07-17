@@ -7,8 +7,8 @@ export default function manifest(): MetadataRoute.Manifest {
     description: 'Full-stack software engineer portfolio: ASP.NET Core, React, SQL Server.',
     start_url: '/',
     display: 'standalone',
-    background_color: '#020614',
-    theme_color: '#D4943A',
+    background_color: '#0a0c11',
+    theme_color: '#0A84FF',
     icons: [
       {
         src: '/icon',

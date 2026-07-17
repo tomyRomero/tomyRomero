@@ -4,8 +4,8 @@ import { T } from '../tokens';
 import { WinTitle } from '../Atoms';
 import { contactDetails, contactBlurb, ME } from '@/constants';
 
-const ICONS: Record<string, string> = {
-  Email: '✉️', LinkedIn: '🔗', GitHub: '⑂', Location: '📍',
+const MARKS: Record<string, string> = {
+  Email: '@', LinkedIn: 'in', GitHub: '⑂', Location: '◎',
 };
 
 export default function ContactWindow({ dark }: { dark: boolean }) {
@@ -20,19 +20,13 @@ export default function ContactWindow({ dark }: { dark: boolean }) {
 
   return (
     <div style={{ padding: '22px 24px', color: tk.text }}>
-      <WinTitle dark={dark}>Get in <em style={{ color: tk.accent, fontStyle: 'italic' }}>Touch</em></WinTitle>
+      <WinTitle dark={dark}>Contact</WinTitle>
 
       {/* Contact hero card */}
       <div style={{
-        position: 'relative',
         background: tk.cardBg, border: `1px solid ${tk.cardBorder}`,
         borderRadius: 16, padding: '18px 20px', marginBottom: 16,
-        overflow: 'hidden',
       }}>
-        <div style={{
-          position: 'absolute', top: 0, left: 0, right: 0, height: 3,
-          background: tk.accentGrad,
-        }} />
         <div style={{
           fontSize: 14, color: tk.textSub, lineHeight: 1.7,
         }}>
@@ -64,8 +58,14 @@ export default function ContactWindow({ dark }: { dark: boolean }) {
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: 13 }}>
-            <span style={{ fontSize: 20, width: 26, textAlign: 'center' }}>
-              {ICONS[item.type] || '•'}
+            <span style={{
+              width: 28, height: 28, borderRadius: 8,
+              background: tk.pillBg, border: `1px solid ${tk.pillBorder}`,
+              display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+              fontSize: 11.5, fontWeight: 600, color: tk.textSub, flexShrink: 0,
+              fontFamily: 'var(--font-mono), monospace',
+            }}>
+              {MARKS[item.type] || '•'}
             </span>
             <div>
               <div style={{
@@ -134,14 +134,14 @@ export default function ContactWindow({ dark }: { dark: boolean }) {
           }}
           onMouseEnter={e => {
             e.currentTarget.style.transform = 'translateY(-2px)';
-            e.currentTarget.style.boxShadow = '0 0 28px rgba(212,148,58,.30), 0 6px 16px rgba(212,148,58,.20)';
+            e.currentTarget.style.boxShadow = '0 8px 22px rgba(0,0,0,.20)';
           }}
           onMouseLeave={e => {
             e.currentTarget.style.transform = 'none';
             e.currentTarget.style.boxShadow = tk.accentGlow;
           }}
         >
-          ✉️  Send me an email
+          Send me an email
         </a>
       </div>
     </div>

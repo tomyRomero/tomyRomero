@@ -7,21 +7,17 @@ import { projectDetails, projects } from '@/constants';
 
 function useTokens(dark: boolean) {
   return {
-    bg:           dark ? '#060a14'                         : '#f2efe9',
-    text:         dark ? '#f0f0f5'                         : '#1a1a1e',
+    bg:           dark ? '#0a0c11'                         : '#f4f5f7',
+    text:         dark ? '#eef0f4'                         : '#1a1c20',
     textMuted:    dark ? 'rgba(255,255,255,.55)'           : 'rgba(0,0,0,.58)',
     textSub:      dark ? 'rgba(255,255,255,.72)'           : 'rgba(0,0,0,.72)',
     cardBg:       dark ? 'rgba(255,255,255,.045)'          : 'rgba(0,0,0,.025)',
     cardBorder:   dark ? 'rgba(255,255,255,.08)'           : 'rgba(0,0,0,.07)',
-    accent:       '#d4943a',
-    accentBg:     dark ? 'rgba(212,148,58,.12)'            : 'rgba(212,148,58,.08)',
-    accentBorder: dark ? 'rgba(212,148,58,.26)'            : 'rgba(212,148,58,.20)',
-    accentGrad:   'linear-gradient(135deg, #D4943A 0%, #f5c87a 50%, #D4943A 100%)',
-    accentGrad2:  'linear-gradient(135deg, #D4943A 0%, #e8a94e 100%)',
-    accentGlow:   dark
-      ? '0 0 20px rgba(212,148,58,.18), 0 4px 12px rgba(212,148,58,.12)'
-      : '0 0 16px rgba(212,148,58,.12), 0 4px 10px rgba(212,148,58,.08)',
-    navBg:        dark ? 'rgba(6,10,20,.94)'               : 'rgba(242,239,233,.94)',
+    accent:       dark ? '#78b3ff'                         : '#0068d6',
+    accentBg:     dark ? 'rgba(64,140,255,.12)'            : 'rgba(0,104,214,.07)',
+    accentBorder: dark ? 'rgba(100,160,255,.30)'           : 'rgba(0,104,214,.20)',
+    accentSolid:  dark ? '#0A84FF'                         : '#0071E3',
+    navBg:        dark ? 'rgba(10,12,17,.94)'              : 'rgba(244,245,247,.94)',
     pillBg:       dark ? 'rgba(255,255,255,.07)'           : 'rgba(0,0,0,.04)',
     pillBorder:   dark ? 'rgba(255,255,255,.10)'           : 'rgba(0,0,0,.08)',
   };
@@ -35,15 +31,12 @@ function SectionLabel({ text, tk }: { text: string; tk: ReturnType<typeof useTok
     }}>
       <h2 style={{
         fontSize: 11, letterSpacing: '1.4px', textTransform: 'uppercase' as const,
-        fontFamily: 'var(--font-mono),monospace', color: tk.accent,
+        fontFamily: 'var(--font-mono),monospace', color: tk.textMuted,
         fontWeight: 600,
       }}>
         {text}
       </h2>
-      <div style={{
-        flex: 1, height: 1,
-        background: `linear-gradient(90deg, ${tk.accentBorder}, transparent)`,
-      }} />
+      <div style={{ flex: 1, height: 1, background: tk.cardBorder }} />
     </div>
   );
 }
@@ -101,10 +94,9 @@ export default function ProjectPage({ params }: { params: { title: string } }) {
           onClick={() => router.back()}
           style={{
             padding: '10px 22px', borderRadius: 12, fontSize: 13,
-            background: tk.accentGrad2, border: 'none',
+            background: tk.accentSolid, border: 'none',
             color: '#fff', cursor: 'pointer',
             fontFamily: 'var(--font-mono),monospace',
-            boxShadow: tk.accentGlow,
           }}
         >
           ← Go back
@@ -157,7 +149,6 @@ export default function ProjectPage({ params }: { params: { title: string } }) {
         </button>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          {summary && <span style={{ fontSize: 18 }}>{summary.emoji}</span>}
           <span style={{ fontSize: 15, fontWeight: 600, color: tk.text, letterSpacing: '-.2px' }}>
             {detail.title}
           </span>
@@ -184,42 +175,25 @@ export default function ProjectPage({ params }: { params: { title: string } }) {
           padding: '28px 0 24px',
         }}>
           <div style={{
-            position: 'relative',
             background: tk.cardBg, border: `1px solid ${tk.cardBorder}`,
             borderRadius: 18, padding: '22px 22px 18px',
-            overflow: 'hidden',
           }}>
-            {/* Top gradient bar */}
-            <div style={{
-              position: 'absolute', top: 0, left: 0, right: 0, height: 3,
-              background: tk.accentGrad,
-              borderRadius: '18px 18px 0 0',
-            }} />
-
             <div style={{
               display: 'flex', alignItems: 'center', gap: 14, marginBottom: 14,
             }}>
               {summary && (
                 <div style={{
-                  width: 56, height: 56, borderRadius: 16, flexShrink: 0,
-                  background: tk.accentBg, border: `1px solid ${tk.accentBorder}`,
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: 28,
-                  boxShadow: tk.accentGlow,
+                  width: 64, height: 48, borderRadius: 12, flexShrink: 0,
+                  border: `1px solid ${tk.cardBorder}`, background: tk.cardBg,
+                  position: 'relative', overflow: 'hidden',
                 }}>
-                  {summary.emoji}
+                  <Image src={summary.image} alt={detail.title} fill style={{ objectFit: 'cover' }} sizes="64px" />
                 </div>
               )}
               <div>
-                <h1 key={dark ? 'd' : 'l'} className="grad-text" style={{
-                  fontFamily: 'var(--font-serif),serif', fontSize: 26, fontWeight: 400,
-                  letterSpacing: '-.3px', marginBottom: 4,
-                  background: dark
-                    ? 'linear-gradient(135deg, #f0f0f5 0%, #d4943a 100%)'
-                    : 'linear-gradient(135deg, #1a1a1e 0%, #d4943a 100%)',
-                  WebkitBackgroundClip: 'text',
-                  WebkitTextFillColor: 'transparent',
-                  backgroundClip: 'text',
+                <h1 style={{
+                  fontSize: 23, fontWeight: 700,
+                  letterSpacing: '-.4px', marginBottom: 4, color: tk.text,
                 }}>
                   {detail.title}
                 </h1>
@@ -245,7 +219,7 @@ export default function ProjectPage({ params }: { params: { title: string } }) {
                 border: `1px solid ${detail.isLive ? 'rgba(52,199,89,.26)' : tk.pillBorder}`,
                 color: detail.isLive ? (dark ? '#34c759' : '#15803d') : tk.textMuted,
               }}>
-                {detail.isLive ? '● Live' : '⑂ GitHub only'}
+                {detail.isLive ? '● Live' : 'GitHub only'}
               </span>
             </div>
           </div>
@@ -419,15 +393,14 @@ export default function ProjectPage({ params }: { params: { title: string } }) {
               style={{
                 flex: 1, textAlign: 'center' as const,
                 padding: '13px 16px', borderRadius: 14, fontSize: 13.5, fontWeight: 600,
-                background: tk.accentGrad2,
+                background: tk.accentSolid,
                 border: 'none',
                 color: '#fff', textDecoration: 'none',
-                boxShadow: tk.accentGlow,
                 transition: 'all .18s',
                 fontFamily: 'var(--font-mono),monospace',
               }}
             >
-              ⑂  GitHub
+              GitHub
             </a>
           )}
           {detail.isLive && detail.livelink && (

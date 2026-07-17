@@ -13,14 +13,14 @@ export default function AppleIcon() {
         style={{
           width: '100%', height: '100%',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
-          background: 'linear-gradient(145deg, #0b1020 0%, #020614 100%)',
+          background: 'linear-gradient(145deg, #14161c 0%, #08090d 100%)',
         }}
       >
         <span style={{
           fontSize: 96,
           fontWeight: 800,
           fontFamily: 'system-ui, sans-serif',
-          color: '#D4943A',
+          color: '#78b3ff',
           letterSpacing: '-5px',
           lineHeight: 1,
         }}>

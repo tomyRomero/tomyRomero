@@ -120,18 +120,6 @@ button:disabled {
   40%       { transform: translate(-11vw, 8vh) scale(1.14); }
   80%       { transform: translate(8vw, -5vh) scale(0.90); }
 }
-@keyframes blob3 {
-  0%, 100% { transform: translate(0, 0) scale(1.00); }
-  50%       { transform: translate(10vw, 9vh) scale(1.08); }
-}
-@keyframes aurora1 {
-  0%, 100% { transform: translate(0vw, 0vh) scale(1.00); opacity: 0.72; }
-  20%       { transform: translate(14vw, -9vh)  scale(1.16); opacity: 0.88; }
-  40%       { transform: translate(5vw,  12vh)  scale(0.86); opacity: 0.76; }
-  60%       { transform: translate(-12vw, 7vh)  scale(1.12); opacity: 0.82; }
-  80%       { transform: translate(-3vw, -8vh)  scale(0.92); opacity: 0.70; }
-}
-
 /* Tilted photo strip entrance */
 @keyframes photoIn {
   0%   { opacity: 0; transform: translateY(20px) scale(.88); }
@@ -184,23 +172,6 @@ button:disabled {
   transition: background-color .3s ease, border-color .3s ease, box-shadow .3s ease !important;
 }
 
-/* Gradient-clipped text (-webkit-background-clip: text) must NEVER be transitioned
-   or GPU-composited during a theme swap. WebKit/Blink rasterize the clipped glyphs
-   into a layer texture when an element transitions; with a transparent text-fill the
-   result is a grainy/blurred block (most visible on small / low-DPI screens).
-   Excluding these elements — and pinning their rasterization — keeps the text crisp. */
-.grad-text {
-  transition: none !important;
-  animation: none !important;
-  will-change: auto !important;
-}
-.theme-transition .grad-text,
-.theme-transition .grad-text *,
-.theme-transition .grad-text::before,
-.theme-transition .grad-text::after {
-  transition: none !important;
-}
-
 /* Print styles */
 @media print {
   .mac-dock, .mac-menubar, .mac-notif { display: none !important; }
@@ -219,7 +190,7 @@ button:disabled {
 
 /* Accessibility: focus visible outlines */
 :focus-visible {
-  outline: 2px solid #D4943A;
+  outline: 2px solid #0A84FF;
   outline-offset: 2px;
   border-radius: 4px;
 }
@@ -231,7 +202,7 @@ button:disabled {
   left: 50%;
   transform: translateX(-50%);
   padding: 10px 24px;
-  background: #D4943A;
+  background: #0071E3;
   color: #fff;
   font-size: 14px;
   font-weight: 600;
