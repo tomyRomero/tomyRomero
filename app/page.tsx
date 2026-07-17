@@ -172,7 +172,8 @@ export default function Home() {
       const ww = Math.min(560, vw - 80);
       const wh = Math.min(640, vh - 160);
       const cx = Math.max(40, Math.round((zone - ww) / 2));
-      const cy = 28 + Math.max(8, Math.round((vh - 28 - 100 - wh) / 2));
+      // Canvas-relative y (the canvas already starts 28px down, under the menu bar)
+      const cy = Math.max(8, Math.round((vh - 28 - 100 - wh) / 2));
       dispatch({ type: 'OPEN_AT', id: 'about', x: cx, y: cy, w: ww, h: wh });
       setFocused('about');
     }, 420);

@@ -8,7 +8,13 @@
       "Bash(git merge *)",
       "Bash(git commit *)",
       "Bash(curl -s http://localhost:3000/)",
-      "Bash(python3 -)"
+      "Bash(python3 -)",
+      "Bash(FILTER_BRANCH_SQUELCH_WARNING=1 git filter-branch -f --msg-filter 'sed \"/^Co-Authored-By: Claude/d\"' -- main)",
+      "Bash(git stash *)",
+      "Bash(lsof -nP -iTCP:3001 -sTCP:LISTEN)",
+      "Bash(PORT=3001 npm run dev)",
+      "Bash(command -v chromium-cli chromium google-chrome \"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome\")",
+      "Bash(node -e \"try{require.resolve\\('playwright'\\);console.log\\('playwright-installed'\\)}catch{console.log\\('no-playwright'\\)}\")"
     ]
   }
 }

@@ -177,7 +177,10 @@ export default function WinShell({ win, dark, dispatch, focused, onFocus, childr
       if (drag.current) {
         lastMouse.current = { x: clientX, y: clientY };
         el.current.style.left = Math.max(0, clientX - dOff.current.x) + 'px';
-        el.current.style.top  = Math.max(28, clientY - dOff.current.y) + 'px';
+        // style.top is resolved relative to the desktop canvas (fixed; top:28),
+        // so subtract that 28 to convert the viewport-space cursor position into
+        // canvas space; floor at 0 lets the window reach just under the menu bar.
+        el.current.style.top  = Math.max(0, clientY - dOff.current.y - 28) + 'px';
         window.dispatchEvent(new CustomEvent('winNearDock', { detail: { near: isNearTrash(trashRect.current, clientX, clientY) } }));
       }
       if (rzRight.current) {
@@ -196,7 +199,9 @@ export default function WinShell({ win, dark, dispatch, focused, onFocus, childr
         const dy   = clientY - rzStart.current.y;
         const newH = Math.max(200, rzStart.current.h - dy);
         el.current.style.height = newH + 'px';
-        el.current.style.top    = Math.max(28, rzStart.current.top + rzStart.current.h - newH) + 'px';
+        // Canvas-relative floor of 0 (matches the drag clamp) so top-edge resize
+        // can raise the window as high as dragging can.
+        el.current.style.top    = Math.max(0, rzStart.current.top + rzStart.current.h - newH) + 'px';
       }
     };
 
