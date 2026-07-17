@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect, useReducer, useCallback, useMemo, useRef } from 'react';
 import MobileView    from '@/components/MobileView';
-import Wallpaper     from '@/components/mac/Wallpaper';
+import Wallpaper, { WALLPAPERS, type WallpaperVariant } from '@/components/mac/Wallpaper';
 import MenuBar       from '@/components/mac/MenuBar';
 import WinShell      from '@/components/mac/WinShell';
 import Dock          from '@/components/mac/Dock';
@@ -102,6 +102,14 @@ export default function Home() {
   const [wins, dispatch] = useReducer(winReducer, undefined, initWins);
   const [focused, setFocused] = useState<string | null>(null);
   const [calPop, setCalPop]   = useState(false);
+  const [wallpaper, setWallpaper] = useState<WallpaperVariant>('mesh');
+
+  // Restore + persist wallpaper choice
+  useEffect(() => {
+    const saved = localStorage.getItem('wallpaper');
+    if (saved && WALLPAPERS.some(w => w.id === saved)) setWallpaper(saved as WallpaperVariant);
+  }, []);
+  useEffect(() => { localStorage.setItem('wallpaper', wallpaper); }, [wallpaper]);
 
   // Restore + persist dark mode (useEffect avoids SSR hydration mismatch).
   // First visit falls back to the visitor's system theme.
@@ -196,11 +204,15 @@ export default function Home() {
     <div style={{ position: 'fixed', inset: 0, overflow: 'hidden' }}>
       {/* Wallpaper with intro fade */}
       <div style={{ animation: 'introFade .8s ease both' }}>
-        <Wallpaper dark={dark} />
+        <Wallpaper dark={dark} variant={wallpaper} />
       </div>
 
       {/* Menu bar */}
-      <MenuBar dark={dark} setDark={toggleDark} wins={wins} dispatch={dispatch} calPop={calPop} setCalPop={setCalPop} />
+      <MenuBar
+        dark={dark} setDark={toggleDark} wins={wins} dispatch={dispatch}
+        calPop={calPop} setCalPop={setCalPop}
+        wallpaper={wallpaper} setWallpaper={setWallpaper}
+      />
 
       {/* Desktop canvas */}
       <div

@@ -109,6 +109,17 @@ button:disabled {
   100% { opacity: 1; transform: none; }
 }
 
+/* Wallpaper wash drift — large soft color spots */
+@keyframes washA {
+  0%, 100% { transform: translate(0, 0) scale(1.00); }
+  33%       { transform: translate(7vw, -5vh) scale(1.08); }
+  66%       { transform: translate(-6vw, 4vh) scale(0.94); }
+}
+@keyframes washB {
+  0%, 100% { transform: translate(0, 0) scale(1.00); }
+  50%       { transform: translate(-9vw, 6vh) scale(1.10); }
+}
+
 /* Wallpaper dune drift — slow horizontal sway per layer */
 @keyframes duneA {
   0%, 100% { transform: translateX(0); }

@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { T } from './tokens';
 import { ME, projects, skills } from '@/constants';
+import { WALLPAPERS, type WallpaperVariant } from './Wallpaper';
 import type { Win, WinAction } from './winTypes';
 
 const WIN_TITLES: Record<string, string> = {
@@ -83,6 +84,8 @@ interface Props {
   dispatch: React.Dispatch<WinAction>;
   calPop: boolean;
   setCalPop: React.Dispatch<React.SetStateAction<boolean>>;
+  wallpaper: WallpaperVariant;
+  setWallpaper: (w: WallpaperVariant) => void;
 }
 
 interface MenuItem {
@@ -95,7 +98,7 @@ interface MenuItem {
 }
 
 // ── Component ─────────────────────────────────────────────────────────────────
-export default function MenuBar({ dark, setDark, wins, dispatch, calPop, setCalPop }: Props) {
+export default function MenuBar({ dark, setDark, wins, dispatch, calPop, setCalPop, wallpaper, setWallpaper }: Props) {
   const tk = T(dark);
   const [clock, setClock]         = useState('');
   const [active, setActive]       = useState<string | null>(null);
@@ -246,6 +249,12 @@ export default function MenuBar({ dark, setDark, wins, dispatch, calPop, setCalP
         { div: true },
         { label: dark ? 'Switch to Light Mode' : 'Switch to Dark Mode',
           action: () => { setDark(d => !d); close(); } },
+        { div: true },
+        { label: 'Wallpaper', disabled: true },
+        ...WALLPAPERS.map(w => ({
+          label: `${wallpaper === w.id ? '✓' : ' '} ${w.label}`,
+          action: () => { setWallpaper(w.id); close(); },
+        })),
         { div: true },
         { label: 'System Preferences…', disabled: true },
         { div: true },
