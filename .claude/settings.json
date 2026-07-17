@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -rn --include='*.tsx' -A2 -E \"<\\(h1|h2|h3\\)\\( |$\\)\" components app)",
+      "Bash(echo \"exit: $?\")",
+      "Bash(git commit -q -m ' *)"
+    ]
+  }
+}

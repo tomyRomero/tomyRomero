@@ -332,7 +332,6 @@ function ProjectDetail({ title, onBack, dark }: { title: string; onBack: () => v
               background: tk.accentGrad2,
               border: 'none',
               color: '#fff', textDecoration: 'none', transition: 'all .18s',
-              boxShadow: tk.accentGlow,
             }}
             onMouseEnter={e => { e.currentTarget.style.opacity = '.85'; e.currentTarget.style.transform = 'translateY(-1px)'; }}
             onMouseLeave={e => { e.currentTarget.style.opacity = '1'; e.currentTarget.style.transform = 'none'; }}
@@ -359,17 +358,32 @@ function ProjectDetail({ title, onBack, dark }: { title: string; onBack: () => v
   );
 }
 
+// ── Deep link from outside (e.g. the Featured Project widget) ────────────────
+// The pending value is set synchronously before the window opens and consumed
+// on mount, so there is no race against the listener attaching; the event
+// covers the already-open case.
+let pendingDetail: string | null = null;
+export function requestProjectDetail(title: string) {
+  pendingDetail = title;
+  window.dispatchEvent(new CustomEvent('openProjectDetail', { detail: { title } }));
+}
+
 // ── Projects list ─────────────────────────────────────────────────────────────
 export default function ProjectsWindow({ dark }: { dark: boolean }) {
   const tk = T(dark);
   const [detail, setDetail] = useState<string | null>(null);
 
-  // Deep link from outside (e.g. the Featured Project widget): jump straight
-  // to a specific project's detail view.
   useEffect(() => {
+    if (pendingDetail && projects.some(p => p.title === pendingDetail)) {
+      setDetail(pendingDetail);
+    }
+    pendingDetail = null;
     const h = (e: Event) => {
       const t = (e as CustomEvent<{ title: string }>).detail?.title;
-      if (t && projects.some(p => p.title === t)) setDetail(t);
+      if (t && projects.some(p => p.title === t)) {
+        pendingDetail = null;
+        setDetail(t);
+      }
     };
     window.addEventListener('openProjectDetail', h);
     return () => window.removeEventListener('openProjectDetail', h);
@@ -405,14 +419,12 @@ export default function ProjectsWindow({ dark }: { dark: boolean }) {
               el.style.borderColor = tk.accentBorder;
               el.style.background  = tk.cardHover;
               el.style.transform   = 'translateX(3px)';
-              el.style.boxShadow   = tk.accentGlow;
             }}
             onMouseLeave={e => {
               const el = e.currentTarget as HTMLDivElement;
               el.style.borderColor = isFeatured ? tk.accentBorder : tk.cardBorder;
               el.style.background  = tk.cardBg;
               el.style.transform   = 'none';
-              el.style.boxShadow   = 'none';
             }}
           >
             <div style={{

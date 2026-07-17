@@ -20,10 +20,8 @@ export const T = (dark: boolean) => ({
   accent:       dark ? '#78b3ff'                  : '#0068d6',
   accentBg:     dark ? 'rgba(64,140,255,.12)'     : 'rgba(0,104,214,.07)',
   accentBorder: dark ? 'rgba(100,160,255,.30)'    : 'rgba(0,104,214,.22)',
-  // Legacy names kept so call sites stay simple; both are flat fills now
-  accentGrad:   dark ? '#0A84FF'                  : '#0071E3',
+  // Solid fill for primary buttons / filled UI
   accentGrad2:  dark ? '#0A84FF'                  : '#0071E3',
-  accentGlow:   'none',
   // System highlight — modern macOS menu/selection blue
   hlColor:      dark ? '#0A84FF' : '#007AFF',
   dockBorder:   dark ? 'rgba(255,255,255,.12)' : 'rgba(0,0,0,.10)',

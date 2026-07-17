@@ -10,9 +10,19 @@ html, body {
   height: 100%;
   overflow: hidden;
   -webkit-font-smoothing: antialiased;
+  /* Prevent iOS Safari's automatic text inflation on rotate (was provided
+     by the removed Tailwind preflight) */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
   cursor: default;
   user-select: none;
   font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+/* Normalized placeholder color, legible on both themes (preflight replacement) */
+::placeholder {
+  color: rgba(130, 134, 144, .8);
+  opacity: 1;
 }
 
 img, svg, video {
@@ -238,5 +248,11 @@ button:disabled {
     animation-iteration-count: 1 !important;
     transition-duration: .001ms !important;
     scroll-behavior: auto !important;
+  }
+  /* The welcome toast's drain bar is a timer, not decorative motion — its
+     animationend drives auto-dismiss, so it must keep its real duration or
+     the toast would vanish instantly for reduced-motion users. */
+  .toast-drain {
+    animation-duration: 7000ms !important;
   }
 }

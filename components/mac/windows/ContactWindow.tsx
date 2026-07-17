@@ -48,13 +48,11 @@ export default function ContactWindow({ dark }: { dark: boolean }) {
             const el = e.currentTarget as HTMLDivElement;
             el.style.borderColor = tk.accentBorder;
             el.style.transform = 'translateX(4px)';
-            el.style.boxShadow = tk.accentGlow;
           }}
           onMouseLeave={e => {
             const el = e.currentTarget as HTMLDivElement;
             el.style.borderColor = tk.cardBorder;
             el.style.transform = 'none';
-            el.style.boxShadow = 'none';
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: 13 }}>
@@ -129,7 +127,6 @@ export default function ContactWindow({ dark }: { dark: boolean }) {
             background: tk.accentGrad2,
             border: 'none',
             color: '#fff', textDecoration: 'none', transition: 'all .18s',
-            boxShadow: tk.accentGlow,
             fontFamily: 'var(--font-sans), sans-serif',
           }}
           onMouseEnter={e => {
@@ -138,7 +135,7 @@ export default function ContactWindow({ dark }: { dark: boolean }) {
           }}
           onMouseLeave={e => {
             e.currentTarget.style.transform = 'none';
-            e.currentTarget.style.boxShadow = tk.accentGlow;
+            e.currentTarget.style.boxShadow = 'none';
           }}
         >
           Send me an email

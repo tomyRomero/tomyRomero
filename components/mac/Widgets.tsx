@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { T } from './tokens';
 import { ME, experiences, projects, yearsExperience } from '@/constants';
+import { requestProjectDetail } from './windows/ProjectsWindow';
 
 // ── Analog clock SVG ──────────────────────────────────────────────────────────
 function AnalogClock({ dark }: { dark: boolean }) {
@@ -112,13 +113,12 @@ export default function Widgets({ dark, openCal, onOpen }: {
 
   const open = (id: string) => onOpen(id);
 
-  // Open the Projects window, then jump into the featured project's detail
-  // view once the window has mounted (the event listener lives inside it).
+  // Open the Projects window and deep-link into the featured project's
+  // detail view. requestProjectDetail stores the target synchronously, so
+  // the window picks it up on mount with no timing involved.
   const openFeatured = () => {
     onOpen('projects');
-    setTimeout(() => {
-      window.dispatchEvent(new CustomEvent('openProjectDetail', { detail: { title: featured.title } }));
-    }, 90);
+    requestProjectDetail(featured.title);
   };
 
   const glass: React.CSSProperties = {

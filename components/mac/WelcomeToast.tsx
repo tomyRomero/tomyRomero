@@ -12,17 +12,7 @@ export default function WelcomeToast({ dark }: { dark: boolean }) {
   const [leaving, setLeaving] = useState(false);
   const [paused,  setPaused]  = useState(false);
   const [runId,   setRunId]   = useState(0);
-
-  // Auto-dismiss with hover-pause: track how much time is left so pausing
-  // the cursor over the card pauses both the timer and the drain bar.
-  const timer     = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const remaining = useRef(DURATION);
-  const startedAt = useRef(0);
-
-  const armTimer = () => {
-    startedAt.current = Date.now();
-    timer.current = setTimeout(dismiss, remaining.current);
-  };
+  const leavingRef = useRef(false);
 
   useEffect(() => {
     if (!localStorage.getItem('welcomed')) {
@@ -34,8 +24,7 @@ export default function WelcomeToast({ dark }: { dark: boolean }) {
   // Replay on demand (Help menu → Show Welcome Tip), even after first visit
   useEffect(() => {
     const replay = () => {
-      if (timer.current) clearTimeout(timer.current);
-      remaining.current = DURATION;
+      leavingRef.current = false;
       setLeaving(false);
       setPaused(false);
       setVisible(true);
@@ -45,31 +34,19 @@ export default function WelcomeToast({ dark }: { dark: boolean }) {
     return () => window.removeEventListener('welcomeReplay', replay);
   }, []);
 
-  useEffect(() => {
-    if (!visible) return;
-    remaining.current = DURATION;
-    armTimer();
-    return () => { if (timer.current) clearTimeout(timer.current); };
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [visible, runId]);
-
+  // The drain bar's CSS animation IS the timer: its animationend dismisses
+  // the toast, and hover simply pauses the animation. One source of truth,
+  // nothing to keep in sync.
   function dismiss() {
+    if (leavingRef.current) return;
+    leavingRef.current = true;
     setLeaving(true);
     setTimeout(() => {
+      leavingRef.current = false;
       setVisible(false);
       localStorage.setItem('welcomed', '1');
     }, 380);
   }
-
-  const pause = () => {
-    if (timer.current) clearTimeout(timer.current);
-    remaining.current = Math.max(600, remaining.current - (Date.now() - startedAt.current));
-    setPaused(true);
-  };
-  const resume = () => {
-    armTimer();
-    setPaused(false);
-  };
 
   if (!visible) return null;
 
@@ -88,8 +65,8 @@ export default function WelcomeToast({ dark }: { dark: boolean }) {
       }}
     >
       <div
-        onMouseEnter={pause}
-        onMouseLeave={resume}
+        onMouseEnter={() => setPaused(true)}
+        onMouseLeave={() => setPaused(false)}
         style={{
           width: 310,
           pointerEvents: 'auto',
@@ -181,7 +158,7 @@ export default function WelcomeToast({ dark }: { dark: boolean }) {
             background: dark ? 'rgba(255,255,255,.08)' : 'rgba(0,0,0,.07)',
             overflow: 'hidden',
           }}>
-            <div key={runId} style={{
+            <div key={runId} className="toast-drain" onAnimationEnd={dismiss} style={{
               height: '100%',
               background: tk.accentGrad2,
               borderRadius: 99,
