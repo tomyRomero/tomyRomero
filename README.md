@@ -1,10 +1,10 @@
 # Hi, I'm Tomy Romero 👋  
 
 Full-Stack Software Engineer specializing in ASP.NET, C#, React and SQL Server.  
-Currently building scalable healthcare systems at MEDsys Software Solutions.  
+Currently building healthcare systems at MEDsys Software Solutions.  
 
-I enjoy designing efficient backend architectures, optimizing databases,  
-and delivering clean, maintainable end-to-end solutions.
+I like building the unglamorous parts well: backend architecture, database design,  
+and the glue that makes a feature actually ship.
 
 ---
 
@@ -51,17 +51,22 @@ Bachelor of Science in Computer Science — 3.11 GPA
 
 ### 📜 Licenses & Certifications
 
-**AWS Academy Graduate — AWS Academy Cloud Foundations**  
-Issued by Amazon Web Services (AWS) Academy  
+**AWS Cloud Quest: Cloud Practitioner**  
+Issued: April 2026 by Amazon Web Services (AWS)  
+🔗 https://www.credly.com/badges/a3e1cf34-d475-4f11-a3a9-fd19e0038af7/public_url  
 
 **Microsoft SQL Server Specialization**  
 Issued: February 2026  
 Credential ID: 7SIMAY3OEGQN  
 🔗 https://www.coursera.org/account/accomplishments/specialization/7SIMAY3OEGQN  
 
+**AWS Academy Graduate — AWS Academy Cloud Foundations**  
+Issued: September 2022 by Amazon Web Services (AWS) Academy  
+🔗 https://www.credly.com/badges/49f35d3b-7ea8-40ee-afde-77c8e7725827  
+
 ---
 
-## <a name="portfolio" target="_blank">🌐 Portfolio</a>
+## <a name="portfolio">🌐 Portfolio</a>
 
 Check out my [**Live Portfolio Site**](https://tomyromero.vercel.app/) to explore more.
 

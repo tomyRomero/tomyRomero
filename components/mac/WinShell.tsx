@@ -3,7 +3,9 @@ import { useRef, useEffect, useState } from 'react';
 import { T } from './tokens';
 import type { Win, WinAction } from './winTypes';
 
-function TrafficLights({ win, dispatch }: { win: Win; dispatch: React.Dispatch<WinAction> }) {
+function TrafficLights({ win, dispatch, focused, dark }: {
+  win: Win; dispatch: React.Dispatch<WinAction>; focused: boolean; dark: boolean;
+}) {
   const [hov, setHov] = useState(false);
 
   const doMin = () => {
@@ -13,18 +15,24 @@ function TrafficLights({ win, dispatch }: { win: Win; dispatch: React.Dispatch<W
 
   const sp = (e: React.MouseEvent) => { e.stopPropagation(); e.preventDefault(); };
 
+  // Real macOS behavior: lights go gray when the window loses focus,
+  // and re-colorize when hovered (symbols appear on hover either way).
+  const lit  = focused || hov;
+  const gray = dark ? 'rgba(255,255,255,.22)' : 'rgba(0,0,0,.16)';
+
   const btn = (bg: string): React.CSSProperties => ({
-    width: 13, height: 13, borderRadius: '50%', background: bg,
+    width: 12, height: 12, borderRadius: '50%',
+    background: lit ? bg : gray,
     border: 'none', cursor: 'pointer', display: 'flex',
     alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-    transition: 'filter .12s, transform .1s',
+    transition: 'filter .12s, transform .1s, background .18s',
   });
 
   return (
     <div
       onMouseEnter={() => setHov(true)}
       onMouseLeave={() => setHov(false)}
-      style={{ display: 'flex', alignItems: 'center', gap: 7, paddingLeft: 14, paddingRight: 6 }}
+      style={{ display: 'flex', alignItems: 'center', gap: 8, paddingLeft: 13, paddingRight: 6 }}
     >
       <button
         style={btn('#ff5f57')}
@@ -330,23 +338,21 @@ export default function WinShell({ win, dark, dispatch, focused, onFocus, childr
         }}
         onDoubleClick={() => dispatch({ type: 'TOGGLE_MAX', id: win.id })}
         style={{
-          height: 44, background: tk.titleBg,
-          borderBottom: `1px solid ${tk.border}`,
+          // Slim, seamless title bar — same material as the window body,
+          // no divider (modern macOS look)
+          height: 34, background: 'transparent',
           display: 'flex', alignItems: 'center',
           flexShrink: 0, position: 'relative',
           cursor: win.isMax ? 'default' : 'grab',
           userSelect: 'none',
-          backdropFilter: 'blur(24px)',
-          WebkitBackdropFilter: 'blur(24px)',
-          boxShadow: tk.titleHighlight,
         }}
       >
         <div data-tl="">
-          <TrafficLights win={win} dispatch={dispatch} />
+          <TrafficLights win={win} dispatch={dispatch} focused={focused} dark={dark} />
         </div>
         <div style={{
           position: 'absolute', left: '50%', transform: 'translateX(-50%)',
-          fontSize: 13, fontWeight: 500,
+          fontSize: 13, fontWeight: 600,
           color: focused ? tk.textSub : tk.textMuted,
           pointerEvents: 'none', whiteSpace: 'nowrap', letterSpacing: .1,
         }}>
@@ -369,13 +375,13 @@ export default function WinShell({ win, dark, dispatch, focused, onFocus, childr
           <div
             onMouseDown={e => { startRz(e); rzLeft.current = true; }}
             onTouchStart={e => { startRzTouch(e); rzLeft.current = true; }}
-            style={{ position: 'absolute', left: 0, top: 44, bottom: 12, width: 6, cursor: 'ew-resize', zIndex: 3 }}
+            style={{ position: 'absolute', left: 0, top: 34, bottom: 12, width: 6, cursor: 'ew-resize', zIndex: 3 }}
           />
           {/* Right edge */}
           <div
             onMouseDown={e => { startRz(e); rzRight.current = true; }}
             onTouchStart={e => { startRzTouch(e); rzRight.current = true; }}
-            style={{ position: 'absolute', right: 0, top: 44, bottom: 12, width: 6, cursor: 'ew-resize', zIndex: 3 }}
+            style={{ position: 'absolute', right: 0, top: 34, bottom: 12, width: 6, cursor: 'ew-resize', zIndex: 3 }}
           />
           {/* Bottom edge */}
           <div

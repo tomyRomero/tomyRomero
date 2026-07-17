@@ -3,43 +3,79 @@ import { useState, useEffect } from 'react';
 import { T } from './tokens';
 import type { Win, WinAction } from './winTypes';
 
-// ── Icons — clear macOS-inspired symbols ──────────────────────────────────────
+// ── Icons — layered artwork with internal gradients (gradient IDs are
+// prefixed per icon; all five render into the same DOM) ───────────────────────
 const ICONS: Record<string, React.ReactNode> = {
   about: (
-    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-      <circle cx="16" cy="11" r="6.5" fill="rgba(255,255,255,.96)" />
-      <path d="M2 30c0-7.73 6.27-14 14-14s14 6.27 14 14" fill="rgba(255,255,255,.88)" />
+    <svg width="33" height="33" viewBox="0 0 32 32" fill="none">
+      <defs>
+        <linearGradient id="dk-ab" x1="16" y1="3" x2="16" y2="30" gradientUnits="userSpaceOnUse">
+          <stop offset="0" stopColor="#ffffff" />
+          <stop offset="1" stopColor="#d3e5ff" />
+        </linearGradient>
+      </defs>
+      <path d="M3.5 29.5c0-6.9 5.6-12.5 12.5-12.5s12.5 5.6 12.5 12.5" fill="url(#dk-ab)" fillOpacity=".92" />
+      <circle cx="16" cy="10.4" r="6.3" fill="url(#dk-ab)" />
+      <circle cx="16" cy="10.4" r="6.3" stroke="rgba(20,60,150,.20)" strokeWidth=".8" />
     </svg>
   ),
   projects: (
-    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-      <path
-        d="M3 9.5c0-1.66 1.34-3 3-3h7.5l2.5 2.5H29c1.1 0 2 .9 2 2v13c0 1.66-1.34 3-3 3H6c-1.66 0-3-1.34-3-3V9.5z"
-        fill="rgba(255,255,255,.92)"
-      />
-      <line x1="9"  y1="18" x2="23" y2="18" stroke="rgba(30,140,90,.45)" strokeWidth="1.8" strokeLinecap="round" />
-      <line x1="9"  y1="22" x2="18" y2="22" stroke="rgba(30,140,90,.35)" strokeWidth="1.8" strokeLinecap="round" />
+    <svg width="33" height="33" viewBox="0 0 32 32" fill="none">
+      <defs>
+        <linearGradient id="dk-pr" x1="16" y1="11" x2="16" y2="27" gradientUnits="userSpaceOnUse">
+          <stop offset="0" stopColor="#ffffff" />
+          <stop offset="1" stopColor="#d5f3e2" />
+        </linearGradient>
+      </defs>
+      {/* Back panel with tab */}
+      <path d="M3 8.6C3 7.2 4.2 6 5.6 6h6.1c.7 0 1.4.28 1.9.78l1.7 1.72h10.1c1.4 0 2.6 1.2 2.6 2.6v1.9H3V8.6z" fill="rgba(255,255,255,.68)" />
+      {/* Front face */}
+      <path d="M3 11.6h26v11.8c0 1.4-1.2 2.6-2.6 2.6H5.6C4.2 26 3 24.8 3 23.4V11.6z" fill="url(#dk-pr)" />
+      <path d="M3 11.6h26v1.1H3z" fill="rgba(15,110,70,.10)" />
     </svg>
   ),
   experience: (
-    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-      <rect x="11" y="4" width="10" height="6" rx="2.5" fill="none" stroke="rgba(255,255,255,.88)" strokeWidth="2" />
-      <rect x="3" y="10" width="26" height="18" rx="3.5" fill="rgba(255,255,255,.90)" />
-      <rect x="3" y="17" width="26" height="4" fill="rgba(90,30,200,.22)" />
-      <rect x="13.5" y="16" width="5" height="6" rx="1.5" fill="rgba(255,255,255,.95)" stroke="rgba(90,30,200,.55)" strokeWidth="1.5" />
+    <svg width="33" height="33" viewBox="0 0 32 32" fill="none">
+      <defs>
+        <linearGradient id="dk-ex" x1="16" y1="9" x2="16" y2="28" gradientUnits="userSpaceOnUse">
+          <stop offset="0" stopColor="#ffffff" />
+          <stop offset="1" stopColor="#e7dcfc" />
+        </linearGradient>
+      </defs>
+      <rect x="11.5" y="4.5" width="9" height="5.5" rx="2.2" stroke="rgba(255,255,255,.92)" strokeWidth="2" />
+      <rect x="3" y="9" width="26" height="19" rx="3.6" fill="url(#dk-ex)" />
+      <path d="M3 16.4h26v2.4H3z" fill="rgba(90,30,200,.15)" />
+      <rect x="13.4" y="15.3" width="5.2" height="5.8" rx="1.6" fill="#fff" stroke="rgba(90,30,200,.48)" strokeWidth="1.4" />
     </svg>
   ),
   skills: (
-    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-      <rect x="2" y="4" width="28" height="24" rx="4" fill="rgba(0,0,0,.22)" stroke="rgba(255,255,255,.88)" strokeWidth="2" />
-      <path d="M8 13.5l5.5 4.5-5.5 4.5" stroke="rgba(255,255,255,.95)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-      <line x1="16.5" y1="22" x2="24" y2="22" stroke="rgba(255,255,255,.78)" strokeWidth="2.5" strokeLinecap="round" />
+    <svg width="33" height="33" viewBox="0 0 32 32" fill="none">
+      <defs>
+        <linearGradient id="dk-sk" x1="16" y1="4" x2="16" y2="28" gradientUnits="userSpaceOnUse">
+          <stop offset="0" stopColor="rgba(34,28,16,.94)" />
+          <stop offset="1" stopColor="rgba(14,11,5,.96)" />
+        </linearGradient>
+      </defs>
+      <rect x="2.5" y="4.5" width="27" height="23" rx="4" fill="url(#dk-sk)" stroke="rgba(255,255,255,.85)" strokeWidth="1.6" />
+      {/* Mini traffic lights */}
+      <circle cx="7.2"  cy="9" r="1.1" fill="#ff5f57" />
+      <circle cx="10.8" cy="9" r="1.1" fill="#ffbd2e" />
+      <circle cx="14.4" cy="9" r="1.1" fill="#28ca41" />
+      <path d="M7.5 15.2l4.6 3.6-4.6 3.6" stroke="#ffd489" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+      <line x1="15.6" y1="22.4" x2="23.2" y2="22.4" stroke="rgba(255,255,255,.85)" strokeWidth="2.2" strokeLinecap="round" />
     </svg>
   ),
   contact: (
-    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-      <rect x="2" y="8" width="28" height="18" rx="3" fill="rgba(255,255,255,.92)" />
-      <path d="M2 11l14 9 14-9" stroke="rgba(180,20,48,.44)" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+    <svg width="33" height="33" viewBox="0 0 32 32" fill="none">
+      <defs>
+        <linearGradient id="dk-co" x1="16" y1="7" x2="16" y2="26" gradientUnits="userSpaceOnUse">
+          <stop offset="0" stopColor="#ffffff" />
+          <stop offset="1" stopColor="#ffe0e4" />
+        </linearGradient>
+      </defs>
+      <rect x="2.5" y="7" width="27" height="18.5" rx="3.2" fill="url(#dk-co)" />
+      <path d="M3.6 9.4L16 18.2 28.4 9.4" stroke="rgba(190,25,55,.48)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      <rect x="2.5" y="7" width="27" height="18.5" rx="3.2" stroke="rgba(150,20,45,.14)" strokeWidth=".8" />
     </svg>
   ),
 };
@@ -70,11 +106,18 @@ const DOCK_ITEMS = [
 
 const BASE = 64;
 
+// Magnification with distance falloff — neighbors of the hovered icon scale
+// too, like the real macOS dock, instead of one icon popping alone.
+const MAG_SCALE = [1.34, 1.16, 1.05];
+const MAG_LIFT  = [-12, -5, -1];
+
 function getScale(idx: number, hov: number | null) {
-  return hov !== null && idx === hov ? 1.38 : 1;
+  if (hov === null) return 1;
+  return MAG_SCALE[Math.abs(idx - hov)] ?? 1;
 }
 function getLift(idx: number, hov: number | null) {
-  return hov !== null && idx === hov ? -10 : 0;
+  if (hov === null) return 0;
+  return MAG_LIFT[Math.abs(idx - hov)] ?? 0;
 }
 
 // Defined at module scope (NOT inside Dock) so React keeps the same component
@@ -107,7 +150,7 @@ function IconBtn({
     >
       {isH && (
         <div style={{
-          position: 'absolute', bottom: Math.round(sz * 1.38) + 20, left: '50%',
+          position: 'absolute', bottom: Math.round(sz * 1.34) + 20, left: '50%',
           transform: 'translateX(-50%)',
           padding: '5px 12px', borderRadius: 8,
           background: dark ? 'rgba(10,10,14,.96)' : 'rgba(8,8,10,.93)',
@@ -233,6 +276,7 @@ export default function Dock({ wins, dark, dispatch }: Props) {
           ? '0 8px 52px rgba(0,0,0,.60), inset 0 1px 0 rgba(255,255,255,.08), inset 0 -1px 0 rgba(0,0,0,.22)'
           : '0 8px 52px rgba(0,0,0,.18), inset 0 1px 0 rgba(255,255,255,.96)',
         zIndex: 9995,
+        animation: 'dockSlideUp .5s .15s cubic-bezier(.16,1,.3,1) both',
       }}
     >
       {DOCK_ITEMS.map((item, i) => (

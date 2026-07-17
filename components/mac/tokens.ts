@@ -1,7 +1,6 @@
 export const T = (dark: boolean) => ({
   dark,
   winBg:        dark ? 'rgba(14,14,20,0.88)'     : 'rgba(255,255,255,0.82)',
-  titleBg:      dark ? 'rgba(20,20,28,0.97)'     : 'rgba(252,251,250,0.97)',
   menuBg:       dark ? 'rgba(12,12,18,0.82)'     : 'rgba(250,249,248,0.80)',
   dropBg:       dark ? 'rgba(18,18,26,0.99)'     : 'rgba(254,253,252,0.99)',
   dockBg:       dark ? 'rgba(12,12,18,0.72)'     : 'rgba(255,255,255,0.58)',
@@ -24,11 +23,9 @@ export const T = (dark: boolean) => ({
   // Gradient accent for premium elements
   accentGrad:   'linear-gradient(135deg, #D4943A 0%, #f5c87a 50%, #D4943A 100%)',
   accentGrad2:  'linear-gradient(135deg, #D4943A 0%, #e8a94e 100%)',
-  hlColor:      'rgba(0,108,210,1)',
+  // System accent — matches modern macOS (post-Big Sur) highlight blue
+  hlColor:      dark ? '#0A84FF' : '#007AFF',
   dockBorder:   dark ? 'rgba(255,255,255,.12)' : 'rgba(0,0,0,.10)',
-  titleHighlight: dark
-    ? 'inset 0 1px 0 rgba(255,255,255,0.05)'
-    : 'inset 0 1px 0 rgba(255,255,255,0.90)',
   shadow: dark
     ? '0 24px 64px rgba(0,0,0,.65), 0 4px 16px rgba(0,0,0,.35), 0 0 0 0.5px rgba(255,255,255,.04)'
     : '0 24px 60px rgba(0,0,0,.14), 0 4px 16px rgba(0,0,0,.07)',

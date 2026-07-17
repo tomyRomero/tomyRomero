@@ -128,9 +128,9 @@ export default function WelcomeToast({ dark }: { dark: boolean }) {
             margin: '8px 0 0', fontSize: 12.5, lineHeight: 1.65,
             color: tk.textMuted, fontFamily: 'var(--font-sans),sans-serif',
           }}>
-            Click the{' '}
-            <span style={{ color: tk.accent, fontWeight: 600 }}>icons in the dock below</span>
-            {' '}to open windows. Try{' '}
+            Each window is a section of my portfolio. Drag them around, use the{' '}
+            <span style={{ color: tk.accent, fontWeight: 600 }}>dock below</span>
+            {' '}to reopen anything, and try{' '}
             <span style={{
               color: tk.textSub, fontWeight: 600,
               fontFamily: 'var(--font-mono),monospace', fontSize: 11.5,

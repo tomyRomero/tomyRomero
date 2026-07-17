@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { T } from './tokens';
-import { ME, experiences, projects } from '@/constants';
+import { ME, experiences, projects, yearsExperience } from '@/constants';
 import type { WinAction } from './winTypes';
 
 // ── Analog clock SVG ──────────────────────────────────────────────────────────
@@ -106,7 +106,6 @@ function AnalogClock({ dark }: { dark: boolean }) {
 export default function Widgets({ dark, dispatch, openCal }: { dark: boolean; dispatch: React.Dispatch<WinAction>; openCal: () => void }) {
   const tk = T(dark);
   const currentRole = experiences[0];
-  const yearsActive = new Date().getFullYear() - 2024;
 
   const open = (id: string) => dispatch({ type: 'OPEN', id });
 
@@ -133,7 +132,7 @@ export default function Widgets({ dark, dispatch, openCal }: { dark: boolean; di
         flexDirection: 'column',
         gap: 10,
         zIndex: 50,
-        width: 178,
+        width: 192,
       }}
       onClick={e => e.stopPropagation()}
     >
@@ -193,13 +192,13 @@ export default function Widgets({ dark, dispatch, openCal }: { dark: boolean; di
             </div>
             <div style={{ flex: 1, minWidth: 0 }}>
               <div style={{
-                fontSize: 12.5, fontWeight: 700, color: tk.text,
+                fontSize: 13, fontWeight: 700, color: tk.text,
                 whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
                 letterSpacing: '-.2px',
               }}>
                 {ME.name}
               </div>
-              <div style={{ fontSize: 10, color: tk.textSub, marginTop: 2 }}>
+              <div style={{ fontSize: 11, color: tk.textSub, marginTop: 2 }}>
                 {currentRole.title}
               </div>
             </div>
@@ -207,7 +206,7 @@ export default function Widgets({ dark, dispatch, openCal }: { dark: boolean; di
 
           {/* Company */}
           <div style={{
-            fontSize: 11, color: tk.textSub, marginTop: 8,
+            fontSize: 11.5, color: tk.textSub, marginTop: 8,
             display: 'flex', alignItems: 'center', gap: 5,
           }}>
             <span style={{ fontSize: 13 }}>{currentRole.logo}</span>
@@ -216,7 +215,7 @@ export default function Widgets({ dark, dispatch, openCal }: { dark: boolean; di
 
           {/* Location */}
           <div style={{
-            fontSize: 10.5, color: tk.textMuted, marginTop: 4,
+            fontSize: 11, color: tk.textMuted, marginTop: 4,
             display: 'flex', alignItems: 'center', gap: 4,
           }}>
             <svg width="7" height="9" viewBox="0 0 9 12" fill={tk.accent} style={{ flexShrink: 0, opacity: .75 }}>
@@ -270,7 +269,7 @@ export default function Widgets({ dark, dispatch, openCal }: { dark: boolean; di
               flexShrink: 0, animation: 'pulse 2s infinite',
             }} />
             <span style={{
-              fontSize: 10.5, color: dark ? '#34c759' : '#15803d',
+              fontSize: 11, color: dark ? '#34c759' : '#15803d',
               fontFamily: 'var(--font-mono), monospace',
             }}>
               Open to opportunities
@@ -291,7 +290,7 @@ export default function Widgets({ dark, dispatch, openCal }: { dark: boolean; di
           {[
             { label: 'Projects', value: String(projects.length),    winId: 'projects'   },
             { label: 'Roles',    value: String(experiences.length), winId: 'experience' },
-            { label: 'Years',    value: `${yearsActive}+`,          winId: 'about'      },
+            { label: 'Years',    value: yearsExperience(),          winId: 'about'      },
           ].map(stat => (
             <button
               key={stat.label}
@@ -322,7 +321,7 @@ export default function Widgets({ dark, dispatch, openCal }: { dark: boolean; di
                 {stat.value}
               </div>
               <div style={{
-                fontSize: 9.5, color: tk.textMuted, marginTop: 3,
+                fontSize: 10.5, color: tk.textMuted, marginTop: 3,
                 letterSpacing: '.2px',
               }}>
                 {stat.label}

@@ -8,6 +8,7 @@ export default function NotFound() {
   useEffect(() => {
     const saved = localStorage.getItem('dark');
     if (saved !== null) setDark(saved === 'true');
+    else setDark(window.matchMedia('(prefers-color-scheme: dark)').matches);
   }, []);
 
   const bg      = dark ? '#020614' : '#f2efe9';

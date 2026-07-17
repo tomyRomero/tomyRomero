@@ -57,6 +57,7 @@ export default function ProjectPage({ params }: { params: { title: string } }) {
   useEffect(() => {
     const saved = localStorage.getItem('dark');
     if (saved !== null) setDark(saved === 'true');
+    else setDark(window.matchMedia('(prefers-color-scheme: dark)').matches);
   }, []);
   useEffect(() => { localStorage.setItem('dark', String(dark)); }, [dark]);
 

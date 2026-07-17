@@ -103,10 +103,12 @@ export default function Home() {
   const [focused, setFocused] = useState<string | null>(null);
   const [calPop, setCalPop]   = useState(false);
 
-  // Restore + persist dark mode (useEffect avoids SSR hydration mismatch)
+  // Restore + persist dark mode (useEffect avoids SSR hydration mismatch).
+  // First visit falls back to the visitor's system theme.
   useEffect(() => {
     const saved = localStorage.getItem('dark');
     if (saved !== null) setDark(saved === 'true');
+    else setDark(window.matchMedia('(prefers-color-scheme: dark)').matches);
   }, []);
   useEffect(() => { localStorage.setItem('dark', String(dark)); }, [dark]);
 
@@ -123,29 +125,60 @@ export default function Home() {
     dispatch({ type: 'FOCUS', id });
   }, []);
 
-  // Open About Me centered on mount
+  // Opening cascade. On large screens every window opens into a tidy grid so
+  // visitors see the whole portfolio without clicking anything; small screens
+  // get just About centered (five windows would be chaos there).
   useEffect(() => {
-    const t = setTimeout(() => {
-      const ww = Math.min(560, window.innerWidth - 80);
-      const wh = Math.min(630, window.innerHeight - 160);
-      const cx = Math.max(40, Math.round((window.innerWidth  - ww) / 2));
-      const cy = 28 + Math.max(8, Math.round((window.innerHeight - 28 - 100 - wh) / 2));
-      dispatch({ type: 'OPEN_AT', id: 'about', x: cx, y: cy, w: ww, h: wh });
-      setFocused('about');
-    }, 420);
-    return () => clearTimeout(t);
+    const timers: ReturnType<typeof setTimeout>[] = [];
+    timers.push(setTimeout(() => {
+      const vw = window.innerWidth, vh = window.innerHeight;
+
+      if (vw < 1100 || vh < 620) {
+        const ww = Math.min(560, vw - 80);
+        const wh = Math.min(630, vh - 160);
+        const cx = Math.max(40, Math.round((vw - ww) / 2));
+        const cy = 28 + Math.max(8, Math.round((vh - 28 - 100 - wh) / 2));
+        dispatch({ type: 'OPEN_AT', id: 'about', x: cx, y: cy, w: ww, h: wh });
+        setFocused('about');
+        return;
+      }
+
+      // 3×2 grid that leaves the right edge clear for the widgets column.
+      // About opens last so it lands frontmost and focused.
+      const cols = 3;
+      const gw = vw - 232;
+      const cW = Math.floor((gw - 16) / cols);
+      const rH = Math.floor((vh - 158) / 2);
+      const slots = [
+        { id: 'projects',   col: 1, row: 0 },
+        { id: 'experience', col: 2, row: 0 },
+        { id: 'skills',     col: 0, row: 1 },
+        { id: 'contact',    col: 1, row: 1 },
+        { id: 'about',      col: 0, row: 0 },
+      ];
+      slots.forEach((s, i) => {
+        timers.push(setTimeout(() => {
+          dispatch({
+            type: 'OPEN_AT', id: s.id,
+            x: 16 + s.col * cW, y: 36 + s.row * rH,
+            w: cW - 12, h: rH - 12,
+          });
+          setFocused(s.id);
+        }, i * 140));
+      });
+    }, 420));
+    return () => timers.forEach(clearTimeout);
   }, []);
 
-  // Keyboard shortcuts
+  // Keyboard shortcuts. Only shift-chords the browser doesn't reserve —
+  // ⌘W/⌘⇧W/⌘M/⌘Q belong to the browser and must never be intercepted.
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
-      if (!(e.metaKey || e.ctrlKey)) return;
-      // Normalize: with Shift held, e.key is uppercase ('O'/'W'/'A'), so compare lowercased
+      if (!(e.metaKey || e.ctrlKey) || !e.shiftKey) return;
+      // Normalize: with Shift held, e.key is uppercase ('O'/'A'), so compare lowercased
       const k = e.key.toLowerCase();
-      if (e.shiftKey && k === 'o') { e.preventDefault(); dispatch({ type: 'OPEN_ALL' }); }
-      if (e.shiftKey && k === 'w') { e.preventDefault(); dispatch({ type: 'CLOSE_ALL' }); }
-      if (e.shiftKey && k === 'a') { e.preventDefault(); dispatch({ type: 'ARRANGE' }); }
-      if (k === 'm') { e.preventDefault(); dispatch({ type: 'MIN_ALL' }); }
+      if (k === 'o') { e.preventDefault(); dispatch({ type: 'OPEN_ALL' }); }
+      if (k === 'a') { e.preventDefault(); dispatch({ type: 'ARRANGE' }); }
     };
     window.addEventListener('keydown', handler);
     return () => window.removeEventListener('keydown', handler);

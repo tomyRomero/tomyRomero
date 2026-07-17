@@ -1,44 +1,19 @@
-import {
-  FaGithub,
-  FaLinkedin,
-} from 'react-icons/fa';
-import { IconType } from 'react-icons/lib';
-
-interface SocialLink {
-  title: string;
-  href: string;
-  icon: IconType;
-}
-
-export const socialLinks: SocialLink[] = [
-  { title: 'GitHub',   href: 'https://github.com/tomyRomero',                     icon: FaGithub },
-  { title: 'LinkedIn', href: 'https://www.linkedin.com/in/tomyromero/', icon: FaLinkedin },
-];
-
 // ── Personal Info ────────────────────────────────────────────────────────────
 export const ME = {
   name:      'Tomy Romero Seas',
-  title:     'Software Engineer 1',
+  title:     'Software Engineer',
   location:  'Jewett City, Connecticut',
   email:     'tomyfletcher99@hotmail.com',
   github:    'https://github.com/tomyRomero',
   linkedin:  'https://www.linkedin.com/in/tomyromero/',
   portfolio: 'https://tomyromero.vercel.app',
-  bio: `Full-stack software engineer with roots in healthcare homecare and a builder's mindset. By day I architect backend, frontend and database systems, converting workflows into scalable solutions. By night I build for the future. UVI graduate. SQL nerd.`,
+  bio: `Full-stack engineer building healthcare software at MEDsys. I work across C#/.NET services, React frontends, and the SQL Server schemas underneath scheduling, billing, and authorizations. Nights and weekends I ship my own projects end to end. UVI graduate. SQL nerd.`,
 };
 
-
-export const intro = `Full-stack software engineer specializing in ASP.NET Core, React, and SQL Server. Passionate about building scalable systems and clean user experiences.`;
-
-export const about = `As a full-stack developer, I design, build, and maintain software solutions using React, C# .NET, and cloud services like AWS and Azure. My experience spans secure authentication systems, payment integrations, AI-powered applications, and efficient e-commerce platforms. Proficient in MySQL and MS SQL Server, I develop scalable, optimized databases. I leverage DevOps tools for CI/CD, ensuring reliable and maintainable software. Focused on delivering results, I embrace Agile workflows and cross-functional collaboration.`;
-
-// ── Nav Links ────────────────────────────────────────────────────────────────
-export const navLinks = [
-  { title: 'About',      path: 'about' },
-  { title: 'Experience', path: 'experience' },
-  { title: 'Projects',   path: 'projects' },
-  { title: 'Contact',    path: 'contact' },
-];
+// First year of professional software work — drives the "years" stats everywhere
+export const CAREER_START = 2024;
+export const yearsExperience = () =>
+  `${Math.max(1, new Date().getFullYear() - CAREER_START)}+`;
 
 // ── Skills (grouped for Skills window) ──────────────────────────────────────
 export const skills: Record<string, string[]> = {
@@ -48,6 +23,8 @@ export const skills: Record<string, string[]> = {
   'Data & Cloud': ['SQL Server', 'Azure', 'AWS'],
   'Tools':        ['Git', 'Docker', 'CI/CD', 'Agile', 'SSMS', 'VS Code', 'Visual Studio'],
 };
+
+export const totalSkills = Object.values(skills).flat().length;
 
 // ── Home Page Pictures ───────────────────────────────────────────────────────
 import tomy       from '../public/assets/tomyRomeroGrad.jpeg';
@@ -76,13 +53,6 @@ export const images = [
   { img: sga,          title: 'Student Government Association Junior Senator',             alt: 'Tomy Romero as SGA Junior Senator' },
 ];
 
-// ── Services ─────────────────────────────────────────────────────────────────
-export const services = [
-  { title: 'Frontend Developer', icon: '/assets/webdev_icon.png' },
-  { title: 'Backend Developer',  icon: '/assets/backend.png' },
-  { title: 'Dev Ops',            icon: '/assets/aws.svg.png' },
-];
-
 // ── Projects (list view) ─────────────────────────────────────────────────────
 export const projects = [
   {
@@ -92,9 +62,8 @@ export const projects = [
     status:      'shipped' as const,
     year:        '2024',
     techStack:   'React Native, ASP.NET Core, SQL Server, FastAPI, AWS',
-    projectIcon: '/assets/github.svg',
     image:       '/artifyme/details.png',
-    description: 'Full-stack mobile app that transforms imaginative sketches into AI-generated images.',
+    description: 'Mobile app that turns hand-drawn sketches into AI-generated images with Stable Diffusion.',
     link:        'https://github.com/tomyRomero/artifyme',
   },
   {
@@ -104,9 +73,8 @@ export const projects = [
     status:      'shipped' as const,
     year:        '2024',
     techStack:   'React, Next.js, AWS, Stripe',
-    projectIcon: '/assets/github.svg',
     image:       '/storeOps/cart.png',
-    description: 'Full-stack CRUD e-commerce platform featuring dual interfaces and Stripe payments.',
+    description: 'E-commerce store with Stripe checkout and a full admin back office.',
     link:        'https://github.com/tomyRomero/storeOps',
   },
   {
@@ -116,9 +84,8 @@ export const projects = [
     status:      'shipped' as const,
     year:        '2023',
     techStack:   'React, Next.js, WebSockets, AWS, SQL',
-    projectIcon: '/assets/github.svg',
     image:       '/sparks/sparks-chats.png',
-    description: 'AI-powered full-stack social media platform with real-time WebSocket messaging.',
+    description: 'Social platform with AI-assisted posts and real-time WebSocket messaging.',
     link:        'https://github.com/tomyRomero/sparks',
   },
   {
@@ -128,9 +95,8 @@ export const projects = [
     status:      'shipped' as const,
     year:        '2024',
     techStack:   'React, ASP.NET Core, SQL Server, Azure, OMDb API',
-    projectIcon: '/assets/github.svg',
     image:       '/iMovies/imovieshome.png',
-    description: 'Team-built CMS for managing movies with social features powered by the OMDb API.',
+    description: 'Team-built movie CMS with social features, backed by the OMDb API.',
     link:        'https://github.com/240708-NET-FS/Project2_OMDb_API_Movies_CMS_Group1',
   },
 ];
@@ -155,14 +121,14 @@ export const projectDetails = [
       '/sparks/sparks-search-post.png', '/sparks/movieSpark.png',
       '/sparks/novelSpark.png',
     ],
-    description: `Sparks is an innovative social media application designed to help users explore, share, and interact with creative ideas. Built with React and Next.js, hosted on AWS using an RDS SQL database and S3 for image storage.`,
+    description: `Sparks is a social platform for exploring and sharing creative ideas. Write posts yourself or draft them with AI, chat in real time, and dig through everything with search. Built with React and Next.js on AWS, using RDS for the SQL database, S3 for image storage, and Pusher for messaging.`,
     features: [
       'Full CRUD operations for posts',
       'Real-time filtering and updates',
       'WebSocket-based real-time user messaging',
       'AI-driven post generation with customizable categories',
-      'Dynamic user profiles with interaction insights',
-      'Comprehensive search and pagination',
+      'User profiles with interaction insights',
+      'Search with pagination across posts',
     ],
     livelink:   'https://sparkify.vercel.app/',
     githubrepo: 'https://github.com/tomyRomero/sparks',
@@ -183,15 +149,13 @@ export const projectDetails = [
       '/artifyme/signup.png', '/artifyme/about.png', '/artifyme/profile.png',
       '/artifyme/profiledark.png', '/artifyme/create.png', '/artifyme/results.png',
     ],
-    description: `ArtifyMe is a powerful mobile application that enables users to transform sketches into high-quality images using AI. Features a React Native interface, ASP.NET backend for secure auth, and FastAPI image generation with Stable Diffusion.`,
+    description: `ArtifyMe turns hand-drawn sketches into AI-generated images. Draw on the in-app canvas, pick your palette, and Stable Diffusion does the rest. React Native on the front end, an ASP.NET Core API handling JWT auth, and a FastAPI service running image generation. S3 handles storage and SQL Server holds the data.`,
     features: [
-      'Sketch-to-image AI-powered conversion',
+      'Sketch-to-image conversion on an in-app drawing canvas',
       'Secure authentication with JWT',
       'Cloud storage with Amazon S3',
-      'User-friendly UI/UX with pagination and dark mode',
-      'Data management with SQL Server',
-      'Seamless React Native mobile experience',
-      'Integration with Stable Diffusion AI model',
+      'Dark mode and paginated artwork lists',
+      'Stable Diffusion image generation via FastAPI',
     ],
     livelink:   'https://github.com/tomyRomero/artifyme',
     githubrepo: 'https://github.com/tomyRomero/artifyme',
@@ -220,12 +184,12 @@ export const projectDetails = [
       '/storeOps/newsletter.png', '/storeOps/admincategories.png',
       '/storeOps/editcategory.png', '/storeOps/adminorders.png',
     ],
-    description: `StoreOperations is a robust e-commerce platform for online shopping. Built with Next.js, Stripe for payment processing, real-time email notifications via nodemailer, and Amazon S3 for image storage.`,
+    description: `StoreOperations is an e-commerce platform with two sides: a storefront with cart, Stripe checkout, and order tracking for customers, and an admin back office for products, categories, deals, and newsletters. Built with Next.js, with email notifications via nodemailer and S3 image storage.`,
     features: [
       'Product and category management (CRUD)',
       'Cart functionality and Stripe payment processing',
       'User authentication and order management',
-      'Admin panel for comprehensive business operations',
+      'Admin panel for products, orders, users, and deals',
       'Responsive design with pagination, filtering, and search',
       'Detailed analytics and reporting',
     ],
@@ -246,15 +210,14 @@ export const projectDetails = [
       '/iMovies/usermovielist.png', '/iMovies/addmovie.png',
       '/iMovies/moviemodal.png', '/iMovies/signup.png', '/iMovies/profile.png',
     ],
-    description: `Contributed to both frontend and backend development for a comprehensive CMS for movie enthusiasts. Used ASP.NET Core, Entity Framework Core, SQL Server, and React for a full-featured movie management system.`,
+    description: `A team-built CMS for movie fans: search titles through the OMDb API, manage personal movie lists, and share, like, and rank favorites. ASP.NET Core and Entity Framework on the backend, React on the front, deployed on Azure. I worked across both the API and the UI.`,
     features: [
       'Content management for movie collections',
       'User authentication with JWT',
-      'Responsive UI/UX',
       'Integration with OMDb API for rich movie metadata',
       'CRUD operations for managing user movie lists',
       'Social features: movie sharing, liking, top-rated movies',
-      'Secure data management with Azure SQL Server',
+      'Azure-hosted SQL Server database',
       'Unit testing with xUnit and Jest',
     ],
     livelink:   '',
@@ -264,48 +227,19 @@ export const projectDetails = [
   },
 ];
 
-// ── Technologies (icon grid) ─────────────────────────────────────────────────
-import javascript from '../public/assets/javascript.png';
-import html       from '../public/assets/html.png';
-import docker     from '../public/assets/docker.png';
-import git        from '../public/assets/git.png';
-import css        from '../public/assets/css.png';
-import reactjs    from '../public/assets/reactjs.png';
-import typescript from '../public/assets/typescript.png';
-import sqlserver  from '../public/assets/MSSQLServer.png';
-import next       from '../public/assets/next-js.svg';
-import azure      from '../public/assets/azure.png';
-import dotnet     from '../public/assets/dotnet.png';
-import aws        from '../public/assets/aws.svg.png';
-
-export const technologies = [
-  { name: 'HTML 5',              icon: html.src },
-  { name: 'CSS 3',               icon: css.src },
-  { name: 'JavaScript',          icon: javascript.src },
-  { name: 'TypeScript',          icon: typescript.src },
-  { name: 'React JS',            icon: reactjs.src },
-  { name: '.NET',                icon: dotnet.src },
-  { name: 'Azure',               icon: azure.src },
-  { name: 'Git',                 icon: git.src },
-  { name: 'Docker',              icon: docker.src },
-  { name: 'SQL Server',          icon: sqlserver.src },
-  { name: 'Next.js',             icon: next.src },
-  { name: 'Amazon Web Services', icon: aws.src },
-];
-
 // ── Experiences ──────────────────────────────────────────────────────────────
 export const experiences = [
   {
-    title:   'Software Engineer 1',
+    title:   'Software Engineer',
     company: 'MEDsys Software Solutions',
     logo:    '🏥',
     date:    'April 2025 – Present',
     location: 'Remote · Connecticut',
     description: [
-      'Architect and maintain full-stack features for a home-care healthcare management system.',
-      'Design complex SQL Server migrations and integrate JavaScript logic into workflows.',
-      'Work with C# ASP.NET Core, SQL Server, and SSMS in a DevOps-driven environment.',
-      'Collaborate with business to translate requirements into scalable solutions.',
+      'Build, maintain, and debug full-stack features for a home-care healthcare management system.',
+      'Design and optimize SQL Server data models and complex queries behind scheduling, billing, authorization, and reporting workflows.',
+      'Ship features end to end with C#, ASP.NET Core, and JavaScript in a DevOps-driven environment.',
+      'Work directly with business stakeholders to scope requirements and deliver new features.',
     ],
     tech: ['C# .NET', 'SQL Server', 'JavaScript', 'ASP.NET Core', 'SSMS'],
   },
@@ -316,9 +250,9 @@ export const experiences = [
     date:     'January 2025 – April 2025',
     location: 'Remote',
     description: [
-      'Developed and maintained features using React, Java Spring Boot, AWS, and MySQL.',
+      'Built and maintained full-stack features with React, Java Spring Boot, and MySQL on AWS.',
       'Implemented secure authentication flows and Stripe payment integration.',
-      'Built intuitive UX in a fast-paced Agile startup environment.',
+      'Worked alongside senior engineers in a small, fast-moving startup team.',
     ],
     tech: ['React', 'Java Spring Boot', 'AWS', 'MySQL', 'Stripe'],
   },
@@ -329,9 +263,9 @@ export const experiences = [
     date:     'June 2024 – September 2024',
     location: 'Remote',
     description: [
-      'Trained in C# .NET, React, MS SQL Server, and DevOps methodologies.',
-      'Ensured code quality through unit testing and structured version control.',
-      'Gained proficiency in cloud services, CI/CD pipelines, and containerization.',
+      'Completed intensive full-stack training in C#/.NET, React, SQL Server, and DevOps practices.',
+      'Built enterprise-style team applications with unit testing and structured version control.',
+      'Worked with cloud services, CI/CD pipelines, and containerization.',
     ],
     tech: ['C# .NET', 'React', 'MS SQL Server', 'Docker', 'CI/CD'],
   },
@@ -367,7 +301,7 @@ export const certifications = [
   {
     name:         'Microsoft SQL Server Specialization',
     issuer:       'Microsoft',
-    logo:         '🪟',
+    logo:         '📜',
     issued:       'Feb 2026',
     credentialId: '7SIMAY3OEGQN',
     url:          'https://www.coursera.org/account/accomplishments/specialization/7SIMAY3OEGQN',
@@ -390,26 +324,9 @@ export const contactDetails = [
   { type: 'Location', icon: '📍', value: 'Jewett City, Connecticut',     href: '',                                             cv: '' },
 ];
 
+// Shared intro line for the Contact window and mobile contact section
+export const contactBlurb =
+  'Hiring for a full-stack role, or just want to talk shop about .NET, React, or SQL? My inbox is open, and email is the fastest way to reach me.';
+
 // ── About page highlight chips ────────────────────────────────────────────────
 export const aboutChips = ['ASP.NET Core', 'React', 'SQL Server', 'Azure', 'Healthcare IT', 'SaaS Builder'];
-
-// ── Open-to-work status ───────────────────────────────────────────────────────
-export const openToWork = {
-  active: true,
-  label: 'Open to opportunities',
-};
-
-// ── Contact window CTA ────────────────────────────────────────────────────────
-export const contactCTA = '✉️  Send me an email';
-
-// ── Mobile footer line ────────────────────────────────────────────────────────
-export const footerLine = 'Built with Next.js';
-
-// ── Spotlight / search descriptions for each window ──────────────────────────
-export const windowDescriptions: Record<string, string> = {
-  about:      'Bio, photos, links',
-  projects:   'Shipped work',
-  experience: 'Work history',
-  skills:     'Tech stack',
-  contact:    'Get in touch',
-};

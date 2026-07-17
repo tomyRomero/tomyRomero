@@ -216,6 +216,21 @@ export default function MenuBar({ dark, setDark, wins, dispatch, calPop, setCalP
     navigator.clipboard?.writeText(txt).then(() => showToast(`✓ ${lbl} copied`));
   const close = () => { setActive(null); setWifiPop(false); setBatPop(false); setCalPop(false); };
 
+  // Copy shortcuts advertised in the Edit menu. Only combos browsers don't
+  // reserve are used — anything like ⌘Q/⌘M/⌘1–9 belongs to the browser/OS.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (!(e.metaKey || e.ctrlKey) || !e.shiftKey) return;
+      const k = e.key.toLowerCase();
+      if (k === 'e') { e.preventDefault(); copy(ME.email,    'Email'); }
+      if (k === 'g') { e.preventDefault(); copy(ME.github,   'GitHub URL'); }
+      if (k === 'l') { e.preventDefault(); copy(ME.linkedin, 'LinkedIn URL'); }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const toggleFS = () => {
     if (isFS) { document.exitFullscreen?.(); }
     else      { document.documentElement.requestFullscreen?.(); }
@@ -227,7 +242,7 @@ export default function MenuBar({ dark, setDark, wins, dispatch, calPop, setCalP
   const MENUS: { id: string; label: string; bold?: boolean; items: MenuItem[] }[] = [
     {
       id: 'apple', label: '⌘', items: [
-        { label: 'About This Portfolio', action: () => showToast('macOS-style Portfolio · Tomy Romero Seas · 2025') },
+        { label: 'About This Portfolio', action: () => showToast(`macOS-style Portfolio · Tomy Romero Seas · ${new Date().getFullYear()}`) },
         { div: true },
         { label: dark ? 'Switch to Light Mode' : 'Switch to Dark Mode',
           action: () => { setDark(d => !d); close(); } },
@@ -248,29 +263,29 @@ export default function MenuBar({ dark, setDark, wins, dispatch, calPop, setCalP
         { div: true },
         { label: '✓ Open to Opportunities', disabled: true },
         { div: true },
-        { label: 'Hide All Windows', shortcut: '⌘H',
+        { label: 'Hide All Windows',
           action: () => { close(); dispatch({ type: 'MIN_ALL' }); } },
-        { label: 'Quit',               shortcut: '⌘Q',
+        { label: 'Quit',
           action: () => { close(); dispatch({ type: 'CLOSE_ALL' }); } },
       ],
     },
     {
       id: 'file', label: 'File', items: [
-        { label: 'Open About…',      shortcut: '⌘1',
+        { label: 'Open About…',
           action: () => { close(); dispatch({ type: 'OPEN', id: 'about' }); } },
-        { label: 'Open Projects…',   shortcut: '⌘2',
+        { label: 'Open Projects…',
           action: () => { close(); dispatch({ type: 'OPEN', id: 'projects' }); } },
-        { label: 'Open Experience…', shortcut: '⌘3',
+        { label: 'Open Experience…',
           action: () => { close(); dispatch({ type: 'OPEN', id: 'experience' }); } },
-        { label: 'Open Skills…',     shortcut: '⌘4',
+        { label: 'Open Skills…',
           action: () => { close(); dispatch({ type: 'OPEN', id: 'skills' }); } },
-        { label: 'Open Contact…',    shortcut: '⌘5',
+        { label: 'Open Contact…',
           action: () => { close(); dispatch({ type: 'OPEN', id: 'contact' }); } },
         { div: true },
         { label: 'Print Portfolio',  shortcut: '⌘P',
           action: () => { close(); window.print(); } },
         { div: true },
-        { label: 'Close All Windows', shortcut: '⌘⇧W',
+        { label: 'Close All Windows',
           action: () => { close(); dispatch({ type: 'CLOSE_ALL' }); } },
       ],
     },
@@ -290,7 +305,6 @@ export default function MenuBar({ dark, setDark, wins, dispatch, calPop, setCalP
     {
       id: 'view', label: 'View', items: [
         { label: dark ? 'Switch to Light Mode' : 'Switch to Dark Mode',
-          shortcut: '⌘⇧T',
           action: () => { setDark(d => !d); close(); } },
         { div: true },
         { label: isFS ? 'Exit Full Screen' : 'Enter Full Screen',
@@ -299,7 +313,7 @@ export default function MenuBar({ dark, setDark, wins, dispatch, calPop, setCalP
     },
     {
       id: 'window', label: 'Window', items: [
-        { label: 'Minimize All',    shortcut: '⌘M',
+        { label: 'Minimize All',
           action: () => { close(); dispatch({ type: 'MIN_ALL' }); } },
         { label: 'Arrange in Grid', shortcut: '⌘⇧A',
           action: () => { close(); dispatch({ type: 'ARRANGE' }); } },
@@ -315,7 +329,7 @@ export default function MenuBar({ dark, setDark, wins, dispatch, calPop, setCalP
     {
       id: 'help', label: 'Help', items: [
         { label: 'About This Portfolio',
-          action: () => showToast('macOS-style portfolio built with Next.js · 2025') },
+          action: () => showToast(`macOS-style portfolio built with Next.js · ${new Date().getFullYear()}`) },
         { div: true },
         { label: 'Traffic Light Guide',
           action: () => showToast('🔴 Close  🟡 Minimize  🟢 Maximize / Restore') },
@@ -492,6 +506,7 @@ export default function MenuBar({ dark, setDark, wins, dispatch, calPop, setCalP
           WebkitBackdropFilter: 'blur(36px) saturate(2.0)',
           borderBottom: `1px solid ${tk.divider}`,
           color: tk.text, fontFamily: 'var(--font-sans), sans-serif',
+          animation: 'menuSlideDown .45s .05s cubic-bezier(.16,1,.3,1) both',
         }}
       >
         {/* Left: menu items */}
@@ -541,21 +556,21 @@ export default function MenuBar({ dark, setDark, wins, dispatch, calPop, setCalP
                             if (!item.disabled) {
                               e.currentTarget.style.background = tk.hlColor;
                               e.currentTarget.style.color = '#fff';
-                              e.currentTarget.style.borderRadius = '6px';
                             }
                           }}
                           onMouseLeave={e => {
                             e.currentTarget.style.background = 'transparent';
                             e.currentTarget.style.color = item.disabled ? dc : tk.text;
-                            e.currentTarget.style.borderRadius = '0';
                           }}
                           style={{
-                            width: '100%', display: 'flex', alignItems: 'center',
-                            justifyContent: 'space-between', padding: '1px 14px',
-                            border: 'none', background: 'transparent',
+                            // Inset rounded highlight pill, like modern macOS menus
+                            width: 'calc(100% - 10px)', margin: '0 5px',
+                            display: 'flex', alignItems: 'center',
+                            justifyContent: 'space-between', padding: '2px 9px',
+                            border: 'none', background: 'transparent', borderRadius: 6,
                             cursor: item.disabled ? 'default' : 'pointer',
                             color: item.disabled ? dc : tk.text,
-                            fontSize: 13, minHeight: 23,
+                            fontSize: 13, minHeight: 24,
                             fontFamily: 'var(--font-sans), sans-serif', textAlign: 'left',
                             transition: 'background .08s, color .08s',
                           }}

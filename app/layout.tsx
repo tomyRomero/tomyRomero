@@ -93,7 +93,7 @@ const jsonLd = {
       name:       'Tomy Romero Seas',
       url:        BASE,
       image:      `${BASE}/assets/tomyRomeroGrad.jpeg`,
-      jobTitle:   'Software Engineer 1',
+      jobTitle:   'Software Engineer',
       worksFor: {
         '@type': 'Organization',
         name:    'MEDsys Software Solutions',

@@ -1,7 +1,7 @@
 'use client';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import Image from 'next/image';
-import { ME, images, projects, experiences, education, certifications, skills, contactDetails, profilePhoto, aboutChips } from '@/constants';
+import { ME, images, projects, experiences, education, certifications, skills, contactDetails, contactBlurb, profilePhoto, aboutChips, totalSkills, yearsExperience } from '@/constants';
 
 function SectionLabel({ text }: { text: string }) {
   return (
@@ -187,9 +187,9 @@ export default function MobileView({ dark, setDark }: { dark: boolean; setDark: 
           display: 'flex', gap: 10, marginBottom: 22,
         }}>
           {[
-            { label: 'Experience', value: '1+' },
-            { label: 'Projects', value: '4' },
-            { label: 'Tech Stack', value: '25+' },
+            { label: 'Years', value: yearsExperience() },
+            { label: 'Projects', value: String(projects.length) },
+            { label: 'Technologies', value: String(totalSkills) },
           ].map(stat => (
             <div key={stat.label} style={{
               flex: 1, textAlign: 'center', padding: '12px 8px',
@@ -500,7 +500,7 @@ export default function MobileView({ dark, setDark }: { dark: boolean; setDark: 
             position: 'absolute', top: 0, left: 0, right: 0, height: 2,
             background: accentGrad,
           }} />
-          I&apos;m always open to discussing new opportunities, interesting projects, or just connecting with fellow developers.
+          {contactBlurb}
         </div>
 
         <div style={{

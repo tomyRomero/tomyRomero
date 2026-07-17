@@ -4,7 +4,7 @@ import { createPortal } from 'react-dom';
 import Image from 'next/image';
 import { T } from '../tokens';
 import { Chip } from '../Atoms';
-import { ME, images, profilePhoto, aboutChips } from '@/constants';
+import { ME, images, profilePhoto, aboutChips, projects, totalSkills, yearsExperience } from '@/constants';
 
 const TILTS = [-7, 4, -5, 8, -3, 6, -8, 3, -4, 7];
 
@@ -347,11 +347,11 @@ export default function AboutWindow({ dark }: { dark: boolean }) {
         </div>
       </div>
 
-      {/* Quick stats row */}
+      {/* Quick stats row — derived from the data so they can never drift */}
       <div style={{ display: 'flex', gap: 10, marginBottom: 18 }}>
-        <StatCard label="Experience" value="1+" dark={dark} />
-        <StatCard label="Projects" value="4" dark={dark} />
-        <StatCard label="Tech Stack" value="25+" dark={dark} />
+        <StatCard label="Years" value={yearsExperience()} dark={dark} />
+        <StatCard label="Projects" value={String(projects.length)} dark={dark} />
+        <StatCard label="Technologies" value={String(totalSkills)} dark={dark} />
       </div>
 
       {/* Bio */}
