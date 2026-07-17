@@ -236,16 +236,31 @@ function TiltedPhotoStrip({ dark }: { dark: boolean }) {
   );
 }
 
-// ── Stat card ─────────────────────────────────────────────────────────────────
-function StatCard({ label, value, dark }: { label: string; value: string; dark: boolean }) {
+// ── Stat card — clicks through to its window ──────────────────────────────────
+function StatCard({ label, value, dark, onClick }: {
+  label: string; value: string; dark: boolean; onClick?: () => void;
+}) {
   const tk = T(dark);
   return (
-    <div style={{
-      flex: 1, textAlign: 'center',
-      padding: '12px 8px', borderRadius: 12,
-      background: tk.cardBg, border: `1px solid ${tk.cardBorder}`,
-      transition: 'all .18s',
-    }}>
+    <button
+      onClick={onClick}
+      style={{
+        flex: 1, textAlign: 'center',
+        padding: '12px 8px', borderRadius: 12,
+        background: tk.cardBg, border: `1px solid ${tk.cardBorder}`,
+        cursor: onClick ? 'pointer' : 'default',
+        transition: 'all .18s',
+      }}
+      onMouseEnter={e => {
+        if (!onClick) return;
+        e.currentTarget.style.borderColor = tk.accentBorder;
+        e.currentTarget.style.transform = 'translateY(-1px)';
+      }}
+      onMouseLeave={e => {
+        e.currentTarget.style.borderColor = tk.cardBorder;
+        e.currentTarget.style.transform = 'none';
+      }}
+    >
       <div style={{
         fontSize: 22, fontWeight: 700, lineHeight: 1,
         fontFamily: 'var(--font-mono),monospace',
@@ -260,12 +275,14 @@ function StatCard({ label, value, dark }: { label: string; value: string; dark: 
       }}>
         {label}
       </div>
-    </div>
+    </button>
   );
 }
 
 // ── Main window ───────────────────────────────────────────────────────────────
-export default function AboutWindow({ dark }: { dark: boolean }) {
+export default function AboutWindow({ dark, onOpen }: {
+  dark: boolean; onOpen?: (id: string) => void;
+}) {
   const tk = T(dark);
   const [showPhotos, setShowPhotos] = useState(true);
   useEffect(() => {
@@ -335,11 +352,11 @@ export default function AboutWindow({ dark }: { dark: boolean }) {
         </div>
       </div>
 
-      {/* Quick stats row — derived from the data so they can never drift */}
+      {/* Quick stats row — derived from the data, each opens its window */}
       <div style={{ display: 'flex', gap: 10, marginBottom: 18 }}>
-        <StatCard label="Years" value={yearsExperience()} dark={dark} />
-        <StatCard label="Projects" value={String(projects.length)} dark={dark} />
-        <StatCard label="Technologies" value={String(totalSkills)} dark={dark} />
+        <StatCard label="Years" value={yearsExperience()} dark={dark} onClick={() => onOpen?.('experience')} />
+        <StatCard label="Projects" value={String(projects.length)} dark={dark} onClick={() => onOpen?.('projects')} />
+        <StatCard label="Technologies" value={String(totalSkills)} dark={dark} onClick={() => onOpen?.('skills')} />
       </div>
 
       {/* Bio */}
@@ -351,9 +368,18 @@ export default function AboutWindow({ dark }: { dark: boolean }) {
         {ME.bio}
       </div>
 
-      {/* Tech chips */}
+      {/* Tech chips — each opens the Skills window */}
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7, marginBottom: 18 }}>
-        {aboutChips.map(t => <Chip key={t} amber dark={dark}>{t}</Chip>)}
+        {aboutChips.map(t => (
+          <button
+            key={t}
+            onClick={() => onOpen?.('skills')}
+            title="View skills"
+            style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}
+          >
+            <Chip amber dark={dark}>{t}</Chip>
+          </button>
+        ))}
       </div>
 
       {/* Links */}

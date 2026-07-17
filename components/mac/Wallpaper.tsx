@@ -3,13 +3,14 @@ import { useState, useRef } from 'react';
 
 // Selectable wallpapers, switchable from the ⌘ menu. All CSS/SVG,
 // zero image assets. Each has a light and dark treatment.
-export type WallpaperVariant = 'splash' | 'bubbles' | 'aurora' | 'dunes';
+export type WallpaperVariant = 'splash' | 'bubbles' | 'rain' | 'lava' | 'mesh';
 
 export const WALLPAPERS: { id: WallpaperVariant; label: string }[] = [
   { id: 'splash',  label: 'Splash'  },
   { id: 'bubbles', label: 'Bubbles' },
-  { id: 'aurora',  label: 'Aurora'  },
-  { id: 'dunes',   label: 'Dunes'   },
+  { id: 'rain',    label: 'Rain'    },
+  { id: 'lava',    label: 'Lava'    },
+  { id: 'mesh',    label: 'Mesh'    },
 ];
 
 const BASES: Record<WallpaperVariant, { dark: string; light: string }> = {
@@ -21,137 +22,222 @@ const BASES: Record<WallpaperVariant, { dark: string; light: string }> = {
     dark:  'linear-gradient(180deg, #03121e 0%, #072a3f 60%, #0a3a52 100%)',
     light: 'linear-gradient(180deg, #e2f1f8 0%, #cfe7f2 55%, #c0dcEB 100%)',
   },
-  aurora: {
-    dark:  'linear-gradient(180deg, #020409 0%, #07101f 55%, #0a1626 100%)',
-    light: 'linear-gradient(180deg, #dfe5f4 0%, #f0e6ee 55%, #f6eee6 100%)',
+  rain: {
+    dark:  'linear-gradient(180deg, #0a0f1c 0%, #101a2e 55%, #0b1322 100%)',
+    light: 'linear-gradient(180deg, #dfe6ef 0%, #ccd6e3 60%, #c3cedd 100%)',
   },
-  dunes: {
-    dark:  'linear-gradient(170deg, #05081a 0%, #0a0e2c 50%, #0c102f 100%)',
-    light: 'linear-gradient(170deg, #d9e9fb 0%, #ecf3fc 55%, #dfeaf7 100%)',
+  lava: {
+    dark:  'linear-gradient(180deg, #160a20 0%, #1e0b26 55%, #12061a 100%)',
+    light: 'linear-gradient(180deg, #f7ecdf 0%, #f3e0e6 60%, #efe3f0 100%)',
+  },
+  mesh: {
+    dark:  'linear-gradient(160deg, #070a1e 0%, #0d1130 50%, #0a0d26 100%)',
+    light: 'linear-gradient(160deg, #e3ecfa 0%, #eef2fb 50%, #e6eefa 100%)',
   },
 };
 
-// ── Dunes: Big Sur-style layered hills ───────────────────────────────────────
-function Dunes({ dark }: { dark: boolean }) {
-  const far  = dark ? ['#35479e', '#161d4e'] : ['#cadef6', '#a9c2e6'];
-  const mid  = dark ? ['#5340c4', '#1e164e'] : ['#bcc9f0', '#93a9db'];
-  const near = dark ? ['#1e78e0', '#0b2a5c'] : ['#86abe2', '#517cba'];
+// Soft radial color spot used by the Mesh wallpaper
+function Wash({ w, pos, color, blur, anim }: {
+  w: string; pos: React.CSSProperties; color: string; blur: number; anim: string;
+}) {
+  return (
+    <div style={{
+      position: 'absolute', width: w, height: w, borderRadius: '50%',
+      ...pos,
+      background: `radial-gradient(circle, ${color} 0%, transparent 68%)`,
+      filter: `blur(${blur}px)`,
+      animation: anim,
+    }} />
+  );
+}
+
+// ── Mesh: Sequoia-style soft color field ─────────────────────────────────────
+function Mesh({ dark }: { dark: boolean }) {
   return (
     <>
+      <Wash w="62vw" pos={{ left: '-16vw', top: '-18vw' }} blur={95} anim="washA 46s ease-in-out infinite"
+        color={dark ? 'rgba(64,110,255,.36)' : 'rgba(120,160,240,.45)'} />
+      <Wash w="56vw" pos={{ right: '-14vw', top: '10vh' }} blur={100} anim="washB 58s ease-in-out infinite"
+        color={dark ? 'rgba(120,80,255,.28)' : 'rgba(160,150,245,.36)'} />
+      <Wash w="48vw" pos={{ left: '16vw', bottom: '-14vh' }} blur={95} anim="washA 64s ease-in-out infinite reverse"
+        color={dark ? 'rgba(0,190,230,.22)' : 'rgba(120,200,235,.32)'} />
+      <Wash w="34vw" pos={{ left: '36vw', top: '26vh' }} blur={85} anim="washB 52s ease-in-out infinite reverse"
+        color={dark ? 'rgba(255,120,190,.10)' : 'rgba(250,180,210,.22)'} />
+    </>
+  );
+}
+
+
+// ── Rain: a rainy window. Blurred bokeh lights glow behind the glass,
+// condensation beads shimmer in place, and runner droplets break loose and
+// slide down under gravity with a wiggle and a fading trail. All configs are
+// seeded-deterministic so SSR matches the client. ────────────────────────────
+const RAIN_BOKEH = (() => {
+  const rnd = mulberry32(4242);
+  const cols = ['rgba(255,180,90,', 'rgba(90,200,255,', 'rgba(255,120,160,', 'rgba(140,255,190,', 'rgba(200,160,255,'];
+  return Array.from({ length: 14 }, (_, i) => ({
+    left: rnd() * 100, top: 10 + rnd() * 72, size: 40 + rnd() * 110,
+    color: cols[i % cols.length], a: 0.16 + rnd() * 0.22,
+    dur: 6 + rnd() * 8, delay: rnd() * 6,
+  }));
+})();
+
+const RAIN_BEADS = (() => {
+  const rnd = mulberry32(1717);
+  return Array.from({ length: 30 }, () => ({
+    left: rnd() * 100, top: rnd() * 100, size: 3 + rnd() * 6,
+    dur: 5 + rnd() * 9, delay: rnd() * 8,
+  }));
+})();
+
+const RAIN_RUNNERS = (() => {
+  const rnd = mulberry32(9090);
+  return Array.from({ length: 12 }, () => ({
+    left: 2 + rnd() * 96, size: 7 + rnd() * 7,
+    dur: 4.5 + rnd() * 5, delay: rnd() * 9,
+    sway: 4 + rnd() * 8, tail: 60 + rnd() * 90,
+  }));
+})();
+
+function Rain({ dark }: { dark: boolean }) {
+  const dropBg = dark
+    ? 'radial-gradient(circle at 35% 30%, rgba(255,255,255,.55), rgba(200,225,255,.16) 45%, rgba(140,170,210,.08) 70%, transparent 100%)'
+    : 'radial-gradient(circle at 35% 30%, rgba(255,255,255,.9), rgba(150,175,205,.25) 45%, rgba(120,145,180,.10) 70%, transparent 100%)';
+  const dropBorder = dark ? '1px solid rgba(210,230,255,.20)' : '1px solid rgba(110,135,170,.25)';
+  const trail = dark
+    ? 'linear-gradient(180deg, transparent, rgba(200,225,255,.26))'
+    : 'linear-gradient(180deg, transparent, rgba(120,150,190,.30))';
+
+  return (
+    <>
+      {/* City-light bokeh behind the glass */}
+      {RAIN_BOKEH.map((b, i) => (
+        <div key={i} className="wp-bokeh" style={{
+          position: 'absolute',
+          left: `${b.left.toFixed(1)}%`, top: `${b.top.toFixed(1)}%`,
+          width: b.size, height: b.size, borderRadius: '50%',
+          background: `radial-gradient(circle, ${b.color}${(dark ? b.a : b.a * 0.55).toFixed(2)}) 0%, transparent 70%)`,
+          filter: 'blur(18px)',
+          animation: `beadFade ${b.dur.toFixed(1)}s ease-in-out ${b.delay.toFixed(1)}s infinite`,
+        }} />
+      ))}
+
+      {/* Condensation beads clinging to the glass */}
+      {RAIN_BEADS.map((b, i) => (
+        <div key={i} className="wp-bead" style={{
+          position: 'absolute',
+          left: `${b.left.toFixed(1)}%`, top: `${b.top.toFixed(1)}%`,
+          width: b.size, height: b.size * 1.1, borderRadius: '50%',
+          background: dropBg, border: dropBorder,
+          opacity: .55,
+          animation: `beadFade ${b.dur.toFixed(1)}s ease-in-out ${b.delay.toFixed(1)}s infinite`,
+        }} />
+      ))}
+
+      {/* Runners: heavy drops sliding down under gravity with a trail */}
+      {RAIN_RUNNERS.map((r, i) => (
+        <div key={i} className="wp-rain-run" style={{
+          position: 'absolute',
+          left: `${r.left.toFixed(1)}%`, top: '-12%',
+          width: r.size, opacity: 0,
+          animation: `rainFall ${r.dur.toFixed(1)}s cubic-bezier(.45,.05,.8,.4) ${r.delay.toFixed(1)}s infinite`,
+        }}>
+          <div style={{
+            position: 'relative',
+            animation: `rainWiggle ${(1.3 + (i % 3) * 0.45).toFixed(2)}s ease-in-out infinite alternate`,
+            ['--rw' as string]: `${r.sway.toFixed(0)}px`,
+          } as React.CSSProperties}>
+            {/* Trail above the head */}
+            <div style={{
+              position: 'absolute', bottom: r.size - 2, left: r.size / 2 - 1,
+              width: 2, height: r.tail, background: trail, borderRadius: 2,
+            }} />
+            {/* Drop head — slightly elongated by drag */}
+            <div style={{
+              width: r.size, height: r.size * 1.2,
+              borderRadius: '46% 46% 52% 52%',
+              background: dropBg, border: dropBorder,
+            }} />
+          </div>
+        </div>
+      ))}
+
+      {/* Diagonal glass sheen */}
       <div style={{
-        position: 'absolute',
-        width: '55vw', height: '55vw',
-        right: '-12vw', top: '-22vw',
-        borderRadius: '50%',
-        background: dark
-          ? 'radial-gradient(circle, rgba(120,150,255,.18) 0%, rgba(120,150,255,.05) 55%, transparent 100%)'
-          : 'radial-gradient(circle, rgba(255,244,214,.65) 0%, rgba(255,238,200,.22) 55%, transparent 100%)',
-        filter: 'blur(40px)',
+        position: 'absolute', inset: 0,
+        background: 'linear-gradient(115deg, transparent 40%, rgba(255,255,255,.05) 48%, transparent 56%, transparent 70%, rgba(255,255,255,.04) 78%, transparent 85%)',
         pointerEvents: 'none',
       }} />
+    </>
+  );
+}
+
+// ── Lava: a real lava lamp. The blobs live inside an SVG gooey filter
+// (blur + alpha threshold), so rising and sinking blobs genuinely STRETCH,
+// SPLIT and MERGE into each other and into the molten pool at the bottom —
+// true metaballs, not overlapping circles. ───────────────────────────────────
+const LAVA_BLOBS = (() => {
+  const rnd = mulberry32(777);
+  return Array.from({ length: 7 }, (_, i) => ({
+    x: 110 + i * 195 + (rnd() - 0.5) * 80,
+    y0: 760 + rnd() * 80,
+    r: 58 + rnd() * 70,
+    rise: -(380 + rnd() * 320),
+    dur: 16 + rnd() * 14,
+    delay: -(rnd() * 24),
+    wob: 5 + rnd() * 4,
+  }));
+})();
+
+function Lava({ dark }: { dark: boolean }) {
+  return (
+    <div style={{
+      position: 'absolute', inset: 0,
+      // drop-shadow follows the merged goo silhouette → molten glow
+      filter: dark
+        ? 'drop-shadow(0 0 34px rgba(255,90,130,.35))'
+        : 'drop-shadow(0 0 30px rgba(255,150,110,.30))',
+    }}>
       <svg
         style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}
         viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true"
       >
         <defs>
-          <linearGradient id="wp-far" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stopColor={far[0]} /><stop offset="1" stopColor={far[1]} />
-          </linearGradient>
-          <linearGradient id="wp-mid" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stopColor={mid[0]} /><stop offset="1" stopColor={mid[1]} />
-          </linearGradient>
-          <linearGradient id="wp-near" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0" stopColor={near[0]} /><stop offset="1" stopColor={near[1]} />
-          </linearGradient>
+          <filter id="wp-goo" x="-30%" y="-30%" width="160%" height="160%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="14" result="b" />
+            <feColorMatrix in="b" type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 24 -11" />
+          </filter>
+          <radialGradient id="wp-lava-grad" cx="35%" cy="30%" r="85%">
+            <stop offset="0%" stopColor={dark ? '#ff9d6b' : '#ffc9a3'} />
+            <stop offset="100%" stopColor={dark ? '#e0356e' : '#ff8f7a'} />
+          </radialGradient>
         </defs>
-        <g style={{ animation: 'duneA 52s ease-in-out infinite' }}>
-          <path d="M-80 500 C 200 420, 470 460, 740 525 C 1010 590, 1260 545, 1520 455 L1520 900 L-80 900 Z"
-            fill="url(#wp-far)" opacity=".75" />
-        </g>
-        <g style={{ animation: 'duneB 64s ease-in-out infinite' }}>
-          <path d="M-80 640 C 220 545, 520 690, 830 630 C 1100 578, 1300 690, 1520 625 L1520 900 L-80 900 Z"
-            fill="url(#wp-mid)" opacity=".85" />
-        </g>
-        <g style={{ animation: 'duneC 42s ease-in-out infinite' }}>
-          <path d="M-80 775 C 280 685, 640 815, 960 745 C 1200 693, 1360 785, 1520 750 L1520 900 L-80 900 Z"
-            fill="url(#wp-near)" opacity=".95" />
+        <g filter="url(#wp-goo)">
+          {/* Molten pool at the base — blobs emerge from and sink back into it */}
+          <ellipse cx="720" cy="960" rx="920" ry="170" fill="url(#wp-lava-grad)" />
+          {LAVA_BLOBS.map((b, i) => (
+            <g key={i} transform={`translate(${b.x.toFixed(0)} ${b.y0.toFixed(0)})`}>
+              <g
+                className="wp-lava-rise"
+                style={{
+                  animation: `lavaRise ${b.dur.toFixed(1)}s ease-in-out ${b.delay.toFixed(1)}s infinite alternate`,
+                  ['--rise' as string]: `${b.rise.toFixed(0)}px`,
+                } as React.CSSProperties}
+              >
+                <circle
+                  className="wp-lava-wob"
+                  r={b.r.toFixed(0)} fill="url(#wp-lava-grad)"
+                  style={{
+                    animation: `lavaWobble ${b.wob.toFixed(1)}s ease-in-out infinite alternate`,
+                    transformBox: 'fill-box', transformOrigin: 'center',
+                  }}
+                />
+              </g>
+            </g>
+          ))}
         </g>
       </svg>
-    </>
-  );
-}
-
-// ── Aurora: northern-lights curtains over a twinkling starfield ──────────────
-// Deterministic star positions (shared PRNG) so SSR and client match.
-const STARS = (() => {
-  const rnd = mulberry32(999);
-  return Array.from({ length: 46 }, () => ({
-    left: rnd() * 100,
-    top: rnd() * 62,
-    size: rnd() < 0.18 ? 2.5 : 1.5,
-    dur: 2.5 + rnd() * 4,
-    delay: rnd() * 6,
-    base: 0.25 + rnd() * 0.4,
-  }));
-})();
-
-const CURTAINS = [
-  { left: '4%',  w: '24vw', dur: 14, delay: 0,  darkC: ['rgba(64,224,180,.30)', 'rgba(80,150,255,.16)'], lightC: ['rgba(120,210,190,.24)', 'rgba(160,180,250,.14)'] },
-  { left: '26%', w: '30vw', dur: 18, delay: -6, darkC: ['rgba(80,230,140,.24)', 'rgba(64,224,200,.14)'], lightC: ['rgba(250,170,190,.22)', 'rgba(240,200,160,.12)'] },
-  { left: '52%', w: '26vw', dur: 16, delay: -3, darkC: ['rgba(150,100,255,.24)', 'rgba(220,100,220,.12)'], lightC: ['rgba(190,160,250,.20)', 'rgba(250,180,210,.12)'] },
-  { left: '74%', w: '28vw', dur: 21, delay: -9, darkC: ['rgba(80,150,255,.22)', 'rgba(64,224,180,.14)'], lightC: ['rgba(150,200,240,.20)', 'rgba(140,220,200,.12)'] },
-];
-
-const SHOOTS = [
-  { left: '12%', top: '8%',  dur: 9,  delay: 2  },
-  { left: '58%', top: '14%', dur: 13, delay: 7.5 },
-];
-
-function Aurora({ dark }: { dark: boolean }) {
-  return (
-    <>
-      {/* Curtains */}
-      {CURTAINS.map((c, i) => {
-        const [a, b] = dark ? c.darkC : c.lightC;
-        return (
-          <div key={i} className="wp-curtain" style={{
-            position: 'absolute',
-            left: c.left, top: '-12vh',
-            width: c.w, height: '120vh',
-            background: `linear-gradient(180deg, transparent 0%, ${a} 28%, ${b} 58%, transparent 88%)`,
-            filter: 'blur(46px)',
-            mixBlendMode: dark ? 'screen' : 'normal',
-            animation: `auroraSway ${c.dur}s ease-in-out ${c.delay}s infinite alternate`,
-            opacity: .8,
-          }} />
-        );
-      })}
-
-      {/* Stars — dark mode only (a dawn sky has none visible) */}
-      {dark && STARS.map((s, i) => (
-        <div key={i} className="wp-star" style={{
-          position: 'absolute',
-          left: `${s.left.toFixed(1)}%`, top: `${s.top.toFixed(1)}%`,
-          width: s.size, height: s.size, borderRadius: '50%',
-          background: 'rgba(235,242,255,.9)',
-          opacity: s.base,
-          animation: `twinkle ${s.dur.toFixed(1)}s ease-in-out ${s.delay.toFixed(1)}s infinite`,
-        }} />
-      ))}
-
-      {/* Occasional shooting stars — dark mode only */}
-      {dark && SHOOTS.map((sh, i) => (
-        <div key={i} className="wp-shoot" style={{
-          position: 'absolute',
-          left: sh.left, top: sh.top,
-          width: 90, height: 2, borderRadius: 2,
-          background: 'linear-gradient(90deg, rgba(255,255,255,.9), transparent)',
-          transform: 'rotate(-32deg)',
-          opacity: 0,
-          animation: `shootStar ${sh.dur}s linear ${sh.delay}s infinite`,
-        }} />
-      ))}
-    </>
+    </div>
   );
 }
 
@@ -454,7 +540,7 @@ function Splash({ dark }: { dark: boolean }) {
 }
 
 const SCENES: Record<WallpaperVariant, (p: { dark: boolean }) => React.ReactNode> = {
-  splash: Splash, bubbles: Bubbles, aurora: Aurora, dunes: Dunes,
+  splash: Splash, bubbles: Bubbles, rain: Rain, lava: Lava, mesh: Mesh,
 };
 
 export default function Wallpaper({ dark, variant }: { dark: boolean; variant: WallpaperVariant }) {

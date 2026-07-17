@@ -156,39 +156,27 @@ export default function Home() {
     dispatch({ type: 'FOCUS', id });
   }, []);
 
-  // Calm opening: About plus Projects, side by side with a slight overlap,
-  // so a visitor immediately sees who you are and what you've built without
-  // the whole desktop erupting. Everything else stays a dock click away.
+  // Open-and-focus, used by window content (e.g. About's clickable cards)
+  const openWin = useCallback((id: string) => {
+    dispatch({ type: 'OPEN', id });
+    setFocused(id);
+  }, []);
+
+  // Calm opening: just About, centered in the widget-free zone, so the
+  // wallpaper gets to perform. About's stats and chips click through to the
+  // other windows, and everything is a dock click away.
   useEffect(() => {
-    const timers: ReturnType<typeof setTimeout>[] = [];
-    timers.push(setTimeout(() => {
+    const t = setTimeout(() => {
       const vw = window.innerWidth, vh = window.innerHeight;
-
-      if (vw < 1150 || vh < 620) {
-        const ww = Math.min(560, vw - 80);
-        const wh = Math.min(630, vh - 160);
-        const cx = Math.max(40, Math.round((vw - ww) / 2));
-        const cy = 28 + Math.max(8, Math.round((vh - 28 - 100 - wh) / 2));
-        dispatch({ type: 'OPEN_AT', id: 'about', x: cx, y: cy, w: ww, h: wh });
-        setFocused('about');
-        return;
-      }
-
-      const zone = vw - 236;   // keep the widgets column clear
-      const aw = Math.min(540, zone - 120), ah = Math.min(600, vh - 170);
-      const pw = Math.min(620, zone - 120), ph = Math.min(560, vh - 200);
-      const ax = 40, ay = 48;
-      const px = Math.max(ax + 150, zone - pw);
-      const py = Math.min(ay + 34, Math.max(40, vh - ph - 100));
-
-      dispatch({ type: 'OPEN_AT', id: 'projects', x: px, y: py, w: pw, h: ph });
-      setFocused('projects');
-      timers.push(setTimeout(() => {
-        dispatch({ type: 'OPEN_AT', id: 'about', x: ax, y: ay, w: aw, h: ah });
-        setFocused('about');
-      }, 200));
-    }, 420));
-    return () => timers.forEach(clearTimeout);
+      const zone = vw >= 1000 ? vw - 200 : vw;   // stay clear of the widgets column
+      const ww = Math.min(560, vw - 80);
+      const wh = Math.min(640, vh - 160);
+      const cx = Math.max(40, Math.round((zone - ww) / 2));
+      const cy = 28 + Math.max(8, Math.round((vh - 28 - 100 - wh) / 2));
+      dispatch({ type: 'OPEN_AT', id: 'about', x: cx, y: cy, w: ww, h: wh });
+      setFocused('about');
+    }, 420);
+    return () => clearTimeout(t);
   }, []);
 
   // Keyboard shortcuts. Only shift-chords the browser doesn't reserve —
@@ -207,12 +195,12 @@ export default function Home() {
 
   // Memoize window content so it doesn't re-mount on every dark-mode toggle
   const CONTENT = useMemo(() => ({
-    about:      <AboutWindow      dark={dark} />,
+    about:      <AboutWindow      dark={dark} onOpen={openWin} />,
     projects:   <ProjectsWindow   dark={dark} />,
     experience: <ExperienceWindow dark={dark} />,
     skills:     <SkillsWindow     dark={dark} />,
     contact:    <ContactWindow    dark={dark} />,
-  }), [dark]);
+  }), [dark, openWin]);
 
   // Dark mode transition: add class briefly on toggle
   const toggleDark = useCallback((v: boolean | ((prev: boolean) => boolean)) => {

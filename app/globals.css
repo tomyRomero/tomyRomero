@@ -119,19 +119,42 @@ button:disabled {
   100% { opacity: 1; transform: none; }
 }
 
-/* Aurora wallpaper — swaying curtains, twinkling stars, shooting stars */
-@keyframes auroraSway {
-  0%   { transform: skewX(-12deg) translateX(-3vw) scaleY(1);    opacity: .55; }
-  100% { transform: skewX(-6deg)  translateX(3vw)  scaleY(1.06); opacity: .95; }
+/* Mesh wallpaper — large soft color spots drifting */
+@keyframes washA {
+  0%, 100% { transform: translate(0, 0) scale(1.00); }
+  33%       { transform: translate(7vw, -5vh) scale(1.08); }
+  66%       { transform: translate(-6vw, 4vh) scale(0.94); }
 }
-@keyframes twinkle {
-  0%, 100% { opacity: .2; }
-  50%      { opacity: 1; }
+@keyframes washB {
+  0%, 100% { transform: translate(0, 0) scale(1.00); }
+  50%       { transform: translate(-9vw, 6vh) scale(1.10); }
 }
-@keyframes shootStar {
-  0%       { transform: rotate(-32deg) translateX(0); opacity: 0; }
-  1.5%     { opacity: .9; }
-  9%, 100% { transform: rotate(-32deg) translateX(52vw); opacity: 0; }
+
+/* Rain wallpaper — runners fall under gravity (accelerating timing on the
+   element), wiggle side to side, beads and bokeh shimmer */
+@keyframes rainFall {
+  0%   { transform: translateY(0); opacity: 0; }
+  4%   { opacity: 1; }
+  88%  { opacity: 1; }
+  100% { transform: translateY(118vh); opacity: 0; }
+}
+@keyframes rainWiggle {
+  0%   { transform: translateX(calc(var(--rw, 5px) * -1)); }
+  100% { transform: translateX(var(--rw, 5px)); }
+}
+@keyframes beadFade {
+  0%, 100% { opacity: .25; }
+  50%      { opacity: .7; }
+}
+
+/* Lava wallpaper — blobs rise and sink inside the goo filter */
+@keyframes lavaRise {
+  0%   { transform: translateY(0); }
+  100% { transform: translateY(var(--rise, -400px)); }
+}
+@keyframes lavaWobble {
+  0%   { transform: scale(1, .94); }
+  100% { transform: scale(.94, 1.08); }
 }
 
 /* Bubbles wallpaper — rise with an S-curve drift. Base opacity is 0, so
@@ -198,19 +221,6 @@ button:disabled {
   96%, 100% { transform: translateY(var(--down, 30px)) scale(1); opacity: 0; }
 }
 
-/* Wallpaper dune drift — slow horizontal sway per layer */
-@keyframes duneA {
-  0%, 100% { transform: translateX(0); }
-  50%       { transform: translateX(-24px); }
-}
-@keyframes duneB {
-  0%, 100% { transform: translateX(0); }
-  50%       { transform: translateX(28px); }
-}
-@keyframes duneC {
-  0%, 100% { transform: translateX(0); }
-  50%       { transform: translateX(-18px); }
-}
 /* Tilted photo strip entrance */
 @keyframes photoIn {
   0%   { opacity: 0; transform: translateY(20px) scale(.88); }
@@ -328,7 +338,7 @@ button:disabled {
      static painting), splat bodies are visible at rest. */
   .wp-bubble, .wp-splat-drop, .wp-splat-ring, .wp-splat-body,
   .wp-splat-drip, .wp-splat-ejx, .wp-splat-ejy,
-  .wp-curtain, .wp-star, .wp-shoot {
+  .wp-bokeh, .wp-bead, .wp-rain-run, .wp-lava-rise, .wp-lava-wob {
     animation: none !important;
   }
 }
