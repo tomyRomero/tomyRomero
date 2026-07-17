@@ -34,8 +34,24 @@ const subscribeResize = (cb: () => void) => {
   window.addEventListener('resize', cb);
   return () => window.removeEventListener('resize', cb);
 };
-// Phones — including landscape phones, whose height can't fit windows + dock
-const isMobileSnapshot = () => window.innerWidth < 768 || window.innerHeight < 520;
+// Stable mobile detection: a device check plus hysteresis, so the skin
+// can't thrash while a browser window is dragged across the boundary or a
+// phone's URL bar collapses mid-scroll.
+// - Phones are identified by their smallest PHYSICAL screen dimension
+//   (stable across rotation and toolbar changes): < 500px → always mobile.
+// - Window width uses a dead zone: switch to mobile under 768, but only
+//   switch back to desktop above 820.
+let mobileLatch = false;
+const isMobileSnapshot = () => {
+  const phone = Math.min(window.screen.width, window.screen.height) < 500;
+  const w = window.innerWidth;
+  if (mobileLatch) {
+    if (w >= 820 && !phone) mobileLatch = false;
+  } else {
+    if (w < 768 || phone) mobileLatch = true;
+  }
+  return mobileLatch;
+};
 // Compact widths (iPad portrait): desktop works, but the widgets column
 // would overlap windows, so it hides
 const isCompactSnapshot = () => window.innerWidth < 1000;

@@ -130,6 +130,24 @@ button:disabled {
   50%       { transform: translate(-9vw, 6vh) scale(1.10); }
 }
 
+/* Bubbles wallpaper — rise with an S-curve drift. Base opacity is 0, so
+   reduced-motion (which collapses the animation) leaves a clean gradient. */
+@keyframes bubbleRise {
+  0%   { transform: translate(0, 0); opacity: 0; }
+  6%   { opacity: 1; }
+  50%  { transform: translate(calc(var(--sway, 20px) * -0.4), -56vh); }
+  90%  { opacity: .9; }
+  100% { transform: translate(var(--sway, 20px), -112vh); opacity: 0; }
+}
+
+/* Splash wallpaper — paint lands with an elastic overshoot. Fill mode 'both'
+   means reduced-motion shows the finished painting instantly. */
+@keyframes splashIn {
+  0%   { transform: scale(0); opacity: 0; }
+  60%  { transform: scale(1.12); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
 /* Wallpaper dune drift — slow horizontal sway per layer */
 @keyframes duneA {
   0%, 100% { transform: translateX(0); }

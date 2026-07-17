@@ -2,13 +2,15 @@
 
 // Four selectable wallpapers, switchable from the ⌘ menu. All CSS/SVG,
 // zero image assets. Each has a light and dark treatment.
-export type WallpaperVariant = 'mesh' | 'dunes' | 'blobs' | 'quiet';
+export type WallpaperVariant = 'mesh' | 'dunes' | 'blobs' | 'quiet' | 'bubbles' | 'splash';
 
 export const WALLPAPERS: { id: WallpaperVariant; label: string }[] = [
-  { id: 'mesh',  label: 'Mesh'  },
-  { id: 'dunes', label: 'Dunes' },
-  { id: 'blobs', label: 'Blobs' },
-  { id: 'quiet', label: 'Quiet' },
+  { id: 'mesh',    label: 'Mesh'    },
+  { id: 'dunes',   label: 'Dunes'   },
+  { id: 'blobs',   label: 'Blobs'   },
+  { id: 'quiet',   label: 'Quiet'   },
+  { id: 'bubbles', label: 'Bubbles' },
+  { id: 'splash',  label: 'Splash'  },
 ];
 
 const BASES: Record<WallpaperVariant, { dark: string; light: string }> = {
@@ -27,6 +29,14 @@ const BASES: Record<WallpaperVariant, { dark: string; light: string }> = {
   quiet: {
     dark:  'linear-gradient(165deg, #08090d 0%, #0e1016 45%, #0a0b10 100%)',
     light: 'linear-gradient(165deg, #eef1f6 0%, #e7ebf2 45%, #ebeef4 100%)',
+  },
+  bubbles: {
+    dark:  'linear-gradient(180deg, #03121e 0%, #072a3f 60%, #0a3a52 100%)',
+    light: 'linear-gradient(180deg, #e2f1f8 0%, #cfe7f2 55%, #c0dcEB 100%)',
+  },
+  splash: {
+    dark:  'linear-gradient(165deg, #141416 0%, #0e0e10 100%)',
+    light: 'linear-gradient(165deg, #f8f8f6 0%, #f1f1ee 100%)',
   },
 };
 
@@ -137,8 +147,100 @@ function Quiet({ dark }: { dark: boolean }) {
   );
 }
 
+// ── Bubbles: slow underwater rise with drift ─────────────────────────────────
+// Deterministic config (no randomness at render time, so SSR and client match)
+const BUBBLES = [
+  { left: '6%',  size: 46, dur: 16, delay: 0,    sway: 40  },
+  { left: '15%', size: 22, dur: 11, delay: 3,    sway: -30 },
+  { left: '24%', size: 64, dur: 20, delay: 6,    sway: 24  },
+  { left: '33%', size: 16, dur: 9,  delay: 1.5,  sway: -18 },
+  { left: '42%', size: 38, dur: 14, delay: 8,    sway: 34  },
+  { left: '52%', size: 26, dur: 12, delay: 4,    sway: -26 },
+  { left: '61%', size: 54, dur: 18, delay: 10,   sway: 20  },
+  { left: '70%', size: 18, dur: 10, delay: 2,    sway: -36 },
+  { left: '78%', size: 42, dur: 15, delay: 7,    sway: 30  },
+  { left: '86%', size: 28, dur: 13, delay: 5,    sway: -22 },
+  { left: '93%', size: 50, dur: 19, delay: 12,   sway: 18  },
+  { left: '48%', size: 12, dur: 8,  delay: 9,    sway: 14  },
+];
+
+function Bubbles({ dark }: { dark: boolean }) {
+  return (
+    <>
+      {BUBBLES.map((b, i) => (
+        <div
+          key={i}
+          style={{
+            position: 'absolute',
+            left: b.left,
+            bottom: -(b.size + 24),
+            width: b.size, height: b.size,
+            borderRadius: '50%',
+            background: dark
+              ? 'radial-gradient(circle at 30% 30%, rgba(255,255,255,.32), rgba(160,220,255,.10) 45%, rgba(160,220,255,.03) 70%, transparent 100%)'
+              : 'radial-gradient(circle at 30% 30%, rgba(255,255,255,.85), rgba(120,170,220,.14) 45%, transparent 70%)',
+            border: dark
+              ? '1px solid rgba(190,230,255,.28)'
+              : '1px solid rgba(110,160,210,.30)',
+            opacity: 0,
+            animation: `bubbleRise ${b.dur}s linear ${b.delay}s infinite`,
+            ['--sway' as string]: `${b.sway}px`,
+          } as React.CSSProperties}
+        />
+      ))}
+    </>
+  );
+}
+
+// ── Splash: paint splats landing on a canvas ─────────────────────────────────
+// Each splash: outer <g> owns placement (attribute transform survives the CSS
+// animation), inner <g> runs the elastic entrance around its own center.
+const SPLASHES = [
+  { x: 280,  y: 620, r: -14, s: 1.15, color: '#0A84FF', delay: .1  },
+  { x: 1130, y: 260, r: 28,  s: 1.0,  color: '#FF375F', delay: .4  },
+  { x: 470,  y: 190, r: 66,  s: .72,  color: '#FFD60A', delay: .7  },
+  { x: 990,  y: 650, r: -40, s: .88,  color: '#30D158', delay: 1.0 },
+  { x: 720,  y: 430, r: 12,  s: .60,  color: '#BF5AF2', delay: 1.3 },
+];
+
+function Splash({ dark }: { dark: boolean }) {
+  return (
+    <svg
+      style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}
+      viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true"
+    >
+      {SPLASHES.map((sp, i) => (
+        <g key={i} transform={`translate(${sp.x} ${sp.y}) rotate(${sp.r}) scale(${sp.s})`}>
+          <g
+            style={{
+              animation: `splashIn .7s cubic-bezier(.34,1.56,.64,1) ${sp.delay}s both`,
+              transformBox: 'fill-box',
+              transformOrigin: 'center',
+            }}
+            fill={sp.color}
+            opacity={dark ? .82 : .9}
+          >
+            {/* Irregular splat body from overlapping ellipses */}
+            <ellipse rx="112" ry="78" />
+            <ellipse rx="66" ry="96" transform="rotate(38) translate(24 -10)" />
+            <ellipse rx="84" ry="52" transform="rotate(-24) translate(-30 22)" />
+            {/* Satellite droplets */}
+            <circle r="14" cx="148" cy="-34" />
+            <circle r="8"  cx="-158" cy="42" />
+            <circle r="6"  cx="96"  cy="112" />
+            <circle r="4"  cx="-104" cy="-96" />
+            {/* Drip */}
+            <rect x="-10" y="58" width="20" height="96" rx="10" />
+            <circle r="12" cx="0" cy="158" />
+          </g>
+        </g>
+      ))}
+    </svg>
+  );
+}
+
 const SCENES: Record<WallpaperVariant, (p: { dark: boolean }) => React.ReactNode> = {
-  mesh: Mesh, dunes: Dunes, blobs: Blobs, quiet: Quiet,
+  mesh: Mesh, dunes: Dunes, blobs: Blobs, quiet: Quiet, bubbles: Bubbles, splash: Splash,
 };
 
 export default function Wallpaper({ dark, variant }: { dark: boolean; variant: WallpaperVariant }) {
