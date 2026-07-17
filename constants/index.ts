@@ -236,7 +236,7 @@ export const experiences = [
     date:    'April 2025 – Present',
     location: 'Remote · Connecticut',
     description: [
-      'Build, maintain, and debug full-stack features for a home care management system.',
+      'Build, maintain, and debug full-stack features for a home-care management system.',
       'Design and optimize SQL Server data models and complex queries behind scheduling, billing, authorization, and reporting workflows.',
       'Ship features end to end with C#, ASP.NET Core, and JavaScript in a DevOps-driven environment.',
       'Work directly with business stakeholders to scope requirements and deliver new features.',
