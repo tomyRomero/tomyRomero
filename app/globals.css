@@ -150,26 +150,48 @@ button:disabled {
   100% { transform: translate(var(--dx, 30px), var(--dy, 0)) scale(.4); opacity: 0; }
 }
 
-/* Splash wallpaper — one full paint cycle per splat: drop falls (0-4%),
-   impact squash + overshoot (4-8.5%), linger, fade, repeat */
+/* Splash wallpaper — one full paint cycle per splat, staged like a real drop
+   impact: fall under gravity (0-4%), squash + overshoot on impact (4-9.6%),
+   ejecta arcs out and lands, drips grow, the paint lingers, fades, repeats */
 @keyframes splatDrop {
-  0%         { transform: translateY(-820px); opacity: 1; animation-timing-function: cubic-bezier(.55, 0, .9, .6); }
-  4%         { transform: translateY(0); opacity: 1; }
-  4.6%, 100% { transform: translateY(0); opacity: 0; }
+  0%         { transform: translateY(-820px) scaleY(1.18); opacity: 1; animation-timing-function: cubic-bezier(.55, 0, .9, .6); }
+  3.9%       { transform: translateY(-8px) scaleY(1.28); opacity: 1; }
+  4%, 100%   { transform: translateY(0) scaleY(1); opacity: 0; }
+}
+@keyframes splatRing {
+  0%, 3.9%  { transform: scale(.25); opacity: 0; }
+  4.2%      { opacity: .5; animation-timing-function: cubic-bezier(.2, .8, .5, 1); }
+  8%, 100%  { transform: scale(1.8); opacity: 0; }
 }
 @keyframes splatBody {
   0%, 3.9%  { transform: scale(0); opacity: 0; }
-  4%        { transform: scale(.4); opacity: 1; }
-  5.5%      { transform: scale(1.22, .82); }
-  7%        { transform: scale(.94, 1.06); }
-  8.5%      { transform: scale(1); }
+  4%        { transform: scale(.35); opacity: 1; animation-timing-function: cubic-bezier(.2, .9, .4, 1); }
+  5.4%      { transform: scale(1.26, .74); }
+  6.8%      { transform: scale(.9, 1.1); }
+  8.2%      { transform: scale(1.05, .96); }
+  9.6%      { transform: scale(1); }
   86%       { transform: scale(1); opacity: 1; }
   96%, 100% { transform: scale(1); opacity: 0; }
 }
-@keyframes splatEject {
-  0%, 3.9%  { transform: translate(0, 0) scale(0); opacity: 0; }
-  4%        { transform: translate(0, 0) scale(1); opacity: .95; }
-  9%, 100%  { transform: translate(var(--ex, 60px), var(--ey, -40px)) scale(.3); opacity: 0; }
+@keyframes splatDrip {
+  0%, 6%    { transform: scaleY(0); opacity: 0; }
+  7%        { opacity: 1; animation-timing-function: cubic-bezier(.3, .6, .6, 1); }
+  30%       { transform: scaleY(1); }
+  86%       { transform: scaleY(1); opacity: 1; }
+  96%, 100% { transform: scaleY(1); opacity: 0; }
+}
+@keyframes splatEjX {
+  0%, 3.9%  { transform: translateX(0); }
+  4%        { animation-timing-function: cubic-bezier(.2, .8, .55, 1); }
+  9%, 100%  { transform: translateX(var(--ex, 60px)); }
+}
+@keyframes splatEjY {
+  0%, 3.9%  { transform: translateY(0) scale(.4); opacity: 0; }
+  4%        { transform: translateY(0) scale(1); opacity: .95; animation-timing-function: cubic-bezier(.25, .9, .45, 1); }
+  6.2%      { transform: translateY(var(--up, -40px)) scale(1); animation-timing-function: cubic-bezier(.6, .05, .9, .5); }
+  9%        { transform: translateY(var(--down, 30px)) scale(1); }
+  86%       { transform: translateY(var(--down, 30px)) scale(1); opacity: .95; }
+  96%, 100% { transform: translateY(var(--down, 30px)) scale(1); opacity: 0; }
 }
 
 /* Wallpaper dune drift — slow horizontal sway per layer */
@@ -298,9 +320,10 @@ button:disabled {
     animation-duration: 7000ms !important;
   }
   /* Wallpaper effects degrade to their base styles under reduced motion:
-     bubbles/drops/ejecta have base opacity 0 (clean gradient), splat bodies
-     are visible at rest (a finished static painting). */
-  .wp-bubble, .wp-splat-drop, .wp-splat-body, .wp-splat-ej {
+     bubbles/drops/rings/ejecta/drips have base opacity 0 (clean gradient or
+     static painting), splat bodies are visible at rest. */
+  .wp-bubble, .wp-splat-drop, .wp-splat-ring, .wp-splat-body,
+  .wp-splat-drip, .wp-splat-ejx, .wp-splat-ejy {
     animation: none !important;
   }
 }

@@ -189,34 +189,49 @@ export function BubbleField({ dark }: { dark: boolean }) {
 
   return (
     <div style={{ position: 'absolute', inset: 0, zIndex: 2, pointerEvents: 'none' }} aria-hidden="true">
-      {BUBBLES.map((b, i) => (
-        <button
-          key={`${i}:${gen[i]}`}
-          className="wp-bubble"
-          tabIndex={-1}
-          onClick={e => pop(i, e)}
-          style={{
-            position: 'absolute',
-            left: b.left,
-            bottom: -(b.size + 24),
-            width: b.size, height: b.size,
-            borderRadius: '50%',
-            padding: 0,
-            pointerEvents: 'auto',
-            cursor: 'pointer',
-            background: dark
-              ? 'radial-gradient(circle at 30% 30%, rgba(255,255,255,.32), rgba(160,220,255,.10) 45%, rgba(160,220,255,.03) 70%, transparent 100%)'
-              : 'radial-gradient(circle at 30% 30%, rgba(255,255,255,.85), rgba(120,170,220,.14) 45%, transparent 70%)',
-            border: dark
-              ? '1px solid rgba(190,230,255,.28)'
-              : '1px solid rgba(110,160,210,.30)',
-            opacity: 0,
-            // Popped bubbles respawn quickly instead of waiting a full cycle
-            animation: `bubbleRise ${b.dur}s linear ${gen[i] === 0 ? b.delay : 1 + (i % 4)}s infinite`,
-            ['--sway' as string]: `${b.sway}px`,
-          } as React.CSSProperties}
-        />
-      ))}
+      {BUBBLES.map((b, i) => {
+        // Invisible enlarged hit target (44px minimum) so small bubbles are
+        // as easy to pop as big ones
+        const hit = Math.max(b.size, 44);
+        const pad = (hit - b.size) / 2;
+        return (
+          <button
+            key={`${i}:${gen[i]}`}
+            className="wp-bubble"
+            tabIndex={-1}
+            onClick={e => pop(i, e)}
+            style={{
+              position: 'absolute',
+              left: `calc(${b.left} - ${pad}px)`,
+              bottom: -(b.size + 24) - pad,
+              width: hit, height: hit,
+              borderRadius: '50%',
+              padding: 0,
+              background: 'transparent',
+              border: 'none',
+              pointerEvents: 'auto',
+              cursor: 'pointer',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              opacity: 0,
+              // Popped bubbles respawn quickly instead of waiting a full cycle
+              animation: `bubbleRise ${b.dur}s linear ${gen[i] === 0 ? b.delay : 1 + (i % 4)}s infinite`,
+              ['--sway' as string]: `${b.sway}px`,
+            } as React.CSSProperties}
+          >
+            <span style={{
+              display: 'block',
+              width: b.size, height: b.size,
+              borderRadius: '50%',
+              background: dark
+                ? 'radial-gradient(circle at 30% 30%, rgba(255,255,255,.32), rgba(160,220,255,.10) 45%, rgba(160,220,255,.03) 70%, transparent 100%)'
+                : 'radial-gradient(circle at 30% 30%, rgba(255,255,255,.85), rgba(120,170,220,.14) 45%, transparent 70%)',
+              border: dark
+                ? '1px solid rgba(190,230,255,.28)'
+                : '1px solid rgba(110,160,210,.30)',
+            }} />
+          </button>
+        );
+      })}
 
       {/* Pop bursts: expanding ring + droplets flying outward */}
       {bursts.map(b => (
@@ -249,35 +264,97 @@ function Bubbles() {
   return null;
 }
 
-// ── Splash: a living painting. Each splat cycles forever: a drop falls,
-// lands with a squash-and-overshoot, ejecta flies out, the splat lingers,
-// fades, and repeats. Negative delays desync the cycles so the canvas is
-// already partially painted at load with new paint landing continuously. ──
-const SPLAT_PATHS = [
-  'M-54,-34 C-38,-70 24,-76 52,-46 C88,-58 112,-16 84,8 C104,40 64,74 30,58 C16,88 -36,86 -50,54 C-92,58 -106,12 -76,-6 C-96,-42 -74,-60 -54,-34 Z',
-  'M-46,-42 C-18,-64 30,-62 48,-34 C82,-42 96,-4 72,16 C88,48 48,68 22,52 C4,78 -40,70 -44,42 C-80,40 -88,-2 -62,-14 C-78,-44 -64,-54 -46,-42 Z',
-  'M-50,-28 C-44,-62 10,-72 40,-52 C74,-64 100,-28 80,-2 C100,26 72,60 40,50 C28,76 -20,80 -38,54 C-72,62 -94,24 -70,2 C-86,-28 -66,-44 -50,-28 Z',
-];
+// ── Splash: a living painting with real splat morphology. Research on drop
+// impact (spreading → rim take-off into radial fingers → satellite droplets
+// shed beyond finger tips) drives a procedural generator: every splat gets a
+// unique seeded silhouette with fingers, satellites aligned to those fingers,
+// ballistic ejecta that land and stay, and slow drips. Deterministic PRNG so
+// server and client render identical shapes. ─────────────────────────────────
 
-const EJECTA = [
-  { x: 78, y: -52 }, { x: -84, y: -40 }, { x: 96, y: 24 },
-  { x: -70, y: 48 }, { x: 30, y: -90 },
-];
+function mulberry32(seed: number) {
+  let a = seed;
+  return () => {
+    a |= 0; a = (a + 0x6D2B79F5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+// Catmull-Rom smoothing over a closed ring of points → cubic bezier path.
+// Long spokes between short neighbors smooth into finger-like tongues.
+function smoothPath(pts: { x: number; y: number }[]) {
+  const n = pts.length;
+  let d = `M${pts[0].x.toFixed(1)},${pts[0].y.toFixed(1)}`;
+  for (let i = 0; i < n; i++) {
+    const p0 = pts[(i - 1 + n) % n], p1 = pts[i], p2 = pts[(i + 1) % n], p3 = pts[(i + 2) % n];
+    const c1x = p1.x + (p2.x - p0.x) / 6, c1y = p1.y + (p2.y - p0.y) / 6;
+    const c2x = p2.x - (p3.x - p1.x) / 6, c2y = p2.y - (p3.y - p1.y) / 6;
+    d += `C${c1x.toFixed(1)},${c1y.toFixed(1)} ${c2x.toFixed(1)},${c2y.toFixed(1)} ${p2.x.toFixed(1)},${p2.y.toFixed(1)}`;
+  }
+  return d + 'Z';
+}
+
+function makeSplat(seed: number) {
+  const rnd = mulberry32(seed);
+  const spokes = 16 + Math.floor(rnd() * 6);
+  const base = 34;
+  const pts: { x: number; y: number }[] = [];
+  const satellites: { x: number; y: number; r: number }[] = [];
+  for (let i = 0; i < spokes; i++) {
+    const ang = (i / spokes) * Math.PI * 2 + (rnd() - 0.5) * 0.28;
+    let r = base * (0.72 + rnd() * 0.55);
+    if (rnd() < 0.34) {
+      // A finger: long tongue with satellite droplets shed along its direction
+      r = base * (1.7 + rnd() * 1.5);
+      const nDrops = 1 + Math.floor(rnd() * 2);
+      for (let k = 0; k < nDrops; k++) {
+        const dist = r * (1.18 + rnd() * 0.55 + k * 0.3);
+        const jitter = (rnd() - 0.5) * 0.18;
+        satellites.push({
+          x: Math.cos(ang + jitter) * dist,
+          y: Math.sin(ang + jitter) * dist,
+          r: Math.max(1.6, 6.5 - k * 2 - rnd() * 2),
+        });
+      }
+    }
+    pts.push({ x: Math.cos(ang) * r, y: Math.sin(ang) * r });
+  }
+  return { path: smoothPath(pts), satellites };
+}
+
+function makeEjecta(seed: number) {
+  const rnd = mulberry32(seed * 31 + 7);
+  return Array.from({ length: 5 + Math.floor(rnd() * 3) }, () => {
+    const ang = rnd() * Math.PI * 2;
+    const dist = 70 + rnd() * 90;
+    return {
+      ex:   Math.cos(ang) * dist,
+      up:   -(24 + rnd() * 50),
+      down: 18 + rnd() * 46,
+      r:    2.5 + rnd() * 3.2,
+    };
+  });
+}
 
 const SPLATS = [
-  { x: 150,  y: 180, rot: -12, s: .52, color: '#0A84FF', cyc: 13, delay: -1  },
-  { x: 1290, y: 210, rot: 30,  s: .45, color: '#FF375F', cyc: 15, delay: -6  },
-  { x: 520,  y: 120, rot: 70,  s: .34, color: '#FFD60A', cyc: 12, delay: -9  },
-  { x: 1060, y: 140, rot: -35, s: .38, color: '#30D158', cyc: 16, delay: -3  },
-  { x: 260,  y: 700, rot: 15,  s: .50, color: '#BF5AF2', cyc: 14, delay: -11 },
-  { x: 760,  y: 240, rot: -60, s: .30, color: '#FF375F', cyc: 17, delay: -13 },
-  { x: 1340, y: 520, rot: 8,   s: .42, color: '#0A84FF', cyc: 12, delay: -5  },
-  { x: 640,  y: 760, rot: 40,  s: .46, color: '#FFD60A', cyc: 15, delay: -8  },
-  { x: 980,  y: 640, rot: -20, s: .36, color: '#64D2FF', cyc: 13, delay: -4  },
-  { x: 420,  y: 430, rot: 55,  s: .30, color: '#30D158', cyc: 13, delay: -2  },
-  { x: 1180, y: 780, rot: -45, s: .40, color: '#BF5AF2', cyc: 16, delay: -10 },
-  { x: 90,   y: 470, rot: 25,  s: .33, color: '#FF9F0A', cyc: 14, delay: -7  },
-];
+  { x: 150,  y: 180, rot: -12, s: .52, color: '#0A84FF', cyc: 13, delay: -1,  drip: true  },
+  { x: 1290, y: 210, rot: 30,  s: .45, color: '#FF375F', cyc: 15, delay: -6,  drip: false },
+  { x: 520,  y: 120, rot: 70,  s: .34, color: '#FFD60A', cyc: 12, delay: -9,  drip: false },
+  { x: 1060, y: 140, rot: -35, s: .38, color: '#30D158', cyc: 16, delay: -3,  drip: true  },
+  { x: 260,  y: 700, rot: 15,  s: .50, color: '#BF5AF2', cyc: 14, delay: -11, drip: false },
+  { x: 760,  y: 240, rot: -60, s: .30, color: '#FF375F', cyc: 17, delay: -13, drip: false },
+  { x: 1340, y: 520, rot: 8,   s: .42, color: '#0A84FF', cyc: 12, delay: -5,  drip: true  },
+  { x: 640,  y: 760, rot: 40,  s: .46, color: '#FFD60A', cyc: 15, delay: -8,  drip: false },
+  { x: 980,  y: 640, rot: -20, s: .36, color: '#64D2FF', cyc: 13, delay: -4,  drip: false },
+  { x: 420,  y: 430, rot: 55,  s: .30, color: '#30D158', cyc: 13, delay: -2,  drip: false },
+  { x: 1180, y: 780, rot: -45, s: .40, color: '#BF5AF2', cyc: 16, delay: -10, drip: false },
+  { x: 90,   y: 470, rot: 25,  s: .33, color: '#FF9F0A', cyc: 14, delay: -7,  drip: true  },
+].map((sp, i) => ({
+  ...sp,
+  ...makeSplat(i * 7919 + 13),
+  ejecta: makeEjecta(i * 104729 + 5),
+}));
 
 function Splash({ dark }: { dark: boolean }) {
   return (
@@ -286,43 +363,75 @@ function Splash({ dark }: { dark: boolean }) {
       viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true"
     >
       {SPLATS.map((sp, i) => (
-        <g key={i} transform={`translate(${sp.x} ${sp.y}) rotate(${sp.rot}) scale(${sp.s})`}>
-          {/* Falling drop — accelerates into the impact point */}
+        <g key={i} transform={`translate(${sp.x} ${sp.y}) scale(${sp.s})`}>
+          {/* Falling drop — stretched by drag, accelerating under gravity */}
           <circle
             className="wp-splat-drop"
             r="11" fill={sp.color} opacity="0"
             style={{ animation: `splatDrop ${sp.cyc}s linear ${sp.delay}s infinite` }}
           />
-          {/* Splat body — squashes on impact, overshoots, settles */}
-          <g
-            className="wp-splat-body"
-            fill={sp.color}
-            opacity={dark ? .82 : .9}
+          {/* Impact ripple */}
+          <circle
+            className="wp-splat-ring"
+            r="26" fill="none" stroke={sp.color} strokeWidth="3" opacity="0"
             style={{
-              animation: `splatBody ${sp.cyc}s linear ${sp.delay}s infinite`,
-              transformBox: 'fill-box',
-              transformOrigin: 'center',
+              animation: `splatRing ${sp.cyc}s linear ${sp.delay}s infinite`,
+              transformBox: 'fill-box', transformOrigin: 'center',
             }}
-          >
-            <path d={SPLAT_PATHS[i % SPLAT_PATHS.length]} />
-            <circle r="9" cx="118" cy="-40" />
-            <circle r="5" cx="-124" cy="30" />
-            <circle r="4" cx="70" cy="96" />
-            <rect x="-7" y="48" width="14" height="70" rx="7" />
-            <circle r="8" cx="0" cy="122" />
-          </g>
-          {/* Ejecta — droplets thrown out at impact */}
-          {EJECTA.map((d, k) => (
-            <circle
-              key={k}
-              className="wp-splat-ej"
-              r="5" fill={sp.color} opacity="0"
+          />
+          {/* Splat body — unique procedural silhouette, squash on impact.
+              Rotation on a wrapper so the drip below stays screen-down. */}
+          <g transform={`rotate(${sp.rot})`}>
+            <g
+              className="wp-splat-body"
+              fill={sp.color}
+              opacity={dark ? .82 : .9}
               style={{
-                animation: `splatEject ${sp.cyc}s ease-out ${sp.delay}s infinite`,
-                ['--ex' as string]: `${d.x}px`,
-                ['--ey' as string]: `${d.y}px`,
+                animation: `splatBody ${sp.cyc}s linear ${sp.delay}s infinite`,
+                transformBox: 'fill-box', transformOrigin: 'center',
+              }}
+            >
+              <path d={sp.path} />
+              {sp.satellites.map((d, k) => (
+                <circle key={k} cx={d.x.toFixed(1)} cy={d.y.toFixed(1)} r={d.r.toFixed(1)} />
+              ))}
+            </g>
+          </g>
+          {/* Slow drip running down the canvas */}
+          {sp.drip && (
+            <g
+              className="wp-splat-drip"
+              fill={sp.color} opacity={dark ? .8 : .88}
+              style={{
+                animation: `splatDrip ${sp.cyc}s linear ${sp.delay}s infinite`,
+                transformBox: 'fill-box', transformOrigin: 'center top',
+              }}
+            >
+              <rect x="-3.5" y="12" width="7" height="82" rx="3.5" />
+              <circle cx="0" cy="98" r="6" />
+            </g>
+          )}
+          {/* Ballistic ejecta: outer element carries horizontal motion, inner
+              carries the up-then-down arc — droplets land and stay */}
+          {sp.ejecta.map((d, k) => (
+            <g
+              key={k}
+              className="wp-splat-ejx"
+              style={{
+                animation: `splatEjX ${sp.cyc}s linear ${sp.delay}s infinite`,
+                ['--ex' as string]: `${d.ex.toFixed(0)}px`,
               } as React.CSSProperties}
-            />
+            >
+              <circle
+                className="wp-splat-ejy"
+                r={d.r.toFixed(1)} fill={sp.color} opacity="0"
+                style={{
+                  animation: `splatEjY ${sp.cyc}s linear ${sp.delay}s infinite`,
+                  ['--up' as string]: `${d.up.toFixed(0)}px`,
+                  ['--down' as string]: `${d.down.toFixed(0)}px`,
+                } as React.CSSProperties}
+              />
+            </g>
           ))}
         </g>
       ))}
