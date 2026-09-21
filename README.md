@@ -25,22 +25,20 @@ and the glue that makes a feature actually ship.
 
 ### **Software Engineer 1 — MEDsys Software Solutions**  
 📍 Remote | April 2025 – Present  
-- Build, maintain, and debug full-stack features for a home-care management system  
-- Design and optimize data models and complex queries supporting scheduling, billing, authorizations, and reporting workflows  
-- Collaborate in an Agile, DevOps-driven environment to deliver scalable, end-to-end solutions  
-- Work primarily with ASP.NET, C#, SQL Server, and modern frontend technologies  
+- Develop and maintain full-stack features for a HIPAA-compliant platform serving multiple home care agencies, using C#, ASP.NET, JavaScript, and SQL Server  
+- Build and enhance reporting tools, data entry forms, and billing and invoicing workflows for operational teams  
+- Resolve production support tickets and bugs, working with QA to find root causes and propose solutions  
+- Work with business stakeholders to turn operational needs into features, in an Agile environment using Jira and Confluence  
 
 ### **Software Developer Intern — LocalChef**  
 📍 Remote | January 2025 – April 2025  
-- Contributed to full-stack web application features in a fast-paced startup environment  
-- Collaborated with senior engineers to implement scalable frontend and backend solutions  
-- Assisted in feature development, testing, and deployment  
+- Developed features for a startup product as part of a small, fast-paced engineering team  
+- Helped build user authentication and payment integration for the platform  
 
 ### **Software Developer Trainee — Revature**  
 📍 June 2024 – September 2024  
-- Completed intensive full-stack training in C#, .NET, SQL Server, and frontend frameworks  
-- Developed enterprise-style applications in Agile team settings  
-- Strengthened knowledge of object-oriented design, REST APIs, and database architecture  
+- Completed a structured Agile software development training program covering the full development lifecycle  
+- Applied code quality practices including testing, continuous integration, and version control  
 
 ---
 

@@ -29,7 +29,6 @@ export const metadata: Metadata = {
 
   keywords: [
     'Tomy F. Romero',
-    'Tomy Romero Seas',
     'software engineer',
     'full-stack developer',
     'ASP.NET Core developer',
@@ -101,7 +100,6 @@ const jsonLd = {
       '@type':    'Person',
       '@id':      `${BASE}/#person`,
       name:       'Tomy F. Romero',
-      alternateName: 'Tomy Romero Seas',
       url:        BASE,
       image:      `${BASE}/assets/tomyRomeroGrad.jpeg`,
       jobTitle:   'Software Engineer',
@@ -127,7 +125,7 @@ const jsonLd = {
       ],
       knowsAbout: [
         'ASP.NET Core', 'C#', 'React', 'Next.js', 'TypeScript',
-        'SQL Server', 'Azure', 'Docker', 'Node.js', 'Spring Boot',
+        'SQL Server', 'Azure', 'Docker', 'Node.js',
       ],
     },
     {

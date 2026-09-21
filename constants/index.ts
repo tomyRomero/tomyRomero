@@ -7,7 +7,7 @@ export const ME = {
   github:    'https://github.com/tomyRomero',
   linkedin:  'https://www.linkedin.com/in/tomyromero/',
   portfolio: 'https://tomyromero.vercel.app',
-  bio: `Full-stack engineer building home care software at MEDsys. I work across C#/.NET services, React frontends, and the SQL Server schemas underneath scheduling, billing, and authorizations, and I like asking the right questions to get to the root of what's needed. Nights and weekends I ship my own projects end to end. UVI graduate, bilingual in English and Spanish. SQL nerd.`,
+  bio: `Full-stack engineer building home care software at MEDsys. I work across C#/.NET services, React frontends, and the SQL Server work behind scheduling, billing, and authorizations, and I like asking the right questions to get to the root of what's needed. Nights and weekends I ship my own projects end to end. UVI graduate, bilingual in English and Spanish. SQL nerd.`,
 };
 
 // First year of professional software work — drives the "years" stats everywhere
@@ -238,7 +238,6 @@ export const experiences = [
     description: [
       'Develop and maintain full-stack features for a HIPAA-compliant platform serving multiple home care agencies, using C#, ASP.NET, JavaScript, and SQL Server.',
       'Build and enhance reporting tools, data entry forms, and billing and invoicing workflows for operational teams.',
-      'Design and optimize SQL Server data models and complex queries behind scheduling, billing, authorization, and reporting.',
       'Resolve production support tickets and bugs, working with QA to find root causes and propose solutions.',
       'Work with business stakeholders to turn operational needs into features, in an Agile environment using Jira and Confluence.',
     ],
@@ -251,11 +250,10 @@ export const experiences = [
     date:     'January 2025 – April 2025',
     location: 'Remote',
     description: [
-      'Built and maintained full-stack features with React, Java Spring Boot, and MySQL on AWS.',
-      'Implemented secure authentication flows and Stripe payment integration.',
-      'Worked alongside senior engineers in a small, fast-moving startup team.',
+      'Developed features for a startup product as part of a small, fast-paced engineering team.',
+      'Helped build user authentication and payment integration for the platform.',
     ],
-    tech: ['React', 'Java Spring Boot', 'AWS', 'MySQL', 'Stripe'],
+    tech: ['React', 'AWS', 'MySQL', 'Stripe'],
   },
   {
     title:    'Software Developer Trainee',
@@ -264,9 +262,8 @@ export const experiences = [
     date:     'June 2024 – September 2024',
     location: 'Remote',
     description: [
-      'Completed intensive full-stack training in C#/.NET, React, SQL Server, and DevOps practices.',
-      'Built enterprise-style team applications with unit testing and structured version control.',
-      'Worked with cloud services, CI/CD pipelines, and containerization.',
+      'Completed a structured Agile software development training program covering the full development lifecycle.',
+      'Applied code quality practices including testing, continuous integration, and version control.',
     ],
     tech: ['C# .NET', 'React', 'MS SQL Server', 'Docker', 'CI/CD'],
   },
