@@ -317,7 +317,7 @@ export default function MobileView({ dark, setDark }: { dark: boolean; setDark: 
                   <div style={{ fontSize: 14.5, fontWeight: 600, color: text }}>{edu.institution}</div>
                   <div style={{ fontSize: 13, color: accent, marginTop: 2 }}>{edu.degree} in {edu.field}</div>
                   <div style={{ fontSize: 11.5, color: textMuted, marginTop: 2 }}>
-                    {edu.period} · {edu.location} · GPA {edu.gpa}
+                    {edu.period} · {edu.location}
                   </div>
                   <ul style={{ margin: '8px 0 0', paddingLeft: 18, color: textSub, fontSize: 12.5, lineHeight: 1.7 }}>
                     {edu.bullets.map((b, j) => <li key={j}>{b}</li>)}
@@ -493,7 +493,7 @@ export default function MobileView({ dark, setDark }: { dark: boolean; setDark: 
 
         {/* Footer */}
         <div style={{ textAlign: 'center', fontSize: 11.5, color: textMuted, paddingBottom: 8 }}>
-          Built with Next.js · {new Date().getFullYear()} Tomy Romero Seas
+          Built with Next.js · {new Date().getFullYear()} Tomy F. Romero
         </div>
       </div>
 

@@ -245,7 +245,7 @@ export default function MenuBar({ dark, setDark, wins, dispatch, calPop, setCalP
   const MENUS: { id: string; label: string; bold?: boolean; items: MenuItem[] }[] = [
     {
       id: 'apple', label: '⌘', items: [
-        { label: 'About This Portfolio', action: () => showToast(`macOS-style Portfolio · Tomy Romero Seas · ${new Date().getFullYear()}`) },
+        { label: 'About This Portfolio', action: () => showToast(`macOS-style Portfolio · Tomy F. Romero · ${new Date().getFullYear()}`) },
         { div: true },
         { label: dark ? 'Switch to Light Mode' : 'Switch to Dark Mode',
           action: () => { setDark(d => !d); close(); } },
@@ -265,7 +265,7 @@ export default function MenuBar({ dark, setDark, wins, dispatch, calPop, setCalP
     },
     {
       id: 'tomy', label: 'Tomy', bold: true, items: [
-        { label: 'About Tomy Romero Seas',
+        { label: 'About Tomy F. Romero',
           action: () => { close(); dispatch({ type: 'OPEN', id: 'about' }); } },
         { div: true },
         { label: 'Print / Save as PDF', shortcut: '⌘P', action: () => { close(); window.print(); } },

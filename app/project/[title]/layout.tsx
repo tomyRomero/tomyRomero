@@ -14,22 +14,22 @@ export async function generateMetadata(
   const detail = projectDetails.find(p => p.title === name);
   const proj   = projects.find(p => p.title === name);
 
-  if (!detail && !proj) return { title: 'Project · Tomy Romero Seas' };
+  if (!detail && !proj) return { title: 'Project · Tomy F. Romero' };
 
   const description = (detail?.description || proj?.description || '').slice(0, 155);
   const heroImg     = proj?.image ? `${BASE}${proj.image}` : undefined;
   const pageUrl     = `${BASE}/project/${encodeURIComponent(name)}`;
 
   return {
-    title: `${name} · Tomy Romero Seas`,
+    title: `${name} · Tomy F. Romero`,
     description,
     alternates: { canonical: pageUrl },
     openGraph: {
-      title:       `${name} · Tomy Romero Seas`,
+      title:       `${name} · Tomy F. Romero`,
       description,
       type:        'article',
       url:         pageUrl,
-      siteName:    'Tomy Romero Seas · Portfolio',
+      siteName:    'Tomy F. Romero · Portfolio',
       locale:      'en_US',
       ...(heroImg ? {
         images: [{ url: heroImg, width: 1280, height: 800, alt: `${name} screenshot` }],
@@ -37,7 +37,7 @@ export async function generateMetadata(
     },
     twitter: {
       card:        'summary_large_image',
-      title:       `${name} · Tomy Romero Seas`,
+      title:       `${name} · Tomy F. Romero`,
       description,
       ...(heroImg ? { images: [heroImg] } : {}),
     },

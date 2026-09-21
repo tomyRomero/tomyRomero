@@ -47,7 +47,7 @@ and the glue that makes a feature actually ship.
 ## <a name="education">🎓 Education</a>
 
 ### **University of the Virgin Islands 🎓**  
-Bachelor of Science in Computer Science — 3.11 GPA  
+Bachelor of Science in Computer Science  
 
 ### 📜 Licenses & Certifications
 

@@ -1,13 +1,13 @@
 // ── Personal Info ────────────────────────────────────────────────────────────
 export const ME = {
-  name:      'Tomy Romero Seas',
-  title:     'Software Engineer',
-  location:  'Jewett City, Connecticut',
+  name:      'Tomy F. Romero',
+  title:     'Full-Stack Software Engineer',
+  location:  'Ocala, Florida',
   email:     'tomyfletcher99@hotmail.com',
   github:    'https://github.com/tomyRomero',
   linkedin:  'https://www.linkedin.com/in/tomyromero/',
   portfolio: 'https://tomyromero.vercel.app',
-  bio: `Full-stack engineer building home care software at MEDsys. I work across C#/.NET services, React frontends, and the SQL Server schemas underneath scheduling, billing, and authorizations. Nights and weekends I ship my own projects end to end. UVI graduate. SQL nerd.`,
+  bio: `Full-stack engineer building home care software at MEDsys. I work across C#/.NET services, React frontends, and the SQL Server schemas underneath scheduling, billing, and authorizations, and I like asking the right questions to get to the root of what's needed. Nights and weekends I ship my own projects end to end. UVI graduate, bilingual in English and Spanish. SQL nerd.`,
 };
 
 // First year of professional software work — drives the "years" stats everywhere
@@ -18,10 +18,10 @@ export const yearsExperience = () =>
 // ── Skills (grouped for Skills window) ──────────────────────────────────────
 export const skills: Record<string, string[]> = {
   'Languages':    ['C#', 'JavaScript/TypeScript', 'SQL', 'HTML/CSS'],
-  'Backend':      ['ASP.NET Core', 'Web API', 'Entity Framework', 'Node.js'],
+  'Backend':      ['ASP.NET Core', 'REST APIs', 'API Design', 'Entity Framework', 'Node.js'],
   'Frontend':     ['React', 'React Native', 'Next.js', 'Tailwind CSS'],
-  'Data & Cloud': ['SQL Server', 'Azure', 'AWS'],
-  'Tools':        ['Git', 'Docker', 'CI/CD', 'Agile', 'SSMS', 'VS Code', 'Visual Studio'],
+  'Data & Cloud': ['SQL Server', 'MySQL', 'Azure', 'AWS'],
+  'Tools':        ['Git', 'Docker', 'CI/CD', 'Unit Testing', 'Agile', 'Jira', 'Confluence', 'SSMS', 'Visual Studio'],
 };
 
 export const totalSkills = Object.values(skills).flat().length;
@@ -75,7 +75,7 @@ export const projects = [
     techStack:   'React, Next.js, AWS, Stripe',
     image:       '/storeOps/cart.png',
     description: 'E-commerce store with Stripe checkout and a full admin back office.',
-    link:        'https://github.com/tomyRomero/storeOps',
+    link:        'https://github.com/tomyRomero/StoreOperations',
   },
   {
     title:       'Sparks',
@@ -194,7 +194,7 @@ export const projectDetails = [
       'Detailed analytics and reporting',
     ],
     livelink:   'https://palettehub.vercel.app/',
-    githubrepo: 'https://github.com/tomyRomero/storeOps',
+    githubrepo: 'https://github.com/tomyRomero/StoreOperations',
     year:       '2024',
     isLive:     true,
   },
@@ -230,18 +230,19 @@ export const projectDetails = [
 // ── Experiences ──────────────────────────────────────────────────────────────
 export const experiences = [
   {
-    title:   'Software Engineer',
+    title:   'Software Engineer I',
     company: 'MEDsys Software Solutions',
     logo:    'M',
     date:    'April 2025 – Present',
-    location: 'Remote · Connecticut',
+    location: 'Remote',
     description: [
-      'Build, maintain, and debug full-stack features for a home-care management system.',
-      'Design and optimize SQL Server data models and complex queries behind scheduling, billing, authorization, and reporting workflows.',
-      'Ship features end to end with C#, ASP.NET Core, and JavaScript in a DevOps-driven environment.',
-      'Work directly with business stakeholders to scope requirements and deliver new features.',
+      'Develop and maintain full-stack features for a HIPAA-compliant platform serving multiple home care agencies, using C#, ASP.NET, JavaScript, and SQL Server.',
+      'Build and enhance reporting tools, data entry forms, and billing and invoicing workflows for operational teams.',
+      'Design and optimize SQL Server data models and complex queries behind scheduling, billing, authorization, and reporting.',
+      'Resolve production support tickets and bugs, working with QA to find root causes and propose solutions.',
+      'Work with business stakeholders to turn operational needs into features, in an Agile environment using Jira and Confluence.',
     ],
-    tech: ['C# .NET', 'SQL Server', 'JavaScript', 'ASP.NET Core', 'SSMS'],
+    tech: ['C# .NET', 'SQL Server', 'JavaScript', 'ASP.NET Core', 'Jira'],
   },
   {
     title:    'Software Developer Intern',
@@ -277,10 +278,9 @@ export const education = [
     institution: 'University of the Virgin Islands',
     degree:      'Bachelor of Science',
     field:       'Computer Science',
-    period:      'Graduated 2023',
-    location:    'U.S. Virgin Islands',
+    period:      'August 2018 – December 2022',
+    location:    'St. Thomas, USVI',
     logo:        'UVI',
-    gpa:         '3.11',
     bullets: [
       'Student Government Association Junior Senator',
       "Dean's List recipient for multiple semesters",
@@ -319,9 +319,9 @@ export const certifications = [
 // ── Contact ───────────────────────────────────────────────────────────────────
 export const contactDetails = [
   { type: 'Email',    icon: '✉️', value: 'tomyfletcher99@hotmail.com',       href: 'mailto:tomyfletcher99@hotmail.com',            cv: 'tomyfletcher99@hotmail.com' },
-  { type: 'LinkedIn', icon: '🔗', value: 'Tomy Romero Seas',                 href: 'https://www.linkedin.com/in/tomyromero/', cv: 'https://www.linkedin.com/in/tomyromero/' },
+  { type: 'LinkedIn', icon: '🔗', value: 'Tomy F. Romero',                 href: 'https://www.linkedin.com/in/tomyromero/', cv: 'https://www.linkedin.com/in/tomyromero/' },
   { type: 'GitHub',   icon: '⑂',  value: 'github.com/tomyRomero',            href: 'https://github.com/tomyRomero',                cv: 'https://github.com/tomyRomero' },
-  { type: 'Location', icon: '📍', value: 'Jewett City, Connecticut',     href: '',                                             cv: '' },
+  { type: 'Location', icon: '📍', value: 'Ocala, Florida',              href: '',                                             cv: '' },
 ];
 
 // Shared intro line for the Contact window and mobile contact section

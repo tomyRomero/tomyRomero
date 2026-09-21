@@ -18,16 +18,17 @@ export const metadata: Metadata = {
   metadataBase: new URL(BASE),
 
   title: {
-    default:  'Tomy Romero Seas · Software Engineer',
-    template: '%s · Tomy Romero Seas',
+    default:  'Tomy F. Romero · Software Engineer',
+    template: '%s · Tomy F. Romero',
   },
 
   description:
     'Full-stack software engineer specializing in ASP.NET Core, React, and SQL Server. ' +
-    'Currently building home care software at MEDsys Software Solutions in Connecticut. ' +
-    'Open to new opportunities.',
+    'Currently building home care software at MEDsys Software Solutions. ' +
+    'Based in Ocala, Florida. Open to new opportunities.',
 
   keywords: [
+    'Tomy F. Romero',
     'Tomy Romero Seas',
     'software engineer',
     'full-stack developer',
@@ -39,16 +40,17 @@ export const metadata: Metadata = {
     'Next.js',
     '.NET developer',
     'Azure',
-    'Connecticut software engineer',
+    'Ocala software engineer',
+    'Florida software engineer',
     'portfolio',
     'web developer',
     'home care software',
     'UVI graduate',
   ],
 
-  authors:   [{ name: 'Tomy Romero Seas', url: BASE }],
-  creator:   'Tomy Romero Seas',
-  publisher: 'Tomy Romero Seas',
+  authors:   [{ name: 'Tomy F. Romero', url: BASE }],
+  creator:   'Tomy F. Romero',
+  publisher: 'Tomy F. Romero',
 
   robots: {
     index:  true,
@@ -68,8 +70,8 @@ export const metadata: Metadata = {
     type:        'website',
     locale:      'en_US',
     url:         BASE,
-    siteName:    'Tomy Romero Seas · Portfolio',
-    title:       'Tomy Romero Seas · Software Engineer',
+    siteName:    'Tomy F. Romero · Portfolio',
+    title:       'Tomy F. Romero · Software Engineer',
     description:
       'Full-stack software engineer specializing in ASP.NET Core, React, and SQL Server. ' +
       'Open to new opportunities.',
@@ -77,13 +79,13 @@ export const metadata: Metadata = {
       url:    '/opengraph-image',
       width:  1200,
       height: 630,
-      alt:    'Tomy Romero Seas · Software Engineer Portfolio',
+      alt:    'Tomy F. Romero · Software Engineer Portfolio',
     }],
   },
 
   twitter: {
     card:        'summary_large_image',
-    title:       'Tomy Romero Seas · Software Engineer',
+    title:       'Tomy F. Romero · Software Engineer',
     description: 'Full-stack software engineer · ASP.NET Core · React · SQL Server · Open to work.',
     images:      ['/opengraph-image'],
   },
@@ -98,7 +100,8 @@ const jsonLd = {
     {
       '@type':    'Person',
       '@id':      `${BASE}/#person`,
-      name:       'Tomy Romero Seas',
+      name:       'Tomy F. Romero',
+      alternateName: 'Tomy Romero Seas',
       url:        BASE,
       image:      `${BASE}/assets/tomyRomeroGrad.jpeg`,
       jobTitle:   'Software Engineer',
@@ -113,8 +116,8 @@ const jsonLd = {
       },
       address: {
         '@type':         'PostalAddress',
-        addressLocality: 'Connecticut',
-        addressRegion:   'CT',
+        addressLocality: 'Ocala',
+        addressRegion:   'FL',
         addressCountry:  'US',
       },
       email:   'tomyfletcher99@hotmail.com',
@@ -131,7 +134,7 @@ const jsonLd = {
       '@type':     'WebSite',
       '@id':       `${BASE}/#website`,
       url:         BASE,
-      name:        'Tomy Romero Seas · Portfolio',
+      name:        'Tomy F. Romero · Portfolio',
       description: 'Full-stack software engineer portfolio',
       publisher:   { '@id': `${BASE}/#person` },
     },

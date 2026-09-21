@@ -1,7 +1,7 @@
 import { ImageResponse } from 'next/og';
 
 export const runtime = 'edge';
-export const alt    = 'Tomy Romero Seas · Software Engineer';
+export const alt    = 'Tomy F. Romero · Software Engineer';
 export const size   = { width: 1200, height: 630 };
 export const contentType = 'image/png';
 
@@ -54,7 +54,7 @@ export default function Image() {
           letterSpacing: '-2px', marginBottom: 14, lineHeight: 1,
           color: '#eef0f4',
         }}>
-          Tomy Romero Seas
+          Tomy F. Romero
         </div>
 
         {/* Role */}

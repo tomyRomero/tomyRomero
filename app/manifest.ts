@@ -2,7 +2,7 @@ import type { MetadataRoute } from 'next';
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: 'Tomy Romero Seas · Software Engineer',
+    name: 'Tomy F. Romero · Software Engineer',
     short_name: 'Tomy Romero',
     description: 'Full-stack software engineer portfolio: ASP.NET Core, React, SQL Server.',
     start_url: '/',

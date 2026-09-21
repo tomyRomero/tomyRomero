@@ -97,7 +97,7 @@ export default function ExperienceWindow({ dark }: { dark: boolean }) {
                 {edu.degree} in {edu.field}
               </div>
               <div style={{ fontSize: 12, color: tk.textMuted, marginTop: 2 }}>
-                {edu.period} · {edu.location} · GPA {edu.gpa}
+                {edu.period} · {edu.location}
               </div>
               <div style={{ marginTop: 8 }}>
                 {edu.bullets.map((b, i) => <Bullet key={i} dark={dark}>{b}</Bullet>)}
