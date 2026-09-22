@@ -218,10 +218,14 @@ export default function MobileView({ dark, setDark }: { dark: boolean; setDark: 
         </div>
 
         {/* External links */}
-        <div style={{ display: 'flex', gap: 10, marginBottom: 36 }}>
-          {([['GitHub', ME.github], ['LinkedIn', ME.linkedin], ['Email', `mailto:${ME.email}`]] as [string, string][]).map(([label, href]) => (
-            <a key={label} href={href} target="_blank" rel="noopener noreferrer" style={{
-              flex: 1, textAlign: 'center',
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 10, marginBottom: 36 }}>
+          {([['GitHub', ME.github], ['LinkedIn', ME.linkedin], ['Email', `mailto:${ME.email}`], ['Resume', '/Tomy_Romero_Resume_Public.pdf']] as [string, string][]).map(([label, href]) => (
+            <a key={label} href={href}
+              {...(label === 'Resume'
+                ? { download: 'Tomy_Romero_Resume.pdf' }
+                : { target: '_blank', rel: 'noopener noreferrer' })}
+              style={{
+              flex: '1 1 40%', textAlign: 'center',
               padding: '11px 16px', borderRadius: 12, fontSize: 13,
               fontFamily: 'var(--font-mono),monospace',
               background: accentBg, border: `1px solid ${accentBorder}`,

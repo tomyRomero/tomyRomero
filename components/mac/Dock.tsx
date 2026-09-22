@@ -75,6 +75,21 @@ const ICONS: Record<string, React.ReactNode> = {
       <rect x="2.5" y="7" width="27" height="18.5" rx="3.2" stroke="rgba(195,30,55,.14)" strokeWidth=".8" />
     </svg>
   ),
+  resume: (
+    <svg width="33" height="33" viewBox="0 0 32 32" fill="none">
+      <defs>
+        <linearGradient id="dk-rs" x1="16" y1="3.5" x2="16" y2="28.5" gradientUnits="userSpaceOnUse">
+          <stop offset="0" stopColor="#ffffff" />
+          <stop offset="1" stopColor="#ffe1d6" />
+        </linearGradient>
+      </defs>
+      <path d="M9 3.5h10.5L23.5 7.5V28.5H9V3.5z" fill="url(#dk-rs)" />
+      <path d="M19.5 3.5L23.5 7.5H19.5V3.5z" fill="rgba(200,60,30,.30)" />
+      <line x1="12" y1="14" x2="20.5" y2="14" stroke="rgba(195,50,20,.42)" strokeWidth="1.6" strokeLinecap="round" />
+      <line x1="12" y1="18" x2="20.5" y2="18" stroke="rgba(195,50,20,.42)" strokeWidth="1.6" strokeLinecap="round" />
+      <line x1="12" y1="22" x2="17" y2="22" stroke="rgba(195,50,20,.42)" strokeWidth="1.6" strokeLinecap="round" />
+    </svg>
+  ),
 };
 
 const TrashSVG = ({ hot }: { hot: boolean }) => {
@@ -102,6 +117,7 @@ const DOCK_ITEMS = [
   { id: 'experience', label: 'Experience', bg: 'linear-gradient(160deg,#BB79F2 0%,#8A42D8 55%,#6E2FBF 100%)', glow: 'rgba(138,66,216,.44)' },
   { id: 'skills',     label: 'Skills',     bg: 'linear-gradient(160deg,#3E4654 0%,#23272f 55%,#15181f 100%)', glow: 'rgba(40,46,58,.55)'   },
   { id: 'contact',    label: 'Contact',    bg: 'linear-gradient(160deg,#FB7A87 0%,#E8404F 55%,#C82737 100%)', glow: 'rgba(232,64,79,.44)'  },
+  { id: 'resume',     label: 'Resume',     bg: 'linear-gradient(160deg,#FF7A54 0%,#E8432A 55%,#C22913 100%)', glow: 'rgba(232,67,42,.44)'  },
 ];
 
 const BASE = 64;
@@ -171,7 +187,7 @@ function IconBtn({
       <button
         data-dock-id={id}
         onClick={() => onClick(id)}
-        aria-label={`Open ${label}`}
+        aria-label={id === 'resume' ? 'Download Resume' : `Open ${label}`}
         style={{
           width: sz, height: sz, borderRadius: r,
           background: bg,
@@ -249,6 +265,15 @@ export default function Dock({ wins, dark, dispatch }: Props) {
   }, []);
 
   const click = (id: string) => {
+    if (id === 'resume') {
+      const a = document.createElement('a');
+      a.href = '/Tomy_Romero_Resume_Public.pdf';
+      a.download = 'Tomy_Romero_Resume.pdf';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      return;
+    }
     const w = wins.find(x => x.id === id);
     if (!w) return;
     if (w.isMin) dispatch({ type: 'RESTORE', id });

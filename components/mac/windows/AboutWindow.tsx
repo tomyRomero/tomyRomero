@@ -387,9 +387,13 @@ export default function AboutWindow({ dark, onOpen }: {
         {([
           ['GitHub',   ME.github],
           ['LinkedIn', ME.linkedin],
+          ['Resume',   '/Tomy_Romero_Resume_Public.pdf'],
         ] as [string, string][]).map(([l, h]) => (
           <a
-            key={l} href={h} target="_blank" rel="noopener noreferrer"
+            key={l} href={h}
+            {...(l === 'Resume'
+              ? { download: 'Tomy_Romero_Resume.pdf' }
+              : { target: '_blank', rel: 'noopener noreferrer' })}
             style={{
               padding: '8px 18px', borderRadius: 10, fontSize: 12.5,
               fontFamily: 'var(--font-mono),monospace',
