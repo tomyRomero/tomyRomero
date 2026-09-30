@@ -2,16 +2,20 @@
 import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { T } from './tokens';
-import { ME, projects, skills } from '@/constants';
-import { WALLPAPERS, type WallpaperVariant } from './Wallpaper';
+import Image from 'next/image';
+import { ME, projects, skills, resumeFile } from '@/constants';
+import { requestProjectDetail } from './windows/ProjectsWindow';
+import { requestResume } from './ResumeDialog';
+import { GitHubIcon, LinkedInIcon, MoonIcon as MoonLine } from './Icons';
+import { WALLPAPERS, type WallpaperVariant } from './wallpaperList';
 import type { Win, WinAction } from './winTypes';
 
 const WIN_TITLES: Record<string, string> = {
   about: 'About Me', projects: 'Projects',
-  experience: 'Experience', skills: 'Skills', contact: 'Contact',
+  experience: 'Experience', skills: 'Skills', contact: 'Contact', photos: 'Photos', weather: 'Weather',
 };
 
-// ── Status bar icon components ────────────────────────────────────────────────
+// Status icons
 function WifiIcon({ c }: { c: string }) {
   return (
     <svg width="17" height="13" viewBox="0 0 20 15" fill={c}>
@@ -76,7 +80,53 @@ function FullscreenExitIcon({ c }: { c: string }) {
   );
 }
 
-// ── Types ─────────────────────────────────────────────────────────────────────
+// Spotlight result icons
+type Glyph = 'about' | 'projects' | 'experience' | 'skills' | 'contact' | 'photos' | 'weather' | 'email'
+  | 'github' | 'linkedin' | 'resume' | 'skill' | 'spark' | 'cup' | 'send' | 'moon' | 'grid';
+
+const GLYPHS: Record<Glyph, React.ReactNode> = {
+  about:      <><circle cx="8" cy="5.4" r="2.6" /><path d="M3 14c.6-2.8 2.6-4.2 5-4.2s4.4 1.4 5 4.2" /></>,
+  projects:   <path d="M2 4.5c0-.6.4-1 1-1h3.2l1.3 1.4H13c.6 0 1 .4 1 1V12c0 .6-.4 1-1 1H3c-.6 0-1-.4-1-1z" />,
+  experience: <><rect x="2" y="5" width="12" height="8.5" rx="1.5" /><path d="M5.8 5V3.6c0-.4.3-.8.8-.8h2.8c.5 0 .8.4.8.8V5M2 9h12" /></>,
+  skills:     <><rect x="2" y="3" width="12" height="10" rx="1.6" /><path d="m4.8 6.6 2 1.6-2 1.6M8.6 10.4h2.8" /></>,
+  contact:    <><rect x="2" y="3.6" width="12" height="8.8" rx="1.5" /><path d="m2.6 4.6 5.4 4 5.4-4" /></>,
+  photos:     <><rect x="2" y="3" width="12" height="10" rx="1.6" /><path d="m2.6 11.2 3.2-3.2 2.6 2.6 1.8-1.8 3.2 3.2" /><circle cx="10.4" cy="6" r="1" /></>,
+  weather:    <><circle cx="6" cy="6" r="2.4" /><path d="M6 1.6v.9M1.6 6h.9M2.9 2.9l.6.6M9.1 2.9l-.6.6" /><path d="M5.5 13.5h6.2a2.4 2.4 0 0 0 .2-4.8 3.4 3.4 0 0 0-6.5.9 2 2 0 0 0 .1 3.9z" /></>,
+  email:      <><circle cx="8" cy="8" r="2.4" /><path d="M10.4 8v.9c0 1 .7 1.6 1.5 1.6s1.6-.7 1.6-2.3A5.5 5.5 0 1 0 11 12.6" /></>,
+  github:     null,
+  linkedin:   null,
+  resume:     <><path d="M4 2h5.2L12 4.8V14H4z" /><path d="M9 2v3h3M6 8h4M6 10.6h4" /></>,
+  skill:      <path d="M5.8 4.6 2.6 8l3.2 3.4M10.2 4.6 13.4 8l-3.2 3.4" />,
+  spark:      <path d="M8 2.5 9.2 6.8 13.5 8 9.2 9.2 8 13.5 6.8 9.2 2.5 8l4.3-1.2z" />,
+  cup:        <path d="M3 5.5h8v4.2A3 3 0 0 1 8 12.7H6a3 3 0 0 1-3-3zM11 6.5h.8a1.6 1.6 0 0 1 0 3.2H11M5 2.5v1.3M7.6 2.5v1.3" />,
+  send:       <path d="M13.5 2.5 2.5 7.2l4.4 1.9 1.9 4.4zM6.9 9.1l3.3-3.3" />,
+  moon:       null,
+  grid:       <><rect x="2.5" y="2.5" width="4.5" height="4.5" rx="1" /><rect x="9" y="2.5" width="4.5" height="4.5" rx="1" /><rect x="2.5" y="9" width="4.5" height="4.5" rx="1" /><rect x="9" y="9" width="4.5" height="4.5" rx="1" /></>,
+};
+
+function SpotGlyph({ glyph, img, sel, dark }: { glyph: Glyph; img?: string; sel: boolean; dark: boolean }) {
+  const tk = T(dark);
+  const brand = glyph === 'github' ? <GitHubIcon s={15} /> : glyph === 'linkedin' ? <LinkedInIcon s={14} /> : glyph === 'moon' ? <MoonLine s={15} /> : null;
+  return (
+    <span style={{
+      position: 'relative', width: 30, height: 30, borderRadius: 8, flexShrink: 0, overflow: 'hidden',
+      display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+      background: sel ? 'rgba(255,255,255,.20)' : tk.pillBg,
+      border: `1px solid ${sel ? 'rgba(255,255,255,.22)' : tk.pillBorder}`,
+      color: sel ? '#fff' : tk.textSub,
+    }}>
+      {img
+        ? <Image src={img} alt="" fill sizes="30px" style={{ objectFit: 'cover', objectPosition: 'top' }} />
+        : brand ?? (
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor"
+            strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            {GLYPHS[glyph]}
+          </svg>
+        )}
+    </span>
+  );
+}
+
 interface Props {
   dark: boolean;
   setDark: React.Dispatch<React.SetStateAction<boolean>>;
@@ -97,7 +147,6 @@ interface MenuItem {
   icon?: React.ReactNode;
 }
 
-// ── Component ─────────────────────────────────────────────────────────────────
 export default function MenuBar({ dark, setDark, wins, dispatch, calPop, setCalPop, wallpaper, setWallpaper }: Props) {
   const tk = T(dark);
   const [clock, setClock]         = useState('');
@@ -114,7 +163,7 @@ export default function MenuBar({ dark, setDark, wins, dispatch, calPop, setCalP
     return { year: n.getFullYear(), month: n.getMonth() };
   });
 
-  // Reset calendar to current month whenever it opens (including from widget click)
+  // Reset to the current month on open
   useEffect(() => {
     if (calPop) {
       const n = new Date();
@@ -122,9 +171,7 @@ export default function MenuBar({ dark, setDark, wins, dispatch, calPop, setCalP
     }
   }, [calPop]);
 
-  // Global Spotlight shortcut: ⌘K / Ctrl+K, plus ⌘F / Ctrl+F (which also suppresses the
-  // browser's native find bar). Exclude the ⌃⌘F chord so the View menu's Full Screen
-  // accelerator isn't hijacked.
+  // ⌘K and ⌘F open Spotlight (⌃⌘F is left for Full Screen)
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (!(e.metaKey || e.ctrlKey)) return;
@@ -138,43 +185,80 @@ export default function MenuBar({ dark, setDark, wins, dispatch, calPop, setCalP
     return () => window.removeEventListener('keydown', onKey);
   }, []);
 
-  // Build search index (stable — only changes when dispatch changes)
-  const searchItems = [
-    { category: 'Windows', label: 'About Me',    desc: 'Bio, photos, links',   icon: '👤', action: () => { dispatch({ type: 'OPEN', id: 'about' });      setSpotlight(false); setSpotQ(''); } },
-    { category: 'Windows', label: 'Projects',    desc: 'Shipped work',         icon: '📁', action: () => { dispatch({ type: 'OPEN', id: 'projects' });   setSpotlight(false); setSpotQ(''); } },
-    { category: 'Windows', label: 'Experience',  desc: 'Work history',         icon: '💼', action: () => { dispatch({ type: 'OPEN', id: 'experience' }); setSpotlight(false); setSpotQ(''); } },
-    { category: 'Windows', label: 'Skills',      desc: 'Tech stack',           icon: '⚡', action: () => { dispatch({ type: 'OPEN', id: 'skills' });     setSpotlight(false); setSpotQ(''); } },
-    { category: 'Windows', label: 'Contact',     desc: 'Get in touch',         icon: '✉️', action: () => { dispatch({ type: 'OPEN', id: 'contact' });    setSpotlight(false); setSpotQ(''); } },
-    ...projects.map(p => ({
-      category: 'Projects', label: p.title, desc: p.tagline, icon: p.emoji,
-      action: () => { dispatch({ type: 'OPEN', id: 'projects' }); setSpotlight(false); setSpotQ(''); },
-    })),
+  // Search index
+  type SpotItem = {
+    category: string; label: string; desc: string; glyph: Glyph;
+    img?: string; keywords?: string; action: () => void;
+  };
+  const done = () => { setSpotlight(false); setSpotQ(''); };
+  const openWin = (id: string) => () => { dispatch({ type: 'OPEN', id }); done(); };
+  const downloadResume = () => { done(); requestResume(); };
+
+  const resumeItem: SpotItem = { category: 'Files', label: 'Resume', desc: `Download ${resumeFile.filename}`, glyph: 'resume', keywords: 'cv pdf download', action: downloadResume };
+  const winItems: SpotItem[] = [
+    { category: 'Windows', label: 'About Me',   desc: 'Bio, photos, links', glyph: 'about',      action: openWin('about') },
+    { category: 'Windows', label: 'Projects',   desc: 'Shipped work',       glyph: 'projects',   action: openWin('projects') },
+    { category: 'Windows', label: 'Experience', desc: 'Work history',       glyph: 'experience', action: openWin('experience') },
+    { category: 'Windows', label: 'Skills',     desc: 'Tech stack',         glyph: 'skills',     action: openWin('skills') },
+    { category: 'Windows', label: 'Contact',    desc: 'Get in touch',       glyph: 'contact',    action: openWin('contact') },
+    { category: 'Windows', label: 'Photos',     desc: 'Project screenshots', glyph: 'photos',    keywords: 'screenshots pictures gallery', action: openWin('photos') },
+    { category: 'Windows', label: 'Weather',    desc: 'Ocala forecast',      glyph: 'weather',   keywords: 'temperature forecast rain', action: openWin('weather') },
+  ];
+  const projectItems: SpotItem[] = projects.map(p => ({
+    category: 'Projects', label: p.title, desc: p.tagline, glyph: 'projects' as Glyph, img: p.image ?? undefined,
+    keywords: p.techStack,
+    action: () => { requestProjectDetail(p.title); dispatch({ type: 'OPEN', id: 'projects' }); done(); },
+  }));
+
+  const searchItems: SpotItem[] = [
+    resumeItem,
+    ...winItems,
+    ...projectItems,
     ...Object.entries(skills).flatMap(([cat, items]) =>
-      items.map(s => ({
-        category: 'Skills', label: s, desc: cat, icon: '⚙️',
-        action: () => { dispatch({ type: 'OPEN', id: 'skills' }); setSpotlight(false); setSpotQ(''); },
-      }))
+      items.map(s => ({ category: 'Skills', label: s, desc: cat, glyph: 'skill' as Glyph, action: openWin('skills') }))
     ),
-    { category: 'Links', label: 'GitHub',   desc: ME.github,   icon: '⑂',  action: () => window.open(ME.github,  '_blank') },
-    { category: 'Links', label: 'LinkedIn', desc: ME.linkedin, icon: '🔗', action: () => window.open(ME.linkedin, '_blank') },
-    { category: 'Links', label: 'Email',    desc: ME.email,    icon: '📧', action: () => window.open(`mailto:${ME.email}`) },
+    { category: 'Links', label: 'GitHub',   desc: ME.github,   glyph: 'github',   action: () => window.open(ME.github,  '_blank') },
+    { category: 'Links', label: 'LinkedIn', desc: ME.linkedin, glyph: 'linkedin', action: () => window.open(ME.linkedin, '_blank') },
+    { category: 'Links', label: 'Email',    desc: ME.email,    glyph: 'email',    action: () => window.open(`mailto:${ME.email}`) },
     // Easter eggs
-    { category: 'Secret', label: 'Hello!',     desc: 'You found a secret! Thanks for exploring ✨',     icon: '🎉', action: () => { showToast('🎉 You found an easter egg!'); setSpotlight(false); setSpotQ(''); } },
-    { category: 'Secret', label: 'Coffee',     desc: 'Fueled by coffee and curiosity ☕',               icon: '☕', action: () => { showToast('☕ Cheers!'); setSpotlight(false); setSpotQ(''); } },
-    { category: 'Secret', label: 'Hire Me',    desc: 'I\'d love to work with you!',                     icon: '🚀', action: () => { dispatch({ type: 'OPEN', id: 'contact' }); setSpotlight(false); setSpotQ(''); } },
-    { category: 'Secret', label: 'Dark Mode',  desc: 'Toggle the lights',                               icon: '🌙', action: () => { setDark(d => !d); setSpotlight(false); setSpotQ(''); } },
-    { category: 'Secret', label: 'Open All',   desc: 'Show everything at once',                         icon: '✦',  action: () => { dispatch({ type: 'OPEN_ALL' }); setSpotlight(false); setSpotQ(''); } },
+    { category: 'Secret', label: 'Hello!',     desc: 'You found a secret! Thanks for exploring ✨',     glyph: 'spark', action: () => { showToast('🎉 You found an easter egg!'); done(); } },
+    { category: 'Secret', label: 'Coffee',     desc: 'Fueled by coffee and curiosity ☕',               glyph: 'cup',   action: () => { showToast('☕ Cheers!'); done(); } },
+    { category: 'Secret', label: 'Hire Me',    desc: 'I\'d love to work with you!',                     glyph: 'send',  action: openWin('contact') },
+    { category: 'Secret', label: 'Dark Mode',  desc: 'Toggle the lights',                               glyph: 'moon',  action: () => { setDark(d => !d); done(); } },
+    { category: 'Secret', label: 'Open All',   desc: 'Show everything at once',                         glyph: 'grid',  action: () => { dispatch({ type: 'OPEN_ALL' }); done(); } },
   ];
 
-  const spotResults = spotQ.trim()
-    ? searchItems.filter(it =>
-        it.label.toLowerCase().includes(spotQ.toLowerCase()) ||
-        it.desc?.toLowerCase().includes(spotQ.toLowerCase()) ||
-        it.category.toLowerCase().includes(spotQ.toLowerCase())
-      )
-    : [];
+  // Shown before typing
+  const suggestions: SpotItem[] = [
+    { ...resumeItem, category: 'Suggested' },
+    { ...winItems[1], category: 'Suggested' },
+    { ...winItems[4], category: 'Suggested' },
+    ...projectItems,
+  ];
 
-  // Clock ticker
+  const q = spotQ.trim().toLowerCase();
+  const matches = searchItems.filter(it =>
+    it.label.toLowerCase().includes(q) ||
+    it.desc.toLowerCase().includes(q) ||
+    it.category.toLowerCase().includes(q) ||
+    (it.keywords ?? '').toLowerCase().includes(q)
+  );
+  // Name matches first, grouped by category in order of best match
+  const rank = (it: SpotItem) => {
+    const l = it.label.toLowerCase();
+    return l.startsWith(q) ? 0 : l.includes(q) ? 1 : 2;
+  };
+  const best = new Map<string, number>();
+  matches.forEach(it => best.set(it.category, Math.min(best.get(it.category) ?? 2, rank(it))));
+  const catAt = Array.from(best.keys());
+  const spotResults = q
+    ? [...matches].sort((a, b) =>
+        best.get(a.category)! - best.get(b.category)! ||
+        catAt.indexOf(a.category) - catAt.indexOf(b.category) ||
+        rank(a) - rank(b))
+    : suggestions;
+
+  // Clock
   useEffect(() => {
     const tick = () => {
       const n = new Date();
@@ -187,14 +271,13 @@ export default function MenuBar({ dark, setDark, wins, dispatch, calPop, setCalP
     return () => clearInterval(id);
   }, []);
 
-  // Track fullscreen state
   useEffect(() => {
     const handler = () => setIsFS(!!document.fullscreenElement);
     document.addEventListener('fullscreenchange', handler);
     return () => document.removeEventListener('fullscreenchange', handler);
   }, []);
 
-  // Close active menu / popovers when clicking anywhere outside the menu bar
+  // Close menus on outside click
   useEffect(() => {
     if (!active && !wifiPop && !batPop && !calPop) return;
     const handler = (e: Event) => {
@@ -219,8 +302,7 @@ export default function MenuBar({ dark, setDark, wins, dispatch, calPop, setCalP
     navigator.clipboard?.writeText(txt).then(() => showToast(`✓ ${lbl} copied`));
   const close = () => { setActive(null); setWifiPop(false); setBatPop(false); setCalPop(false); };
 
-  // Copy shortcuts advertised in the Edit menu. Only combos browsers don't
-  // reserve are used — anything like ⌘Q/⌘M/⌘1–9 belongs to the browser/OS.
+  // Edit menu shortcuts (only ones browsers don't reserve)
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if (!(e.metaKey || e.ctrlKey) || !e.shiftKey) return;
@@ -315,6 +397,8 @@ export default function MenuBar({ dark, setDark, wins, dispatch, calPop, setCalP
       id: 'view', label: 'View', items: [
         { label: dark ? 'Switch to Light Mode' : 'Switch to Dark Mode',
           action: () => { setDark(d => !d); close(); } },
+        { label: 'Classic View',
+          action: () => { close(); window.location.assign('/classic'); } },
         { div: true },
         { label: isFS ? 'Exit Full Screen' : 'Enter Full Screen',
           shortcut: '⌃⌘F', action: toggleFS },
@@ -360,7 +444,7 @@ export default function MenuBar({ dark, setDark, wins, dispatch, calPop, setCalP
 
   return (
     <>
-      {/* ── Spotlight overlay (portaled to body so it's above everything) ── */}
+      {/* Spotlight */}
       {spotlight && createPortal(
         <div
           style={{
@@ -380,7 +464,6 @@ export default function MenuBar({ dark, setDark, wins, dispatch, calPop, setCalP
             }}
             onClick={e => e.stopPropagation()}
           >
-            {/* Input row */}
             <div style={{
               display: 'flex', alignItems: 'center', gap: 10,
               padding: '13px 18px',
@@ -420,10 +503,8 @@ export default function MenuBar({ dark, setDark, wins, dispatch, calPop, setCalP
               )}
             </div>
 
-            {/* Results */}
             {spotResults.length > 0 ? (
               <div style={{ maxHeight: 380, overflowY: 'auto' }}>
-                {/* Group by category */}
                 {(Array.from(new Set(spotResults.map(r => r.category)))).map(cat => {
                   const items = spotResults.filter(r => r.category === cat);
                   return (
@@ -441,7 +522,7 @@ export default function MenuBar({ dark, setDark, wins, dispatch, calPop, setCalP
                         const isSel   = flatIdx === spotSel;
                         return (
                           <button
-                            key={item.label + item.category}
+                            key={item.category + item.label}
                             onClick={item.action}
                             onMouseEnter={() => setSpotSel(flatIdx)}
                             style={{
@@ -456,7 +537,7 @@ export default function MenuBar({ dark, setDark, wins, dispatch, calPop, setCalP
                               textAlign: 'left' as const,
                             }}
                           >
-                            <span style={{ fontSize: 22, lineHeight: 1, flexShrink: 0 }}>{item.icon}</span>
+                            <SpotGlyph glyph={item.glyph} img={item.img} sel={isSel} dark={dark} />
                             <span style={{ flex: 1, minWidth: 0 }}>
                               <span style={{
                                 display: 'block', fontSize: 14, fontWeight: 500,
@@ -490,13 +571,9 @@ export default function MenuBar({ dark, setDark, wins, dispatch, calPop, setCalP
                 })}
                 <div style={{ height: 6 }} />
               </div>
-            ) : spotQ ? (
+            ) : (
               <div style={{ padding: '28px 18px', textAlign: 'center', color: tk.textMuted, fontSize: 14 }}>
                 No results for <strong style={{ color: tk.text }}>"{spotQ}"</strong>
-              </div>
-            ) : (
-              <div style={{ padding: '14px 18px', color: tk.textMuted, fontSize: 13 }}>
-                Search projects, skills, windows, links…
               </div>
             )}
           </div>
@@ -504,7 +581,6 @@ export default function MenuBar({ dark, setDark, wins, dispatch, calPop, setCalP
         document.body
       )}
 
-      {/* ── Menu bar ──────────────────────────────────────────────────────── */}
       <div
         className="mac-menubar"
         onClick={close}
@@ -520,7 +596,6 @@ export default function MenuBar({ dark, setDark, wins, dispatch, calPop, setCalP
           animation: 'menuSlideDown .45s .05s cubic-bezier(.16,1,.3,1) both',
         }}
       >
-        {/* Left: menu items */}
         <div style={{ display: 'flex', alignItems: 'center', height: '100%' }}>
           {MENUS.map(menu => (
             <div key={menu.id} style={{ position: 'relative', height: '100%' }}>
@@ -574,7 +649,6 @@ export default function MenuBar({ dark, setDark, wins, dispatch, calPop, setCalP
                             e.currentTarget.style.color = item.disabled ? dc : tk.text;
                           }}
                           style={{
-                            // Inset rounded highlight pill, like modern macOS menus
                             width: 'calc(100% - 10px)', margin: '0 5px',
                             display: 'flex', alignItems: 'center',
                             justifyContent: 'space-between', padding: '2px 9px',
@@ -604,14 +678,24 @@ export default function MenuBar({ dark, setDark, wins, dispatch, calPop, setCalP
           ))}
         </div>
 
-        {/* Right: status icons */}
         <div style={{
           display: 'flex', alignItems: 'center', gap: 6,
           paddingRight: 14, height: '100%',
         }}>
-          {/* WiFi */}
+          <a
+            href="/classic"
+            style={{
+              height: 22, padding: '0 8px', marginRight: 4, borderRadius: 5, display: 'flex', alignItems: 'center',
+              fontSize: 13, fontWeight: 500, color: tk.text, opacity: .78, whiteSpace: 'nowrap', transition: 'opacity .15s, background .15s',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.opacity = '1'; e.currentTarget.style.background = tk.pillBg; }}
+            onMouseLeave={e => { e.currentTarget.style.opacity = '.78'; e.currentTarget.style.background = 'transparent'; }}
+          >
+            Classic view
+          </a>
           <div style={{ position: 'relative' }}>
             <button
+              aria-label="Wi-Fi"
               onClick={e => { e.stopPropagation(); setActive(null); setBatPop(false); setWifiPop(p => !p); }}
               style={{
                 display: 'flex', alignItems: 'center', opacity: wifiPop ? 1 : .70,
@@ -669,9 +753,9 @@ export default function MenuBar({ dark, setDark, wins, dispatch, calPop, setCalP
             )}
           </div>
 
-          {/* Battery */}
           <div style={{ position: 'relative' }}>
             <button
+              aria-label="Battery"
               onClick={e => { e.stopPropagation(); setActive(null); setWifiPop(false); setBatPop(p => !p); }}
               style={{
                 display: 'flex', alignItems: 'center', opacity: batPop ? 1 : .78,
@@ -711,7 +795,6 @@ export default function MenuBar({ dark, setDark, wins, dispatch, calPop, setCalP
                     <div style={{ fontSize: 11, color: '#34c759', marginTop: 1 }}>⚡ Fully Charged</div>
                   </div>
                 </div>
-                {/* Battery bar */}
                 <div style={{
                   height: 8, background: dark ? 'rgba(255,255,255,.10)' : 'rgba(0,0,0,.10)',
                   borderRadius: 4, overflow: 'hidden', marginBottom: 8,
@@ -732,7 +815,6 @@ export default function MenuBar({ dark, setDark, wins, dispatch, calPop, setCalP
             )}
           </div>
 
-          {/* Spotlight */}
           <button
             onClick={e => { e.stopPropagation(); setSpotlight(s => !s); }}
             title="Spotlight  ⌘K"
@@ -751,7 +833,6 @@ export default function MenuBar({ dark, setDark, wins, dispatch, calPop, setCalP
             </svg>
           </button>
 
-          {/* Dark/Light toggle */}
           <button
             onClick={e => { e.stopPropagation(); setDark(d => !d); }}
             title={dark ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
@@ -767,7 +848,7 @@ export default function MenuBar({ dark, setDark, wins, dispatch, calPop, setCalP
             {dark ? <SunIcon c={ic} /> : <MoonIcon c={ic} />}
           </button>
 
-          {/* Clock — interactive calendar popover */}
+          {/* Clock and calendar */}
           <div style={{ position: 'relative' }}>
             <button
               onClick={e => {
@@ -801,14 +882,12 @@ export default function MenuBar({ dark, setDark, wins, dispatch, calPop, setCalP
                                    'July','August','September','October','November','December'];
               const DAY_NAMES   = ['Su','Mo','Tu','We','Th','Fr','Sa'];
 
-              // Build calendar grid
               const firstDow   = new Date(calView.year, calView.month, 1).getDay();
               const daysInMonth = new Date(calView.year, calView.month + 1, 0).getDate();
               const cells: (number | null)[] = Array(firstDow).fill(null);
               for (let d = 1; d <= daysInMonth; d++) cells.push(d);
               while (cells.length % 7) cells.push(null);
 
-              // Live time string
               const hh = String(now.getHours()).padStart(2, '0');
               const mm = String(now.getMinutes()).padStart(2, '0');
               const ss = String(now.getSeconds()).padStart(2, '0');
@@ -831,7 +910,6 @@ export default function MenuBar({ dark, setDark, wins, dispatch, calPop, setCalP
                     fontFamily: 'var(--font-sans), sans-serif',
                   }}
                 >
-                  {/* Live time + date */}
                   <div style={{
                     padding: '16px 18px 14px',
                     borderBottom: `1px solid ${tk.divider}`,
@@ -849,7 +927,6 @@ export default function MenuBar({ dark, setDark, wins, dispatch, calPop, setCalP
                     </div>
                   </div>
 
-                  {/* Month nav */}
                   <div style={{
                     display: 'flex', alignItems: 'center', justifyContent: 'space-between',
                     padding: '10px 14px 6px',
@@ -883,7 +960,6 @@ export default function MenuBar({ dark, setDark, wins, dispatch, calPop, setCalP
                     >›</button>
                   </div>
 
-                  {/* Day headers */}
                   <div style={{
                     display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)',
                     padding: '0 10px', gap: '2px 0',
@@ -899,7 +975,6 @@ export default function MenuBar({ dark, setDark, wins, dispatch, calPop, setCalP
                       </div>
                     ))}
 
-                    {/* Calendar cells */}
                     {cells.map((day, i) => {
                       const isToday = isCurrentMonth && day === todayD;
                       const isSun   = i % 7 === 0;
@@ -929,7 +1004,6 @@ export default function MenuBar({ dark, setDark, wins, dispatch, calPop, setCalP
                     })}
                   </div>
 
-                  {/* Today button */}
                   {!isCurrentMonth && (
                     <div style={{ padding: '8px 14px 12px' }}>
                       <button
@@ -959,7 +1033,6 @@ export default function MenuBar({ dark, setDark, wins, dispatch, calPop, setCalP
         </div>
       </div>
 
-      {/* ── Toast ─────────────────────────────────────────────────────────── */}
       {toast && (
         <div style={{
           position: 'fixed', top: 38, left: '50%', zIndex: 99998,

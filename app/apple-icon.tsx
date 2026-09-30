@@ -4,8 +4,7 @@ export const runtime     = 'edge';
 export const size        = { width: 180, height: 180 };
 export const contentType = 'image/png';
 
-// Apple touch icon — iOS applies its own rounded mask and does not support
-// transparency well, so this uses an opaque branded background.
+// iOS masks the corners and handles transparency poorly, so the background is opaque
 export default function AppleIcon() {
   return new ImageResponse(
     (

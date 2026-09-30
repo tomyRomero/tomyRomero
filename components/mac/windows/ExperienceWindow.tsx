@@ -1,186 +1,316 @@
 'use client';
+import { useState } from 'react';
 import { T } from '../tokens';
-import { Chip, WinTitle, Bullet, Lettermark } from '../Atoms';
 import { experiences, education, certifications } from '@/constants';
+import { requestResume } from '../ResumeDialog';
+import RoleTimeline, { shortSpan } from '@/components/RoleTimeline';
+import {
+  Sidebar, SidebarHeading, SidebarItem, Toolbar, ToolbarButton, Monogram, tint, useWidthClass,
+  TOOLBAR_H, ChevronUp, ChevronDown, Briefcase, GradCap, Ribbon, Download, ArrowUpRight,
+} from '../Native';
+
+// Styled after Mail: sidebar, message list, reading pane
+
+type Section = 'work' | 'education' | 'certs';
+
+const SECTIONS: { id: Section; label: string; icon: React.ReactNode; count: number }[] = [
+  { id: 'work',      label: 'Work',           icon: <Briefcase />, count: experiences.length },
+  { id: 'education', label: 'Education',      icon: <GradCap />,   count: education.length },
+  { id: 'certs',     label: 'Certifications', icon: <Ribbon />,    count: certifications.length },
+];
+
+const firstYear = Math.min(...experiences.map(e => Number(e.start.slice(0, 4))));
+const SUBTITLE: Record<Section, string> = {
+  work:      `${experiences.length} roles · ${firstYear} – today`,
+  education: education.map(e => e.years).join(', '),
+  certs:     `${certifications.length} credentials`,
+};
+
+type Row = { key: string; mono: string; tint: Parameters<typeof tint>[0]; name: string; meta: string; line2: string; line3?: string; current?: boolean };
+
+function rowsFor(section: Section): Row[] {
+  if (section === 'work') return experiences.map(e => ({
+    key: e.company, mono: e.logo, tint: e.tint, name: e.company, meta: shortSpan(e.start, e.end),
+    line2: e.title, line3: e.description[0], current: !e.end,
+  }));
+  if (section === 'education') return education.map(e => ({
+    key: e.institution, mono: e.logo, tint: e.tint, name: e.institution, meta: e.years,
+    line2: `${e.degree} in ${e.field}`, line3: e.bullets.join('. ') + '.',
+  }));
+  return certifications.map(c => ({
+    key: c.name, mono: c.logo, tint: c.tint, name: c.name, meta: c.issued,
+    line2: c.issuer,
+  }));
+}
 
 export default function ExperienceWindow({ dark }: { dark: boolean }) {
   const tk = T(dark);
+  // 0: no sidebar, 1: full three panes
+  const [ref, wide] = useWidthClass<HTMLDivElement>([860]);
+  const [section, setSection] = useState<Section>('work');
+  const [picked, setPicked] = useState<Record<Section, number>>({ work: 0, education: 0, certs: 0 });
+  const rows = rowsFor(section);
+  const sel = picked[section];
+  const pick = (i: number) => setPicked(p => ({ ...p, [section]: Math.max(0, Math.min(rows.length - 1, i)) }));
 
   return (
-    <div style={{ padding: '22px 24px', color: tk.text }}>
-      <WinTitle dark={dark}>Experience</WinTitle>
-
-      {experiences.map((exp, i) => (
-        <div
-          key={exp.company}
-          style={{
-            position: 'relative', paddingLeft: 26, marginBottom: 28,
-            animation: `contentFadeIn .4s ${i * 0.08}s ease both`,
-          }}
+    <div ref={ref} style={{ flex: 1, minWidth: 0, display: 'flex', color: tk.label }}>
+      {wide === 1 && (
+        <Sidebar
+          dark={dark} width={200} label="Experience sections"
+          footer={
+            <button
+              onClick={requestResume}
+              style={{
+                width: '100%', height: 32, display: 'flex', alignItems: 'center', gap: 9, padding: '0 10px',
+                borderRadius: 8, fontSize: 13, fontWeight: 500, color: tk.label,
+                background: dark ? 'rgba(255,255,255,.08)' : 'rgba(255,255,255,.6)',
+                boxShadow: `0 0 0 .5px ${dark ? 'rgba(255,255,255,.1)' : 'rgba(0,0,0,.08)'}`,
+              }}
+            >
+              <span style={{ color: tk.accent, display: 'inline-flex' }}><Download /></span>
+              Resume (PDF)
+            </button>
+          }
         >
-          {/* Timeline dot — accent for current role */}
-          <div style={{
-            position: 'absolute', left: 0, top: 5, width: 10, height: 10, borderRadius: '50%',
-            background: i === 0 ? tk.accent : tk.pillBorder,
-            border: `2px solid ${i === 0 ? tk.accentBorder : tk.divider}`,
-          }} />
-          {/* Timeline line — gradient for first segment */}
-          {i < experiences.length - 1 && (
-            <div style={{
-              position: 'absolute', left: 4, top: 20, width: 2,
-              height: 'calc(100% - 4px)',
-              background: i === 0
-                ? `linear-gradient(to bottom, ${tk.accent}, ${tk.divider})`
-                : tk.divider,
-              borderRadius: 1,
-            }} />
-          )}
+          <SidebarHeading dark={dark}>Experience</SidebarHeading>
+          {SECTIONS.map(s => (
+            <SidebarItem
+              key={s.id} dark={dark} label={s.label} count={s.count}
+              icon={<span style={{ color: tk.accent, display: 'inline-flex' }}>{s.icon}</span>}
+              selected={section === s.id} onClick={() => setSection(s.id)}
+            />
+          ))}
+        </Sidebar>
+      )}
 
-          {/* Header */}
-          <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 8, marginBottom: 8 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-              <Lettermark text={exp.logo} dark={dark} />
-              <div>
-                <div style={{ fontSize: 15, fontWeight: 600, color: tk.text }}>{exp.company}</div>
-                <div style={{ fontSize: 13, color: tk.accent, marginTop: 1 }}>{exp.title}</div>
-              </div>
-            </div>
-            <div style={{ textAlign: 'right', flexShrink: 0 }}>
-              <div style={{ fontSize: 11.5, fontFamily: 'var(--font-mono), monospace', color: tk.textMuted }}>{exp.date}</div>
-              <div style={{ fontSize: 11, color: tk.textMuted, marginTop: 2 }}>{exp.location}</div>
-            </div>
-          </div>
-
-          {/* Bullets */}
-          <div style={{
-            background: tk.cardBg, border: `1px solid ${tk.cardBorder}`,
-            borderRadius: 12, padding: '14px 16px', marginBottom: 10,
-            transition: 'all .18s',
-          }}>
-            {exp.description.map((b, j) => <Bullet key={j} dark={dark}>{b}</Bullet>)}
-          </div>
-
-          {/* Tech chips */}
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-            {exp.tech.map(t => <Chip key={t} dark={dark}>{t}</Chip>)}
-          </div>
-        </div>
-      ))}
-
-      {/* Education */}
-      <div style={{ borderTop: `1px solid ${tk.divider}`, paddingTop: 20, marginTop: 4 }}>
-        <div style={{
-          fontSize: 13, fontWeight: 600, color: tk.textMuted,
-          textTransform: 'uppercase' as const, letterSpacing: '1px', marginBottom: 14,
-          fontFamily: 'var(--font-mono), monospace',
-          display: 'flex', alignItems: 'center', gap: 8,
+      {/* Message list */}
+      <section aria-label={SECTIONS.find(s => s.id === section)!.label} style={{
+        width: wide ? 320 : 290, flexShrink: 0, display: 'flex', flexDirection: 'column',
+        background: tk.pane, borderRight: `1px solid ${tk.sep}`,
+      }}>
+        <div data-drag="" style={{
+          minHeight: TOOLBAR_H, flexShrink: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center',
+          padding: wide ? '0 20px' : '0 16px 0 88px',
         }}>
-          <span>Education</span>
-          <div style={{
-            flex: 1, height: 1,
-            background: `linear-gradient(90deg, ${tk.divider}, transparent)`,
-          }} />
+          <h2 style={{ fontSize: 15, fontWeight: 600, lineHeight: 1.2 }}>{SECTIONS.find(s => s.id === section)!.label}</h2>
+          <div style={{ fontSize: 11.5, color: tk.label2 }}>{SUBTITLE[section]}</div>
         </div>
-        {education.map(edu => (
-          <div
-            key={edu.institution}
-            style={{
-              display: 'flex', alignItems: 'flex-start', gap: 14,
-              padding: '16px 18px', background: tk.cardBg,
-              border: `1px solid ${tk.cardBorder}`, borderRadius: 14,
-            }}
-          >
-            <Lettermark text={edu.logo} dark={dark} size={40} />
-            <div style={{ flex: 1 }}>
-              <div style={{ fontWeight: 600, fontSize: 14.5, color: tk.text }}>{edu.institution}</div>
-              <div style={{ fontSize: 13, color: tk.accent, marginTop: 2 }}>
-                {edu.degree} in {edu.field}
+        {wide === 0 && (
+          <div role="group" aria-label="Section" style={{
+            margin: '2px 12px 8px', padding: 2, borderRadius: 8, background: tk.fill,
+            display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
+          }}>
+            {SECTIONS.map(s => (
+              <button key={s.id} aria-pressed={section === s.id} onClick={() => setSection(s.id)} style={{
+                height: 24, borderRadius: 6, fontSize: 12, fontWeight: section === s.id ? 600 : 500,
+                background: section === s.id ? (dark ? 'rgba(255,255,255,.16)' : '#fff') : 'transparent',
+                boxShadow: section === s.id ? '0 1px 2px rgba(0,0,0,.12)' : 'none', color: tk.label,
+              }}>
+                {s.id === 'certs' ? 'Certs' : s.label}
+              </button>
+            ))}
+          </div>
+        )}
+        <div
+          role="listbox"
+          aria-label={SECTIONS.find(s => s.id === section)!.label}
+          tabIndex={0}
+          onKeyDown={e => {
+            if (e.key === 'ArrowDown') { e.preventDefault(); pick(sel + 1); }
+            if (e.key === 'ArrowUp')   { e.preventDefault(); pick(sel - 1); }
+          }}
+          style={{ flex: 1, minHeight: 0, overflowY: 'auto', padding: '4px 8px 8px', outline: 'none' }}
+        >
+          {rows.map((r, i) => {
+            const on = i === sel;
+            const lastBeforeSel = i + 1 === sel || i === rows.length - 1;
+            return (
+              <div
+                key={r.key}
+                role="option"
+                aria-selected={on}
+                onClick={() => pick(i)}
+                style={{
+                  position: 'relative', display: 'flex', gap: 11, padding: '12px 12px 0 20px',
+                  borderRadius: 10, cursor: 'pointer',
+                  background: on ? tk.select : 'transparent', color: on ? '#fff' : tk.label,
+                  animation: `contentFadeIn .35s ${i * 0.05}s ease both`,
+                }}
+              >
+                {r.current && (
+                  <span aria-label="Current" style={{
+                    position: 'absolute', left: 7, top: 25, width: 7, height: 7, borderRadius: '50%',
+                    background: on ? '#fff' : tk.accent,
+                  }} />
+                )}
+                {on
+                  ? <span aria-hidden="true" style={{
+                      width: 34, height: 34, flexShrink: 0, borderRadius: section === 'certs' ? 9 : '50%',
+                      background: 'rgba(255,255,255,.2)', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      fontSize: r.mono.length > 2 ? 11 : r.mono.length > 1 ? 13 : 14, fontWeight: 700,
+                    }}>{r.mono}</span>
+                  : <Monogram text={r.mono} t={r.tint} dark={dark} size={34} round={section !== 'certs'} />}
+                <span style={{
+                  flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 2, paddingBottom: 13,
+                  borderBottom: on || lastBeforeSel ? '1px solid transparent' : `1px solid ${tk.sep}`,
+                }}>
+                  <span style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
+                    <span style={{ flex: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', fontSize: 14, fontWeight: 600 }}>
+                      {r.name}
+                    </span>
+                    <span style={{ flexShrink: 0, fontSize: 12, color: on ? 'rgba(255,255,255,.9)' : tk.label2 }}>{r.meta}</span>
+                  </span>
+                  <span style={{ fontSize: 13, fontWeight: 500 }}>{r.line2}</span>
+                  {r.line3 && (
+                    <span style={{
+                      fontSize: 12.5, lineHeight: 1.45, color: on ? 'rgba(255,255,255,.88)' : tk.label2,
+                      display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden',
+                    }}>{r.line3}</span>
+                  )}
+                </span>
               </div>
-              <div style={{ fontSize: 12, color: tk.textMuted, marginTop: 2 }}>
-                {edu.period} · {edu.location}
-              </div>
-              <div style={{ marginTop: 8 }}>
-                {edu.bullets.map((b, i) => <Bullet key={i} dark={dark}>{b}</Bullet>)}
-              </div>
-            </div>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* Reading pane */}
+      <article style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', background: tk.pane }}>
+        <Toolbar style={{ justifyContent: 'flex-end', gap: 2 }}>
+          {wide === 0 && (
+            <ToolbarButton dark={dark} label="Download resume" onClick={requestResume}><Download s={16} /></ToolbarButton>
+          )}
+          <ToolbarButton dark={dark} label="Previous" disabled={sel === 0} onClick={() => pick(sel - 1)}><ChevronUp /></ToolbarButton>
+          <ToolbarButton dark={dark} label="Next" disabled={sel === rows.length - 1} onClick={() => pick(sel + 1)}><ChevronDown /></ToolbarButton>
+        </Toolbar>
+        <div key={section + sel} style={{
+          flex: 1, minHeight: 0, overflowY: 'auto', padding: wide ? '4px 34px 30px' : '4px 26px 26px',
+          animation: 'fadeIn .2s ease',
+        }}>
+          {section === 'work' && <RoleDetail i={sel} dark={dark} onSelect={c => pick(experiences.findIndex(e => e.company === c))} />}
+          {section === 'education' && <SchoolDetail i={sel} dark={dark} />}
+          {section === 'certs' && <CertDetail i={sel} dark={dark} />}
+        </div>
+      </article>
+    </div>
+  );
+}
+
+// Reading pane
+function DetailHeader({ mono, t, title, sub, meta, badge, dark, square }: {
+  mono: string; t: Row['tint']; title: string; sub: string; meta: string; badge?: string; dark: boolean; square?: boolean;
+}) {
+  const tk = T(dark);
+  return (
+    <div style={{ display: 'flex', gap: 14, alignItems: 'center' }}>
+      <Monogram text={mono} t={t} dark={dark} size={54} round={!square} />
+      <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 2 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 9, flexWrap: 'wrap' }}>
+          <h3 style={{ fontSize: 23, fontWeight: 700, letterSpacing: '-.5px', lineHeight: 1.15, textWrap: 'balance' }}>{title}</h3>
+          {badge && (
+            <span style={{ padding: '2px 9px', borderRadius: 10, background: tk.accentBg, color: tk.accent, fontSize: 11.5, fontWeight: 600 }}>
+              {badge}
+            </span>
+          )}
+        </div>
+        <div style={{ fontSize: 14, color: tk.label, fontWeight: 500 }}>{sub}</div>
+        <div style={{ fontSize: 12.5, color: tk.label2 }}>{meta}</div>
+      </div>
+    </div>
+  );
+}
+
+function Dots({ items, color, dark }: { items: string[]; color: string; dark: boolean }) {
+  const tk = T(dark);
+  return (
+    <ul style={{ marginTop: 22, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 12 }}>
+      {items.map(b => (
+        <li key={b} className="text-pretty" style={{ display: 'flex', gap: 12, fontSize: 14.5, lineHeight: 1.6, color: tk.label, maxWidth: 680 }}>
+          <span aria-hidden="true" style={{ width: 6, height: 6, marginTop: 9, flexShrink: 0, borderRadius: '50%', background: color }} />
+          {b}
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+function RoleDetail({ i, dark, onSelect }: { i: number; dark: boolean; onSelect: (company: string) => void }) {
+  const tk = T(dark);
+  const e = experiences[i];
+  const c = tint(e.tint, dark);
+  return (
+    <>
+      <DetailHeader
+        dark={dark} mono={e.logo} t={e.tint} title={e.title} sub={e.company}
+        meta={`${e.date} · ${e.location}`} badge={e.end ? undefined : 'Current'}
+      />
+      <div style={{ marginTop: 20, borderRadius: 12, background: tk.paneAlt, padding: '12px 18px' }}>
+        <RoleTimeline
+          dark={dark} selected={e.company} onSelect={onSelect}
+          muted={{ text: tk.label2, track: dark ? 'rgba(255,255,255,.1)' : '#e3e3e8', tick: dark ? 'rgba(255,255,255,.12)' : '#d8d8de', knob: tk.pane }}
+        />
+      </div>
+      <Dots items={e.description} color={c.bar} dark={dark} />
+      <div style={{ marginTop: 22, display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
+        <span style={{ fontSize: 12, fontWeight: 600, color: tk.label2, marginRight: 4 }}>Tech</span>
+        {e.tech.map(t => (
+          <span key={t} style={{ padding: '4px 10px', borderRadius: 7, background: tk.fill, fontSize: 12.5, fontWeight: 500 }}>{t}</span>
+        ))}
+      </div>
+    </>
+  );
+}
+
+function SchoolDetail({ i, dark }: { i: number; dark: boolean }) {
+  const tk = T(dark);
+  const e = education[i];
+  return (
+    <>
+      <DetailHeader
+        dark={dark} mono={e.logo} t={e.tint} title={e.institution} sub={`${e.degree} in ${e.field}`}
+        meta={`${e.period} · ${e.location}`}
+      />
+      <Dots items={e.bullets} color={tint(e.tint, dark).bar} dark={dark} />
+    </>
+  );
+}
+
+function CertDetail({ i, dark }: { i: number; dark: boolean }) {
+  const tk = T(dark);
+  const c = certifications[i];
+  return (
+    <>
+      <DetailHeader
+        dark={dark} square mono={c.logo} t={c.tint} title={c.name} sub={c.issuer}
+        meta={`Issued ${c.issued}`}
+      />
+      <div style={{ marginTop: 22, borderRadius: 12, background: tk.paneAlt, padding: '4px 18px' }}>
+        {[
+          ['Issuer', c.issuer],
+          ['Issued', c.issued],
+          ...(c.credentialId ? [['Credential ID', c.credentialId]] : []),
+        ].map(([k, v], j, all) => (
+          <div key={k} style={{
+            display: 'flex', justifyContent: 'space-between', gap: 16, padding: '11px 0', fontSize: 13.5,
+            borderBottom: j < all.length - 1 ? `1px solid ${tk.sep}` : 'none',
+          }}>
+            <span style={{ color: tk.label2 }}>{k}</span>
+            <span style={{ fontFamily: k === 'Credential ID' ? 'var(--font-mono), monospace' : undefined, textAlign: 'right' }}>{v}</span>
           </div>
         ))}
       </div>
-
-      {/* Certifications */}
-      <div style={{ borderTop: `1px solid ${tk.divider}`, paddingTop: 20, marginTop: 20 }}>
-        <div style={{
-          fontSize: 13, fontWeight: 600, color: tk.textMuted,
-          textTransform: 'uppercase' as const, letterSpacing: '1px', marginBottom: 14,
-          fontFamily: 'var(--font-mono), monospace',
-          display: 'flex', alignItems: 'center', gap: 8,
-        }}>
-          <span>Certifications</span>
-          <div style={{
-            flex: 1, height: 1,
-            background: `linear-gradient(90deg, ${tk.divider}, transparent)`,
-          }} />
-        </div>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-          {certifications.map(cert => (
-            <div
-              key={cert.name}
-              style={{
-                display: 'flex', alignItems: 'center', gap: 14,
-                padding: '14px 18px', background: tk.cardBg,
-                border: `1px solid ${tk.cardBorder}`, borderRadius: 14,
-                transition: 'all .18s',
-              }}
-              onMouseEnter={e => {
-                const el = e.currentTarget;
-                el.style.borderColor = tk.accentBorder;
-                el.style.transform = 'translateX(3px)';
-              }}
-              onMouseLeave={e => {
-                const el = e.currentTarget;
-                el.style.borderColor = tk.cardBorder;
-                el.style.transform = 'none';
-              }}
-            >
-              <Lettermark text={cert.logo} dark={dark} />
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ fontWeight: 600, fontSize: 13.5, color: tk.text }}>{cert.name}</div>
-                <div style={{ fontSize: 12, color: tk.accent, marginTop: 2 }}>{cert.issuer}</div>
-                <div style={{ fontSize: 11.5, color: tk.textMuted, marginTop: 2 }}>
-                  Issued {cert.issued}
-                  {cert.credentialId && (
-                    <span style={{ marginLeft: 8, fontFamily: 'var(--font-mono), monospace' }}>
-                      · ID {cert.credentialId}
-                    </span>
-                  )}
-                </div>
-              </div>
-              <a
-                href={cert.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  flexShrink: 0, padding: '6px 14px', borderRadius: 10, fontSize: 11.5,
-                  fontFamily: 'var(--font-mono), monospace',
-                  background: tk.accentBg, border: `1px solid ${tk.accentBorder}`,
-                  color: tk.accent, textDecoration: 'none', fontWeight: 500,
-                  transition: 'all .15s', whiteSpace: 'nowrap' as const,
-                }}
-                onMouseEnter={e => {
-                  e.currentTarget.style.background = tk.accentBorder;
-                  e.currentTarget.style.transform = 'translateY(-1px)';
-                }}
-                onMouseLeave={e => {
-                  e.currentTarget.style.background = tk.accentBg;
-                  e.currentTarget.style.transform = 'none';
-                }}
-              >
-                View ↗
-              </a>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
+      <a
+        href={c.url} target="_blank" rel="noopener noreferrer"
+        style={{
+          marginTop: 18, display: 'inline-flex', alignItems: 'center', gap: 7, padding: '8px 16px', borderRadius: 9,
+          background: tk.select, color: '#fff', fontSize: 13.5, fontWeight: 600, transition: 'filter .15s',
+        }}
+        onMouseEnter={e => (e.currentTarget.style.filter = 'brightness(1.08)')}
+        onMouseLeave={e => (e.currentTarget.style.filter = 'none')}
+      >
+        View credential <ArrowUpRight s={12} />
+      </a>
+    </>
   );
 }

@@ -14,7 +14,6 @@ export default function Icon() {
           background: 'transparent',
         }}
       >
-        {/* Soft blue glow so it reads on both light and dark browser UIs */}
         <div style={{
           position: 'absolute',
           width: 380, height: 380,
@@ -23,7 +22,6 @@ export default function Icon() {
           display: 'flex',
         }} />
 
-        {/* TR */}
         <span style={{
           fontSize: 210,
           fontWeight: 800,

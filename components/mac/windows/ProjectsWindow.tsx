@@ -1,482 +1,389 @@
 'use client';
-import { useState, useCallback, useEffect, useRef } from 'react';
-import { createPortal } from 'react-dom';
-import Image from 'next/image';
+import { useState, useEffect, useRef } from 'react';
 import { T } from '../tokens';
-import { Chip, WinTitle, Bullet, Label } from '../Atoms';
-import { projects, projectDetails } from '@/constants';
+import { projects, projectDetails, shotsFor, isTallShot, ME } from '@/constants';
+import ProjectCover from '@/components/ProjectCover';
+import { Browser, Phone } from '@/components/DeviceFrames';
+import Showcase, { hasLiveDemo, stackOf, PLATFORM } from '@/components/ProjectShowcase';
+import { GitHubIcon } from '../Icons';
+import {
+  Sidebar, SidebarHeading, SidebarItem, Toolbar, ToolbarButton, useWidthClass,
+  ChevronLeft, ChevronRight, ArrowUpRight, CheckIcon, ShareIcon, SearchLine,
+} from '../Native';
 
-const STATUS_BADGE: Record<string, { bg: string; txt: string; lbl: string }> = {
-  shipped:      { bg: 'rgba(52,199,89,.12)',  txt: '#1da044', lbl: 'Shipped' },
-  'in-progress':{ bg: 'rgba(255,159,10,.12)', txt: '#d07a00', lbl: 'In Progress' },
-  ongoing:      { bg: 'rgba(64,140,255,.14)', txt: '#4a94e8', lbl: 'Ongoing' },
-  archived:     { bg: 'rgba(120,120,128,.1)', txt: '#888',    lbl: 'Archived' },
-};
-
-// ── Lightbox (portal) ────────────────────────────────────────────────────────
-function Lightbox({ imgs, startIdx, onClose }: {
-  imgs: string[]; startIdx: number; onClose: () => void;
-}) {
-  const [idx, setIdx] = useState(startIdx);
-  const closeRef = useRef(onClose); closeRef.current = onClose;
-  const prev = useCallback(() => setIdx(i => (i - 1 + imgs.length) % imgs.length), [imgs.length]);
-  const next = useCallback(() => setIdx(i => (i + 1) % imgs.length), [imgs.length]);
-  const prevRef = useRef(prev); prevRef.current = prev;
-  const nextRef = useRef(next); nextRef.current = next;
-
-  useEffect(() => {
-    document.body.classList.add('lb-open');
-    const h = (e: KeyboardEvent) => {
-      if (e.key === 'Escape')     closeRef.current();
-      if (e.key === 'ArrowRight') nextRef.current();
-      if (e.key === 'ArrowLeft')  prevRef.current();
-    };
-    window.addEventListener('keydown', h);
-    return () => { document.body.classList.remove('lb-open'); window.removeEventListener('keydown', h); };
-  }, []);
-
-  return createPortal(
-    <div
-      onClick={onClose}
-      onMouseDown={e => e.stopPropagation()}
-      style={{
-        position: 'fixed', inset: 0, zIndex: 99999,
-        background: 'rgba(0,0,0,.90)', backdropFilter: 'blur(16px)',
-        WebkitBackdropFilter: 'blur(16px)',
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        animation: 'fadeSlideIn .18s ease',
-      }}
-    >
-      <div
-        style={{ position: 'relative', width: '82vw', height: '78vh', flexShrink: 0 }}
-        onClick={e => e.stopPropagation()}
-      >
-        <Image
-          src={imgs[idx]} alt={`screenshot ${idx + 1}`}
-          fill style={{ objectFit: 'contain', borderRadius: 10 }} sizes="82vw"
-        />
-      </div>
-
-      <div style={{
-        position: 'absolute', bottom: 28, left: '50%', transform: 'translateX(-50%)',
-        background: 'rgba(0,0,0,.55)', backdropFilter: 'blur(8px)',
-        color: 'rgba(255,255,255,.80)', fontSize: 12, padding: '4px 14px',
-        borderRadius: 20, fontFamily: 'var(--font-mono),monospace',
-        border: '1px solid rgba(255,255,255,.12)',
-      }}>
-        {idx + 1} / {imgs.length}
-      </div>
-
-      <button
-        onClick={onClose}
-        style={{
-          position: 'absolute', top: 20, right: 24,
-          width: 36, height: 36, borderRadius: '50%',
-          background: 'rgba(255,255,255,.14)', border: '1px solid rgba(255,255,255,.22)',
-          color: '#fff', cursor: 'pointer', fontSize: 18, lineHeight: 1,
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          transition: 'background .15s',
-        }}
-        onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,.26)')}
-        onMouseLeave={e => (e.currentTarget.style.background = 'rgba(255,255,255,.14)')}
-      >
-        ✕
-      </button>
-
-      {imgs.length > 1 && (
-        <>
-          {[
-            { label: '‹', pos: { left: 20 }, action: prev },
-            { label: '›', pos: { right: 20 }, action: next },
-          ].map(({ label, pos, action }) => (
-            <button
-              key={label}
-              onClick={e => { e.stopPropagation(); action(); }}
-              style={{
-                position: 'absolute', top: '50%', transform: 'translateY(-50%)',
-                ...pos,
-                width: 48, height: 48, borderRadius: '50%',
-                background: 'rgba(255,255,255,.14)', border: '1px solid rgba(255,255,255,.22)',
-                color: '#fff', cursor: 'pointer', fontSize: 24, lineHeight: 1,
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                transition: 'background .15s',
-              }}
-              onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,.28)')}
-              onMouseLeave={e => (e.currentTarget.style.background = 'rgba(255,255,255,.14)')}
-            >
-              {label}
-            </button>
-          ))}
-        </>
-      )}
-    </div>,
-    document.body
-  );
-}
-
-// ── Animated image carousel ───────────────────────────────────────────────────
-function ImageCarousel({ imgs, dark }: { imgs: string[]; dark: boolean }) {
-  const tk  = T(dark);
-  const [idx, setIdx]         = useState(0);
-  const [dir, setDir]         = useState<'right' | 'left'>('right');
-  const [animKey, setAnimKey] = useState(0);
-  const [lightbox, setLightbox] = useState(false);
-
-  const go = useCallback((newIdx: number, direction: 'right' | 'left') => {
-    setDir(direction);
-    setAnimKey(k => k + 1);
-    setIdx(newIdx);
-  }, []);
-
-  const prev = () => go((idx - 1 + imgs.length) % imgs.length, 'left');
-  const next = () => go((idx + 1) % imgs.length, 'right');
-
-  if (!imgs.length) return null;
-
-  const navBtn = (label: string, onClick: () => void, side: 'left' | 'right') => (
-    <button
-      onClick={onClick}
-      style={{
-        position: 'absolute', top: '50%', transform: 'translateY(-50%)',
-        [side]: 8,
-        width: 32, height: 32, borderRadius: '50%',
-        background: 'rgba(0,0,0,.42)', backdropFilter: 'blur(8px)',
-        border: '1px solid rgba(255,255,255,.22)',
-        color: '#fff', cursor: 'pointer', fontSize: 20, lineHeight: 1,
-        display: 'flex', alignItems: 'center', justifyContent: 'center',
-        transition: 'background .15s, transform .15s',
-        zIndex: 2,
-      }}
-      onMouseEnter={e => { e.currentTarget.style.background = 'rgba(0,0,0,.66)'; e.currentTarget.style.transform = 'translateY(-50%) scale(1.1)'; }}
-      onMouseLeave={e => { e.currentTarget.style.background = 'rgba(0,0,0,.42)'; e.currentTarget.style.transform = 'translateY(-50%) scale(1)'; }}
-    >
-      {label}
-    </button>
-  );
-
-  return (
-    <>
-      {lightbox && <Lightbox imgs={imgs} startIdx={idx} onClose={() => setLightbox(false)} />}
-
-      <div style={{ position: 'relative', width: '100%', marginBottom: 14 }}>
-        <div style={{
-          width: '100%', aspectRatio: '16/9', borderRadius: 12, overflow: 'hidden',
-          background: tk.cardBg, border: `1px solid ${tk.cardBorder}`,
-          position: 'relative',
-        }}>
-          <div
-            key={animKey}
-            style={{
-              position: 'absolute', inset: 0,
-              animation: `${dir === 'right' ? 'slideInFromRight' : 'slideInFromLeft'} .28s cubic-bezier(.22,1,.36,1)`,
-            }}
-          >
-            <Image
-              src={imgs[idx]} alt={`screenshot ${idx + 1}`}
-              fill style={{ objectFit: 'contain' }} sizes="520px"
-            />
-          </div>
-
-          <button
-            onClick={() => setLightbox(true)}
-            title="View fullscreen"
-            style={{
-              position: 'absolute', top: 8, right: 8, zIndex: 3,
-              width: 30, height: 30, borderRadius: 8,
-              background: 'rgba(0,0,0,.48)', backdropFilter: 'blur(6px)',
-              border: '1px solid rgba(255,255,255,.22)',
-              color: '#fff', cursor: 'pointer',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              transition: 'background .15s',
-            }}
-            onMouseEnter={e => (e.currentTarget.style.background = 'rgba(0,0,0,.72)')}
-            onMouseLeave={e => (e.currentTarget.style.background = 'rgba(0,0,0,.48)')}
-          >
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round">
-              <path d="M8 3H5a2 2 0 00-2 2v3m18 0V5a2 2 0 00-2-2h-3m0 18h3a2 2 0 002-2v-3M3 16v3a2 2 0 002 2h3"/>
-            </svg>
-          </button>
-
-          {imgs.length > 1 && (
-            <>
-              {navBtn('‹', prev, 'left')}
-              {navBtn('›', next, 'right')}
-            </>
-          )}
-        </div>
-
-        {imgs.length > 1 && (
-          <div style={{
-            display: 'flex', gap: 6, justifyContent: 'center',
-            marginTop: 10, alignItems: 'center',
-          }}>
-            {imgs.map((_, i) => (
-              <button
-                key={i}
-                onClick={() => go(i, i > idx ? 'right' : 'left')}
-                style={{
-                  width: i === idx ? 18 : 6,
-                  height: 6, borderRadius: 3, border: 'none',
-                  background: i === idx ? tk.accent : (dark ? 'rgba(255,255,255,.22)' : 'rgba(0,0,0,.20)'),
-                  cursor: 'pointer',
-                  transition: 'width .22s ease, background .18s',
-                  padding: 0,
-                }}
-              />
-            ))}
-          </div>
-        )}
-      </div>
-    </>
-  );
-}
-
-// ── Project detail ────────────────────────────────────────────────────────────
-function ProjectDetail({ title, onBack, dark }: { title: string; onBack: () => void; dark: boolean }) {
-  const tk     = T(dark);
-  const proj   = projects.find(p => p.title === title);
-  const detail = projectDetails.find(d => d.title === title);
-  if (!proj || !detail) return null;
-  const sc = STATUS_BADGE[proj.status] || STATUS_BADGE.shipped;
-
-  return (
-    <div style={{ padding: '18px 22px', animation: 'slideRight .22s ease', color: tk.text }}>
-      <button
-        onClick={onBack}
-        style={{
-          display: 'inline-flex', alignItems: 'center', gap: 6,
-          padding: '5px 13px', borderRadius: 20,
-          border: `1px solid ${tk.cardBorder}`, background: tk.cardBg,
-          color: tk.text, fontSize: 13, cursor: 'pointer', marginBottom: 18,
-          fontFamily: 'var(--font-sans),sans-serif', transition: 'all .15s',
-        }}
-        onMouseEnter={e => { e.currentTarget.style.borderColor = tk.accentBorder; e.currentTarget.style.color = tk.accent; }}
-        onMouseLeave={e => { e.currentTarget.style.borderColor = tk.cardBorder;   e.currentTarget.style.color = tk.text; }}
-      >
-        <svg width="6" height="10" viewBox="0 0 6 10" fill="none">
-          <path d="M5 1L1 5l4 4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/>
-        </svg>
-        All Projects
-      </button>
-
-      {/* Header */}
-      <div style={{
-        background: tk.cardBg,
-        border: `1px solid ${tk.cardBorder}`,
-        borderRadius: 14, padding: '16px 18px', marginBottom: 18,
-      }}>
-        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-            <div style={{
-              width: 52, height: 40, borderRadius: 10, overflow: 'hidden',
-              flexShrink: 0, position: 'relative',
-              border: `1px solid ${tk.cardBorder}`, background: tk.cardBg,
-            }}>
-              <Image src={proj.image} alt={proj.title} fill style={{ objectFit: 'cover' }} sizes="52px" />
-            </div>
-            <div>
-              <h2 style={{
-                fontSize: 19, fontWeight: 600,
-                letterSpacing: '-.3px', color: tk.text, lineHeight: 1.15,
-              }}>
-                {proj.title}
-              </h2>
-              <div style={{ fontSize: 13.5, color: tk.textMuted, marginTop: 3 }}>{proj.tagline}</div>
-            </div>
-          </div>
-          <span style={{
-            fontSize: 10.5, fontFamily: 'var(--font-mono),monospace',
-            padding: '3px 10px', borderRadius: 20,
-            background: sc.bg, color: sc.txt, flexShrink: 0, marginTop: 4,
-          }}>
-            {sc.lbl}
-          </span>
-        </div>
-      </div>
-
-      {proj.year && (
-        <div style={{ fontSize: 11.5, fontFamily: 'var(--font-mono),monospace', color: tk.textMuted, marginBottom: 14 }}>
-          {proj.year}
-        </div>
-      )}
-
-      <p style={{ fontSize: 13.5, color: tk.textSub, lineHeight: 1.74, marginBottom: 18 }}>
-        {detail.description}
-      </p>
-
-      <ImageCarousel imgs={detail.images} dark={dark} />
-
-      {detail.features && detail.features.length > 0 && (
-        <>
-          <Label dark={dark}>Key Features</Label>
-          <div style={{
-            background: tk.cardBg, border: `1px solid ${tk.cardBorder}`,
-            borderRadius: 12, padding: '14px 16px', marginBottom: 18,
-          }}>
-            {detail.features.map((f, i) => <Bullet key={i} dark={dark}>{f}</Bullet>)}
-          </div>
-        </>
-      )}
-
-      <Label dark={dark}>Tech Stack</Label>
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7, marginBottom: 22 }}>
-        {proj.techStack.split(', ').map(t => <Chip key={t} dark={dark}>{t}</Chip>)}
-      </div>
-
-      <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-        {detail.githubrepo && (
-          <a href={detail.githubrepo} target="_blank" rel="noopener noreferrer"
-            style={{
-              display: 'inline-flex', alignItems: 'center', gap: 7,
-              padding: '10px 20px', borderRadius: 12, fontSize: 13.5, fontWeight: 500,
-              background: tk.accentGrad2,
-              border: 'none',
-              color: '#fff', textDecoration: 'none', transition: 'all .18s',
-            }}
-            onMouseEnter={e => { e.currentTarget.style.opacity = '.85'; e.currentTarget.style.transform = 'translateY(-1px)'; }}
-            onMouseLeave={e => { e.currentTarget.style.opacity = '1'; e.currentTarget.style.transform = 'none'; }}
-          >
-            View on GitHub
-          </a>
-        )}
-        {detail.isLive && detail.livelink && (
-          <a href={detail.livelink} target="_blank" rel="noopener noreferrer"
-            style={{
-              display: 'inline-flex', alignItems: 'center', gap: 7,
-              padding: '10px 20px', borderRadius: 12, fontSize: 13.5, fontWeight: 500,
-              background: tk.cardBg, border: `1px solid ${tk.cardBorder}`,
-              color: tk.text, textDecoration: 'none', transition: 'all .18s',
-            }}
-            onMouseEnter={e => { e.currentTarget.style.borderColor = tk.accentBorder; e.currentTarget.style.transform = 'translateY(-1px)'; }}
-            onMouseLeave={e => { e.currentTarget.style.borderColor = tk.cardBorder; e.currentTarget.style.transform = 'none'; }}
-          >
-            Live Demo ↗
-          </a>
-        )}
-      </div>
-    </div>
-  );
-}
-
-// ── Deep link from outside (e.g. the Featured Project widget) ────────────────
-// The pending value is set synchronously before the window opens and consumed
-// on mount, so there is no race against the listener attaching; the event
-// covers the already-open case.
+// Deep link (Spotlight, Photos): pending is read on mount; the event covers an
+// open window.
 let pendingDetail: string | null = null;
 export function requestProjectDetail(title: string) {
   pendingDetail = title;
   window.dispatchEvent(new CustomEvent('openProjectDetail', { detail: { title } }));
 }
 
-// ── Projects list ─────────────────────────────────────────────────────────────
+// Library data
+type Filter = 'all' | 'web' | 'mobile';
+type Project = (typeof projects)[number];
+
+const FILTERS: { id: Filter; label: string; title: string }[] = [
+  { id: 'all',    label: 'All Projects', title: 'All Projects' },
+  { id: 'web',    label: 'Web apps',     title: 'Web apps' },
+  { id: 'mobile', label: 'Mobile apps',  title: 'Mobile apps' },
+];
+const countOf = (f: Filter) => projects.filter(p => f === 'all' || p.platform === f).length;
+const featured = projects[0];
+
+// Library icons
+const GridIcon = () => <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round"><rect x="3.5" y="3.5" width="7" height="7" rx="1.8" /><rect x="13.5" y="3.5" width="7" height="7" rx="1.8" /><rect x="3.5" y="13.5" width="7" height="7" rx="1.8" /><rect x="13.5" y="13.5" width="7" height="7" rx="1.8" /></svg>;
+const WebIcon  = () => <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round"><rect x="3" y="4.5" width="18" height="15" rx="2" /><path d="M3 9h18" /></svg>;
+const PhoneIcon = () => <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round"><rect x="6.5" y="2.5" width="11" height="19" rx="2.5" /><path d="M10.5 18.5h3" strokeLinecap="round" /></svg>;
+const ListIcon = () => <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><path d="M9 6.5h11M9 12h11M9 17.5h11M4.5 6.5h.01M4.5 12h.01M4.5 17.5h.01" /></svg>;
+const FILTER_ICON: Record<Filter, React.ReactNode> = { all: <GridIcon />, web: <WebIcon />, mobile: <PhoneIcon /> };
+
+// Covers: web projects in a browser frame, mobile ones as a fan of phones
+function PhoneFan({ p, dark, width, sizes }: { p: Project; dark: boolean; width: number; sizes: string }) {
+  const shots = shotsFor(p.title).filter(isTallShot);
+  const [mid, left, right] = [shots[0], shots[1], shots.length > 2 ? shots[shots.length - 1] : undefined];
+  if (!mid) return null;
+  const side = Math.round(width * 0.86);
+  return (
+    <div style={{ position: 'relative', display: 'flex', justifyContent: 'center', alignItems: 'flex-start' }}>
+      {left && <Phone shot={left} width={side} sizes={sizes} style={{ position: 'absolute', right: '50%', marginRight: width * 0.28, top: width * 0.2, transform: 'rotate(-8deg)' }} />}
+      {right && <Phone shot={right} width={side} sizes={sizes} style={{ position: 'absolute', left: '50%', marginLeft: width * 0.28, top: width * 0.2, transform: 'rotate(8deg)' }} />}
+      <Phone shot={mid} width={width} sizes={sizes} alt={`${p.title} screens`} shadow={dark ? '0 22px 40px rgba(0,0,0,.5)' : '0 22px 40px rgba(80,40,10,.3)'} style={{ position: 'relative' }} />
+    </div>
+  );
+}
+
+function CardCover({ p, dark }: { p: Project; dark: boolean }) {
+  const tk = T(dark);
+  if (p.platform === 'mobile') {
+    return (
+      <div style={{ position: 'relative', aspectRatio: '16 / 10', borderRadius: 10, overflow: 'hidden', background: dark ? '#2b2520' : '#f4ede6' }}>
+        <div style={{ position: 'absolute', left: 0, right: 0, top: '10%' }}>
+          <PhoneFan p={p} dark={dark} width={86} sizes="90px" />
+        </div>
+      </div>
+    );
+  }
+  return p.cover
+    ? <Browser shot={p.cover} label={p.title} dark={dark} aspect="16 / 10" sizes="(max-width: 1400px) 300px, 380px" />
+    : <div style={{ position: 'relative', aspectRatio: '16 / 10', borderRadius: 10, overflow: 'hidden', boxShadow: `0 0 0 .5px ${tk.sep}` }}>
+        <ProjectCover title={p.title} shot={null} sizes="300px" dark={dark} />
+      </div>;
+}
+
+// Featured banner
+function Featured({ dark, onOpen, roomy, hidden, animate }: { dark: boolean; onOpen: () => void; roomy: boolean; hidden: boolean; animate: boolean }) {
+  const p = featured;
+  const detail = projectDetails.find(d => d.title === p.title);
+  const ink = dark ? '#f5f5f7' : '#1d1d1f';
+  return (
+    <div style={{
+      position: 'relative', height: 300, borderRadius: 18, overflow: 'hidden',
+      background: dark ? '#2b2520' : '#f4ede6', color: ink,
+      display: hidden ? 'none' : undefined, animation: animate ? 'contentFadeIn .4s ease both' : undefined,
+    }}>
+      <div style={{ position: 'absolute', inset: 0, backgroundImage: `radial-gradient(${dark ? 'rgba(255,220,180,.07)' : 'rgba(120,80,40,.11)'} 1px, transparent 1px)`, backgroundSize: '14px 14px' }} />
+      <div style={{ position: 'relative', height: '100%', maxWidth: roomy ? '56%' : '100%', padding: '30px 32px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+        <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: '.9px', textTransform: 'uppercase', color: dark ? '#e3a56f' : '#93511e' }}>
+          Featured · {PLATFORM[p.platform]} · {p.year}
+        </div>
+        <h3 style={{ marginTop: 6, fontSize: 42, fontWeight: 700, letterSpacing: '-1.4px', lineHeight: 1 }}>{p.title}</h3>
+        <p style={{ marginTop: 10, fontSize: 16, lineHeight: 1.4, color: dark ? '#d6cfc8' : '#4a4038', maxWidth: 360 }}>{p.tagline}</p>
+        <div style={{ marginTop: 14, display: 'flex', flexWrap: 'wrap', gap: 6 }}>
+          {stackOf(p).map(t => (
+            <span key={t} style={{ padding: '4px 10px', borderRadius: 7, fontSize: 12.5, fontWeight: 500, background: dark ? 'rgba(255,255,255,.1)' : 'rgba(255,255,255,.8)' }}>{t}</span>
+          ))}
+        </div>
+        <div style={{ marginTop: 18, display: 'flex', gap: 8 }}>
+          <button onClick={onOpen} style={{
+            padding: '9px 18px', borderRadius: 10, fontSize: 14, fontWeight: 600,
+            background: ink, color: dark ? '#1d1d1f' : '#fff', transition: 'transform .15s',
+          }}
+            onMouseEnter={e => (e.currentTarget.style.transform = 'translateY(-1px)')}
+            onMouseLeave={e => (e.currentTarget.style.transform = 'none')}
+          >
+            Open project
+          </button>
+          {detail?.githubrepo && (
+            <a href={detail.githubrepo} target="_blank" rel="noopener noreferrer" style={{
+              padding: '9px 16px', borderRadius: 10, fontSize: 14, fontWeight: 500,
+              background: dark ? 'rgba(255,255,255,.1)' : 'rgba(255,255,255,.85)', color: ink,
+            }}>
+              GitHub
+            </a>
+          )}
+        </div>
+      </div>
+      {roomy && (
+        <div style={{ position: 'absolute', right: '4%', top: 34, width: '40%' }}>
+          <PhoneFan p={p} dark={dark} width={150} sizes="160px" />
+        </div>
+      )}
+    </div>
+  );
+}
+
+// Grid card and list row
+function Card({ p, dark, onOpen, i, hidden, animate }: { p: Project; dark: boolean; onOpen: () => void; i: number; hidden: boolean; animate: boolean }) {
+  const tk = T(dark);
+  const tags = stackOf(p);
+  const shown = tags.slice(0, 3);
+  return (
+    <button
+      onClick={onOpen}
+      aria-label={`Open ${p.title}`}
+      style={{ textAlign: 'left', display: hidden ? 'none' : 'flex', flexDirection: 'column', gap: 12, animation: animate ? `contentFadeIn .4s ${i * 0.05}s ease both` : undefined }}
+      onMouseEnter={e => { (e.currentTarget.firstChild as HTMLElement).style.transform = 'translateY(-3px)'; }}
+      onMouseLeave={e => { (e.currentTarget.firstChild as HTMLElement).style.transform = 'none'; }}
+    >
+      <div style={{ transition: 'transform .2s cubic-bezier(.2,.8,.3,1)' }}>
+        <CardCover p={p} dark={dark} />
+      </div>
+      <div style={{ padding: '0 2px', display: 'flex', flexDirection: 'column', gap: 3 }}>
+        <span style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
+          <span style={{ fontSize: 16, fontWeight: 600, color: tk.label }}>{p.title}</span>
+          <span style={{ fontSize: 13, color: tk.label2 }}>{p.year}</span>
+          {hasLiveDemo(p.title) && <LiveBadge dark={dark} />}
+        </span>
+        <span style={{ fontSize: 13.5, lineHeight: 1.4, color: tk.label }}>{p.tagline}</span>
+        <span style={{ fontSize: 12.5, color: tk.label2 }}>
+          {shown.join(' · ')}{tags.length > shown.length ? ` · +${tags.length - shown.length}` : ''}
+        </span>
+      </div>
+    </button>
+  );
+}
+
+function LiveBadge({ dark }: { dark: boolean }) {
+  return (
+    <span style={{
+      marginLeft: 'auto', alignSelf: 'center', flexShrink: 0, fontSize: 11.5, fontWeight: 600, padding: '2px 8px', borderRadius: 20,
+      background: 'rgba(52,199,89,.14)', color: dark ? '#34c759' : '#166534',
+    }}>Live demo</span>
+  );
+}
+
+function Row({ p, dark, onOpen, last, hidden }: { p: Project; dark: boolean; onOpen: () => void; last: boolean; hidden: boolean }) {
+  const tk = T(dark);
+  return (
+    <button
+      onClick={onOpen}
+      style={{ width: '100%', textAlign: 'left', display: hidden ? 'none' : 'flex', alignItems: 'center', gap: 14, padding: '10px 10px', borderRadius: 10, transition: 'background .12s' }}
+      onMouseEnter={e => (e.currentTarget.style.background = tk.fill)}
+      onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+    >
+      <span style={{ position: 'relative', width: 72, height: 46, flexShrink: 0, borderRadius: 7, overflow: 'hidden', background: tk.paneAlt, boxShadow: `0 0 0 .5px ${tk.sep}` }}>
+        <ProjectCover title={p.title} shot={p.cover} sizes="72px" dark={dark} size="xs" pad={3} />
+      </span>
+      <span style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 2, paddingBottom: 0 }}>
+        <span style={{ fontSize: 14.5, fontWeight: 600, color: tk.label }}>{p.title}</span>
+        <span style={{ fontSize: 13, color: tk.label2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.tagline}</span>
+      </span>
+      <span style={{ fontSize: 12.5, color: tk.label2, flexShrink: 0 }}>{PLATFORM[p.platform]}</span>
+      <span style={{ fontSize: 12.5, color: tk.label2, flexShrink: 0, width: 36, textAlign: 'right' }}>{p.year}</span>
+      <span style={{ color: tk.label3, display: 'inline-flex' }}><ChevronRight s={14} /></span>
+      {!last && <span />}
+    </button>
+  );
+}
+
 export default function ProjectsWindow({ dark }: { dark: boolean }) {
   const tk = T(dark);
+  // 0: no sidebar, 1: sidebar; the showcase stacks its columns under 900
+  const [ref, size] = useWidthClass<HTMLDivElement>([760, 1000]);
+  const wide = size >= 1;
+  const [filter, setFilter] = useState<Filter>('all');
   const [detail, setDetail] = useState<string | null>(null);
+  const [layout, setLayout] = useState<'grid' | 'list'>('grid');
+  const [query, setQuery] = useState('');
+  const [copied, setCopied] = useState(false);
+  const scroller = useRef<HTMLDivElement>(null);
+  // Fade in on open only, not on every filter change
+  const [settled, setSettled] = useState(false);
+  useEffect(() => {
+    const t = setTimeout(() => setSettled(true), 900);
+    return () => clearTimeout(t);
+  }, []);
 
   useEffect(() => {
-    if (pendingDetail && projects.some(p => p.title === pendingDetail)) {
-      setDetail(pendingDetail);
-    }
+    if (pendingDetail && projects.some(p => p.title === pendingDetail)) setDetail(pendingDetail);
     pendingDetail = null;
     const h = (e: Event) => {
       const t = (e as CustomEvent<{ title: string }>).detail?.title;
-      if (t && projects.some(p => p.title === t)) {
-        pendingDetail = null;
-        setDetail(t);
-      }
+      if (t && projects.some(p => p.title === t)) { pendingDetail = null; setDetail(t); }
     };
     window.addEventListener('openProjectDetail', h);
     return () => window.removeEventListener('openProjectDetail', h);
   }, []);
+  useEffect(() => { scroller.current?.scrollTo({ top: 0 }); }, [detail, filter]);
 
-  if (detail) {
-    return <ProjectDetail title={detail} onBack={() => setDetail(null)} dark={dark} />;
-  }
+  const q = query.trim().toLowerCase();
+  const matches = projects.filter(p =>
+    (filter === 'all' || p.platform === filter) &&
+    (!q || [p.title, p.tagline, p.techStack, p.description].join(' ').toLowerCase().includes(q)));
+  const showFeatured = filter === 'all' && !q && !detail;
+  const listed = showFeatured && layout === 'grid' ? matches.filter(p => p !== featured) : matches;
+  const cur = detail ? projects.find(p => p.title === detail)! : null;
+  const curDetail = detail ? projectDetails.find(d => d.title === detail) : null;
+
+  const copyLink = () => {
+    if (!detail) return;
+    navigator.clipboard?.writeText(`${ME.portfolio}/project/${encodeURIComponent(detail)}`).catch(() => {});
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1600);
+  };
+  const pickFilter = (f: Filter) => { setFilter(f); setDetail(null); };
 
   return (
-    <div style={{ padding: '20px 22px', color: tk.text }}>
-      <WinTitle dark={dark}>Projects</WinTitle>
-
-      {projects.map((p, idx) => {
-        const sc = STATUS_BADGE[p.status] || STATUS_BADGE.shipped;
-        const isFeatured = idx === 0;
-        return (
-          <div
-            key={p.title}
-            onClick={() => setDetail(p.title)}
-            style={{
-              position: 'relative',
-              display: 'flex', alignItems: 'center', gap: 14,
-              padding: isFeatured ? '14px 16px' : '12px 14px',
-              borderRadius: 14, marginBottom: 10,
-              background: tk.cardBg,
-              border: `1px solid ${isFeatured ? tk.accentBorder : tk.cardBorder}`,
-              cursor: 'pointer', transition: 'all .18s ease',
-              overflow: 'hidden',
+    <div ref={ref} style={{ flex: 1, minWidth: 0, display: 'flex', color: tk.label }}>
+      {wide && (
+        <Sidebar
+          dark={dark} width={220} label="Library"
+          footer={
+            <a href={ME.github} target="_blank" rel="noopener noreferrer" style={{
+              height: 32, display: 'flex', alignItems: 'center', gap: 9, padding: '0 10px', borderRadius: 8, fontSize: 13, color: tk.label,
             }}
-            onMouseEnter={e => {
-              const el = e.currentTarget as HTMLDivElement;
-              el.style.borderColor = tk.accentBorder;
-              el.style.background  = tk.cardHover;
-              el.style.transform   = 'translateX(3px)';
-            }}
-            onMouseLeave={e => {
-              const el = e.currentTarget as HTMLDivElement;
-              el.style.borderColor = isFeatured ? tk.accentBorder : tk.cardBorder;
-              el.style.background  = tk.cardBg;
-              el.style.transform   = 'none';
-            }}
-          >
-            <div style={{
-              width: 56, height: 42, borderRadius: 10, overflow: 'hidden',
-              flexShrink: 0, position: 'relative',
-              background: tk.cardBg, border: `1px solid ${tk.cardBorder}`,
-            }}>
-              <Image src={p.image} alt={p.title} fill style={{ objectFit: 'cover' }} sizes="56px" />
-            </div>
-
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
-                <span style={{ fontSize: 14.5, fontWeight: 600, color: tk.text }}>
-                  {p.title}
+              onMouseEnter={e => (e.currentTarget.style.background = dark ? 'rgba(255,255,255,.06)' : 'rgba(0,0,0,.05)')}
+              onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+            >
+              <GitHubIcon s={16} /><span style={{ flex: 1 }}>All repos on GitHub</span>
+              <span style={{ color: tk.label2, display: 'inline-flex' }}><ArrowUpRight /></span>
+            </a>
+          }
+        >
+          <SidebarHeading dark={dark}>Library</SidebarHeading>
+          {FILTERS.map(f => (
+            <SidebarItem
+              key={f.id} dark={dark} label={f.label} count={countOf(f.id)}
+              icon={<span style={{ color: tk.accent, display: 'inline-flex' }}>{FILTER_ICON[f.id]}</span>}
+              selected={!detail && filter === f.id} onClick={() => pickFilter(f.id)}
+            />
+          ))}
+          <SidebarHeading dark={dark}>Projects</SidebarHeading>
+          {projects.map(p => (
+            <SidebarItem
+              key={p.title} dark={dark} label={p.title} selected={detail === p.title}
+              onClick={() => setDetail(p.title)}
+              icon={
+                <span style={{ position: 'relative', width: 22, height: 22, flexShrink: 0, borderRadius: 5, overflow: 'hidden', background: tk.pane, boxShadow: '0 0 0 .5px rgba(0,0,0,.15)' }}>
+                  <ProjectCover title={p.title} shot={p.cover} sizes="24px" dark={dark} size="xs" pad={1} />
                 </span>
-                {p.year && (
-                  <span style={{ fontSize: 11, fontFamily: 'var(--font-mono),monospace', color: tk.textMuted }}>
-                    {p.year}
-                  </span>
-                )}
-              </div>
-              <div style={{
-                fontSize: 12.5, color: tk.textMuted, marginTop: 2,
-                overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
-              }}>
-                {p.tagline}
-              </div>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5, marginTop: 7 }}>
-                {p.techStack.split(', ').slice(0, 3).map(t => <Chip key={t} dark={dark}>{t}</Chip>)}
-                {p.techStack.split(', ').length > 3 && (
-                  <span style={{ fontSize: 11, color: tk.textMuted, fontFamily: 'var(--font-mono),monospace', alignSelf: 'center' }}>
-                    +{p.techStack.split(', ').length - 3}
-                  </span>
-                )}
-              </div>
-            </div>
+              }
+            />
+          ))}
+        </Sidebar>
+      )}
 
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 8, flexShrink: 0 }}>
-              <span style={{
-                fontSize: 10.5, fontFamily: 'var(--font-mono),monospace',
-                padding: '3px 9px', borderRadius: 20,
-                background: sc.bg, color: sc.txt, whiteSpace: 'nowrap',
+      <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', background: tk.pane }}>
+        <Toolbar style={{ padding: wide ? '0 16px 0 22px' : '0 16px 0 88px', gap: 10 }}>
+          {detail && cur ? (
+            <>
+              <ToolbarButton dark={dark} label="Back" onClick={() => setDetail(null)}><ChevronLeft /></ToolbarButton>
+              <h2 style={{ fontSize: 15, fontWeight: 600, whiteSpace: 'nowrap' }}>{cur.title}</h2>
+              <span style={{ fontSize: 13, color: tk.label2 }}>{cur.year}</span>
+              <span style={{ flex: 1 }} />
+              {curDetail?.githubrepo && (
+                <a href={curDetail.githubrepo} target="_blank" rel="noopener noreferrer" style={{
+                  display: 'inline-flex', alignItems: 'center', gap: 7, height: 30, padding: '0 13px', borderRadius: 8,
+                  background: tk.select, color: '#fff', fontSize: 13, fontWeight: 600, whiteSpace: 'nowrap', transition: 'filter .15s',
+                }}
+                  onMouseEnter={e => (e.currentTarget.style.filter = 'brightness(1.08)')}
+                  onMouseLeave={e => (e.currentTarget.style.filter = 'none')}
+                >
+                  <GitHubIcon s={15} />{size >= 1 ? 'View on GitHub' : 'GitHub'}
+                </a>
+              )}
+              {curDetail?.isLive && curDetail.livelink && (
+                <a href={curDetail.livelink} target="_blank" rel="noopener noreferrer" style={{
+                  display: 'inline-flex', alignItems: 'center', gap: 6, height: 30, padding: '0 12px', borderRadius: 8,
+                  background: tk.fill, color: tk.label, fontSize: 13, fontWeight: 500, whiteSpace: 'nowrap',
+                }}>Live demo <ArrowUpRight /></a>
+              )}
+              <ToolbarButton dark={dark} label={copied ? 'Link copied' : 'Copy link to this project'} onClick={copyLink}>
+                {copied ? <CheckIcon s={16} /> : <ShareIcon s={16} />}
+              </ToolbarButton>
+            </>
+          ) : (
+            <>
+              <div style={{ display: 'flex', flexDirection: 'column', minWidth: 0 }}>
+                <h2 style={{ fontSize: 15, fontWeight: 600, lineHeight: 1.2 }}>{FILTERS.find(f => f.id === filter)!.title}</h2>
+                <span style={{ fontSize: 11.5, color: tk.label2 }}>{matches.length} project{matches.length === 1 ? '' : 's'}</span>
+              </div>
+              <span style={{ flex: 1 }} />
+              <div role="group" aria-label="View as" style={{ display: 'flex', padding: 2, borderRadius: 8, background: tk.fill }}>
+                {(['grid', 'list'] as const).map(l => (
+                  <button key={l} aria-label={l === 'grid' ? 'Grid' : 'List'} aria-pressed={layout === l} onClick={() => setLayout(l)} style={{
+                    width: 30, height: 24, borderRadius: 6, display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                    background: layout === l ? (dark ? 'rgba(255,255,255,.16)' : '#fff') : 'transparent',
+                    boxShadow: layout === l ? '0 1px 2px rgba(0,0,0,.12)' : 'none', color: tk.label,
+                  }}>
+                    {l === 'grid' ? <GridIcon /> : <ListIcon />}
+                  </button>
+                ))}
+              </div>
+              <label style={{
+                display: 'flex', alignItems: 'center', gap: 6, height: 28, width: size >= 2 ? 220 : 150, padding: '0 9px',
+                borderRadius: 8, background: tk.fill, color: tk.label2,
               }}>
-                {sc.lbl}
-              </span>
-              <svg width="5" height="9" viewBox="0 0 5 9" fill="none" style={{ opacity: .40 }}>
-                <path d="M1 1l3.5 3.5L1 8" stroke={tk.accent} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </div>
+                <SearchLine />
+                <input
+                  type="search" value={query} onChange={e => setQuery(e.target.value)} placeholder="Search" aria-label="Search projects"
+                  style={{ flex: 1, minWidth: 0, border: 'none', background: 'transparent', outline: 'none', fontSize: 13, color: tk.label }}
+                />
+              </label>
+            </>
+          )}
+        </Toolbar>
+
+        {!wide && !detail && (
+          <div role="group" aria-label="Library" style={{
+            margin: '0 16px 10px', padding: 2, borderRadius: 8, background: tk.fill,
+            display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
+          }}>
+            {FILTERS.map(f => (
+              <button key={f.id} aria-pressed={filter === f.id} onClick={() => pickFilter(f.id)} style={{
+                height: 24, borderRadius: 6, fontSize: 12, fontWeight: filter === f.id ? 600 : 500, color: tk.label,
+                background: filter === f.id ? (dark ? 'rgba(255,255,255,.16)' : '#fff') : 'transparent',
+                boxShadow: filter === f.id ? '0 1px 2px rgba(0,0,0,.12)' : 'none',
+              }}>
+                {f.id === 'all' ? 'All' : f.label.replace(' apps', '')}
+              </button>
+            ))}
           </div>
-        );
-      })}
+        )}
+
+        <div ref={scroller} style={{ flex: 1, minHeight: 0, overflowY: 'auto' }}>
+          {detail ? (
+            <Showcase key={detail} title={detail} dark={dark} stacked={size < 2} />
+          ) : (
+            <div style={{ padding: '4px 24px 28px' }}>
+              {/* Filters hide cards instead of unmounting them, so images don't reload */}
+              {layout === 'grid' && <Featured dark={dark} roomy={size >= 1} onOpen={() => setDetail(featured.title)} hidden={!showFeatured} animate={!settled} />}
+              {showFeatured && layout === 'grid' && (
+                <h3 style={{ margin: '26px 2px 12px', fontSize: 17, fontWeight: 600 }}>All projects</h3>
+              )}
+              {listed.length === 0 ? (
+                <div style={{ padding: '60px 0', textAlign: 'center', color: tk.label2, fontSize: 14 }}>
+                  No projects match “{query.trim()}”
+                </div>
+              ) : layout === 'grid' ? (
+                // Tracks stretch to fill a wide window; one or two results keep card size
+                <div style={{ display: 'grid', gridTemplateColumns: `repeat(auto-fit, minmax(220px, ${listed.length < 3 ? '340px' : '1fr'}))`, gap: '24px 20px' }}>
+                  {projects.map(p => (
+                    <Card key={p.title} p={p} dark={dark} i={Math.max(0, listed.indexOf(p))} onOpen={() => setDetail(p.title)} hidden={!listed.includes(p)} animate={!settled} />
+                  ))}
+                </div>
+              ) : (
+                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                  {projects.map(p => (
+                    <Row key={p.title} p={p} dark={dark} last={p === listed[listed.length - 1]} onOpen={() => setDetail(p.title)} hidden={!listed.includes(p)} />
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

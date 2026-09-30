@@ -18,7 +18,6 @@ export default function Image() {
           position: 'relative',
         }}
       >
-        {/* Single subtle blue wash */}
         <div style={{
           position: 'absolute', top: -120, left: -100,
           width: 520, height: 520, borderRadius: '50%',
@@ -26,7 +25,6 @@ export default function Image() {
           filter: 'blur(60px)',
         }} />
 
-        {/* Corner URL */}
         <div style={{
           position: 'absolute', bottom: 36, right: 52,
           fontSize: 18, color: 'rgba(238,240,244,.24)',
@@ -36,7 +34,6 @@ export default function Image() {
           tomyromero.vercel.app
         </div>
 
-        {/* Monogram */}
         <div style={{
           width: 104, height: 104, borderRadius: 26,
           background: '#0A84FF',
@@ -48,7 +45,6 @@ export default function Image() {
           TR
         </div>
 
-        {/* Name */}
         <div style={{
           fontSize: 62, fontWeight: 700,
           letterSpacing: '-2px', marginBottom: 14, lineHeight: 1,
@@ -57,14 +53,12 @@ export default function Image() {
           Tomy F. Romero
         </div>
 
-        {/* Role */}
         <div style={{
           fontSize: 26, color: '#78b3ff', fontWeight: 500, marginBottom: 28,
         }}>
           Software Engineer · MEDsys Software Solutions
         </div>
 
-        {/* Tech pills row */}
         <div style={{ display: 'flex', gap: 12 }}>
           {['ASP.NET Core', 'React', 'SQL Server', 'TypeScript', 'Azure'].map(t => (
             <div key={t} style={{
@@ -78,7 +72,6 @@ export default function Image() {
           ))}
         </div>
 
-        {/* Open-to-work dot */}
         <div style={{
           display: 'flex', alignItems: 'center', gap: 10,
           marginTop: 36,

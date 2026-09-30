@@ -1,512 +1,130 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import Image from 'next/image';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { projectDetails, projects } from '@/constants';
-
-function useTokens(dark: boolean) {
-  return {
-    bg:           dark ? '#0a0c11'                         : '#f4f5f7',
-    text:         dark ? '#eef0f4'                         : '#1a1c20',
-    textMuted:    dark ? 'rgba(255,255,255,.55)'           : 'rgba(0,0,0,.58)',
-    textSub:      dark ? 'rgba(255,255,255,.72)'           : 'rgba(0,0,0,.72)',
-    cardBg:       dark ? 'rgba(255,255,255,.045)'          : 'rgba(0,0,0,.025)',
-    cardBorder:   dark ? 'rgba(255,255,255,.08)'           : 'rgba(0,0,0,.07)',
-    accent:       dark ? '#78b3ff'                         : '#0068d6',
-    accentBg:     dark ? 'rgba(64,140,255,.12)'            : 'rgba(0,104,214,.07)',
-    accentBorder: dark ? 'rgba(100,160,255,.30)'           : 'rgba(0,104,214,.20)',
-    accentSolid:  dark ? '#0A84FF'                         : '#0071E3',
-    navBg:        dark ? 'rgba(10,12,17,.94)'              : 'rgba(244,245,247,.94)',
-    pillBg:       dark ? 'rgba(255,255,255,.07)'           : 'rgba(0,0,0,.04)',
-    pillBorder:   dark ? 'rgba(255,255,255,.10)'           : 'rgba(0,0,0,.08)',
-  };
-}
-
-function SectionLabel({ text, tk }: { text: string; tk: ReturnType<typeof useTokens> }) {
-  return (
-    <div style={{
-      display: 'flex', alignItems: 'center', gap: 10,
-      marginBottom: 14, marginTop: 6,
-    }}>
-      <h2 style={{
-        fontSize: 11, letterSpacing: '1.4px', textTransform: 'uppercase' as const,
-        fontFamily: 'var(--font-mono),monospace', color: tk.textMuted,
-        fontWeight: 600,
-      }}>
-        {text}
-      </h2>
-      <div style={{ flex: 1, height: 1, background: tk.cardBorder }} />
-    </div>
-  );
-}
+import { MoonIcon, SunIcon, SearchIcon, GitHubIcon } from '@/components/mac/Icons';
+import { T } from '@/components/mac/tokens';
+import { ChevronLeft, ArrowUpRight } from '@/components/mac/Native';
+import Showcase, { PLATFORM } from '@/components/ProjectShowcase';
 
 export default function ProjectPage({ params }: { params: { title: string } }) {
   const router = useRouter();
   const [dark, setDark] = useState(false);
-  const [imgIdx, setImgIdx] = useState(0);
-  const [lightbox, setLightbox] = useState(false);
+  const [tucked, setTucked] = useState(false);
+  // Don't save until the stored value has been read
+  const [prefsReady, setPrefsReady] = useState(false);
+  const titleRef = useRef<HTMLHeadingElement>(null);
 
   useEffect(() => {
     const saved = localStorage.getItem('dark');
     if (saved !== null) setDark(saved === 'true');
     else setDark(window.matchMedia('(prefers-color-scheme: dark)').matches);
+    setPrefsReady(true);
   }, []);
-  useEffect(() => { localStorage.setItem('dark', String(dark)); }, [dark]);
+  useEffect(() => { if (prefsReady) localStorage.setItem('dark', String(dark)); }, [dark, prefsReady]);
 
-  const decodedTitle = decodeURIComponent(params.title);
-  const detail = projectDetails.find(p => p.title === decodedTitle);
-  const summary = projects.find(p => p.title === decodedTitle);
+  const name = decodeURIComponent(params.title);
+  const detail = projectDetails.find(p => p.title === name);
+  const summary = projects.find(p => p.title === name);
+  const tk = T(dark);
+  const bg = dark ? '#000000' : '#f2f2f7';
 
-  // Dark-mode toggle with the same smooth crossfade the desktop/mobile views use
   const toggleDark = () => {
     document.documentElement.classList.add('theme-transition');
     setDark(d => !d);
     setTimeout(() => document.documentElement.classList.remove('theme-transition'), 350);
   };
+  const back = () => {
+    if (document.referrer.startsWith(window.location.origin) && window.history.length > 1) router.back();
+    else router.push('/');
+  };
 
-  // Keyboard support for the gallery lightbox (Escape closes, arrows navigate)
-  const lightboxCount = detail ? detail.images.filter(Boolean).length : 0;
-  useEffect(() => {
-    if (!lightbox || lightboxCount === 0) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape')           setLightbox(false);
-      else if (e.key === 'ArrowLeft')   setImgIdx(i => (i - 1 + lightboxCount) % lightboxCount);
-      else if (e.key === 'ArrowRight')  setImgIdx(i => (i + 1) % lightboxCount);
-    };
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  }, [lightbox, lightboxCount]);
-
-  const tk = useTokens(dark);
-
-  if (!detail) {
+  if (!detail || !summary) {
     return (
       <div style={{
-        minHeight: '100dvh', background: tk.bg, color: tk.text,
-        display: 'flex', flexDirection: 'column', alignItems: 'center',
-        justifyContent: 'center', gap: 16,
-        fontFamily: 'var(--font-sans),sans-serif',
+        minHeight: '100dvh', background: bg, color: tk.label,
+        display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 16,
       }}>
-        <div style={{ fontSize: 40 }}>🔍</div>
+        <div style={{ color: tk.accent }}><SearchIcon s={36} /></div>
         <div style={{ fontSize: 18, fontWeight: 600 }}>Project not found</div>
-        <button
-          onClick={() => router.back()}
-          style={{
-            padding: '10px 22px', borderRadius: 12, fontSize: 13,
-            background: tk.accentSolid, border: 'none',
-            color: '#fff', cursor: 'pointer',
-            fontFamily: 'var(--font-mono),monospace',
-          }}
-        >
-          ← Go back
+        <button onClick={() => router.push('/')} style={{
+          padding: '10px 22px', borderRadius: 12, fontSize: 14, fontWeight: 600, background: tk.select, color: '#fff',
+        }}>
+          Back to the portfolio
         </button>
       </div>
     );
   }
 
-  const images = detail.images.filter(Boolean);
-  const prev = () => setImgIdx(i => (i - 1 + images.length) % images.length);
-  const next = () => setImgIdx(i => (i + 1) % images.length);
-
   return (
-    <div style={{
-      position: 'fixed', inset: 0, overflowY: 'auto',
-      background: tk.bg, color: tk.text,
-      fontFamily: 'var(--font-sans),sans-serif',
-      userSelect: 'text',
-    }}>
-
-      {/* ── Sticky nav ──────────────────────────────────────────────────────── */}
+    <div
+      onScroll={e => {
+        const t = e.currentTarget.scrollTop > (titleRef.current?.offsetTop ?? 80);
+        if (t !== tucked) setTucked(t);
+      }}
+      style={{ position: 'fixed', inset: 0, overflowY: 'auto', background: bg, color: tk.label, userSelect: 'text' }}
+    >
       <nav style={{
-        position: 'sticky', top: 0, zIndex: 100,
-        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        padding: '13px 20px',
-        background: tk.navBg,
-        backdropFilter: 'blur(24px)', WebkitBackdropFilter: 'blur(24px)',
-        borderBottom: `1px solid ${tk.cardBorder}`,
+        position: 'sticky', top: 0, zIndex: 100, paddingTop: 'env(safe-area-inset-top, 0px)',
+        background: dark ? 'rgba(22,22,24,.82)' : 'rgba(250,250,252,.82)',
+        backdropFilter: 'blur(24px) saturate(1.8)', WebkitBackdropFilter: 'blur(24px) saturate(1.8)',
+        borderBottom: `.5px solid ${tucked ? (dark ? 'rgba(255,255,255,.14)' : 'rgba(0,0,0,.14)') : 'transparent'}`,
+        transition: 'border-color .18s',
       }}>
-        <button
-          onClick={() => router.back()}
-          style={{
-            display: 'flex', alignItems: 'center', gap: 6,
-            background: tk.cardBg, border: `1px solid ${tk.cardBorder}`,
-            borderRadius: 10, padding: '7px 14px', cursor: 'pointer',
-            fontSize: 13, color: tk.textSub,
-            fontFamily: 'var(--font-sans),sans-serif',
-            transition: 'all .15s',
-          }}
-          onMouseEnter={e => {
-            e.currentTarget.style.borderColor = tk.accentBorder;
-            e.currentTarget.style.color = tk.accent;
-          }}
-          onMouseLeave={e => {
-            e.currentTarget.style.borderColor = tk.cardBorder;
-            e.currentTarget.style.color = tk.textSub;
-          }}
-        >
-          <span style={{ fontSize: 15 }}>←</span> Back
-        </button>
-
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <span style={{ fontSize: 15, fontWeight: 600, color: tk.text, letterSpacing: '-.2px' }}>
-            {detail.title}
-          </span>
+        <div style={{ maxWidth: 960, height: 48, margin: '0 auto', padding: '0 8px', display: 'grid', gridTemplateColumns: '1fr auto 1fr', alignItems: 'center' }}>
+          <button onClick={back} style={{ justifySelf: 'start', display: 'inline-flex', alignItems: 'center', gap: 2, height: 36, padding: '0 8px', fontSize: 16, color: tk.accent }}>
+            <ChevronLeft s={20} />Portfolio
+          </button>
+          <span style={{ fontSize: 16, fontWeight: 600, opacity: tucked ? 1 : 0, transition: 'opacity .18s' }}>{detail.title}</span>
+          <button
+            onClick={toggleDark}
+            aria-label={dark ? 'Switch to light mode' : 'Switch to dark mode'}
+            style={{
+              justifySelf: 'end', width: 36, height: 36, borderRadius: '50%', color: tk.label2,
+              display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+              background: dark ? 'rgba(255,255,255,.1)' : 'rgba(0,0,0,.05)',
+            }}
+          >
+            {dark ? <SunIcon s={17} /> : <MoonIcon s={17} />}
+          </button>
         </div>
-
-        <button
-          onClick={toggleDark}
-          aria-label={dark ? 'Switch to light mode' : 'Switch to dark mode'}
-          style={{
-            background: tk.cardBg, border: `1px solid ${tk.cardBorder}`,
-            borderRadius: 8, padding: '5px 10px', cursor: 'pointer',
-            fontSize: 15, color: tk.text,
-          }}
-        >
-          {dark ? '☀️' : '🌙'}
-        </button>
       </nav>
 
-      {/* ── Page body ───────────────────────────────────────────────────────── */}
-      <div style={{ maxWidth: 540, margin: '0 auto', padding: '0 20px 80px' }}>
-
-        {/* Hero card */}
-        <div style={{
-          padding: '28px 0 24px',
-        }}>
-          <div style={{
-            background: tk.cardBg, border: `1px solid ${tk.cardBorder}`,
-            borderRadius: 18, padding: '22px 22px 18px',
-          }}>
-            <div style={{
-              display: 'flex', alignItems: 'center', gap: 14, marginBottom: 14,
-            }}>
-              {summary && (
-                <div style={{
-                  width: 64, height: 48, borderRadius: 12, flexShrink: 0,
-                  border: `1px solid ${tk.cardBorder}`, background: tk.cardBg,
-                  position: 'relative', overflow: 'hidden',
-                }}>
-                  <Image src={summary.image} alt={detail.title} fill style={{ objectFit: 'cover' }} sizes="64px" />
-                </div>
-              )}
-              <div>
-                <h1 style={{
-                  fontSize: 23, fontWeight: 700,
-                  letterSpacing: '-.4px', marginBottom: 4, color: tk.text,
-                }}>
-                  {detail.title}
-                </h1>
-                <div style={{ fontSize: 13, color: tk.accent }}>{detail.type}</div>
-              </div>
+      <div style={{ maxWidth: 960, margin: '0 auto', paddingBottom: 'calc(40px + env(safe-area-inset-bottom, 0px))' }}>
+        <header className="pp-head" style={{ display: 'flex', alignItems: 'flex-end', gap: 16, flexWrap: 'wrap' }}>
+          <div style={{ flex: 1, minWidth: 240 }}>
+            <div style={{ fontSize: 12.5, fontWeight: 700, letterSpacing: '.8px', textTransform: 'uppercase', color: tk.label2 }}>
+              {PLATFORM[summary.platform]} · {detail.year}
             </div>
-
-            {/* Meta row */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' as const }}>
-              <span style={{
-                padding: '3px 10px', borderRadius: 20, fontSize: 11,
-                fontFamily: 'var(--font-mono),monospace',
-                background: tk.accentBg, border: `1px solid ${tk.accentBorder}`,
-                color: tk.accent,
-              }}>
-                {detail.year}
-              </span>
-              <span style={{
-                padding: '3px 10px', borderRadius: 20, fontSize: 11,
-                fontFamily: 'var(--font-mono),monospace',
-                background: detail.isLive
-                  ? 'rgba(52,199,89,.10)' : tk.pillBg,
-                border: `1px solid ${detail.isLive ? 'rgba(52,199,89,.26)' : tk.pillBorder}`,
-                color: detail.isLive ? (dark ? '#34c759' : '#15803d') : tk.textMuted,
-              }}>
-                {detail.isLive ? '● Live' : 'GitHub only'}
-              </span>
-            </div>
+            <h1 ref={titleRef} className="pp-title" style={{ marginTop: 4, fontWeight: 700, letterSpacing: '-1px', lineHeight: 1.05 }}>{detail.title}</h1>
+            <p style={{ marginTop: 6, fontSize: 17, color: tk.label2 }}>{detail.type}</p>
           </div>
-        </div>
-
-        {/* ── Image gallery ────────────────────────────────────────────────── */}
-        {images.length > 0 && (
-          <>
-            <SectionLabel text="Gallery" tk={tk} />
-            <div style={{ marginBottom: 28 }}>
-              {/* Main image */}
-              <div
-                onClick={() => setLightbox(true)}
-                style={{
-                  position: 'relative', width: '100%', aspectRatio: '16/10',
-                  borderRadius: 16, overflow: 'hidden',
-                  background: tk.cardBg,
-                  border: `1px solid ${tk.cardBorder}`,
-                  cursor: 'zoom-in', marginBottom: 10,
-                }}
-              >
-                <Image
-                  src={images[imgIdx]}
-                  alt={`${detail.title} screenshot ${imgIdx + 1}`}
-                  fill
-                  style={{ objectFit: 'contain', padding: 4 }}
-                  sizes="540px"
-                />
-                <div style={{
-                  position: 'absolute', bottom: 10, right: 10,
-                  background: 'rgba(0,0,0,.60)', backdropFilter: 'blur(8px)',
-                  borderRadius: 20, padding: '3px 10px',
-                  fontSize: 11, color: 'rgba(255,255,255,.85)',
-                  fontFamily: 'var(--font-mono),monospace',
-                }}>
-                  {imgIdx + 1} / {images.length}
-                </div>
-              </div>
-
-              {/* Prev / Next + thumbnail strip */}
-              {images.length > 1 && (
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <button
-                    onClick={prev}
-                    aria-label="Previous image"
-                    style={{
-                      width: 34, height: 34, borderRadius: 10, flexShrink: 0,
-                      background: tk.cardBg, border: `1px solid ${tk.cardBorder}`,
-                      color: tk.textSub, fontSize: 16, cursor: 'pointer',
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      transition: 'all .15s',
-                    }}
-                  >‹</button>
-
-                  <div style={{
-                    flex: 1, display: 'flex', gap: 6, overflowX: 'auto',
-                    scrollbarWidth: 'none', paddingBottom: 2,
-                  }}>
-                    {images.map((img, i) => (
-                      <button
-                        key={i}
-                        onClick={() => setImgIdx(i)}
-                        aria-label={`View image ${i + 1}`}
-                        style={{
-                          flexShrink: 0, width: 52, height: 36,
-                          borderRadius: 8, overflow: 'hidden', padding: 0,
-                          border: i === imgIdx
-                            ? `2px solid ${tk.accent}`
-                            : `1px solid ${tk.cardBorder}`,
-                          cursor: 'pointer', position: 'relative',
-                          opacity: i === imgIdx ? 1 : 0.55,
-                          transition: 'opacity .15s, border-color .15s',
-                          background: tk.cardBg,
-                        }}
-                      >
-                        <Image
-                          src={img} alt="" fill
-                          style={{ objectFit: 'cover' }} sizes="52px"
-                        />
-                      </button>
-                    ))}
-                  </div>
-
-                  <button
-                    onClick={next}
-                    aria-label="Next image"
-                    style={{
-                      width: 34, height: 34, borderRadius: 10, flexShrink: 0,
-                      background: tk.cardBg, border: `1px solid ${tk.cardBorder}`,
-                      color: tk.textSub, fontSize: 16, cursor: 'pointer',
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      transition: 'all .15s',
-                    }}
-                  >›</button>
-                </div>
-              )}
-            </div>
-          </>
-        )}
-
-        {/* ── Description ──────────────────────────────────────────────────── */}
-        <SectionLabel text="About" tk={tk} />
-        <div style={{
-          background: tk.cardBg, border: `1px solid ${tk.cardBorder}`,
-          borderRadius: 16, padding: '18px 20px', marginBottom: 22,
-          fontSize: 14, lineHeight: 1.78, color: tk.textSub,
-        }}>
-          {detail.description}
-        </div>
-
-        {/* ── Features ─────────────────────────────────────────────────────── */}
-        {detail.features && detail.features.length > 0 && (
-          <>
-            <SectionLabel text="Features" tk={tk} />
-            <div style={{
-              background: tk.cardBg, border: `1px solid ${tk.cardBorder}`,
-              borderRadius: 16, padding: '16px 20px', marginBottom: 22,
-            }}>
-              {detail.features.map((f, i) => (
-                <div
-                  key={i}
-                  style={{
-                    display: 'flex', gap: 10, fontSize: 13.5,
-                    color: tk.textSub, lineHeight: 1.68,
-                    marginBottom: i < detail.features.length - 1 ? 10 : 0,
-                    paddingBottom: i < detail.features.length - 1 ? 10 : 0,
-                    borderBottom: i < detail.features.length - 1
-                      ? `1px solid ${tk.cardBorder}` : 'none',
-                  }}
-                >
-                  <span style={{ color: tk.accent, flexShrink: 0, marginTop: 1, fontSize: 12, fontWeight: 600 }}>&rsaquo;</span>
-                  <span>{f}</span>
-                </div>
-              ))}
-            </div>
-          </>
-        )}
-
-        {/* ── Tech stack ───────────────────────────────────────────────────── */}
-        {detail.tools && detail.tools.length > 0 && (
-          <>
-            <SectionLabel text="Tech Stack" tk={tk} />
-            <div style={{
-              display: 'flex', flexWrap: 'wrap' as const, gap: 8, marginBottom: 28,
-            }}>
-              {detail.tools.map((tool, i) => (
-                <div
-                  key={i}
-                  style={{
-                    position: 'relative', width: 38, height: 38,
-                    borderRadius: 10,
-                    background: tk.cardBg, border: `1px solid ${tk.cardBorder}`,
-                    overflow: 'hidden', flexShrink: 0,
-                    transition: 'all .18s',
-                  }}
-                >
-                  <Image src={tool} alt={`tool-${i}`} fill style={{ objectFit: 'contain', padding: 5 }} sizes="38px" />
-                </div>
-              ))}
-            </div>
-          </>
-        )}
-
-        {/* ── Links ────────────────────────────────────────────────────────── */}
-        <SectionLabel text="Links" tk={tk} />
-        <div style={{ display: 'flex', gap: 10 }}>
-          {detail.githubrepo && (
-            <a
-              href={detail.githubrepo}
-              target="_blank" rel="noopener noreferrer"
-              style={{
-                flex: 1, textAlign: 'center' as const,
-                padding: '13px 16px', borderRadius: 14, fontSize: 13.5, fontWeight: 600,
-                background: tk.accentSolid,
-                border: 'none',
-                color: '#fff', textDecoration: 'none',
-                transition: 'all .18s',
-                fontFamily: 'var(--font-mono),monospace',
-              }}
-            >
-              GitHub
-            </a>
-          )}
-          {detail.isLive && detail.livelink && (
-            <a
-              href={detail.livelink}
-              target="_blank" rel="noopener noreferrer"
-              style={{
-                flex: 1, textAlign: 'center' as const,
-                padding: '13px 16px', borderRadius: 14, fontSize: 13.5, fontWeight: 500,
-                background: 'rgba(52,199,89,.10)',
-                border: '1px solid rgba(52,199,89,.24)',
-                color: dark ? '#34c759' : '#15803d', textDecoration: 'none',
-                transition: 'all .18s',
-                fontFamily: 'var(--font-mono),monospace',
-              }}
-            >
-              ↗  Live Demo
-            </a>
-          )}
-        </div>
-      </div>
-
-      {/* ── Lightbox ──────────────────────────────────────────────────────── */}
-      {lightbox && (
-        <div
-          onClick={() => setLightbox(false)}
-          role="dialog"
-          aria-modal="true"
-          aria-label={`${detail.title} gallery`}
-          style={{
-            position: 'fixed', inset: 0, zIndex: 99999,
-            background: 'rgba(0,0,0,.92)', backdropFilter: 'blur(18px)',
-            WebkitBackdropFilter: 'blur(18px)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            animation: 'fadeSlideIn .18s ease',
-          }}
-        >
-          <div
-            style={{ position: 'relative', width: '92vw', height: '80vh' }}
-            onClick={e => e.stopPropagation()}
-          >
-            <Image
-              src={images[imgIdx]}
-              alt={`${detail.title} screenshot ${imgIdx + 1}`}
-              fill style={{ objectFit: 'contain', borderRadius: 10 }}
-              sizes="92vw"
-            />
-            {images.length > 1 && (
-              <>
-                <button
-                  onClick={prev}
-                  aria-label="Previous image"
-                  style={{
-                    position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)',
-                    width: 44, height: 44, borderRadius: '50%',
-                    background: 'rgba(255,255,255,.14)', border: '1px solid rgba(255,255,255,.22)',
-                    color: '#fff', cursor: 'pointer', fontSize: 22,
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    transition: 'background .15s',
-                  }}
-                  onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,.28)')}
-                  onMouseLeave={e => (e.currentTarget.style.background = 'rgba(255,255,255,.14)')}
-                >‹</button>
-                <button
-                  onClick={next}
-                  aria-label="Next image"
-                  style={{
-                    position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)',
-                    width: 44, height: 44, borderRadius: '50%',
-                    background: 'rgba(255,255,255,.14)', border: '1px solid rgba(255,255,255,.22)',
-                    color: '#fff', cursor: 'pointer', fontSize: 22,
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    transition: 'background .15s',
-                  }}
-                  onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,.28)')}
-                  onMouseLeave={e => (e.currentTarget.style.background = 'rgba(255,255,255,.14)')}
-                >›</button>
-              </>
+          <div className="pp-actions" style={{ display: 'flex', gap: 8 }}>
+            {detail.githubrepo && (
+              <a href={detail.githubrepo} target="_blank" rel="noopener noreferrer" style={{
+                display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                height: 44, padding: '0 18px', borderRadius: 12, fontSize: 15, fontWeight: 600, background: tk.select, color: '#fff',
+              }}>
+                <GitHubIcon s={17} />View on GitHub
+              </a>
+            )}
+            {detail.isLive && detail.livelink && (
+              <a href={detail.livelink} target="_blank" rel="noopener noreferrer" style={{
+                display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+                height: 44, padding: '0 18px', borderRadius: 12, fontSize: 15, fontWeight: 600,
+                background: dark ? '#1c1c1e' : '#fff', color: tk.label,
+              }}>
+                Live demo <ArrowUpRight s={12} />
+              </a>
             )}
           </div>
-          {/* Counter */}
-          <div style={{
-            position: 'absolute', bottom: 28, left: '50%', transform: 'translateX(-50%)',
-            background: 'rgba(0,0,0,.55)', backdropFilter: 'blur(8px)',
-            color: 'rgba(255,255,255,.80)', fontSize: 12, padding: '4px 14px',
-            borderRadius: 20, fontFamily: 'var(--font-mono),monospace',
-            border: '1px solid rgba(255,255,255,.12)',
-          }}>
-            {imgIdx + 1} / {images.length}
-          </div>
-          <button
-            onClick={() => setLightbox(false)}
-            aria-label="Close"
-            style={{
-              position: 'absolute', top: 20, right: 20,
-              width: 38, height: 38, borderRadius: '50%',
-              background: 'rgba(255,255,255,.14)', border: '1px solid rgba(255,255,255,.22)',
-              color: '#fff', cursor: 'pointer', fontSize: 18,
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              transition: 'background .15s',
-            }}
-            onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,.28)')}
-            onMouseLeave={e => (e.currentTarget.style.background = 'rgba(255,255,255,.14)')}
-          >✕</button>
+        </header>
+
+        <div className="pp-card" style={{ background: dark ? '#1c1c1e' : '#fff' }}>
+          <Showcase title={detail.title} dark={dark} level={2} animate={false} />
         </div>
-      )}
+      </div>
     </div>
   );
 }

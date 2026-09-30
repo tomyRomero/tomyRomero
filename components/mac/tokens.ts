@@ -16,15 +16,27 @@ export const T = (dark: boolean) => ({
   pillBg:       dark ? 'rgba(255,255,255,0.07)'   : 'rgba(0,0,0,0.04)',
   pillBorder:   dark ? 'rgba(255,255,255,0.10)'   : 'rgba(0,0,0,0.08)',
   pillText:     dark ? 'rgba(238,240,244,.68)'    : 'rgba(26,28,32,.68)',
-  // Single flat accent — macOS system blue. No gradients, no glows.
-  accent:       dark ? '#78b3ff'                  : '#0068d6',
+  accent:       dark ? '#78b3ff'                  : '#0062cc',
   accentBg:     dark ? 'rgba(64,140,255,.12)'     : 'rgba(0,104,214,.07)',
   accentBorder: dark ? 'rgba(100,160,255,.30)'    : 'rgba(0,104,214,.22)',
   // Solid fill for primary buttons / filled UI
   accentGrad2:  dark ? '#0A84FF'                  : '#0071E3',
-  // System highlight — modern macOS menu/selection blue
+  // Menu and selection highlight
   hlColor:      dark ? '#0A84FF' : '#007AFF',
   dockBorder:   dark ? 'rgba(255,255,255,.12)' : 'rgba(0,0,0,.10)',
+  // Native app surfaces: opaque content panes beside translucent sidebars
+  pane:         dark ? '#1c1c1f'                  : '#ffffff',
+  paneAlt:      dark ? '#2a2a2e'                  : '#f5f5f7',
+  fill:         dark ? 'rgba(255,255,255,.08)'    : '#f0f0f3',
+  sidebar:      dark ? 'rgba(36,34,46,.62)'       : 'rgba(242,241,247,.62)',
+  sidebarLine:  dark ? 'rgba(0,0,0,.5)'           : 'rgba(0,0,0,.1)',
+  sidebarSel:   dark ? 'rgba(255,255,255,.1)'     : 'rgba(0,0,0,.08)',
+  sep:          dark ? 'rgba(255,255,255,.08)'    : '#e8e8ed',
+  label:        dark ? '#f5f5f7'                  : '#1d1d1f',
+  label2:       dark ? '#a1a1a6'                  : '#6e6e73',
+  label3:       dark ? '#5d5d62'                  : '#b8b8bf',
+  // Filled system blue for selections and primary buttons
+  select:       dark ? '#0a84ff'                  : '#0062cc',
   shadow: dark
     ? '0 24px 64px rgba(0,0,0,.65), 0 4px 16px rgba(0,0,0,.35), 0 0 0 0.5px rgba(255,255,255,.04)'
     : '0 24px 60px rgba(0,0,0,.14), 0 4px 16px rgba(0,0,0,.07)',

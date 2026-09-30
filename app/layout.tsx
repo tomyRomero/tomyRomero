@@ -5,7 +5,6 @@ import { Analytics } from '@vercel/analytics/react';
 
 const BASE = 'https://tomyromero.vercel.app';
 
-// Browser chrome (mobile URL bar etc.) matches the site background per theme
 export const viewport: Viewport = {
   themeColor: [
     { media: '(prefers-color-scheme: light)', color: '#f4f5f7' },
@@ -13,7 +12,6 @@ export const viewport: Viewport = {
   ],
 };
 
-// ── Metadata ──────────────────────────────────────────────────────────────────
 export const metadata: Metadata = {
   metadataBase: new URL(BASE),
 
@@ -92,7 +90,7 @@ export const metadata: Metadata = {
   category: 'technology',
 };
 
-// ── JSON-LD structured data ───────────────────────────────────────────────────
+// JSON-LD
 const jsonLd = {
   '@context': 'https://schema.org',
   '@graph': [
@@ -102,7 +100,10 @@ const jsonLd = {
       name:       'Tomy F. Romero',
       url:        BASE,
       image:      `${BASE}/assets/tomyRomeroGrad.jpeg`,
-      jobTitle:   'Software Engineer',
+      jobTitle:   'Full-Stack Software Engineer',
+      description:
+        'Full-stack software engineer building home care software with ASP.NET Core, React, and SQL Server.',
+      knowsLanguage: ['English', 'Spanish'],
       worksFor: {
         '@type': 'Organization',
         name:    'MEDsys Software Solutions',
@@ -139,27 +140,29 @@ const jsonLd = {
   ],
 };
 
-// ── Fonts ─────────────────────────────────────────────────────────────────────
+// Variable font, so no weight list
 const dmSans = DM_Sans({
   subsets:  ['latin'],
-  weight:   ['300', '400', '500', '600'],
   variable: '--font-sans',
   display:  'swap',
 });
 
+// Only used for small labels, so not preloaded
 const ibmPlexMono = IBM_Plex_Mono({
   subsets:  ['latin'],
   weight:   ['400', '500'],
   variable: '--font-mono',
   display:  'swap',
+  preload:  false,
 });
 
-// ── Layout ────────────────────────────────────────────────────────────────────
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
+    // data-theme is set by an inline script before hydration
     <html
       lang="en"
       className={`${dmSans.variable} ${ibmPlexMono.variable}`}
+      suppressHydrationWarning
     >
       <body>
         <a href="#main-content" className="skip-to-content">Skip to content</a>

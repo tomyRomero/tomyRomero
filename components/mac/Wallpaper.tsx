@@ -1,28 +1,33 @@
 'use client';
-import { useState, useRef } from 'react';
+import { useState, useRef, useCallback } from 'react';
+import DynamicScene from './DynamicScene';
+import ShaderWallpaper from './wallpapers/ShaderWallpaper';
+import { BUBBLES_FS } from './wallpapers/bubblesShader';
+import { hexRGB } from './wallpapers/gl';
+import SplashPaint from './wallpapers/SplashPaint';
 
-// Selectable wallpapers, switchable from the ⌘ menu. All CSS/SVG,
-// zero image assets. Each has a light and dark treatment.
-export type WallpaperVariant = 'splash' | 'bubbles' | 'mesh';
-
-export const WALLPAPERS: { id: WallpaperVariant; label: string }[] = [
-  { id: 'splash',  label: 'Splash'  },
-  { id: 'bubbles', label: 'Bubbles' },
-  { id: 'mesh',    label: 'Mesh'    },
-];
+// Dynamic, Bubbles and Splash are WebGL shaders with SVG/CSS fallbacks; Mesh is CSS
+import type { WallpaperVariant } from './wallpaperList';
+export { WALLPAPERS, type WallpaperVariant } from './wallpaperList';
 
 const BASES: Record<WallpaperVariant, { dark: string; light: string }> = {
   splash: {
     dark:  'linear-gradient(165deg, #141416 0%, #0e0e10 100%)',
     light: 'linear-gradient(165deg, #f8f8f6 0%, #f1f1ee 100%)',
   },
+  // Shown until the shader fades in
   bubbles: {
-    dark:  'linear-gradient(180deg, #03121e 0%, #072a3f 60%, #0a3a52 100%)',
-    light: 'linear-gradient(180deg, #e2f1f8 0%, #cfe7f2 55%, #c0dcEB 100%)',
+    dark:  'linear-gradient(180deg, #0f4f6e 0%, #0a2f4a 45%, #030e1b 100%)',
+    light: 'linear-gradient(180deg, #b8eef5 0%, #4fb8d0 45%, #13628a 100%)',
   },
   mesh: {
     dark:  'linear-gradient(160deg, #070a1e 0%, #0d1130 50%, #0a0d26 100%)',
     light: 'linear-gradient(160deg, #e3ecfa 0%, #eef2fb 50%, #e6eefa 100%)',
+  },
+  // The scene paints its own sky; this only shows for a frame on load
+  dynamic: {
+    dark:  'linear-gradient(180deg, #0f1838 0%, #1d2a55 100%)',
+    light: 'linear-gradient(180deg, #7fb5ea 0%, #cfe6f7 100%)',
   },
 };
 
@@ -41,7 +46,7 @@ function Wash({ w, pos, color, blur, anim }: {
   );
 }
 
-// ── Mesh: Sequoia-style soft color field ─────────────────────────────────────
+// Mesh
 function Mesh({ dark }: { dark: boolean }) {
   return (
     <>
@@ -57,53 +62,86 @@ function Mesh({ dark }: { dark: boolean }) {
   );
 }
 
-
-// ── Bubbles: interactive field, rendered by the desktop INSIDE the window
-// canvas (below windows/widgets) so bubbles are clickable in empty space but
-// never intercept clicks on real content. Deterministic config — no
-// randomness at render time, so SSR and client match.
+// Bubbles: the water is a shader; the bubbles are buttons rendered inside the
+// window canvas, below windows. Deterministic so SSR and client match.
 const BUBBLES = [
-  { left: '6%',  size: 46, dur: 16, delay: 0,    sway: 40  },
-  { left: '15%', size: 22, dur: 11, delay: 3,    sway: -30 },
-  { left: '24%', size: 64, dur: 20, delay: 6,    sway: 24  },
-  { left: '33%', size: 16, dur: 9,  delay: 1.5,  sway: -18 },
-  { left: '42%', size: 38, dur: 14, delay: 8,    sway: 34  },
-  { left: '52%', size: 26, dur: 12, delay: 4,    sway: -26 },
-  { left: '61%', size: 54, dur: 18, delay: 10,   sway: 20  },
-  { left: '70%', size: 18, dur: 10, delay: 2,    sway: -36 },
-  { left: '78%', size: 42, dur: 15, delay: 7,    sway: 30  },
-  { left: '86%', size: 28, dur: 13, delay: 5,    sway: -22 },
-  { left: '93%', size: 50, dur: 19, delay: 12,   sway: 18  },
-  { left: '48%', size: 12, dur: 8,  delay: 9,    sway: 14  },
+  { left: '5%',  size: 48, dur: 14,   delay: 0,    sway: 34  },
+  { left: '12%', size: 20, dur: 19,   delay: 3,    sway: -22 },
+  { left: '19%', size: 66, dur: 12,   delay: 6.5,  sway: 26  },
+  { left: '27%', size: 14, dur: 21,   delay: 1.5,  sway: -16 },
+  { left: '34%', size: 36, dur: 16,   delay: 9,    sway: 30  },
+  { left: '41%', size: 24, dur: 18,   delay: 4,    sway: -24 },
+  { left: '49%', size: 56, dur: 13,   delay: 11,   sway: 20  },
+  { left: '56%', size: 12, dur: 22,   delay: 7,    sway: 14  },
+  { left: '63%', size: 42, dur: 15,   delay: 2,    sway: -32 },
+  { left: '70%', size: 18, dur: 20,   delay: 12.5, sway: 22  },
+  { left: '77%', size: 60, dur: 12.5, delay: 5,    sway: -20 },
+  { left: '84%', size: 28, dur: 17,   delay: 8,    sway: 28  },
+  { left: '91%', size: 44, dur: 14.5, delay: 13,   sway: -26 },
+  { left: '96%', size: 16, dur: 21,   delay: 10,   sway: 12  },
 ];
 
-const POP_DROPS = [
-  { x: 40, y: 0 }, { x: 20, y: -34 }, { x: -20, y: -34 },
-  { x: -40, y: 0 }, { x: -20, y: 34 }, { x: 20, y: 34 },
-];
+// Pop: droplets thrown in a ring, plus a few tiny bubbles set free
+const POP_DROPS = Array.from({ length: 10 }, (_, k) => {
+  const a = (k / 10) * Math.PI * 2 + (k % 2 ? .18 : -.12);
+  const r = 34 + (k % 3) * 9;
+  return { x: Math.cos(a) * r, y: Math.sin(a) * r, s: 3 + (k % 3) };
+});
+const POP_MICRO = [{ x: -8, y: -46, s: 5 }, { x: 10, y: -62, s: 4 }, { x: -2, y: -78, s: 3 }, { x: 14, y: -38, s: 3 }];
+
+function BubbleGlass({ size, dark }: { size: number; dark: boolean }) {
+  return (
+    <span className="wp-bubble-glass" style={{
+      position: 'relative', display: 'block', width: size, height: size, borderRadius: '50%',
+      background: dark
+        ? 'radial-gradient(circle at 50% 55%, rgba(120,210,255,.05) 0%, rgba(120,210,255,.08) 55%, rgba(170,230,255,.32) 84%, rgba(220,245,255,.7) 97%, rgba(220,245,255,0) 100%)'
+        : 'radial-gradient(circle at 50% 55%, rgba(255,255,255,.08) 0%, rgba(255,255,255,.1) 55%, rgba(255,255,255,.42) 84%, rgba(255,255,255,.95) 97%, rgba(255,255,255,0) 100%)',
+      boxShadow: dark ? '0 0 14px rgba(110,220,255,.18)' : '0 4px 14px rgba(10,70,110,.12)',
+    }}>
+      <span className="wp-bubble-film" style={{
+        position: 'absolute', inset: 0, borderRadius: '50%',
+        background: 'conic-gradient(from 0deg, rgba(255,80,170,.55), rgba(80,200,255,.5), rgba(255,230,90,.5), rgba(90,255,170,.5), rgba(170,110,255,.55), rgba(255,80,170,.55))',
+        WebkitMask: 'radial-gradient(circle, transparent 74%, #000 88%, transparent 100%)',
+        mask: 'radial-gradient(circle, transparent 74%, #000 88%, transparent 100%)',
+        opacity: dark ? .45 : .6,
+      }} />
+      <span style={{
+        position: 'absolute', left: '17%', top: '13%', width: '40%', height: '24%', borderRadius: '50%',
+        transform: 'rotate(-32deg)',
+        background: 'radial-gradient(ellipse at center, rgba(255,255,255,.95) 0%, rgba(255,255,255,.5) 40%, rgba(255,255,255,0) 72%)',
+      }} />
+      <span style={{
+        position: 'absolute', right: '18%', bottom: '14%', width: '18%', height: '11%', borderRadius: '50%',
+        transform: 'rotate(-32deg)',
+        background: 'radial-gradient(ellipse at center, rgba(255,255,255,.6), rgba(255,255,255,0) 70%)',
+      }} />
+    </span>
+  );
+}
 
 export function BubbleField({ dark }: { dark: boolean }) {
-  // gen[i] bumps on pop → remounts that bubble so it respawns from the bottom
+  // Bumping gen[i] remounts a popped bubble at the bottom
   const [gen, setGen] = useState<number[]>(() => BUBBLES.map(() => 0));
   const [bursts, setBursts] = useState<{ id: number; x: number; y: number; size: number }[]>([]);
   const burstId = useRef(0);
 
   const pop = (i: number, e: React.MouseEvent<HTMLButtonElement>) => {
-    const r = e.currentTarget.getBoundingClientRect();
+    const glass = e.currentTarget.querySelector('.wp-bubble-glass') ?? e.currentTarget;
+    const r = glass.getBoundingClientRect();
     const id = ++burstId.current;
-    // Canvas-relative coords (the canvas starts 28px below the viewport top)
+    // The canvas starts 28px below the viewport top
     setBursts(b => [...b, { id, x: r.left + r.width / 2, y: r.top - 28 + r.height / 2, size: r.width }]);
     setGen(g => g.map((v, j) => (j === i ? v + 1 : v)));
-    setTimeout(() => setBursts(b => b.filter(x => x.id !== id)), 650);
+    setTimeout(() => setBursts(b => b.filter(x => x.id !== id)), 900);
   };
 
   return (
     <div style={{ position: 'absolute', inset: 0, zIndex: 2, pointerEvents: 'none' }} aria-hidden="true">
       {BUBBLES.map((b, i) => {
-        // Invisible enlarged hit target (44px minimum) so small bubbles are
-        // as easy to pop as big ones
+        // 44px minimum hit target
         const hit = Math.max(b.size, 44);
         const pad = (hit - b.size) / 2;
+        const wobble = 1.1 + (70 - b.size) / 60;
         return (
           <button
             key={`${i}:${gen[i]}`}
@@ -115,51 +153,60 @@ export function BubbleField({ dark }: { dark: boolean }) {
               left: `calc(${b.left} - ${pad}px)`,
               bottom: -(b.size + 24) - pad,
               width: hit, height: hit,
-              borderRadius: '50%',
-              padding: 0,
-              background: 'transparent',
-              border: 'none',
-              pointerEvents: 'auto',
-              cursor: 'pointer',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              padding: 0, background: 'transparent', border: 'none',
+              pointerEvents: 'auto', cursor: 'pointer',
               opacity: 0,
               // Popped bubbles respawn quickly instead of waiting a full cycle
               animation: `bubbleRise ${b.dur}s linear ${gen[i] === 0 ? b.delay : 1 + (i % 4)}s infinite`,
-              ['--sway' as string]: `${b.sway}px`,
-            } as React.CSSProperties}
+            }}
           >
             <span style={{
-              display: 'block',
-              width: b.size, height: b.size,
-              borderRadius: '50%',
-              background: dark
-                ? 'radial-gradient(circle at 30% 30%, rgba(255,255,255,.32), rgba(160,220,255,.10) 45%, rgba(160,220,255,.03) 70%, transparent 100%)'
-                : 'radial-gradient(circle at 30% 30%, rgba(255,255,255,.85), rgba(120,170,220,.14) 45%, transparent 70%)',
-              border: dark
-                ? '1px solid rgba(190,230,255,.28)'
-                : '1px solid rgba(110,160,210,.30)',
-            }} />
+              display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%',
+              animation: `bubbleSway ${(b.dur / 3).toFixed(2)}s ease-in-out ${-(i % 5)}s infinite alternate`,
+              ['--sway' as string]: `${b.sway}px`,
+            } as React.CSSProperties}>
+              <span style={{
+                display: 'block',
+                animation: `bubbleWobble ${wobble.toFixed(2)}s ease-in-out ${-(i % 3) * .4}s infinite alternate`,
+                ['--wob' as string]: String(Math.min(.07, b.size / 900)),
+              } as React.CSSProperties}>
+                <BubbleGlass size={b.size} dark={dark} />
+              </span>
+            </span>
           </button>
         );
       })}
 
-      {/* Pop bursts: expanding ring + droplets flying outward */}
       {bursts.map(b => (
         <div key={b.id} style={{ position: 'absolute', left: b.x, top: b.y, width: 0, height: 0, zIndex: 3 }}>
           <div style={{
+            position: 'absolute', left: -b.size / 2, top: -b.size / 2, width: b.size, height: b.size, borderRadius: '50%',
+            background: 'radial-gradient(circle, rgba(255,255,255,.7), rgba(255,255,255,0) 70%)',
+            animation: 'bubbleFlash .22s ease-out both',
+          }} />
+          <div style={{
             position: 'absolute', left: -b.size / 2, top: -b.size / 2,
             width: b.size, height: b.size, borderRadius: '50%',
-            border: dark ? '2px solid rgba(200,235,255,.7)' : '2px solid rgba(90,150,210,.7)',
-            animation: 'bubblePopRing .45s ease-out both',
+            border: dark ? '1.5px solid rgba(200,240,255,.8)' : '1.5px solid rgba(255,255,255,.95)',
+            animation: 'bubblePopRing .42s cubic-bezier(.2,.7,.3,1) both',
           }} />
           {POP_DROPS.map((d, k) => (
             <div key={k} style={{
-              position: 'absolute', left: -3, top: -3, width: 6, height: 6,
+              position: 'absolute', left: -d.s / 2, top: -d.s / 2, width: d.s, height: d.s,
               borderRadius: '50%',
-              background: dark ? 'rgba(210,240,255,.85)' : 'rgba(110,165,215,.85)',
-              animation: 'bubblePopDrop .5s ease-out both',
-              ['--dx' as string]: `${d.x * (b.size / 40)}px`,
-              ['--dy' as string]: `${d.y * (b.size / 40)}px`,
+              background: dark ? 'rgba(210,245,255,.9)' : 'rgba(255,255,255,.95)',
+              boxShadow: dark ? '0 0 6px rgba(120,220,255,.6)' : '0 1px 3px rgba(10,70,110,.25)',
+              animation: `bubblePopDrop .55s cubic-bezier(.15,.8,.3,1) ${k * 8}ms both`,
+              ['--dx' as string]: `${(d.x * (b.size / 44)).toFixed(1)}px`,
+              ['--dy' as string]: `${(d.y * (b.size / 44)).toFixed(1)}px`,
+            } as React.CSSProperties} />
+          ))}
+          {POP_MICRO.map((m, k) => (
+            <div key={`m${k}`} style={{
+              position: 'absolute', left: m.x - m.s / 2, top: -m.s / 2, width: m.s, height: m.s, borderRadius: '50%',
+              border: dark ? '1px solid rgba(200,240,255,.8)' : '1px solid rgba(255,255,255,.95)',
+              animation: `bubbleMicro .85s ease-out ${60 + k * 40}ms both`,
+              ['--my' as string]: `${m.y}px`,
             } as React.CSSProperties} />
           ))}
         </div>
@@ -168,18 +215,22 @@ export function BubbleField({ dark }: { dark: boolean }) {
   );
 }
 
-// The wallpaper layer itself contributes only the ocean gradient; the
-// interactive bubbles live in the desktop canvas (see BubbleField above).
-function Bubbles() {
-  return null;
+const BUBBLE_WATER = {
+  light: { uTop: '#b8eef5', uMid: '#4fb8d0', uDeep: '#13628a', uRay: '#ffffff', uSand: '#d9cda4', uGrass: '#1f6b5a', uSnow: '#ffffff' },
+  dark:  { uTop: '#0f4f6e', uMid: '#0a2f4a', uDeep: '#030e1b', uRay: '#7fd4ff', uSand: '#1d3140', uGrass: '#0a2a2c', uSnow: '#6ff7ff' },
+};
+
+function Bubbles({ dark }: { dark: boolean }) {
+  const [failed, setFailed] = useState(false);
+  const uniforms = useCallback(() => {
+    const pal = BUBBLE_WATER[dark ? 'dark' : 'light'];
+    return { ...Object.fromEntries(Object.entries(pal).map(([k, v]) => [k, hexRGB(v)])), uDark: dark ? 1 : 0 };
+  }, [dark]);
+  if (failed) return null;
+  return <ShaderWallpaper frag={BUBBLES_FS} uniforms={uniforms} fps={30} maxDpr={1.25} maxPixels={2.4e6} onFail={() => setFailed(true)} />;
 }
 
-// ── Splash: a living painting with real splat morphology. Research on drop
-// impact (spreading → rim take-off into radial fingers → satellite droplets
-// shed beyond finger tips) drives a procedural generator: every splat gets a
-// unique seeded silhouette with fingers, satellites aligned to those fingers,
-// ballistic ejecta that land and stay, and slow drips. Deterministic PRNG so
-// server and client render identical shapes. ─────────────────────────────────
+// Splash SVG fallback: seeded procedural splats so server and client match
 
 function mulberry32(seed: number) {
   let a = seed;
@@ -191,8 +242,7 @@ function mulberry32(seed: number) {
   };
 }
 
-// Catmull-Rom smoothing over a closed ring of points → cubic bezier path.
-// Long spokes between short neighbors smooth into finger-like tongues.
+// Catmull-Rom through a closed ring of points, as cubic beziers
 function smoothPath(pts: { x: number; y: number }[]) {
   const n = pts.length;
   let d = `M${pts[0].x.toFixed(1)},${pts[0].y.toFixed(1)}`;
@@ -215,9 +265,7 @@ function makeSplat(seed: number) {
     const ang = (i / spokes) * Math.PI * 2 + (rnd() - 0.5) * 0.28;
     let r = base * (0.72 + rnd() * 0.55);
     if (rnd() < 0.34) {
-      // A finger: tongue with satellite droplets shed along its direction.
-      // Surface tension rounds real finger ends into clubs, so cap the tip
-      // with a droplet circle — no sharp points.
+      // A finger with satellite droplets and a rounded tip
       r = base * (1.55 + rnd() * 1.15);
       satellites.push({
         x: Math.cos(ang) * (r - 2),
@@ -273,7 +321,8 @@ const SPLATS = [
   ejecta: makeEjecta(i * 104729 + 5),
 }));
 
-function Splash({ dark }: { dark: boolean }) {
+// Fallback without WebGL2
+function SplashSVG({ dark }: { dark: boolean }) {
   return (
     <svg
       style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}
@@ -281,13 +330,11 @@ function Splash({ dark }: { dark: boolean }) {
     >
       {SPLATS.map((sp, i) => (
         <g key={i} transform={`translate(${sp.x} ${sp.y}) scale(${sp.s})`}>
-          {/* Falling drop — stretched by drag, accelerating under gravity */}
           <circle
             className="wp-splat-drop"
             r="11" fill={sp.color} opacity="0"
             style={{ animation: `splatDrop ${sp.cyc}s linear ${sp.delay}s infinite` }}
           />
-          {/* Impact ripple */}
           <circle
             className="wp-splat-ring"
             r="26" fill="none" stroke={sp.color} strokeWidth="3" opacity="0"
@@ -296,8 +343,7 @@ function Splash({ dark }: { dark: boolean }) {
               transformBox: 'fill-box', transformOrigin: 'center',
             }}
           />
-          {/* Splat body — unique procedural silhouette, squash on impact.
-              Rotation on a wrapper so the drip below stays screen-down. */}
+          {/* Rotation is on a wrapper so the drip stays vertical */}
           <g transform={`rotate(${sp.rot})`}>
             <g
               className="wp-splat-body"
@@ -314,7 +360,6 @@ function Splash({ dark }: { dark: boolean }) {
               ))}
             </g>
           </g>
-          {/* Slow drip running down the canvas */}
           {sp.drip && (
             <g
               className="wp-splat-drip"
@@ -328,8 +373,7 @@ function Splash({ dark }: { dark: boolean }) {
               <circle cx="0" cy="98" r="6" />
             </g>
           )}
-          {/* Ballistic ejecta: outer element carries horizontal motion, inner
-              carries the up-then-down arc — droplets land and stay */}
+          {/* Outer element moves horizontally, inner does the arc */}
           {sp.ejecta.map((d, k) => (
             <g
               key={k}
@@ -356,8 +400,14 @@ function Splash({ dark }: { dark: boolean }) {
   );
 }
 
+// The painting itself is WebGL (wallpapers/SplashPaint.tsx)
+function Splash({ dark }: { dark: boolean }) {
+  const [failed, setFailed] = useState(false);
+  return failed ? <SplashSVG dark={dark} /> : <SplashPaint dark={dark} onFail={() => setFailed(true)} />;
+}
+
 const SCENES: Record<WallpaperVariant, (p: { dark: boolean }) => React.ReactNode> = {
-  splash: Splash, bubbles: Bubbles, mesh: Mesh,
+  splash: Splash, bubbles: Bubbles, mesh: Mesh, dynamic: DynamicScene,
 };
 
 export default function Wallpaper({ dark, variant }: { dark: boolean; variant: WallpaperVariant }) {
@@ -366,10 +416,10 @@ export default function Wallpaper({ dark, variant }: { dark: boolean; variant: W
     <div style={{
       position: 'fixed', inset: 0, zIndex: 0, overflow: 'hidden',
       background: BASES[variant][dark ? 'dark' : 'light'],
+      animation: 'introFade .6s ease both',
     }}>
       <Scene dark={dark} />
 
-      {/* Noise texture */}
       <div style={{
         position: 'absolute', inset: 0,
         opacity: dark ? 0.035 : 0.025,
@@ -379,7 +429,6 @@ export default function Wallpaper({ dark, variant }: { dark: boolean; variant: W
         mixBlendMode: 'overlay',
       }} />
 
-      {/* Vignette */}
       <div style={{
         position: 'absolute', inset: 0,
         background: `radial-gradient(ellipse at center, transparent 55%, ${dark ? 'rgba(0,0,0,.42)' : 'rgba(20,30,50,.06)'} 100%)`,

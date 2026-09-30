@@ -3,13 +3,15 @@ import { useState, useCallback, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import Image from 'next/image';
 import { T } from '../tokens';
-import { Chip } from '../Atoms';
-import { ME, images, profilePhoto, aboutChips, projects, totalSkills, yearsExperience } from '@/constants';
+import { ME, images, profilePhoto, projects, totalSkills, yearsExperience, resumeFile, experiences, education } from '@/constants';
+import { GitHubIcon, LinkedInIcon } from '../Icons';
+import { requestResume } from '../ResumeDialog';
+import { Monogram, TOOLBAR_H, Download, Envelope, ShareIcon, CheckIcon, PinLine } from '../Native';
 
-const TILTS = [-7, 4, -5, 8, -3, 6, -8, 3, -4, 7];
+const TILTS = [-5, 4, -3, 6, -6, 3, -4, 7, -2, 5];
 
-// ── Lightbox (portal — renders at body level, no stacking-context issues) ─────
-function Lightbox({ startIdx, onClose }: { startIdx: number; onClose: () => void }) {
+// Lightbox
+export function Lightbox({ startIdx, onClose }: { startIdx: number; onClose: () => void }) {
   const [idx, setIdx] = useState(startIdx);
   const prev = useCallback(() => setIdx(i => (i - 1 + images.length) % images.length), []);
   const next = useCallback(() => setIdx(i => (i + 1) % images.length), []);
@@ -66,7 +68,6 @@ function Lightbox({ startIdx, onClose }: { startIdx: number; onClose: () => void
         )}
       </div>
 
-      {/* Counter */}
       <div style={{
         position: 'absolute', bottom: 22, left: '50%', transform: 'translateX(-50%)',
         background: 'rgba(0,0,0,.50)', color: 'rgba(255,255,255,.70)',
@@ -77,7 +78,6 @@ function Lightbox({ startIdx, onClose }: { startIdx: number; onClose: () => void
         {idx + 1} / {images.length}
       </div>
 
-      {/* Keyboard hint */}
       <div style={{
         position: 'absolute', bottom: 22, right: 24,
         color: 'rgba(255,255,255,.32)', fontSize: 11,
@@ -86,7 +86,6 @@ function Lightbox({ startIdx, onClose }: { startIdx: number; onClose: () => void
         ← → esc
       </div>
 
-      {/* Close */}
       <button
         onClick={onClose}
         style={{
@@ -103,7 +102,6 @@ function Lightbox({ startIdx, onClose }: { startIdx: number; onClose: () => void
         ✕
       </button>
 
-      {/* Prev / Next */}
       {images.length > 1 && (
         <>
           {([
@@ -135,288 +133,275 @@ function Lightbox({ startIdx, onClose }: { startIdx: number; onClose: () => void
   );
 }
 
-// ── Tilted Photo Strip ─────────────────────────────────────────────────────────
-function TiltedPhotoStrip({ dark }: { dark: boolean }) {
-  const tk = T(dark);
-  const [lightbox, setLightbox] = useState<number | null>(null);
-  const [hov, setHov]           = useState<number | null>(null);
-
+// Photo strip
+function PhotoStrip({ dark, onOpen }: { dark: boolean; onOpen: (i: number) => void }) {
+  const [hov, setHov] = useState<number | null>(null);
   return (
-    <>
-      {lightbox !== null && <Lightbox startIdx={lightbox} onClose={() => setLightbox(null)} />}
-
-      {/* Section header */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
-        <span style={{
-          fontSize: 10.5, fontFamily: 'var(--font-mono),monospace',
-          color: tk.accent, textTransform: 'uppercase', letterSpacing: '1.1px',
-          display: 'flex', alignItems: 'center', gap: 8,
-        }}>
-          Photos
-          <span style={{
-            height: 1, width: 24,
-            background: `linear-gradient(90deg, ${tk.accentBorder}, transparent)`,
-            display: 'inline-block',
-          }} />
-        </span>
-        <span style={{ fontSize: 11, color: tk.textMuted, fontFamily: 'var(--font-mono),monospace' }}>
-          {images.length} shots · scroll →
-        </span>
-      </div>
-
-      {/* Horizontal scrollable tilted strip */}
-      <div
-        style={{
-          overflowX: 'auto', paddingTop: 20, paddingBottom: 14,
-          scrollbarWidth: 'thin',
-          scrollbarColor: `${dark ? 'rgba(255,255,255,.18)' : 'rgba(0,0,0,.18)'} transparent`,
-        }}
-      >
-        <div style={{
-          display: 'flex', alignItems: 'flex-end', gap: 24,
-          width: 'max-content', paddingLeft: 8, paddingRight: 8,
-        }}>
-          {images.map((img, i) => {
-            const tilt = TILTS[i % TILTS.length];
-            const isH  = hov === i;
-            return (
-              <div
-                key={i}
+    <div style={{ overflowX: 'auto', padding: '14px 0 26px' }}>
+      <div style={{ display: 'flex', alignItems: 'flex-start', gap: 14, width: 'max-content', padding: '0 26px' }}>
+        {images.map((img, i) => {
+          const tilt = TILTS[i % TILTS.length];
+          const on = hov === i;
+          // The entrance runs on a wrapper so its last frame doesn't override the tilt
+          return (
+            <span key={i} style={{
+              flexShrink: 0, position: 'relative', zIndex: on ? 2 : 1,
+              animation: `photoIn .5s ${i * 0.05}s cubic-bezier(.16,1,.3,1) both`,
+            }}>
+              <button
+                aria-label={`Open photo: ${img.title}`}
+                onMouseEnter={() => setHov(i)}
+                onMouseLeave={() => setHov(null)}
+                onClick={() => onOpen(i)}
                 style={{
-                  flexShrink: 0,
-                  position: 'relative',
-                  zIndex: isH ? 10 : 1,
-                  animation: `photoIn .5s ${i * 0.055}s cubic-bezier(.16,1,.3,1) both`,
+                  display: 'block', width: 118, padding: '7px 7px 24px',
+                  background: dark ? '#e8e4da' : '#faf8f3', borderRadius: 2,
+                  transform: `rotate(${on ? 0 : tilt}deg) translateY(${on ? -4 : (i % 3) * 3}px) scale(${on ? 1.08 : 1})`,
+                  transition: 'transform .22s cubic-bezier(.34,1.56,.64,1), box-shadow .18s ease',
+                  boxShadow: on
+                    ? '0 18px 40px rgba(0,0,0,.3), 0 4px 12px rgba(0,0,0,.18)'
+                    : `0 8px 20px rgba(0,0,0,${dark ? '.45' : '.16'})`,
                 }}
               >
-                <button
-                  onMouseEnter={() => setHov(i)}
-                  onMouseLeave={() => setHov(null)}
-                  onClick={() => setLightbox(i)}
-                  style={{
-                    display: 'block',
-                    width: 128,
-                    padding: '7px 7px 26px',
-                    background: dark ? '#e8e4da' : '#faf8f3',
-                    border: 'none',
-                    borderRadius: 2,
-                    cursor: 'pointer',
-                    transform: `rotate(${isH ? 0 : tilt}deg) scale(${isH ? 1.12 : 1})`,
-                    transformOrigin: 'bottom center',
-                    transition: 'transform .22s cubic-bezier(.34,1.56,.64,1), box-shadow .18s ease',
-                    boxShadow: isH
-                      ? '0 22px 52px rgba(0,0,0,.46), 0 6px 18px rgba(0,0,0,.28)'
-                      : `0 ${4 + Math.abs(tilt) / 2}px ${10 + Math.abs(tilt) * 1.4}px rgba(0,0,0,${dark ? '.40' : '.24'})`,
-                  }}
-                >
-                  <div style={{
-                    position: 'relative', width: '100%', aspectRatio: '1',
-                    overflow: 'hidden', background: '#d0ccc4',
-                  }}>
-                    <Image src={img.img} alt={img.alt} fill style={{ objectFit: 'cover' }} sizes="114px" />
-                  </div>
-                  {img.title && (
-                    <div style={{
-                      marginTop: 5, fontSize: 9.5,
-                      color: dark ? '#444' : '#555',
-                      fontFamily: 'var(--font-sans),sans-serif',
-                      textAlign: 'center', lineHeight: 1.3, userSelect: 'none',
-                      overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
-                    }}>
-                      {img.title}
-                    </div>
-                  )}
-                </button>
-              </div>
-            );
-          })}
-        </div>
+                <span style={{ position: 'relative', display: 'block', width: 104, height: 104, overflow: 'hidden', background: '#d0ccc4' }}>
+                  <Image src={img.img} alt="" fill style={{ objectFit: 'cover' }} sizes="104px" />
+                </span>
+              </button>
+            </span>
+          );
+        })}
       </div>
-    </>
+    </div>
   );
 }
 
-// ── Stat card — clicks through to its window ──────────────────────────────────
-function StatCard({ label, value, dark, onClick }: {
-  label: string; value: string; dark: boolean; onClick?: () => void;
+function Tile({ label, icon, primary, dark, href, onClick }: {
+  label: string; icon: React.ReactNode; primary?: boolean; dark: boolean;
+  href?: string; onClick?: (e: React.MouseEvent) => void;
+}) {
+  const tk = T(dark);
+  const style: React.CSSProperties = {
+    height: 68, borderRadius: 14,
+    display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 6,
+    fontSize: 13, fontWeight: primary ? 600 : 500,
+    background: primary ? tk.select : dark ? '#2c2c30' : '#ffffff',
+    color: primary ? '#fff' : tk.accent,
+    boxShadow: primary
+      ? `0 10px 24px ${dark ? 'rgba(10,132,255,.3)' : 'rgba(0,98,204,.32)'}`
+      : dark ? '0 0 0 .5px rgba(255,255,255,.08), 0 10px 24px rgba(0,0,0,.4)' : '0 0 0 .5px rgba(0,0,0,.08), 0 10px 24px rgba(0,0,0,.1)',
+    transition: 'transform .16s ease, filter .16s ease',
+  };
+  const lift = (e: React.MouseEvent<HTMLElement>) => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.filter = 'brightness(1.04)'; };
+  const drop = (e: React.MouseEvent<HTMLElement>) => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.filter = 'none'; };
+  const ext = href?.startsWith('http');
+  return href ? (
+    <a href={href} onClick={onClick} style={style} onMouseEnter={lift} onMouseLeave={drop}
+      {...(ext ? { target: '_blank', rel: 'noopener noreferrer' } : {})}>
+      {icon}{label}
+    </a>
+  ) : (
+    <button onClick={onClick} style={style} onMouseEnter={lift} onMouseLeave={drop}>{icon}{label}</button>
+  );
+}
+
+// A labeled row, Contacts style
+function CardRow({ label, dark, last, center, children }: {
+  label: string; dark: boolean; last?: boolean; center?: boolean; children: React.ReactNode;
 }) {
   const tk = T(dark);
   return (
-    <button
-      onClick={onClick}
-      style={{
-        flex: 1, textAlign: 'center',
-        padding: '12px 8px', borderRadius: 12,
-        background: tk.cardBg, border: `1px solid ${tk.cardBorder}`,
-        cursor: onClick ? 'pointer' : 'default',
-        transition: 'all .18s',
-      }}
-      onMouseEnter={e => {
-        if (!onClick) return;
-        e.currentTarget.style.borderColor = tk.accentBorder;
-        e.currentTarget.style.transform = 'translateY(-1px)';
-      }}
-      onMouseLeave={e => {
-        e.currentTarget.style.borderColor = tk.cardBorder;
-        e.currentTarget.style.transform = 'none';
-      }}
-    >
-      <div style={{
-        fontSize: 22, fontWeight: 700, lineHeight: 1,
-        fontFamily: 'var(--font-mono),monospace',
-        color: tk.accent,
-      }}>
-        {value}
-      </div>
-      <div style={{
-        fontSize: 10, color: tk.textMuted, marginTop: 5,
-        fontFamily: 'var(--font-mono),monospace',
-        textTransform: 'uppercase', letterSpacing: '.6px',
-      }}>
-        {label}
-      </div>
-    </button>
+    <div style={{
+      display: 'grid', gridTemplateColumns: '72px minmax(0, 1fr)', gap: 16, alignItems: center ? 'center' : 'start',
+      padding: '12px 2px', borderBottom: last ? 'none' : `1px solid ${tk.sep}`,
+    }}>
+      <div style={{ fontSize: 12.5, fontWeight: 500, color: tk.label2, textAlign: 'right', paddingTop: center ? 0 : 2 }}>{label}</div>
+      <div style={{ minWidth: 0 }}>{children}</div>
+    </div>
   );
 }
 
-// ── Main window ───────────────────────────────────────────────────────────────
+const DEGREE_SHORT: Record<string, string> = { 'Bachelor of Science': 'B.S.' };
+const HEADER_H = 272;
+
 export default function AboutWindow({ dark, onOpen }: {
   dark: boolean; onOpen?: (id: string) => void;
 }) {
   const tk = T(dark);
-  const [showPhotos, setShowPhotos] = useState(true);
+  const [lightbox, setLightbox] = useState<number | null>(null);
+  const [copied, setCopied] = useState(false);
+  const [collapsed, setCollapsed] = useState(false);
+  // Load the strip after the window opens
+  const [showPhotos, setShowPhotos] = useState(false);
   useEffect(() => {
-    setShowPhotos(false);
     const t = setTimeout(() => setShowPhotos(true), 300);
     return () => clearTimeout(t);
   }, []);
 
+  const role = experiences[0];
+  const school = education[0];
+
+  const copyLink = () => {
+    navigator.clipboard?.writeText(ME.portfolio).catch(() => {});
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1600);
+  };
+
+  const stat = (value: string, label: string, id: string, mid?: boolean) => (
+    <button
+      onClick={() => onOpen?.(id)}
+      style={{
+        padding: '14px 0 13px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3,
+        borderLeft: mid ? `1px solid ${tk.sep}` : 'none', borderRight: mid ? `1px solid ${tk.sep}` : 'none',
+        color: tk.label, transition: 'background .15s',
+      }}
+      onMouseEnter={e => (e.currentTarget.style.background = dark ? 'rgba(255,255,255,.04)' : 'rgba(0,0,0,.025)')}
+      onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+    >
+      <span style={{ fontSize: 28, fontWeight: 700, letterSpacing: '-.8px', lineHeight: 1, fontVariantNumeric: 'tabular-nums' }}>{value}</span>
+      <span style={{ fontSize: 12.5, color: tk.label2 }}>{label}</span>
+    </button>
+  );
+
   return (
-    <div style={{ padding: '22px 24px', color: tk.text }}>
-      {/* Header: avatar + name with gradient accent bar */}
-      <div style={{
-        background: tk.cardBg,
-        border: `1px solid ${tk.cardBorder}`,
-        borderRadius: 16,
-        padding: '20px 20px 16px',
-        marginBottom: 20,
+    <div style={{ flex: 1, minWidth: 0, position: 'relative', display: 'flex', background: tk.pane }}>
+      {lightbox !== null && <Lightbox startIdx={lightbox} onClose={() => setLightbox(null)} />}
+
+      {/* Compact title bar once the header scrolls away */}
+      <div data-drag="" aria-hidden={!collapsed} style={{
+        position: 'absolute', top: 0, left: 0, right: 0, height: TOOLBAR_H, zIndex: 5,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        background: dark ? 'rgba(28,28,31,.82)' : 'rgba(255,255,255,.82)',
+        backdropFilter: 'blur(20px) saturate(1.8)', WebkitBackdropFilter: 'blur(20px) saturate(1.8)',
+        borderBottom: `1px solid ${tk.sep}`,
+        fontSize: 13, fontWeight: 600, color: tk.label,
+        opacity: collapsed ? 1 : 0, pointerEvents: collapsed ? 'auto' : 'none',
+        transition: 'opacity .18s ease',
       }}>
-        <div style={{ display: 'flex', gap: 16, alignItems: 'flex-start' }}>
+        {ME.name}
+      </div>
+
+      <div
+        onScroll={e => {
+          const c = e.currentTarget.scrollTop > HEADER_H - TOOLBAR_H - 8;
+          if (c !== collapsed) setCollapsed(c);
+        }}
+        style={{ flex: 1, minWidth: 0, overflowY: 'auto', overflowX: 'hidden' }}
+      >
+        {/* Header: blurred photo behind the name */}
+        <header data-drag="" style={{ position: 'relative', height: HEADER_H, overflow: 'hidden', background: '#3b3a36', color: '#fff' }}>
+          {/* Blurred placeholder, no extra request */}
+          <div aria-hidden="true" style={{
+            position: 'absolute', inset: 0, backgroundImage: `url(${profilePhoto.blurDataURL})`, backgroundSize: 'cover', backgroundPosition: 'center',
+            filter: 'blur(26px) saturate(1.5)', transform: 'scale(1.35)', opacity: .95,
+          }} />
+          <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(0,0,0,.1) 0%, rgba(0,0,0,.4) 100%)' }} />
+
+          <button
+            onClick={copyLink}
+            aria-label={copied ? 'Link copied' : 'Copy link to this portfolio'}
+            title={copied ? 'Link copied' : 'Copy link'}
+            style={{
+              position: 'absolute', top: 12, right: 14, zIndex: 1,
+              height: 28, minWidth: 32, padding: '0 8px', borderRadius: 8,
+              display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+              background: 'rgba(255,255,255,.18)', color: '#fff', fontSize: 12.5, fontWeight: 500,
+              backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)',
+              transition: 'background .15s',
+            }}
+            onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,.28)')}
+            onMouseLeave={e => (e.currentTarget.style.background = 'rgba(255,255,255,.18)')}
+          >
+            {copied ? <><CheckIcon s={14} />Copied</> : <ShareIcon />}
+          </button>
+
           <div style={{
-            width: 80, height: 80, borderRadius: 20, flexShrink: 0, overflow: 'hidden',
-            border: `1px solid ${tk.cardBorder}`,
-            boxShadow: '0 4px 14px rgba(0,0,0,.12)',
-            position: 'relative',
+            position: 'relative', height: '100%', paddingBottom: 30,
+            display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
           }}>
-            <Image src={profilePhoto} alt="Tomy Romero" fill style={{ objectFit: 'cover' }} sizes="80px" priority />
-          </div>
-          <div style={{ flex: 1 }}>
-            <h2 style={{
-              fontSize: 21, fontWeight: 600,
-              letterSpacing: '-.4px', lineHeight: 1.2,
-              color: tk.text,
+            <div style={{
+              position: 'relative', width: 104, height: 104, borderRadius: '50%', overflow: 'hidden',
+              boxShadow: '0 0 0 3px rgba(255,255,255,.9), 0 12px 30px rgba(0,0,0,.35)',
             }}>
+              <Image src={profilePhoto} alt="Tomy Romero" fill sizes="104px" priority style={{ objectFit: 'cover' }} />
+            </div>
+            <h2 style={{ marginTop: 14, fontSize: 30, fontWeight: 700, letterSpacing: '-.7px', lineHeight: 1.05, textShadow: '0 2px 12px rgba(0,0,0,.25)' }}>
               {ME.name}
             </h2>
-            <div style={{
-              color: tk.accent, fontSize: 14, fontWeight: 500, marginTop: 5,
-              fontFamily: 'var(--font-sans),sans-serif',
-            }}>
-              {ME.title}
-            </div>
-            <div style={{
-              color: tk.textMuted, fontSize: 12.5, marginTop: 5,
-              display: 'flex', alignItems: 'center', gap: 5,
-            }}>
-              <svg width="9" height="12" viewBox="0 0 9 12" fill={tk.accent} style={{ flexShrink: 0 }}>
-                <path d="M4.5 0C2 0 0 2 0 4.5c0 3.5 4.5 7.5 4.5 7.5S9 8 9 4.5C9 2 7 0 4.5 0zm0 6a1.5 1.5 0 110-3 1.5 1.5 0 010 3z"/>
-              </svg>
-              {ME.location}
+            <div style={{ marginTop: 5, fontSize: 15, fontWeight: 500, color: 'rgba(255,255,255,.92)' }}>{ME.title}</div>
+            <div style={{ marginTop: 11, display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', justifyContent: 'center' }}>
+              <span style={{
+                display: 'inline-flex', alignItems: 'center', gap: 5, padding: '4px 11px 4px 9px', borderRadius: 20,
+                background: 'rgba(255,255,255,.18)', fontSize: 12.5, fontWeight: 500,
+                backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)',
+              }}>
+                <PinLine />{ME.location}
+              </span>
+              <span style={{
+                display: 'inline-flex', alignItems: 'center', gap: 6, padding: '4px 11px 4px 9px', borderRadius: 20,
+                background: 'rgba(24,128,56,.62)', fontSize: 12.5, fontWeight: 600,
+                backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)',
+              }}>
+                <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#5ee07c', boxShadow: '0 0 0 3px rgba(94,224,124,.25)', animation: 'pulse 2s infinite' }} />
+                Open to opportunities
+              </span>
             </div>
           </div>
+        </header>
+
+        {/* Readable width when zoomed */}
+        <div style={{ maxWidth: 760, margin: '0 auto' }}>
+        <div style={{ position: 'relative', margin: '-34px 24px 0', display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))', gap: 10 }}>
+          <Tile
+            primary dark={dark} label="Resume" icon={<Download s={22} />}
+            href={resumeFile.href} onClick={e => { e.preventDefault(); requestResume(); }}
+          />
+          <Tile dark={dark} label="Email" icon={<Envelope s={22} />} onClick={() => onOpen?.('contact')} />
+          <Tile dark={dark} label="GitHub" icon={<GitHubIcon s={21} />} href={ME.github} />
+          <Tile dark={dark} label="LinkedIn" icon={<LinkedInIcon s={20} />} href={ME.linkedin} />
         </div>
 
-        {/* Open to work — integrated into header card */}
         <div style={{
-          display: 'inline-flex', alignItems: 'center', gap: 7,
-          background: 'rgba(52,199,89,.10)', border: '1px solid rgba(52,199,89,.22)',
-          padding: '5px 14px', borderRadius: 20, marginTop: 14,
+          margin: '20px 24px 0', display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
+          borderRadius: 14, background: tk.paneAlt, overflow: 'hidden',
         }}>
-          <div style={{
-            width: 6, height: 6, borderRadius: '50%', background: '#34c759',
-            boxShadow: '0 0 8px #34c759', animation: 'pulse 2s infinite',
-          }} />
-          <span style={{ fontSize: 11.5, color: dark ? '#34c759' : '#15803d', fontFamily: 'var(--font-mono),monospace' }}>
-            Open to opportunities
-          </span>
+          {stat(yearsExperience(), 'Years', 'experience')}
+          {stat(String(projects.length), 'Projects', 'projects', true)}
+          {stat(String(totalSkills), 'Technologies', 'skills')}
+        </div>
+
+        <div style={{ margin: '10px 24px 0' }}>
+          <CardRow label="note" dark={dark}>
+            <p className="text-pretty" style={{ fontSize: 14, lineHeight: 1.6, color: tk.label }}>{ME.bio}</p>
+          </CardRow>
+          <CardRow label="work" dark={dark} center>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <Monogram text={role.logo} t={role.tint} dark={dark} size={30} round={false} />
+              <div style={{ minWidth: 0, display: 'flex', flexDirection: 'column', gap: 1 }}>
+                <span style={{ fontSize: 14, color: tk.label }}>{role.title}</span>
+                <span style={{ fontSize: 12.5, color: tk.label2 }}>{role.company} · {role.date}</span>
+              </div>
+            </div>
+          </CardRow>
+          <CardRow label="education" dark={dark} last center>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <Monogram text={school.logo} t={school.tint} dark={dark} size={30} round={false} />
+              <div style={{ minWidth: 0, display: 'flex', flexDirection: 'column', gap: 1 }}>
+                <span style={{ fontSize: 14, color: tk.label }}>{DEGREE_SHORT[school.degree] ?? school.degree} {school.field}</span>
+                <span style={{ fontSize: 12.5, color: tk.label2 }}>{school.institution} · {school.years}</span>
+              </div>
+            </div>
+          </CardRow>
+        </div>
+
+        <div style={{ margin: '8px 26px 0', display: 'flex', alignItems: 'baseline', justifyContent: 'space-between' }}>
+          <h3 style={{ fontSize: 13, fontWeight: 600, color: tk.label }}>Photos</h3>
+          <button onClick={() => setLightbox(0)} style={{ fontSize: 12.5, fontWeight: 500, color: tk.accent }}>
+            Show all {images.length}
+          </button>
+        </div>
+        {showPhotos ? <PhotoStrip dark={dark} onOpen={setLightbox} /> : <div style={{ height: 196 }} />}
         </div>
       </div>
-
-      {/* Quick stats row — derived from the data, each opens its window */}
-      <div style={{ display: 'flex', gap: 10, marginBottom: 18 }}>
-        <StatCard label="Years" value={yearsExperience()} dark={dark} onClick={() => onOpen?.('experience')} />
-        <StatCard label="Projects" value={String(projects.length)} dark={dark} onClick={() => onOpen?.('projects')} />
-        <StatCard label="Technologies" value={String(totalSkills)} dark={dark} onClick={() => onOpen?.('skills')} />
-      </div>
-
-      {/* Bio */}
-      <div style={{
-        background: tk.cardBg, border: `1px solid ${tk.cardBorder}`,
-        borderRadius: 14, padding: '16px 18px',
-        fontSize: 13.5, lineHeight: 1.78, color: tk.textSub, marginBottom: 18,
-      }}>
-        {ME.bio}
-      </div>
-
-      {/* Tech chips — each opens the Skills window */}
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7, marginBottom: 18 }}>
-        {aboutChips.map(t => (
-          <button
-            key={t}
-            onClick={() => onOpen?.('skills')}
-            title="View skills"
-            style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer' }}
-          >
-            <Chip amber dark={dark}>{t}</Chip>
-          </button>
-        ))}
-      </div>
-
-      {/* Links */}
-      <div style={{ display: 'flex', gap: 9, flexWrap: 'wrap', marginBottom: 24 }}>
-        {([
-          ['GitHub',   ME.github],
-          ['LinkedIn', ME.linkedin],
-          ['Resume',   '/Tomy_Romero_Resume_Public.pdf'],
-        ] as [string, string][]).map(([l, h]) => (
-          <a
-            key={l} href={h}
-            {...(l === 'Resume'
-              ? { download: 'Tomy_Romero_Resume.pdf' }
-              : { target: '_blank', rel: 'noopener noreferrer' })}
-            style={{
-              padding: '8px 18px', borderRadius: 10, fontSize: 12.5,
-              fontFamily: 'var(--font-mono),monospace',
-              background: tk.accentBg, border: `1px solid ${tk.accentBorder}`,
-              color: tk.accent, textDecoration: 'none', fontWeight: 500,
-              transition: 'all .18s',
-            }}
-            onMouseEnter={e => {
-              e.currentTarget.style.background = tk.accentBorder;
-              e.currentTarget.style.transform = 'translateY(-1px)';
-            }}
-            onMouseLeave={e => {
-              e.currentTarget.style.background = tk.accentBg;
-              e.currentTarget.style.transform = 'none';
-            }}
-          >
-            {l}
-          </a>
-        ))}
-      </div>
-
-      {/* Tilted photo strip */}
-      {showPhotos && <TiltedPhotoStrip dark={dark} />}
     </div>
   );
 }

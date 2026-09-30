@@ -14,7 +14,7 @@ export default function NotFound() {
   const bg      = dark ? '#0a0c11' : '#f4f5f7';
   const text    = dark ? '#eef0f4' : '#1a1c20';
   const textSub = dark ? 'rgba(238,240,244,.60)' : 'rgba(26,28,32,.60)';
-  const accent  = dark ? '#78b3ff' : '#0068d6';
+  const accent  = dark ? '#78b3ff' : '#0062cc';
   const accentSolid = dark ? '#0A84FF' : '#0071E3';
   const cardBg  = dark ? 'rgba(255,255,255,.045)' : 'rgba(0,0,0,.025)';
   const border  = dark ? 'rgba(255,255,255,.08)' : 'rgba(0,0,0,.07)';
@@ -29,7 +29,6 @@ export default function NotFound() {
       textAlign: 'center',
       padding: 24,
     }}>
-      {/* Decorative blurred blob */}
       <div style={{
         position: 'absolute',
         width: '40vw', height: '40vw', borderRadius: '50%',
@@ -40,7 +39,6 @@ export default function NotFound() {
         pointerEvents: 'none',
       }} />
 
-      {/* macOS-style window frame */}
       <div style={{
         position: 'relative',
         background: cardBg,
@@ -55,7 +53,6 @@ export default function NotFound() {
           : '0 24px 64px rgba(0,0,0,.10)',
         overflow: 'hidden',
       }}>
-        {/* Traffic lights */}
         <div style={{
           position: 'absolute', top: 16, left: 18,
           display: 'flex', gap: 7,
@@ -65,7 +62,6 @@ export default function NotFound() {
           <div style={{ width: 12, height: 12, borderRadius: '50%', background: '#28c840' }} />
         </div>
 
-        {/* 404 number */}
         <div style={{
           fontSize: 72, fontWeight: 800, lineHeight: 1,
           fontFamily: 'var(--font-mono), monospace',
@@ -106,7 +102,6 @@ export default function NotFound() {
           ← Back to Desktop
         </Link>
 
-        {/* Keyboard hint */}
         <div style={{
           marginTop: 20, fontSize: 11,
           color: textSub,

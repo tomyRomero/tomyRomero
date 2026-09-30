@@ -21,7 +21,7 @@ export default function WelcomeToast({ dark }: { dark: boolean }) {
     }
   }, []);
 
-  // Replay on demand (Help menu → Show Welcome Tip), even after first visit
+  // Help > Show Welcome Tip
   useEffect(() => {
     const replay = () => {
       leavingRef.current = false;
@@ -34,9 +34,7 @@ export default function WelcomeToast({ dark }: { dark: boolean }) {
     return () => window.removeEventListener('welcomeReplay', replay);
   }, []);
 
-  // The drain bar's CSS animation IS the timer: its animationend dismisses
-  // the toast, and hover simply pauses the animation. One source of truth,
-  // nothing to keep in sync.
+  // The drain bar's animationend dismisses the toast; hover pauses it
   function dismiss() {
     if (leavingRef.current) return;
     leavingRef.current = true;
@@ -51,15 +49,12 @@ export default function WelcomeToast({ dark }: { dark: boolean }) {
   if (!visible) return null;
 
   return (
-    /* Flex row so the card is centered without messing with translateX in keyframes */
+    /* Top right, like macOS notifications */
     <div
       style={{
         position: 'fixed',
-        bottom: 96,
-        left: 0,
-        right: 0,
-        display: 'flex',
-        justifyContent: 'center',
+        top: 38,
+        right: 16,
         zIndex: 9998,
         pointerEvents: 'none',
       }}
@@ -83,14 +78,11 @@ export default function WelcomeToast({ dark }: { dark: boolean }) {
         }}
       >
         <div style={{ padding: '14px 16px 16px' }}>
-
-          {/* Header row */}
           <div style={{
             display: 'flex', alignItems: 'center',
             justifyContent: 'space-between', marginBottom: 11,
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              {/* Real photo, not a logo — this is a person saying hi */}
               <div style={{
                 width: 28, height: 28, borderRadius: '50%', flexShrink: 0,
                 overflow: 'hidden', position: 'relative',
@@ -106,7 +98,6 @@ export default function WelcomeToast({ dark }: { dark: boolean }) {
               </span>
             </div>
 
-            {/* Close button */}
             <button
               onClick={dismiss}
               style={{
@@ -125,10 +116,8 @@ export default function WelcomeToast({ dark }: { dark: boolean }) {
             </button>
           </div>
 
-          {/* Divider */}
           <div style={{ height: 1, background: tk.divider, marginBottom: 11 }} />
 
-          {/* Body */}
           <p style={{
             margin: 0, fontSize: 13, lineHeight: 1.68,
             color: tk.textSub, fontFamily: 'var(--font-sans),sans-serif',
@@ -152,7 +141,6 @@ export default function WelcomeToast({ dark }: { dark: boolean }) {
             {' '}to search.
           </p>
 
-          {/* Progress bar — pauses while hovered */}
           <div style={{
             marginTop: 14, height: 3, borderRadius: 99,
             background: dark ? 'rgba(255,255,255,.08)' : 'rgba(0,0,0,.07)',
@@ -168,15 +156,6 @@ export default function WelcomeToast({ dark }: { dark: boolean }) {
           </div>
         </div>
 
-        {/* Downward caret pointing at dock */}
-        <div style={{
-          textAlign: 'center', fontSize: 14, lineHeight: 1,
-          color: tk.accent, opacity: .7,
-          paddingBottom: 8, marginTop: -4,
-          fontFamily: 'system-ui',
-        }}>
-          ▾
-        </div>
       </div>
     </div>
   );

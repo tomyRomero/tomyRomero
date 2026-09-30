@@ -2,95 +2,13 @@
 import { useState, useEffect, useRef } from 'react';
 import { T } from './tokens';
 import type { Win, WinAction } from './winTypes';
+import { requestResume } from './ResumeDialog';
+import { APP_BG, appGlyph } from './appIcons';
 
-// ── Icons — layered artwork with internal gradients (gradient IDs are
-// prefixed per icon; all five render into the same DOM) ───────────────────────
-const ICONS: Record<string, React.ReactNode> = {
-  about: (
-    <svg width="33" height="33" viewBox="0 0 32 32" fill="none">
-      <defs>
-        <linearGradient id="dk-ab" x1="16" y1="3" x2="16" y2="30" gradientUnits="userSpaceOnUse">
-          <stop offset="0" stopColor="#ffffff" />
-          <stop offset="1" stopColor="#d6e8ff" />
-        </linearGradient>
-      </defs>
-      <path d="M3.5 29.5c0-6.9 5.6-12.5 12.5-12.5s12.5 5.6 12.5 12.5" fill="url(#dk-ab)" fillOpacity=".92" />
-      <circle cx="16" cy="10.4" r="6.3" fill="url(#dk-ab)" />
-      <circle cx="16" cy="10.4" r="6.3" stroke="rgba(15,70,160,.22)" strokeWidth=".8" />
-    </svg>
-  ),
-  projects: (
-    <svg width="33" height="33" viewBox="0 0 32 32" fill="none">
-      <defs>
-        <linearGradient id="dk-pr" x1="16" y1="11" x2="16" y2="27" gradientUnits="userSpaceOnUse">
-          <stop offset="0" stopColor="#ffffff" />
-          <stop offset="1" stopColor="#d9f5e0" />
-        </linearGradient>
-      </defs>
-      <path d="M3 8.6C3 7.2 4.2 6 5.6 6h6.1c.7 0 1.4.28 1.9.78l1.7 1.72h10.1c1.4 0 2.6 1.2 2.6 2.6v1.9H3V8.6z" fill="rgba(255,255,255,.68)" />
-      <path d="M3 11.6h26v11.8c0 1.4-1.2 2.6-2.6 2.6H5.6C4.2 26 3 24.8 3 23.4V11.6z" fill="url(#dk-pr)" />
-      <path d="M3 11.6h26v1.1H3z" fill="rgba(15,110,55,.12)" />
-    </svg>
-  ),
-  experience: (
-    <svg width="33" height="33" viewBox="0 0 32 32" fill="none">
-      <defs>
-        <linearGradient id="dk-ex" x1="16" y1="9" x2="16" y2="28" gradientUnits="userSpaceOnUse">
-          <stop offset="0" stopColor="#ffffff" />
-          <stop offset="1" stopColor="#eadffb" />
-        </linearGradient>
-      </defs>
-      <rect x="11.5" y="4.5" width="9" height="5.5" rx="2.2" stroke="rgba(255,255,255,.92)" strokeWidth="2" />
-      <rect x="3" y="9" width="26" height="19" rx="3.6" fill="url(#dk-ex)" />
-      <path d="M3 16.4h26v2.4H3z" fill="rgba(95,35,190,.14)" />
-      <rect x="13.4" y="15.3" width="5.2" height="5.8" rx="1.6" fill="#fff" stroke="rgba(95,35,190,.45)" strokeWidth="1.4" />
-    </svg>
-  ),
-  skills: (
-    <svg width="33" height="33" viewBox="0 0 32 32" fill="none">
-      <defs>
-        <linearGradient id="dk-sk" x1="16" y1="4" x2="16" y2="28" gradientUnits="userSpaceOnUse">
-          <stop offset="0" stopColor="rgba(255,255,255,.16)" />
-          <stop offset="1" stopColor="rgba(255,255,255,.05)" />
-        </linearGradient>
-      </defs>
-      <rect x="2.5" y="4.5" width="27" height="23" rx="4" fill="url(#dk-sk)" stroke="rgba(255,255,255,.85)" strokeWidth="1.6" />
-      <circle cx="7.2"  cy="9" r="1.1" fill="#ff5f57" />
-      <circle cx="10.8" cy="9" r="1.1" fill="#ffbd2e" />
-      <circle cx="14.4" cy="9" r="1.1" fill="#28ca41" />
-      <path d="M7.5 15.2l4.6 3.6-4.6 3.6" stroke="#8be28f" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
-      <line x1="15.6" y1="22.4" x2="23.2" y2="22.4" stroke="rgba(255,255,255,.85)" strokeWidth="2.2" strokeLinecap="round" />
-    </svg>
-  ),
-  contact: (
-    <svg width="33" height="33" viewBox="0 0 32 32" fill="none">
-      <defs>
-        <linearGradient id="dk-co" x1="16" y1="7" x2="16" y2="26" gradientUnits="userSpaceOnUse">
-          <stop offset="0" stopColor="#ffffff" />
-          <stop offset="1" stopColor="#ffe2e6" />
-        </linearGradient>
-      </defs>
-      <rect x="2.5" y="7" width="27" height="18.5" rx="3.2" fill="url(#dk-co)" />
-      <path d="M3.6 9.4L16 18.2 28.4 9.4" stroke="rgba(195,30,55,.45)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-      <rect x="2.5" y="7" width="27" height="18.5" rx="3.2" stroke="rgba(195,30,55,.14)" strokeWidth=".8" />
-    </svg>
-  ),
-  resume: (
-    <svg width="33" height="33" viewBox="0 0 32 32" fill="none">
-      <defs>
-        <linearGradient id="dk-rs" x1="16" y1="3.5" x2="16" y2="28.5" gradientUnits="userSpaceOnUse">
-          <stop offset="0" stopColor="#ffffff" />
-          <stop offset="1" stopColor="#ffe1d6" />
-        </linearGradient>
-      </defs>
-      <path d="M9 3.5h10.5L23.5 7.5V28.5H9V3.5z" fill="url(#dk-rs)" />
-      <path d="M19.5 3.5L23.5 7.5H19.5V3.5z" fill="rgba(200,60,30,.30)" />
-      <line x1="12" y1="14" x2="20.5" y2="14" stroke="rgba(195,50,20,.42)" strokeWidth="1.6" strokeLinecap="round" />
-      <line x1="12" y1="18" x2="20.5" y2="18" stroke="rgba(195,50,20,.42)" strokeWidth="1.6" strokeLinecap="round" />
-      <line x1="12" y1="22" x2="17" y2="22" stroke="rgba(195,50,20,.42)" strokeWidth="1.6" strokeLinecap="round" />
-    </svg>
-  ),
-};
+// Icons
+const ICONS: Record<string, React.ReactNode> = Object.fromEntries(
+  ['about', 'projects', 'experience', 'skills', 'contact', 'resume', 'photos', 'weather'].map(id => [id, appGlyph(id, 'dk')]),
+);
 
 const TrashSVG = ({ hot }: { hot: boolean }) => {
   const body = hot ? 'rgba(255,230,80,.92)' : 'rgba(255,255,255,.88)';
@@ -107,24 +25,27 @@ const TrashSVG = ({ hot }: { hot: boolean }) => {
   );
 };
 
-// ── Dock tiles — Apple-style per-app colors (the one place the app keeps
-// its vivid palette; everything else stays quiet) ────────────────────────────
+// Tile colors
 const TRASH_BG = 'linear-gradient(160deg, rgba(88,96,112,.94) 0%, rgba(42,46,58,.96) 100%)';
 
 const DOCK_ITEMS = [
-  { id: 'about',      label: 'About Me',   bg: 'linear-gradient(160deg,#5FB6F9 0%,#2E7DE9 55%,#1D5FD0 100%)', glow: 'rgba(46,125,233,.48)' },
-  { id: 'projects',   label: 'Projects',   bg: 'linear-gradient(160deg,#57D96D 0%,#2AAE4F 55%,#1E8B3E 100%)', glow: 'rgba(42,174,79,.44)'  },
-  { id: 'experience', label: 'Experience', bg: 'linear-gradient(160deg,#BB79F2 0%,#8A42D8 55%,#6E2FBF 100%)', glow: 'rgba(138,66,216,.44)' },
-  { id: 'skills',     label: 'Skills',     bg: 'linear-gradient(160deg,#3E4654 0%,#23272f 55%,#15181f 100%)', glow: 'rgba(40,46,58,.55)'   },
-  { id: 'contact',    label: 'Contact',    bg: 'linear-gradient(160deg,#FB7A87 0%,#E8404F 55%,#C82737 100%)', glow: 'rgba(232,64,79,.44)'  },
-  { id: 'resume',     label: 'Resume',     bg: 'linear-gradient(160deg,#FF7A54 0%,#E8432A 55%,#C22913 100%)', glow: 'rgba(232,67,42,.44)'  },
+  { id: 'about',      label: 'About Me',   bg: APP_BG.about, glow: 'rgba(46,125,233,.48)' },
+  { id: 'projects',   label: 'Projects',   bg: APP_BG.projects, glow: 'rgba(42,174,79,.44)'  },
+  { id: 'experience', label: 'Experience', bg: APP_BG.experience, glow: 'rgba(138,66,216,.44)' },
+  { id: 'skills',     label: 'Skills',     bg: APP_BG.skills, glow: 'rgba(40,46,58,.55)'   },
+  { id: 'contact',    label: 'Contact',    bg: APP_BG.contact, glow: 'rgba(232,64,79,.44)'  },
+  { id: 'resume',     label: 'Resume',     bg: APP_BG.resume, glow: 'rgba(232,67,42,.44)'  },
+];
+
+// Shown only while running, after a divider
+const RUNNING_ITEMS = [
+  { id: 'photos',  label: 'Photos',  bg: APP_BG.photos, glow: 'rgba(140,110,220,.36)' },
+  { id: 'weather', label: 'Weather', bg: APP_BG.weather, glow: 'rgba(42,134,232,.44)' },
 ];
 
 const BASE = 64;
 
-// Continuous magnification: scale is a smooth function of the horizontal
-// distance between the cursor and each icon's center, like the real dock.
-// No discrete per-icon jumps, so nothing snaps or flickers.
+// Magnification is a smooth function of cursor distance
 function magnify(mx: number | null, el: HTMLElement | null) {
   if (mx === null || !el) return { scale: 1, lift: 0 };
   const r = el.getBoundingClientRect();
@@ -134,9 +55,7 @@ function magnify(mx: number | null, el: HTMLElement | null) {
   return { scale: 1 + 0.30 * e, lift: -11 * e };
 }
 
-// Defined at module scope (NOT inside Dock) so React keeps the same component
-// identity across Dock re-renders — otherwise the icon subtree remounts on
-// every hover and the transitions snap instead of animating.
+// Module scope so the icon keeps its identity across renders
 function IconBtn({
   id, label, bg, glow, idx, mx, sz = BASE,
   wins, hovIdx, setHovIdx, dark, tk, onClick,
@@ -195,8 +114,7 @@ function IconBtn({
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           transform: `scale(${scale}) translateY(${lift}px)`,
           transformOrigin: 'bottom center',
-          // Fast linear follow while the cursor is over the dock; springy
-          // settle when it leaves.
+          // Fast follow while hovering, spring back on leave
           transition: mx !== null
             ? 'transform .08s linear, box-shadow .18s ease'
             : 'transform .30s cubic-bezier(.22,1,.36,1), box-shadow .18s ease',
@@ -207,14 +125,12 @@ function IconBtn({
           position: 'relative', overflow: 'hidden',
         }}
       >
-        {/* Specular sheen */}
         <div style={{
           position: 'absolute', top: 0, left: '-6%', right: '6%', height: '54%',
           background: 'linear-gradient(170deg,rgba(255,255,255,.30) 0%,rgba(255,255,255,.08) 50%,transparent 100%)',
           borderRadius: `${r}px ${r}px 0 0`,
           pointerEvents: 'none',
         }} />
-        {/* Bottom depth */}
         <div style={{
           position: 'absolute', bottom: 0, left: 0, right: 0, height: '28%',
           background: 'linear-gradient(0deg,rgba(0,0,0,.22) 0%,transparent 100%)',
@@ -224,7 +140,6 @@ function IconBtn({
         {ICONS[id]}
       </button>
 
-      {/* Running indicator dot */}
       <div style={{
         width: 4, height: 4, borderRadius: '50%', marginTop: 5,
         background: isOpen ? tk.accent : 'transparent',
@@ -254,7 +169,7 @@ export default function Dock({ wins, dark, dispatch }: Props) {
     return () => window.removeEventListener('winNearDock', handler);
   }, []);
 
-  // Play the trash "shake" when a window is dropped into the dock to delete it
+  // Shake the trash when a window is dropped on it
   useEffect(() => {
     const onShake = () => {
       setTrAnim(true);
@@ -265,21 +180,23 @@ export default function Dock({ wins, dark, dispatch }: Props) {
   }, []);
 
   const click = (id: string) => {
-    if (id === 'resume') {
-      const a = document.createElement('a');
-      a.href = '/Tomy_Romero_Resume_Public.pdf';
-      a.download = 'Tomy_Romero_Resume.pdf';
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      return;
-    }
+    if (id === 'resume') { requestResume(); return; }
     const w = wins.find(x => x.id === id);
     if (!w) return;
     if (w.isMin) dispatch({ type: 'RESTORE', id });
     else if (w.isOpen) dispatch({ type: 'FOCUS', id });
     else dispatch({ type: 'OPEN', id });
   };
+
+  const running = RUNNING_ITEMS.filter(item => wins.some(w => w.id === item.id && (w.isOpen || w.isMin)));
+  const divider = (
+    <div style={{
+      width: 1, height: 44, alignSelf: 'center', margin: '0 2px',
+      background: dark
+        ? 'linear-gradient(to bottom, transparent, rgba(255,255,255,.18), transparent)'
+        : 'linear-gradient(to bottom, transparent, rgba(0,0,0,.16), transparent)',
+    }} />
+  );
 
   const isTrashHot = trTarget || trHov;
   const trMag      = magnify(mx, trashRef.current);
@@ -318,15 +235,21 @@ export default function Dock({ wins, dark, dispatch }: Props) {
         />
       ))}
 
-      {/* Divider */}
-      <div style={{
-        width: 1, height: 44, alignSelf: 'center', margin: '0 2px',
-        background: dark
-          ? 'linear-gradient(to bottom, transparent, rgba(255,255,255,.18), transparent)'
-          : 'linear-gradient(to bottom, transparent, rgba(0,0,0,.16), transparent)',
-      }} />
+      {running.length > 0 && <>
+        {divider}
+        {running.map((item, i) => (
+          <div key={item.id} style={{ animation: 'dockIconIn .32s cubic-bezier(.2,1.3,.4,1) both' }}>
+            <IconBtn
+              {...item} idx={DOCK_ITEMS.length + i} mx={mx}
+              wins={wins} hovIdx={hovIdx} setHovIdx={setHovIdx}
+              dark={dark} tk={tk} onClick={click}
+            />
+          </div>
+        ))}
+      </>}
 
-      {/* Trash */}
+      {divider}
+
       <div
         ref={trashRef}
         style={{

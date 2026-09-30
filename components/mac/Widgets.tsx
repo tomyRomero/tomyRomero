@@ -1,23 +1,34 @@
 'use client';
-import { useState, useEffect } from 'react';
-import Image from 'next/image';
+import { useState, useEffect, useSyncExternalStore } from 'react';
 import { T } from './tokens';
-import { ME, experiences, projects, yearsExperience } from '@/constants';
-import { requestProjectDetail } from './windows/ProjectsWindow';
+import { WidgetFrame, S, GAP, M } from './widgets/WidgetFrame';
+import CalendarWidget from './widgets/CalendarWidget';
+import WeatherWidget from './widgets/WeatherWidget';
+import PhotosWidget from './widgets/PhotosWidget';
 
-// ── Analog clock SVG ──────────────────────────────────────────────────────────
+// Bundled with the widgets so opening one never waits on a download
+export { default as PhotosWindow } from './windows/PhotosWindow';
+export { default as WeatherWindow } from './windows/WeatherWindow';
+export { WeatherWidget, PhotosWidget };
+
+// Analog clock
+// Rounded so server and client sin/cos agree
+const r2 = (n: number) => Math.round(n * 100) / 100;
+
 function AnalogClock({ dark }: { dark: boolean }) {
   const tk   = T(dark);
-  const [now, setNow] = useState(() => new Date());
+  // Hands render after mount (the server's time isn't the visitor's)
+  const [now, setNow] = useState<Date | null>(null);
 
   useEffect(() => {
+    setNow(new Date());
     const id = setInterval(() => setNow(new Date()), 1000);
     return () => clearInterval(id);
   }, []);
 
-  const h  = now.getHours() % 12;
-  const m  = now.getMinutes();
-  const s  = now.getSeconds();
+  const h  = (now?.getHours() ?? 0) % 12;
+  const m  = now?.getMinutes() ?? 0;
+  const s  = now?.getSeconds() ?? 0;
 
   const hourDeg   = h * 30 + m * 0.5;
   const minuteDeg = m * 6  + s * 0.1;
@@ -30,10 +41,10 @@ function AnalogClock({ dark }: { dark: boolean }) {
   const hourTicks = Array.from({ length: 12 }, (_, i) => {
     const rad = (i * 30) * (Math.PI / 180);
     return {
-      x1: cx + (R - 9) * Math.sin(rad),
-      y1: cy - (R - 9) * Math.cos(rad),
-      x2: cx + R        * Math.sin(rad),
-      y2: cy - R        * Math.cos(rad),
+      x1: r2(cx + (R - 9) * Math.sin(rad)),
+      y1: r2(cy - (R - 9) * Math.cos(rad)),
+      x2: r2(cx + R        * Math.sin(rad)),
+      y2: r2(cy - R        * Math.cos(rad)),
     };
   });
 
@@ -41,10 +52,10 @@ function AnalogClock({ dark }: { dark: boolean }) {
     if (i % 5 === 0) return null;
     const rad = (i * 6) * (Math.PI / 180);
     return {
-      x1: cx + (R - 4.5) * Math.sin(rad),
-      y1: cy - (R - 4.5) * Math.cos(rad),
-      x2: cx + R          * Math.sin(rad),
-      y2: cy - R          * Math.cos(rad),
+      x1: r2(cx + (R - 4.5) * Math.sin(rad)),
+      y1: r2(cy - (R - 4.5) * Math.cos(rad)),
+      x2: r2(cx + R          * Math.sin(rad)),
+      y2: r2(cy - R          * Math.cos(rad)),
     };
   });
 
@@ -82,12 +93,12 @@ function AnalogClock({ dark }: { dark: boolean }) {
           stroke={tickColor} strokeWidth="2.2" strokeLinecap="round" />
       ))}
 
+      {now && <>
       <line x1={cx} y1={cy} x2={hx} y2={hy}
         stroke={handColor} strokeWidth="3.2" strokeLinecap="round" />
       <line x1={cx} y1={cy} x2={mx} y2={my}
         stroke={handColor} strokeWidth="2" strokeLinecap="round" />
 
-      {/* Second hand — accent */}
       <line x1={cx} y1={cy} x2={sx} y2={sy}
         stroke={tk.accent} strokeWidth="1.2" strokeLinecap="round" />
       <line
@@ -96,6 +107,7 @@ function AnalogClock({ dark }: { dark: boolean }) {
         y2={cy - (sy - cy) * 0.22}
         stroke={tk.accent} strokeWidth="1.2" strokeLinecap="round"
       />
+      </>}
 
       <circle cx={cx} cy={cy} r="3.5" fill={tk.accent} />
       <circle cx={cx} cy={cy} r="1.5" fill={handColor} />
@@ -103,284 +115,42 @@ function AnalogClock({ dark }: { dark: boolean }) {
   );
 }
 
-// ── Widgets column ────────────────────────────────────────────────────────────
+// 2×2 grid at macOS sizes, scaled down on smaller screens
+const GRID_H = S * 2 + GAP;
+const MIN_K  = 0.72;
+
+const subscribe = (cb: () => void) => { window.addEventListener('resize', cb); return () => window.removeEventListener('resize', cb); };
+const viewport  = () => `${window.innerWidth}x${window.innerHeight}`;
+
+function scaleFor(vw: number, vh: number) {
+  const room = vh - 183;                  // under the menu bar, above the dock
+  const side = (vw / 2 - 222) / M;        // clear of the centered About window
+  return Math.max(MIN_K, Math.min(1, room / GRID_H, side));
+}
+
 export default function Widgets({ dark, openCal, onOpen }: {
   dark: boolean; openCal: () => void; onOpen: (id: string) => void;
 }) {
-  const tk = T(dark);
-  const currentRole = experiences[0];
-  const featured    = projects[0];
-
-  const open = (id: string) => onOpen(id);
-
-  // Open the Projects window and deep-link into the featured project's
-  // detail view. requestProjectDetail stores the target synchronously, so
-  // the window picks it up on mount with no timing involved.
-  const openFeatured = () => {
-    onOpen('projects');
-    requestProjectDetail(featured.title);
-  };
-
-  const glass: React.CSSProperties = {
-    background: tk.winBg,
-    backdropFilter: 'blur(32px) saturate(2.0)',
-    WebkitBackdropFilter: 'blur(32px) saturate(2.0)',
-    border: `1px solid ${tk.border}`,
-    borderRadius: 20,
-    boxShadow: dark
-      ? '0 6px 32px rgba(0,0,0,.22), 0 0 0 0.5px rgba(255,255,255,.04)'
-      : '0 6px 28px rgba(0,0,0,.10)',
-    fontFamily: 'var(--font-sans), sans-serif',
-    overflow: 'hidden',
-  };
+  const [vw, vh] = useSyncExternalStore(subscribe, viewport, () => '1440x900').split('x').map(Number);
+  const k = scaleFor(vw, vh);
 
   return (
     <div
-      style={{
-        position: 'absolute',
-        right: 16,
-        top: 40,
-        display: 'flex',
-        flexDirection: 'column',
-        gap: 10,
-        zIndex: 50,
-        width: 192,
-      }}
+      style={{ position: 'absolute', right: 16, top: 40, width: M * k, height: GRID_H * k, zIndex: 50 }}
       onClick={e => e.stopPropagation()}
     >
-      {/* ── Analog clock ──────────────────────────── */}
-      <button
-        onClick={openCal}
-        style={{
-          ...glass, padding: '14px 14px 12px',
-          cursor: 'pointer', border: `1px solid ${tk.border}`,
-          transition: 'all .18s',
-        }}
-        onMouseEnter={e => {
-          e.currentTarget.style.borderColor = tk.accentBorder;
-          e.currentTarget.style.transform = 'translateY(-1px)';
-        }}
-        onMouseLeave={e => {
-          e.currentTarget.style.borderColor = tk.border;
-          e.currentTarget.style.transform = 'none';
-        }}
-        title="Open Calendar"
-      >
-        <AnalogClock dark={dark} />
-      </button>
-
-      {/* ── Profile / identity ────────────────────── */}
-      <div
-        role="button"
-        tabIndex={0}
-        onClick={() => open('about')}
-        onKeyDown={e => e.key === 'Enter' && open('about')}
-        style={{ ...glass, cursor: 'pointer', transition: 'all .18s' }}
-        onMouseEnter={e => {
-          e.currentTarget.style.borderColor = tk.accentBorder;
-          e.currentTarget.style.transform = 'translateY(-1px)';
-        }}
-        onMouseLeave={e => {
-          e.currentTarget.style.borderColor = tk.border;
-          e.currentTarget.style.transform = 'none';
-        }}
-      >
-        <div style={{ padding: '12px 14px 13px' }}>
-          {/* Avatar + name */}
-          <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
-            <div style={{
-              width: 44, height: 44, borderRadius: 12, flexShrink: 0,
-              background: tk.accentGrad2,
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              fontSize: 15, color: '#fff', fontWeight: 700, letterSpacing: -0.5,
-            }}>
-              TR
-            </div>
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{
-                fontSize: 13, fontWeight: 700, color: tk.text,
-                whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis',
-                letterSpacing: '-.2px',
-              }}>
-                {ME.name}
-              </div>
-              <div style={{ fontSize: 11, color: tk.textSub, marginTop: 2 }}>
-                {currentRole.title}
-              </div>
-            </div>
+      <div style={{
+        width: M, display: 'grid', gridTemplateColumns: `${S}px ${S}px`, gap: GAP,
+        transform: k < 1 ? `scale(${k})` : undefined, transformOrigin: 'top left',
+      }}>
+        <WidgetFrame dark={dark} w={S} h={S} label="Clock. Open Calendar" title="Open Calendar" onPress={openCal}>
+          <div style={{ height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <AnalogClock dark={dark} />
           </div>
-
-          {/* Company */}
-          <div style={{
-            fontSize: 11.5, color: tk.textSub, marginTop: 8,
-          }}>
-            {currentRole.company}
-          </div>
-
-          {/* Location */}
-          <div style={{
-            fontSize: 11, color: tk.textMuted, marginTop: 4,
-            display: 'flex', alignItems: 'center', gap: 4,
-          }}>
-            <svg width="7" height="9" viewBox="0 0 9 12" fill={tk.accent} style={{ flexShrink: 0, opacity: .75 }}>
-              <path d="M4.5 0C2 0 0 2 0 4.5c0 3.5 4.5 7.5 4.5 7.5S9 8 9 4.5C9 2 7 0 4.5 0zm0 6a1.5 1.5 0 110-3 1.5 1.5 0 010 3z" />
-            </svg>
-            {ME.location}
-          </div>
-
-          {/* Divider */}
-          <div style={{
-            height: 1, margin: '10px 0 9px',
-            background: `linear-gradient(90deg, ${tk.divider}, transparent)`,
-          }} />
-
-          {/* Social buttons */}
-          <div style={{ display: 'flex', gap: 6 }}>
-            {([['GitHub', ME.github], ['LinkedIn', ME.linkedin]] as [string, string][]).map(([label, href]) => (
-              <a
-                key={label}
-                href={href}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  flex: 1, textAlign: 'center',
-                  padding: '5px 8px', borderRadius: 8, fontSize: 11,
-                  background: tk.pillBg, border: `1px solid ${tk.pillBorder}`,
-                  color: tk.textSub, textDecoration: 'none', fontWeight: 500,
-                  transition: 'all .15s',
-                }}
-                onMouseEnter={e => {
-                  e.currentTarget.style.borderColor = tk.accentBorder;
-                  e.currentTarget.style.color = tk.accent;
-                }}
-                onMouseLeave={e => {
-                  e.currentTarget.style.borderColor = tk.pillBorder;
-                  e.currentTarget.style.color = tk.textSub;
-                }}
-              >
-                {label}
-              </a>
-            ))}
-          </div>
-
-          {/* Open to work */}
-          <div style={{
-            display: 'flex', alignItems: 'center', gap: 5, marginTop: 9,
-          }}>
-            <div style={{
-              width: 5, height: 5, borderRadius: '50%',
-              background: '#34c759', boxShadow: '0 0 6px #34c759',
-              flexShrink: 0, animation: 'pulse 2s infinite',
-            }} />
-            <span style={{
-              fontSize: 11, color: dark ? '#34c759' : '#15803d',
-              fontFamily: 'var(--font-mono), monospace',
-            }}>
-              Open to opportunities
-            </span>
-          </div>
-        </div>
-      </div>
-
-      {/* ── Featured project ─────────────────────────────────────────────── */}
-      <div
-        role="button"
-        tabIndex={0}
-        onClick={openFeatured}
-        onKeyDown={e => e.key === 'Enter' && openFeatured()}
-        style={{ ...glass, cursor: 'pointer', transition: 'all .18s' }}
-        onMouseEnter={e => {
-          e.currentTarget.style.borderColor = tk.accentBorder;
-          e.currentTarget.style.transform = 'translateY(-1px)';
-        }}
-        onMouseLeave={e => {
-          e.currentTarget.style.borderColor = tk.border;
-          e.currentTarget.style.transform = 'none';
-        }}
-      >
-        {/* Blurred cover of the same shot behind a contained foreground, so
-            portrait app screenshots preview without letterbox bars */}
-        <div style={{ position: 'relative', width: '100%', aspectRatio: '16/10', overflow: 'hidden', background: tk.cardBg }}>
-          <Image
-            src={featured.image} alt="" aria-hidden fill sizes="192px"
-            style={{ objectFit: 'cover', filter: 'blur(16px) saturate(1.3)', transform: 'scale(1.25)', opacity: .8 }}
-          />
-          <Image
-            src={featured.image} alt={featured.title} fill sizes="192px"
-            style={{ objectFit: 'contain', padding: 5 }}
-          />
-        </div>
-        <div style={{ padding: '10px 13px 12px' }}>
-          <div style={{
-            fontSize: 9.5, color: tk.textMuted, fontWeight: 600,
-            letterSpacing: '.6px', textTransform: 'uppercase', marginBottom: 4,
-          }}>
-            Featured Project
-          </div>
-          <div style={{ display: 'flex', alignItems: 'baseline', gap: 6 }}>
-            <span style={{ fontSize: 12.5, fontWeight: 700, color: tk.text }}>{featured.title}</span>
-            <span style={{ fontSize: 10, color: tk.textMuted, fontFamily: 'var(--font-mono), monospace' }}>
-              {featured.year}
-            </span>
-          </div>
-          <div style={{
-            fontSize: 10.5, color: tk.textSub, marginTop: 3, lineHeight: 1.5,
-            overflow: 'hidden', display: '-webkit-box',
-            WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' as const,
-          }}>
-            {featured.tagline}
-          </div>
-        </div>
-      </div>
-
-      {/* ── Stats ────────────────────────────────────────────────────────── */}
-      <div style={{ ...glass, padding: '12px 14px' }}>
-        <div style={{
-          fontSize: 10, color: tk.textMuted, marginBottom: 9,
-          fontWeight: 600, letterSpacing: '.5px', textTransform: 'uppercase',
-        }}>
-          Stats
-        </div>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 6 }}>
-          {[
-            { label: 'Projects', value: String(projects.length),    winId: 'projects'   },
-            { label: 'Roles',    value: String(experiences.length), winId: 'experience' },
-            { label: 'Years',    value: yearsExperience(),          winId: 'about'      },
-          ].map(stat => (
-            <button
-              key={stat.label}
-              onClick={() => open(stat.winId)}
-              style={{
-                background: tk.cardBg, borderRadius: 12,
-                border: `1px solid ${tk.border}`,
-                padding: '8px 4px', textAlign: 'center',
-                cursor: 'pointer', transition: 'all .18s',
-              }}
-              onMouseEnter={e => {
-                e.currentTarget.style.borderColor = tk.accentBorder;
-                e.currentTarget.style.transform = 'translateY(-1px)';
-              }}
-              onMouseLeave={e => {
-                e.currentTarget.style.borderColor = tk.border;
-                e.currentTarget.style.transform = 'none';
-              }}
-            >
-              <div style={{
-                fontSize: 20, fontWeight: 700, lineHeight: 1,
-                fontFamily: 'var(--font-mono), monospace',
-                color: tk.accent,
-              }}>
-                {stat.value}
-              </div>
-              <div style={{
-                fontSize: 10.5, color: tk.textMuted, marginTop: 3,
-                letterSpacing: '.2px',
-              }}>
-                {stat.label}
-              </div>
-            </button>
-          ))}
-        </div>
+        </WidgetFrame>
+        <WeatherWidget dark={dark} onOpen={onOpen} />
+        <CalendarWidget dark={dark} onPress={openCal} />
+        <PhotosWidget dark={dark} onOpen={onOpen} />
       </div>
     </div>
   );

@@ -8,6 +8,10 @@ export interface Win {
   sz: { w: number; h: number };
   defPos: { x: number; y: number };
   defSz: { w: number; h: number };
+  // Smallest size a resize can reach (the app's layout floor)
+  minSz?: { w: number; h: number };
+  // Set once the window has had its first, centered placement
+  placed?: boolean;
   z: number;
   minning: boolean;
   closing: boolean;
@@ -21,6 +25,7 @@ export type WinAction =
   | { type: 'MIN_DONE';    id: string }
   | { type: 'RESTORE';     id: string }
   | { type: 'TOGGLE_MAX';  id: string }
+  | { type: 'UNZOOM_AT';   id: string; x: number; y: number }
   | { type: 'FOCUS';       id: string }
   | { type: 'MOVE';        id: string; x: number; y: number }
   | { type: 'RESIZE';      id: string; w: number; h: number }
@@ -29,3 +34,7 @@ export type WinAction =
   | { type: 'MIN_ALL' }
   | { type: 'ARRANGE' }
   | { type: 'OPEN_AT'; id: string; x: number; y: number; w?: number; h?: number };
+
+// About opens first, centered left of the widgets; DesktopPhotos pins
+// prints in the space beside it
+export const ABOUT_W = 580;
