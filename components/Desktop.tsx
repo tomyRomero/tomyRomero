@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect, useReducer, useCallback, useMemo, useSyncExternalStore } from 'react';
+import { useState, useEffect, useLayoutEffect, useReducer, useCallback, useMemo, useSyncExternalStore } from 'react';
 import dynamic       from 'next/dynamic';
 import MobileView    from '@/components/MobileView';
 import { WALLPAPERS, type WallpaperVariant } from '@/components/mac/wallpaperList';
@@ -14,7 +14,7 @@ import ProjectsWindow   from '@/components/mac/windows/ProjectsWindow';
 import ExperienceWindow from '@/components/mac/windows/ExperienceWindow';
 import SkillsWindow     from '@/components/mac/windows/SkillsWindow';
 import ContactWindow    from '@/components/mac/windows/ContactWindow';
-import { ABOUT_W, type Win, type WinAction } from '@/components/mac/winTypes';
+import { ABOUT_W, WIDGET_ROW, isWidgetRow, type Win, type WinAction } from '@/components/mac/winTypes';
 
 // Desktop-only chunks
 const Wallpaper   = dynamic(() => import('@/components/mac/Wallpaper'), { ssr: false });
@@ -37,6 +37,15 @@ const WIN_DEFS = [
 let ZZ = 200;
 const nz = () => ++ZZ;
 
+const useIsoLayoutEffect = typeof window === 'undefined' ? useEffect : useLayoutEffect;
+
+// Kept across in-app navigation, so coming back from the classic view finds
+// the windows where they were
+let lastWins: Win[] | null = null;
+const settled = (wins: Win[]) => wins.map(w => ({
+  ...w, isOpen: w.isOpen && !w.closing, isMin: w.isMin || w.minning, minning: false, closing: false,
+}));
+
 // Read synchronously on client mounts so back-navigation doesn't flash the desktop
 const subscribeResize = (cb: () => void) => {
   window.addEventListener('resize', cb);
@@ -57,6 +66,7 @@ const isMobileSnapshot = () => {
 };
 // iPad portrait: no room for the widgets column
 const isCompactSnapshot = () => window.innerWidth < 1000;
+const isRowSnapshot = () => isWidgetRow(window.innerWidth, window.innerHeight);
 // Room for pinned polaroids left of the centered About window
 const isWideSnapshot = () => window.innerWidth >= 1260;
 const serverSnapshot = () => false;
@@ -157,15 +167,19 @@ export default function Desktop() {
   const isMobile  = useSyncExternalStore<boolean | null>(subscribeResize, isMobileSnapshot, unknownSnapshot);
   const isCompact = useSyncExternalStore(subscribeResize, isCompactSnapshot, serverSnapshot);
   const isWide    = useSyncExternalStore(subscribeResize, isWideSnapshot,    serverSnapshot);
-  const [wins, dispatch] = useReducer(winReducer, undefined, initWins);
+  const isRow     = useSyncExternalStore(subscribeResize, isRowSnapshot,     serverSnapshot);
+  const [wins, dispatch] = useReducer(winReducer, undefined, () => (lastWins ? settled(lastWins) : initWins()));
+  const [restored] = useState(lastWins !== null);
+  useEffect(() => { lastWins = wins; }, [wins]);
   const [focused, setFocused] = useState<string | null>(null);
   const [calPop, setCalPop]   = useState(false);
   const [wallpaper, setWallpaper] = useState<WallpaperVariant>(WALLPAPERS[0].id);
   // Don't save until the stored values have been read
   const [prefsReady, setPrefsReady] = useState(false);
 
-  // Restore saved settings, falling back to the system theme
-  useEffect(() => {
+  // Restore saved settings, falling back to the system theme. Before paint,
+  // so arriving from another page doesn't flash light or the default wallpaper
+  useIsoLayoutEffect(() => {
     const wp = localStorage.getItem('wallpaper');
     if (wp && WALLPAPERS.some(w => w.id === wp)) setWallpaper(wp as WallpaperVariant);
     const d = localStorage.getItem('dark');
@@ -177,7 +191,15 @@ export default function Desktop() {
   useEffect(() => { if (prefsReady) localStorage.setItem('dark', String(dark)); }, [dark, prefsReady]);
   useEffect(() => { document.documentElement.dataset.theme = dark ? 'dark' : 'light'; }, [dark]);
 
+  // Clicking the wallpaper moves every window to the screen edges, as on
+  // macOS; opening or focusing any window brings them back
+  const [revealed, setRevealed] = useState(false);
+  const shown = wins.filter(w => w.isOpen && !w.isMin && !w.closing);
+  const shownKey = shown.map(w => `${w.id}:${w.z}`).join();
+  useEffect(() => { setRevealed(false); }, [shownKey]);
+
   const focus = useCallback((id: string) => {
+    setRevealed(false);
     setFocused(id);
     dispatch({ type: 'FOCUS', id });
   }, []);
@@ -196,19 +218,21 @@ export default function Desktop() {
 
   // Open About on first load
   useEffect(() => {
+    if (restored) return;
     const t = setTimeout(() => {
       const vw = window.innerWidth, vh = window.innerHeight;
       const zone = vw >= 1000 ? vw - 200 : vw;   // stay clear of the widgets column
+      const under = isWidgetRow(vw, vh) ? WIDGET_ROW.bottom + 20 : 0;
       const ww = Math.min(ABOUT_W, vw - 80);
-      const wh = Math.min(700, vh - 150);
+      const wh = Math.min(700, vh - 150 - under);
       const cx = Math.max(40, Math.round((zone - ww) / 2));
       // The canvas starts 28px down, under the menu bar
-      const cy = Math.max(8, Math.round((vh - 28 - 100 - wh) / 2));
+      const cy = under || Math.max(8, Math.round((vh - 28 - 100 - wh) / 2));
       dispatch({ type: 'OPEN_AT', id: 'about', x: cx, y: cy, w: ww, h: wh });
       setFocused('about');
     }, 220);
     return () => clearTimeout(t);
-  }, []);
+  }, [restored]);
 
   // Shift chords only; ⌘W, ⌘M and ⌘Q belong to the browser
   useEffect(() => {
@@ -254,7 +278,11 @@ export default function Desktop() {
       <div
         // Clicks inside windows bubble here too; only empty desktop clears focus
         data-desktop=""
-        onClick={e => { if (e.target === e.currentTarget) setFocused(null); }}
+        onClick={e => {
+          if (e.target !== e.currentTarget) return;
+          setFocused(null);
+          setRevealed(r => !r && shown.length > 0);
+        }}
         style={{ position: 'fixed', top: 28, left: 0, right: 0, bottom: 80, zIndex: 1 }}
       >
         {wallpaper === 'bubbles' && <BubbleField dark={dark} />}
@@ -268,15 +296,17 @@ export default function Desktop() {
             dark={dark}
             dispatch={dispatch}
             focused={focused === win.id}
+            away={revealed}
             onFocus={focus}
           >
             {CONTENT[win.id as keyof typeof CONTENT]}
           </WinShell>
         ))}
 
-        {/* Hidden on compact widths; desktop only */}
-        {!isCompact && isMobile === false && <Widgets
+        {/* A row on portrait tablets, hidden on other compact widths; desktop only */}
+        {(!isCompact || isRow) && isMobile === false && <Widgets
           dark={dark}
+          row={isCompact}
           openCal={() => setCalPop(true)}
           onOpen={(id: string) => {
             const w = wins.find(x => x.id === id);

@@ -16,6 +16,8 @@ import { Browser, Phone } from '@/components/DeviceFrames';
 import RoleTimeline, { shortSpan } from '@/components/RoleTimeline';
 import { CatIcon } from '@/components/SkillIcon';
 import Home, { type AppId } from '@/components/mobile/Home';
+import { copyText } from '@/components/copyText';
+import { Link } from '@/components/nav';
 
 // Phone layout: a home screen where each section opens as an app. The open
 // app is kept in the URL hash, so Back closes it.
@@ -53,6 +55,8 @@ function atIcon(r: DOMRect | null): Keyframe {
   };
 }
 const ZOOM_RADIUS = '44px';
+// Outlives the component, so Back from a project page lands where you were
+const appScroll: Record<string, number> = {};
 const rectOf = (el: HTMLElement | null) => (el?.closest<HTMLElement>('[data-app]') ?? el)?.getBoundingClientRect() ?? null;
 
 export default function MobileView({ dark, setDark }: { dark: boolean; setDark: (v: boolean) => void }) {
@@ -68,14 +72,17 @@ export default function MobileView({ dark, setDark }: { dark: boolean; setDark: 
   const pushed = useRef(false);   // whether we pushed a history entry
   const moving = useRef<Animation[]>([]);
   const scrollers = useRef<Record<string, HTMLDivElement | null>>({});
-  const saved = useRef<Record<string, number>>({});
+  const saved = useRef(appScroll);
 
   const iconOf = (id: AppId) => home.current?.querySelector<HTMLElement>(`[data-app="${id}"]`) ?? null;
   const stop = () => {
     moving.current.forEach(a => a.cancel());
     moving.current = [];
-    if (layer.current) layer.current.style.borderRadius = '';
+    if (layer.current) Object.assign(layer.current.style, { borderRadius: '', transform: '' });
+    if (home.current) Object.assign(home.current.style, { transform: '', opacity: '' });
   };
+  // Where a home bar drag left the app and home screen, so closing starts there
+  const dragged = useRef<Lift | null>(null);
   const keepScroll = () => {
     const id = appRef.current;
     const el = id && scrollers.current[id];
@@ -110,6 +117,8 @@ export default function MobileView({ dark, setDark }: { dark: boolean; setDark: 
   const hide = () => {
     if (!appRef.current) return;
     keepScroll();
+    const from = dragged.current;
+    dragged.current = null;
     const back = opener.current?.isConnected ? opener.current : iconOf(appRef.current);
     const done = () => {
       flushSync(() => setApp(null));
@@ -121,16 +130,27 @@ export default function MobileView({ dark, setDark }: { dark: boolean; setDark: 
     const r = rectOf(back);
     const ease = 'cubic-bezier(.4,0,.2,1)';
     const a = layer.current!.animate(
-      [{ transform: 'none', opacity: 1 }, { opacity: 1, offset: .65 }, atIcon(r)],
+      [from?.app ?? { transform: 'none', opacity: 1 }, { opacity: 1, offset: .65 }, atIcon(r)],
       { duration: 380, easing: ease, fill: 'forwards' },
     );
     layer.current!.style.borderRadius = ZOOM_RADIUS;
     moving.current.push(a);
     if (home.current && r) {
-      home.current.style.transformOrigin = `${r.left + r.width / 2}px ${r.top + r.height / 2}px`;
-      moving.current.push(home.current.animate([{ transform: 'scale(1.12)', opacity: .35 }, { transform: 'none', opacity: 1 }], { duration: 380, easing: ease }));
+      if (!from) home.current.style.transformOrigin = `${r.left + r.width / 2}px ${r.top + r.height / 2}px`;
+      moving.current.push(home.current.animate([from?.home ?? { transform: 'scale(1.12)', opacity: .35 }, { transform: 'none', opacity: 1 }], { duration: 380, easing: ease }));
     }
     a.onfinish = done;
+  };
+
+  // A short drag puts the app back where it was
+  const settle = (from: Lift) => {
+    stop();
+    layer.current!.style.borderRadius = ZOOM_RADIUS;
+    const ease = 'cubic-bezier(.2,.9,.3,1.1)';
+    const a = layer.current!.animate([from.app, { transform: 'none' }], { duration: 320, easing: ease });
+    a.onfinish = () => { if (layer.current) layer.current.style.borderRadius = ''; };
+    moving.current.push(a);
+    if (home.current) moving.current.push(home.current.animate([from.home, { transform: 'scale(1.12)', opacity: .35 }], { duration: 320, easing: ease, fill: 'forwards' }));
   };
 
   const open = (id: AppId, from: HTMLElement | null) => {
@@ -173,7 +193,9 @@ export default function MobileView({ dark, setDark }: { dark: boolean; setDark: 
 
   // Back and Forward
   useEffect(() => {
+    const here = window.location.pathname;
     const onPop = () => {
+      if (window.location.pathname !== here) return;
       const id = appFromHash(window.location.hash);
       if (id === appRef.current) return;
       if (!id) { pushed.current = false; hide(); return; }
@@ -191,6 +213,8 @@ export default function MobileView({ dark, setDark }: { dark: boolean; setDark: 
     const el = app && scrollers.current[app];
     if (el) el.scrollTop = saved.current[app] ?? 0;
   }, [app]);
+  // Also when leaving for another page
+  useIsoLayoutEffect(() => keepScroll, []);
 
   useEffect(() => {
     if (home.current) home.current.inert = !!app;
@@ -244,6 +268,13 @@ export default function MobileView({ dark, setDark }: { dark: boolean; setDark: 
           </section>
         )}
       </div>
+
+      {app && (
+        <HomeBar
+          layer={layer} home={home} light={dark || app === 'weather'}
+          onStart={stop} onStay={settle} onGo={from => { dragged.current = from; goHome(); }}
+        />
+      )}
 
       {lightboxIdx !== null && (
         <div
@@ -345,6 +376,68 @@ function Screen({ id, title, dark, setDark, hidden, scrollRef, onHome, children 
         </div>
       </div>
     </section>
+  );
+}
+
+type Lift = { app: Keyframe; home: Keyframe };
+
+// The bar along the bottom of an iPhone. Dragging it up shrinks the app under
+// the finger; letting go far enough or with a flick sends it home.
+function HomeBar({ layer, home, light, onStart, onStay, onGo }: {
+  layer: React.RefObject<HTMLDivElement>; home: React.RefObject<HTMLDivElement>; light: boolean;
+  onStart: () => void; onStay: (from: Lift) => void; onGo: (from: Lift) => void;
+}) {
+  const pill = useRef<HTMLSpanElement>(null);
+
+  const down = (e: React.PointerEvent<HTMLDivElement>) => {
+    const app = layer.current, hs = home.current, bar = e.currentTarget;
+    if (!app || e.button !== 0) return;
+    bar.setPointerCapture(e.pointerId);
+    onStart();
+    app.style.borderRadius = ZOOM_RADIUS;
+    const vh = window.innerHeight, y0 = e.clientY;
+    let lift = 0, speed = 0, lastY = y0, lastT = e.timeStamp;
+
+    const now = (): Lift => ({
+      app: { transform: app.style.transform || 'none', opacity: 1 },
+      home: { transform: hs?.style.transform || 'none', opacity: Number(hs?.style.opacity || 1) },
+    });
+    const move = (m: PointerEvent) => {
+      lift = Math.max(0, y0 - m.clientY);
+      const p = Math.min(1, lift / (vh * .5));
+      app.style.transform = `translateY(${-lift * .3}px) scale(${1 - p * .42})`;
+      if (hs) Object.assign(hs.style, { transform: `scale(${1.12 - .12 * p})`, opacity: String(.35 + .65 * p) });
+      if (pill.current) pill.current.style.opacity = String(Math.max(0, 1 - p * 3));
+      if (m.timeStamp > lastT) speed = (lastY - m.clientY) / (m.timeStamp - lastT);
+      lastY = m.clientY; lastT = m.timeStamp;
+    };
+    const up = () => {
+      bar.removeEventListener('pointermove', move);
+      bar.removeEventListener('pointerup', up);
+      bar.removeEventListener('pointercancel', up);
+      if (pill.current) pill.current.style.opacity = '';
+      if (!lift) { onStay(now()); return; }
+      if (lift > vh * .18 || (speed > .45 && lift > 24)) onGo(now());
+      else onStay(now());
+    };
+    bar.addEventListener('pointermove', move);
+    bar.addEventListener('pointerup', up);
+    bar.addEventListener('pointercancel', up);
+  };
+
+  // The Home button in the nav bar does the same for keyboards and screen readers
+  return (
+    <div aria-hidden="true" onPointerDown={down} style={{
+      position: 'absolute', left: '50%', bottom: 0, zIndex: 21, transform: 'translateX(-50%)',
+      width: 'min(64%, 260px)', height: 'calc(28px + env(safe-area-inset-bottom, 0px))',
+      display: 'flex', alignItems: 'flex-end', justifyContent: 'center',
+      paddingBottom: 'calc(8px + env(safe-area-inset-bottom, 0px))', touchAction: 'none', cursor: 'grab',
+    }}>
+      <span ref={pill} style={{
+        width: 134, height: 5, borderRadius: 3, transition: 'opacity .2s ease',
+        background: light ? 'rgba(255,255,255,.85)' : 'rgba(0,0,0,.8)',
+      }} />
+    </div>
   );
 }
 
@@ -565,7 +658,7 @@ function ProjectCard({ p, dark, featured }: { p: (typeof projects)[number]; dark
   const ink = dark ? '#f5f5f7' : '#1d1d1f';
   const tags = p.techStack.split(', ');
   return (
-    <a href={`/project/${encodeURIComponent(p.title)}`} style={{
+    <Link href={`/project/${encodeURIComponent(p.title)}`} style={{
       position: 'relative', display: 'block', height: mobile ? 432 : 320, borderRadius: 22, overflow: 'hidden', color: ink,
       background: mobile ? (dark ? '#2b2520' : '#f4ede6') : (dark ? '#1f2229' : '#eaeef5'),
       boxShadow: `0 14px 34px rgba(0,0,0,${dark ? '.4' : '.1'})`,
@@ -605,7 +698,7 @@ function ProjectCard({ p, dark, featured }: { p: (typeof projects)[number]; dark
         </span>
         <span style={{ padding: '7px 16px', borderRadius: 20, background: ink, color: dark ? '#1d1d1f' : '#fff', fontSize: 14, fontWeight: 600 }}>View</span>
       </div>
-    </a>
+    </Link>
   );
 }
 
@@ -734,9 +827,11 @@ function ContactScreen({ dark }: { dark: boolean }) {
     window.location.href = `mailto:${ME.email}?${q}`;
   };
   const copy = () => {
-    navigator.clipboard?.writeText(ME.email).catch(() => {});
-    setCopied(true);
-    setTimeout(() => setCopied(false), 1800);
+    copyText(ME.email).then(ok => {
+      if (!ok) return;
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1800);
+    });
   };
   const line: React.CSSProperties = { display: 'flex', alignItems: 'center', gap: 8, minHeight: 46, marginLeft: 16, paddingRight: 16, borderBottom: `1px solid ${tk.sep}`, fontSize: 15 };
 

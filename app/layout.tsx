@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import { DM_Sans, IBM_Plex_Mono } from 'next/font/google';
 import './globals.css';
 import { Analytics } from '@vercel/analytics/react';
+import { NavEvents } from '@/components/nav';
 
 const BASE = 'https://tomyromero.vercel.app';
 
@@ -99,7 +100,7 @@ const jsonLd = {
       '@id':      `${BASE}/#person`,
       name:       'Tomy F. Romero',
       url:        BASE,
-      image:      `${BASE}/assets/tomyRomeroGrad.jpeg`,
+      image:      `${BASE}/assets/headshot.jpg`,
       jobTitle:   'Full-Stack Software Engineer',
       description:
         'Full-stack software engineer building home care software with ASP.NET Core, React, and SQL Server.',
@@ -173,6 +174,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <main id="main-content">
           {children}
         </main>
+        <NavEvents />
         <Analytics />
       </body>
     </html>

@@ -46,3 +46,9 @@ export const T = (dark: boolean) => ({
 });
 
 export type Tk = ReturnType<typeof T>;
+
+// Thumb colors for .hscroll strips (globals.css)
+export const thumbVars = (dark: boolean) => ({
+  '--sb-thumb': dark ? 'rgba(255,255,255,.28)' : 'rgba(0,0,0,.26)',
+  '--sb-thumb-hover': dark ? 'rgba(255,255,255,.45)' : 'rgba(0,0,0,.42)',
+}) as React.CSSProperties;

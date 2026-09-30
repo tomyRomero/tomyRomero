@@ -5,6 +5,7 @@ import { matColors, TINTS } from '@/components/projectColors';
 import { SECTIONS } from './shared';
 import ThemeToggle from './ThemeToggle';
 import ClassicMenu from './ClassicMenu';
+import { Link } from '@/components/nav';
 import s from './classic.module.css';
 
 export type Vars = React.CSSProperties & Record<`--${string}`, string>;
@@ -20,19 +21,19 @@ export function ClassicBar({ base }: { base: '' | '/classic' }) {
   return (
     <header className={s.bar}>
       <div className={s.barInner}>
-        <a href={base || '#top'} className={s.brand}>
+        <Link href={base || '#top'} className={s.brand}>
           <span className={s.brandPhoto}><Image src={profilePhoto} alt="" fill sizes="30px" style={{ objectFit: 'cover' }} /></span>
           {ME.name}
-        </a>
+        </Link>
         <nav aria-label="Sections" className={s.links}>
           {SECTIONS.map(x => (
-            <a key={x.id} href={`${base}#${x.id}`} aria-current={base && x.id === 'projects' ? 'true' : undefined}>{x.label}</a>
+            <Link key={x.id} href={`${base}#${x.id}`} aria-current={base && x.id === 'projects' ? 'true' : undefined}>{x.label}</Link>
           ))}
         </nav>
         <div className={s.tools}>
           <ThemeToggle />
           {/* In the menu on phones */}
-          <a href="/" className={`${s.pill} ${s.deskOnly}`}><WindowGlyph />Mac view</a>
+          <Link href="/" className={`${s.pill} ${s.deskOnly}`}><WindowGlyph />Mac view</Link>
           <a href={resumeFile.href} download={resumeFile.filename} className={`${s.pill} ${s.primary} ${s.deskOnly}`}>Resume</a>
           <ClassicMenu base={base} resume={{ href: resumeFile.href, filename: resumeFile.filename }} />
         </div>
@@ -45,10 +46,10 @@ export function ClassicFooter() {
   return (
     <footer className={s.footer}>
       <span>{ME.name} · {ME.location}</span>
-      <a href="/">
+      <Link href="/">
         <span className={s.deskOnly}>Back to Mac view</span>
         <span className={s.phoneOnly}>Back to iPhone view</span>
-      </a>
+      </Link>
     </footer>
   );
 }

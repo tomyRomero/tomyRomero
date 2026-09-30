@@ -1,8 +1,9 @@
 // Runs before paint to avoid a theme flash
 export const THEME = `(function(){try{var d=localStorage.getItem('dark');var k=d!==null?d==='true':matchMedia('(prefers-color-scheme: dark)').matches;document.documentElement.dataset.theme=k?'dark':'light'}catch(e){}})()`;
 
-// The page scrolls inside .page, which browsers don't restore on Back
-export const KEEP_SCROLL = `(function(){var p=document.currentScript.parentElement,k='classic-scroll';try{var n=performance.getEntriesByType('navigation')[0],y=sessionStorage.getItem(k);if(n&&n.type==='back_forward'&&y){var go=function(){p.scrollTo({top:+y,behavior:'instant'})};go();if(location.hash)addEventListener('load',function(){requestAnimationFrame(go)})}}catch(e){}addEventListener('pagehide',function(){try{sessionStorage.setItem(k,p.scrollTop)}catch(e){}})})()`;
+// Before paint on a full Back/Forward load; ClassicScroll saves the positions
+export const SCROLL_KEY = 'classic-scroll';
+export const KEEP_SCROLL = `(function(){var p=document.currentScript.parentElement;try{var n=performance.getEntriesByType('navigation')[0],y=JSON.parse(sessionStorage.getItem('${SCROLL_KEY}')||'{}')[location.pathname];if(n&&n.type==='back_forward'&&y!=null){var go=function(){p.scrollTo({top:y,behavior:'instant'})};go();if(location.hash)addEventListener('load',function(){requestAnimationFrame(go)})}}catch(e){}})()`;
 
 export const SECTIONS = [
   { id: 'projects',   label: 'Projects',   app: 'projects' },

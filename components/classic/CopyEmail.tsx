@@ -2,9 +2,10 @@
 import { useRef, useState } from 'react';
 import { MailIcon } from '@/components/mac/Icons';
 import { CheckIcon, CopyIcon } from '@/components/mac/Native';
+import { copyText } from '@/components/copyText';
 import s from './classic.module.css';
 
-// Falls back to selecting the text where the clipboard API is unavailable (http)
+// If copying fails, the address is selected so it can be copied by hand
 export default function CopyEmail({ email }: { email: string }) {
   const [done, setDone] = useState(false);
   const text = useRef<HTMLSpanElement>(null);
@@ -16,11 +17,11 @@ export default function CopyEmail({ email }: { email: string }) {
     sel?.addRange(r);
   };
   const copy = () => {
-    if (!navigator.clipboard) { select(); return; }
-    navigator.clipboard.writeText(email).then(() => {
+    copyText(email).then(ok => {
+      if (!ok) { select(); return; }
       setDone(true);
       setTimeout(() => setDone(false), 1800);
-    }, select);
+    });
   };
   return (
     <button type="button" className={s.copy} onClick={copy} aria-label={done ? 'Email address copied' : `Copy ${email}`}>

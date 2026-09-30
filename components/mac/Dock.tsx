@@ -78,8 +78,8 @@ function IconBtn({
         position: 'relative', display: 'flex', flexDirection: 'column',
         alignItems: 'center', width: sz, flexShrink: 0,
       }}
-      onMouseEnter={() => setHovIdx(idx)}
-      onMouseLeave={() => setHovIdx(null)}
+      onPointerEnter={e => { if (e.pointerType === 'mouse') setHovIdx(idx); }}
+      onPointerLeave={() => setHovIdx(null)}
     >
       {isH && (
         <div style={{
@@ -209,8 +209,9 @@ export default function Dock({ wins, dark, dispatch }: Props) {
       className="mac-dock"
       role="navigation"
       aria-label="Application dock"
-      onMouseMove={e => setMx(e.clientX)}
-      onMouseLeave={() => { setMx(null); setHovIdx(null); }}
+      // Mouse only: a tap would leave the magnification and label stuck on
+      onPointerMove={e => { if (e.pointerType === 'mouse') setMx(e.clientX); }}
+      onPointerLeave={() => { setMx(null); setHovIdx(null); }}
       style={{
         position: 'fixed', bottom: 10, left: '50%', transform: 'translateX(-50%)',
         display: 'flex', alignItems: 'flex-end', gap: 26,
@@ -256,8 +257,8 @@ export default function Dock({ wins, dark, dispatch }: Props) {
           position: 'relative', display: 'flex', flexDirection: 'column',
           alignItems: 'center', width: BASE, flexShrink: 0,
         }}
-        onMouseEnter={() => setTrHov(true)}
-        onMouseLeave={() => setTrHov(false)}
+        onPointerEnter={e => { if (e.pointerType === 'mouse') setTrHov(true); }}
+        onPointerLeave={() => setTrHov(false)}
       >
         {isTrashHot && (
           <div style={{

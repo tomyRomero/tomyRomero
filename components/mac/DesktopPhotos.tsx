@@ -6,9 +6,9 @@ import { Lightbox } from './windows/AboutWindow';
 import { ABOUT_W } from './winTypes';
 
 const PINNED = [
-  { idx: 0, tilt: -7 },
-  { idx: 2, tilt: 5 },
-  { idx: 3, tilt: -4 },
+  { idx: 4, tilt: -7 },
+  { idx: 5, tilt: 5 },
+  { idx: 6, tilt: -4 },
 ];
 const W = 118;
 
@@ -74,8 +74,7 @@ export default function DesktopPhotos({ dark }: { dark: boolean }) {
               </div>
               <div style={{
                 marginTop: 5, fontSize: 10, color: '#555', textAlign: 'center',
-                fontFamily: 'var(--font-sans),sans-serif', lineHeight: 1.3,
-                overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+                fontFamily: 'var(--font-sans),sans-serif', lineHeight: 1.3, textWrap: 'balance',
               }}>
                 {img.title}
               </div>

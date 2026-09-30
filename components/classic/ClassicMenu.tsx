@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useRef, useState } from 'react';
 import { APP_BG, appGlyph } from '@/components/mac/appIcons';
+import { Link } from '@/components/nav';
 import { SECTIONS } from './shared';
 import s from './classic.module.css';
 
@@ -39,23 +40,23 @@ export default function ClassicMenu({ base, resume }: { base: string; resume: { 
       {open && (
         <nav id="classic-menu" aria-label="Menu" className={s.menu}>
           {SECTIONS.map(x => (
-            <a key={x.id} href={`${base}#${x.id}`} onClick={close} aria-current={base && x.id === 'projects' ? 'true' : undefined}>
+            <Link key={x.id} href={`${base}#${x.id}`} onClick={close} aria-current={base && x.id === 'projects' ? 'true' : undefined}>
               <span aria-hidden="true" className={s.menuIcon} style={{ background: APP_BG[x.app] }}>{appGlyph(x.app, 'cm', .5)}</span>
               {x.label}
-            </a>
+            </Link>
           ))}
           <a href={resume.href} download={resume.filename} onClick={close}>
             <span aria-hidden="true" className={s.menuIcon} style={{ background: APP_BG.resume }}>{appGlyph('resume', 'cm', .5)}</span>
             Resume
           </a>
-          <a href="/" className={s.phoneOnly}>
+          <Link href="/" className={s.phoneOnly}>
             <span aria-hidden="true" className={`${s.menuIcon} ${s.menuPhone}`}>
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
                 <rect x="6.5" y="2.5" width="11" height="19" rx="2.8" /><path d="M10.5 18.5h3" strokeLinecap="round" />
               </svg>
             </span>
             iPhone view
-          </a>
+          </Link>
         </nav>
       )}
     </div>

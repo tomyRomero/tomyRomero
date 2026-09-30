@@ -1,22 +1,27 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useLayoutEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { projectDetails, projects } from '@/constants';
 import { MoonIcon, SunIcon, SearchIcon, GitHubIcon } from '@/components/mac/Icons';
 import { T } from '@/components/mac/tokens';
 import { ChevronLeft, ArrowUpRight } from '@/components/mac/Native';
 import Showcase, { PLATFORM } from '@/components/ProjectShowcase';
+import { hasAppHistory, useNavigate } from '@/components/nav';
+
+const useIsoLayoutEffect = typeof window === 'undefined' ? useEffect : useLayoutEffect;
 
 export default function ProjectPage({ params }: { params: { title: string } }) {
   const router = useRouter();
+  const go = useNavigate();
   const [dark, setDark] = useState(false);
   const [tucked, setTucked] = useState(false);
   // Don't save until the stored value has been read
   const [prefsReady, setPrefsReady] = useState(false);
   const titleRef = useRef<HTMLHeadingElement>(null);
 
-  useEffect(() => {
+  // Before paint, so arriving in dark mode doesn't flash light
+  useIsoLayoutEffect(() => {
     const saved = localStorage.getItem('dark');
     if (saved !== null) setDark(saved === 'true');
     else setDark(window.matchMedia('(prefers-color-scheme: dark)').matches);
@@ -36,8 +41,8 @@ export default function ProjectPage({ params }: { params: { title: string } }) {
     setTimeout(() => document.documentElement.classList.remove('theme-transition'), 350);
   };
   const back = () => {
-    if (document.referrer.startsWith(window.location.origin) && window.history.length > 1) router.back();
-    else router.push('/');
+    if (hasAppHistory() || (document.referrer.startsWith(window.location.origin) && window.history.length > 1)) router.back();
+    else go('/');
   };
 
   if (!detail || !summary) {
@@ -48,7 +53,7 @@ export default function ProjectPage({ params }: { params: { title: string } }) {
       }}>
         <div style={{ color: tk.accent }}><SearchIcon s={36} /></div>
         <div style={{ fontSize: 18, fontWeight: 600 }}>Project not found</div>
-        <button onClick={() => router.push('/')} style={{
+        <button onClick={() => go('/')} style={{
           padding: '10px 22px', borderRadius: 12, fontSize: 14, fontWeight: 600, background: tk.select, color: '#fff',
         }}>
           Back to the portfolio
@@ -63,7 +68,7 @@ export default function ProjectPage({ params }: { params: { title: string } }) {
         const t = e.currentTarget.scrollTop > (titleRef.current?.offsetTop ?? 80);
         if (t !== tucked) setTucked(t);
       }}
-      style={{ position: 'fixed', inset: 0, overflowY: 'auto', background: bg, color: tk.label, userSelect: 'text' }}
+      style={{ position: 'fixed', inset: 0, overflowY: 'auto', background: bg, color: tk.label, userSelect: 'text', colorScheme: dark ? 'dark' : 'light' }}
     >
       <nav style={{
         position: 'sticky', top: 0, zIndex: 100, paddingTop: 'env(safe-area-inset-top, 0px)',

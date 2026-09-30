@@ -38,3 +38,8 @@ export type WinAction =
 // About opens first, centered left of the widgets; DesktopPhotos pins
 // prints in the space beside it
 export const ABOUT_W = 580;
+
+// Portrait tablets have no room for the widget column, so the widgets run in
+// a row across the top and About opens under it
+export const isWidgetRow = (vw: number, vh: number) => vw < 1000 && vh >= 880;
+export const WIDGET_ROW = { top: 16, bottom: 186 };

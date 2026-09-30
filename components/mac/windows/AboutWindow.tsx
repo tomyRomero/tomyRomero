@@ -2,10 +2,11 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import Image from 'next/image';
-import { T } from '../tokens';
+import { T, thumbVars } from '../tokens';
 import { ME, images, profilePhoto, projects, totalSkills, yearsExperience, resumeFile, experiences, education } from '@/constants';
 import { GitHubIcon, LinkedInIcon } from '../Icons';
 import { requestResume } from '../ResumeDialog';
+import { copyText } from '@/components/copyText';
 import { Monogram, TOOLBAR_H, Download, Envelope, ShareIcon, CheckIcon, PinLine } from '../Native';
 
 const TILTS = [-5, 4, -3, 6, -6, 3, -4, 7, -2, 5];
@@ -137,7 +138,7 @@ export function Lightbox({ startIdx, onClose }: { startIdx: number; onClose: () 
 function PhotoStrip({ dark, onOpen }: { dark: boolean; onOpen: (i: number) => void }) {
   const [hov, setHov] = useState<number | null>(null);
   return (
-    <div style={{ overflowX: 'auto', padding: '14px 0 26px' }}>
+    <div className="hscroll" style={{ ...thumbVars(dark), overflowX: 'auto', padding: '14px 0 16px' }}>
       <div style={{ display: 'flex', alignItems: 'flex-start', gap: 14, width: 'max-content', padding: '0 26px' }}>
         {images.map((img, i) => {
           const tilt = TILTS[i % TILTS.length];
@@ -241,9 +242,11 @@ export default function AboutWindow({ dark, onOpen }: {
   const school = education[0];
 
   const copyLink = () => {
-    navigator.clipboard?.writeText(ME.portfolio).catch(() => {});
-    setCopied(true);
-    setTimeout(() => setCopied(false), 1600);
+    copyText(ME.portfolio).then(ok => {
+      if (!ok) return;
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1600);
+    });
   };
 
   const stat = (value: string, label: string, id: string, mid?: boolean) => (

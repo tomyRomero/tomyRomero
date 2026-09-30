@@ -2,7 +2,7 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import Image from 'next/image';
-import { T } from '@/components/mac/tokens';
+import { T, thumbVars } from '@/components/mac/tokens';
 import { projects, projectDetails, shotsFor, isTallShot, shotLabel } from '@/constants';
 import ProjectCover from '@/components/ProjectCover';
 import { Browser, Phone } from '@/components/DeviceFrames';
@@ -224,7 +224,7 @@ export default function Showcase({ title, dark, stacked = false, level = 3, anim
       )}
 
       {shots.length > 1 && (
-        <div ref={stripRef} style={{ display: 'flex', gap: 8, marginTop: 12, overflowX: 'auto', padding: '3px 3px 8px' }}>
+        <div ref={stripRef} className="hscroll" style={{ ...thumbVars(dark), display: 'flex', gap: 8, marginTop: 12, overflowX: 'auto', padding: '3px 3px 12px' }}>
           {shots.map((s, i) => (
             <button
               key={s.src}

@@ -5,6 +5,7 @@ import { T } from '../tokens';
 import { contactDetails, contactBlurb, ME, profilePhoto } from '@/constants';
 import { MailIcon, LinkedInIcon, GitHubIcon, PinIcon } from '../Icons';
 import { requestResume } from '../ResumeDialog';
+import { copyText } from '@/components/copyText';
 import { Toolbar, TOOLBAR_H, useWidthClass, ArrowUpRight, CopyIcon, CheckIcon, Download, SendIcon } from '../Native';
 
 // Send opens the visitor's mail app with the draft filled in (mailto)
@@ -26,9 +27,11 @@ export default function ContactWindow({ dark }: { dark: boolean }) {
   const [body, setBody] = useState('');
 
   const copyEmail = () => {
-    navigator.clipboard?.writeText(ME.email).catch(() => {});
-    setCopied(true);
-    setTimeout(() => setCopied(false), 1800);
+    copyText(ME.email).then(ok => {
+      if (!ok) return;
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1800);
+    });
   };
   const send = () => {
     const q = `subject=${encodeURIComponent(subject.trim() || SUBJECT)}${body.trim() ? `&body=${encodeURIComponent(body)}` : ''}`;

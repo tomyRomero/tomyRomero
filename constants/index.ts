@@ -70,19 +70,30 @@ import sga        from '../public/assets/sga.jpeg';
 import newyork    from '../public/assets/newyork.jpg';
 import rhodeisland from '../public/assets/rhodeisland.jpg';
 import fall       from '../public/assets/picnic.jpg';
+import headshot   from '../public/assets/headshot.jpg';
+import liberty    from '../public/assets/statue-of-liberty.jpg';
+import stamford   from '../public/assets/stamford-ct.jpg';
+import river      from '../public/assets/autumn-river.jpg';
+import hallOfFame from '../public/assets/basketball-hall-of-fame.jpg';
+import winter     from '../public/assets/winter-ct.jpg';
 
-export const profilePhoto = tomy;
+export const profilePhoto = headshot;
 
 export const images = [
-  { img: tomy,         title: 'Tomy Romero',                                              alt: 'Picture of Tomy Romero smiling' },
-  { img: uvi,          title: 'University of the Virgin Islands',                         alt: 'University of the Virgin Islands' },
-  { img: president,    title: 'Picture with President of UVI',                            alt: 'Picture with President of University of the Virgin Islands' },
+  { img: liberty,      title: 'Statue of Liberty',                                        alt: 'Tomy Romero at the Statue of Liberty' },
+  { img: stamford,     title: 'Stamford, CT',                                             alt: 'Tomy Romero in Stamford, Connecticut' },
+  { img: river,        title: 'Autumn River',                                             alt: 'A river in autumn' },
+  { img: tomy,         title: 'Graduation',                                               alt: 'Tomy Romero at graduation' },
+  { img: winter,       title: 'Winter in CT',                                             alt: 'A snowy park in Connecticut' },
   { img: newyork,      title: 'New York City',                                            alt: 'Picture of New York City' },
+  { img: uvi,          title: 'University of the Virgin Islands',                         alt: 'University of the Virgin Islands' },
+  { img: hallOfFame,   title: 'Basketball Hall of Fame',                                  alt: 'Tomy Romero at the Basketball Hall of Fame' },
+  { img: president,    title: 'Picture with President of UVI',                            alt: 'Picture with President of University of the Virgin Islands' },
   { img: deanslist,    title: "Dean's List Reception",                                    alt: "Dean's List Reception" },
   { img: fall,         title: 'Fall Picnic',                                              alt: 'Fall Picnic' },
   { img: rhodeisland,  title: 'Rhode Island',                                             alt: 'Picture of Rhode Island' },
   { img: scholarship,  title: 'Scholarship Award',                                        alt: 'Scholarship Reception' },
-  { img: uvilogo,      title: 'University Logo',                                          alt: 'UVI Logo' },
+  { img: uvilogo,      title: 'University of the Virgin Islands Logo',                    alt: 'University of the Virgin Islands logo' },
   { img: sga,          title: 'Student Government Association Junior Senator',             alt: 'Tomy Romero as SGA Junior Senator' },
 ];
 

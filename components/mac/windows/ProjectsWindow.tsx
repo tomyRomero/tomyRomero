@@ -6,6 +6,7 @@ import ProjectCover from '@/components/ProjectCover';
 import { Browser, Phone } from '@/components/DeviceFrames';
 import Showcase, { hasLiveDemo, stackOf, PLATFORM } from '@/components/ProjectShowcase';
 import { GitHubIcon } from '../Icons';
+import { copyText } from '@/components/copyText';
 import {
   Sidebar, SidebarHeading, SidebarItem, Toolbar, ToolbarButton, useWidthClass,
   ChevronLeft, ChevronRight, ArrowUpRight, CheckIcon, ShareIcon, SearchLine,
@@ -228,9 +229,11 @@ export default function ProjectsWindow({ dark }: { dark: boolean }) {
 
   const copyLink = () => {
     if (!detail) return;
-    navigator.clipboard?.writeText(`${ME.portfolio}/project/${encodeURIComponent(detail)}`).catch(() => {});
-    setCopied(true);
-    setTimeout(() => setCopied(false), 1600);
+    copyText(`${ME.portfolio}/project/${encodeURIComponent(detail)}`).then(ok => {
+      if (!ok) return;
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1600);
+    });
   };
   const pickFilter = (f: Filter) => { setFilter(f); setDetail(null); };
 

@@ -2,6 +2,7 @@
 import { useState, useEffect, useSyncExternalStore } from 'react';
 import { T } from './tokens';
 import { WidgetFrame, S, GAP, M } from './widgets/WidgetFrame';
+import { WIDGET_ROW } from './winTypes';
 import CalendarWidget from './widgets/CalendarWidget';
 import WeatherWidget from './widgets/WeatherWidget';
 import PhotosWidget from './widgets/PhotosWidget';
@@ -117,6 +118,7 @@ function AnalogClock({ dark }: { dark: boolean }) {
 
 // 2×2 grid at macOS sizes, scaled down on smaller screens
 const GRID_H = S * 2 + GAP;
+const ROW_W  = S * 4 + GAP * 3;
 const MIN_K  = 0.72;
 
 const subscribe = (cb: () => void) => { window.addEventListener('resize', cb); return () => window.removeEventListener('resize', cb); };
@@ -128,19 +130,20 @@ function scaleFor(vw: number, vh: number) {
   return Math.max(MIN_K, Math.min(1, room / GRID_H, side));
 }
 
-export default function Widgets({ dark, openCal, onOpen }: {
-  dark: boolean; openCal: () => void; onOpen: (id: string) => void;
+// row: one line across the top, for portrait tablets
+export default function Widgets({ dark, row, openCal, onOpen }: {
+  dark: boolean; row?: boolean; openCal: () => void; onOpen: (id: string) => void;
 }) {
   const [vw, vh] = useSyncExternalStore(subscribe, viewport, () => '1440x900').split('x').map(Number);
-  const k = scaleFor(vw, vh);
+  const k = row ? Math.min(1, (vw - 32) / ROW_W) : scaleFor(vw, vh);
+  const place: React.CSSProperties = row
+    ? { left: '50%', top: WIDGET_ROW.top, width: ROW_W * k, height: S * k, marginLeft: -ROW_W * k / 2 }
+    : { right: 16, top: 40, width: M * k, height: GRID_H * k };
 
   return (
-    <div
-      style={{ position: 'absolute', right: 16, top: 40, width: M * k, height: GRID_H * k, zIndex: 50 }}
-      onClick={e => e.stopPropagation()}
-    >
+    <div style={{ position: 'absolute', zIndex: 50, ...place }} onClick={e => e.stopPropagation()}>
       <div style={{
-        width: M, display: 'grid', gridTemplateColumns: `${S}px ${S}px`, gap: GAP,
+        width: row ? ROW_W : M, display: 'grid', gridTemplateColumns: `repeat(${row ? 4 : 2}, ${S}px)`, gap: GAP,
         transform: k < 1 ? `scale(${k})` : undefined, transformOrigin: 'top left',
       }}>
         <WidgetFrame dark={dark} w={S} h={S} label="Clock. Open Calendar" title="Open Calendar" onPress={openCal}>

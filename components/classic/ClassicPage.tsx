@@ -7,9 +7,11 @@ import { APP_BG, appGlyph } from '@/components/mac/appIcons';
 import { GitHubIcon, LinkedInIcon, MailIcon, PinIcon } from '@/components/mac/Icons';
 import { CatIcon } from '@/components/SkillIcon';
 import { ClassicBar, ClassicFooter, Head, Monogram, Mat } from './parts';
-import { THEME, KEEP_SCROLL, PLATFORM, anchorOf, pageOf } from './shared';
+import { THEME, PLATFORM, anchorOf, pageOf } from './shared';
+import ClassicScroll from './ClassicScroll';
 import ClassicWeather from './ClassicWeather';
 import CopyEmail from './CopyEmail';
+import { Link } from '@/components/nav';
 import s from './classic.module.css';
 
 const SUBJECT = 'Hello from your portfolio';
@@ -17,7 +19,7 @@ const SUBJECT = 'Hello from your portfolio';
 export default function ClassicPage() {
   const now = experiences[0];
   return (
-    <div className={s.page}>
+    <ClassicScroll className={s.page}>
       <script dangerouslySetInnerHTML={{ __html: THEME }} />
       <span id="top" />
 
@@ -96,7 +98,7 @@ export default function ClassicPage() {
                   {p.techStack.split(', ').map(t => <span key={t} className={s.mono}>{t}</span>)}
                 </div>
                 <div className={s.buttons}>
-                  <a className={`${s.button} ${s.primary}`} href={pageOf(p.title)}>View Project</a>
+                  <Link className={`${s.button} ${s.primary}`} href={pageOf(p.title)}>View Project</Link>
                   <a className={s.button} href={p.link} target="_blank" rel="noopener noreferrer"><GitHubIcon s={15} />GitHub</a>
                 </div>
               </div>
@@ -180,7 +182,6 @@ export default function ClassicPage() {
 
         <ClassicFooter />
       </div>
-      <script dangerouslySetInnerHTML={{ __html: KEEP_SCROLL }} />
-    </div>
+    </ClassicScroll>
   );
 }

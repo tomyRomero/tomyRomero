@@ -6,6 +6,7 @@ import { T } from '../tokens';
 import { projects, shotsFor, shotLabel, isTallShot, type Shot } from '@/constants';
 import { albumTint } from '@/components/projectColors';
 import { requestProjectDetail } from './ProjectsWindow';
+import { useNavigate } from '@/components/nav';
 import {
   Sidebar, SidebarHeading, SidebarItem, Toolbar, ToolbarButton, useWidthClass,
   ChevronLeft, ChevronRight,
@@ -347,6 +348,7 @@ function FullScreen({ list, at, setAt, onClose }: {
 // nav: phone-only bar that replaces the window chrome
 export default function PhotosWindow({ dark, onOpen, nav }: { dark: boolean; onOpen: (id: string) => void; nav?: React.ReactNode }) {
   const tk = T(dark);
+  const go = useNavigate();
   // 0: no sidebar (albums become a row of tabs), 1: sidebar
   const [ref, size] = useWidthClass<HTMLDivElement>([720]);
   const wide = size >= 1;
@@ -396,7 +398,7 @@ export default function PhotosWindow({ dark, onOpen, nav }: { dark: boolean; onO
   };
   // The phone has no Projects window: its project pages stand alone
   const openProject = (title: string) => {
-    if (nav) { window.location.assign(`/project/${encodeURIComponent(title)}`); return; }
+    if (nav) { go(`/project/${encodeURIComponent(title)}`); return; }
     requestProjectDetail(title);
     onOpen('projects');
   };

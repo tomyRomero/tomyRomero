@@ -6,6 +6,7 @@ import { S } from '@/components/mac/widgets/WidgetFrame';
 import { GitHubIcon, LinkedInIcon, MoonIcon, SunIcon, PinIcon } from '@/components/mac/Icons';
 import { requestResume } from '@/components/mac/ResumeDialog';
 import { APP_BG, appGlyph } from '@/components/mac/appIcons';
+import { Link } from '@/components/nav';
 
 export type AppId = 'about' | 'work' | 'experience' | 'contact' | 'skills' | 'photos' | 'weather';
 export type Open = (id: AppId, from: HTMLElement | null) => void;
@@ -168,7 +169,7 @@ export default function Home({ dark, setDark, open, homeRef }: {
         position: 'absolute', left: 0, right: 0, bottom: 'calc(116px + env(safe-area-inset-bottom, 0px))',
         display: 'flex', justifyContent: 'center', pointerEvents: 'none',
       }}>
-        <a href="/classic" className="m-press" style={{
+        <Link href="/classic" className="m-press" style={{
           ...glass, pointerEvents: 'auto', height: 32, padding: '0 14px', borderRadius: 16,
           display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 13, fontWeight: 600, color: ink,
         }}>
@@ -176,7 +177,7 @@ export default function Home({ dark, setDark, open, homeRef }: {
             <rect x="4" y="3" width="16" height="18" rx="3" /><path d="M8 8h8M8 12h8M8 16h5" />
           </svg>
           Classic view
-        </a>
+        </Link>
       </div>
 
       <nav aria-label="Sections" style={{

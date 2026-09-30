@@ -2,6 +2,7 @@
 import { useRef, useEffect, useState } from 'react';
 import { T } from './tokens';
 import type { Win, WinAction } from './winTypes';
+import ScrollThumbs from './ScrollThumbs';
 
 function TrafficLights({ win, dispatch, focused, dark }: {
   win: Win; dispatch: React.Dispatch<WinAction>; focused: boolean; dark: boolean;
@@ -94,6 +95,7 @@ interface Props {
   dark: boolean;
   dispatch: React.Dispatch<WinAction>;
   focused: boolean;
+  away: boolean;
   onFocus: (id: string) => void;
   children: React.ReactNode;
 }
@@ -129,8 +131,10 @@ function isDragZone(t: EventTarget | null) {
 // Zoomed: fill the desktop with an even gap
 const ZOOM_GAP = 8;
 const DOCK_SPACE = 110;
+// How much of a window stays on screen while the desktop is revealed
+const PEEK = 28;
 
-export default function WinShell({ win, dark, dispatch, focused, onFocus, children }: Props) {
+export default function WinShell({ win, dark, dispatch, focused, away, onFocus, children }: Props) {
   const tk = T(dark);
   const el         = useRef<HTMLDivElement>(null);
   const drag       = useRef(false);
@@ -387,6 +391,15 @@ export default function WinShell({ win, dark, dispatch, focused, onFocus, childr
     !document.body.classList.contains('lb-open') && isDragZone(t);
   const zoomEase = 'cubic-bezier(.2,.85,.25,1)';
 
+  // Desktop revealed: slide to the nearer side, leaving a sliver on screen
+  let slide = 0;
+  if (away && typeof window !== 'undefined') {
+    const vw = window.innerWidth;
+    const left = win.isMax ? ZOOM_GAP : win.pos.x;
+    const width = win.isMax ? vw - ZOOM_GAP * 2 : win.sz.w;
+    slide = left + width / 2 < vw / 2 ? PEEK - left - width : vw - left - PEEK;
+  }
+
   return (
     <section
       ref={el}
@@ -420,9 +433,10 @@ export default function WinShell({ win, dark, dispatch, focused, onFocus, childr
         borderRadius: 12,
         boxShadow: focused ? tk.shadowFoc : tk.shadow,
         overflow: 'hidden',
+        transform: slide ? `translateX(${slide}px)` : undefined,
         transition: zoomAnim
-          ? `left .36s ${zoomEase}, top .36s ${zoomEase}, width .36s ${zoomEase}, height .36s ${zoomEase}, box-shadow .25s ease, border-color .2s`
-          : 'box-shadow .25s ease, border-color .2s',
+          ? `left .36s ${zoomEase}, top .36s ${zoomEase}, width .36s ${zoomEase}, height .36s ${zoomEase}, box-shadow .25s ease, border-color .2s, transform .5s ${zoomEase}`
+          : `box-shadow .25s ease, border-color .2s, transform .5s ${zoomEase}`,
         fontFamily: 'var(--font-sans), sans-serif',
         pointerEvents: (win.minning || win.closing) ? 'none' : undefined,
         ...anim,
@@ -431,6 +445,9 @@ export default function WinShell({ win, dark, dispatch, focused, onFocus, childr
       <div style={{ flex: 1, minHeight: 0, display: 'flex', position: 'relative' }}>
         {children}
       </div>
+      <ScrollThumbs host={el} />
+      {/* While the desktop is revealed, a press anywhere just brings windows back */}
+      {away && <div onMouseDown={() => onFocus(win.id)} style={{ position: 'absolute', inset: 0, zIndex: 40, cursor: 'pointer' }} />}
 
       <div data-tl="" style={{ position: 'absolute', left: 14, top: 16, zIndex: 20 }}>
         <TrafficLights win={win} dispatch={dispatch} focused={focused} dark={dark} />

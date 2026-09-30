@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
-import Link from 'next/link';
+import { Link } from '@/components/nav';
 
 export default function NotFound() {
   const [dark, setDark] = useState(false);

@@ -9,6 +9,8 @@ import { requestResume } from './ResumeDialog';
 import { GitHubIcon, LinkedInIcon, MoonIcon as MoonLine } from './Icons';
 import { WALLPAPERS, type WallpaperVariant } from './wallpaperList';
 import type { Win, WinAction } from './winTypes';
+import { copyText } from '@/components/copyText';
+import { Link, useNavigate } from '@/components/nav';
 
 const WIN_TITLES: Record<string, string> = {
   about: 'About Me', projects: 'Projects',
@@ -149,6 +151,7 @@ interface MenuItem {
 
 export default function MenuBar({ dark, setDark, wins, dispatch, calPop, setCalPop, wallpaper, setWallpaper }: Props) {
   const tk = T(dark);
+  const go = useNavigate();
   const [clock, setClock]         = useState('');
   const [active, setActive]       = useState<string | null>(null);
   const [toast, setToast]         = useState<string | null>(null);
@@ -299,7 +302,7 @@ export default function MenuBar({ dark, setDark, wins, dispatch, calPop, setCalP
 
   const showToast = (msg: string) => { setToast(msg); setTimeout(() => setToast(null), 2500); };
   const copy = (txt: string, lbl: string) =>
-    navigator.clipboard?.writeText(txt).then(() => showToast(`✓ ${lbl} copied`));
+    copyText(txt).then(ok => { if (ok) showToast(`✓ ${lbl} copied`); });
   const close = () => { setActive(null); setWifiPop(false); setBatPop(false); setCalPop(false); };
 
   // Edit menu shortcuts (only ones browsers don't reserve)
@@ -398,7 +401,7 @@ export default function MenuBar({ dark, setDark, wins, dispatch, calPop, setCalP
         { label: dark ? 'Switch to Light Mode' : 'Switch to Dark Mode',
           action: () => { setDark(d => !d); close(); } },
         { label: 'Classic View',
-          action: () => { close(); window.location.assign('/classic'); } },
+          action: () => { close(); go('/classic'); } },
         { div: true },
         { label: isFS ? 'Exit Full Screen' : 'Enter Full Screen',
           shortcut: '⌃⌘F', action: toggleFS },
@@ -682,7 +685,7 @@ export default function MenuBar({ dark, setDark, wins, dispatch, calPop, setCalP
           display: 'flex', alignItems: 'center', gap: 6,
           paddingRight: 14, height: '100%',
         }}>
-          <a
+          <Link
             href="/classic"
             style={{
               height: 22, padding: '0 8px', marginRight: 4, borderRadius: 5, display: 'flex', alignItems: 'center',
@@ -692,7 +695,7 @@ export default function MenuBar({ dark, setDark, wins, dispatch, calPop, setCalP
             onMouseLeave={e => { e.currentTarget.style.opacity = '.78'; e.currentTarget.style.background = 'transparent'; }}
           >
             Classic view
-          </a>
+          </Link>
           <div style={{ position: 'relative' }}>
             <button
               aria-label="Wi-Fi"

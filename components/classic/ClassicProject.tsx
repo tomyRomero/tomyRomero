@@ -4,6 +4,8 @@ import { ArrowUpRight } from '@/components/mac/Native';
 import { ClassicBar, ClassicFooter, Head, Mat } from './parts';
 import { THEME, PLATFORM, anchorOf, pageOf } from './shared';
 import ClassicShowcase from './ClassicShowcase';
+import ClassicScroll from './ClassicScroll';
+import { Link } from '@/components/nav';
 import s from './classic.module.css';
 
 export default function ClassicProject({ title }: { title: string }) {
@@ -11,7 +13,7 @@ export default function ClassicProject({ title }: { title: string }) {
   const d = projectDetails.find(x => x.title === title)!;
   const others = projects.filter(x => x.title !== title);
   return (
-    <div className={s.page}>
+    <ClassicScroll className={s.page}>
       <script dangerouslySetInnerHTML={{ __html: THEME }} />
       <span id="top" />
 
@@ -20,7 +22,7 @@ export default function ClassicProject({ title }: { title: string }) {
       <main className={`${s.wrap} ${s.projectWrap}`}>
         <div className={s.projectTop}>
           <nav aria-label="Breadcrumb" className={s.crumbs}>
-            <a href={`/classic#${anchorOf(title)}`}>Projects</a>
+            <Link href={`/classic#${anchorOf(title)}`}>Projects</Link>
             <span aria-hidden="true">›</span>
             <span aria-current="page">{title}</span>
           </nav>
@@ -50,20 +52,20 @@ export default function ClassicProject({ title }: { title: string }) {
           <Head app="projects" title="More projects" id="more-projects" />
           <div className={s.more}>
             {others.map(o => (
-              <a key={o.title} href={pageOf(o.title)} className={`${s.card} ${s.moreCard}`}>
+              <Link key={o.title} href={pageOf(o.title)} className={`${s.card} ${s.moreCard}`}>
                 <Mat title={o.title} shot={o.cover} sizes={{ tall: '90px', wide: '(max-width: 760px) 80vw, 300px' }} />
                 <span className={s.moreBody}>
                   <span className={s.label}>{PLATFORM[o.platform]} · {o.year}</span>
                   <strong>{o.title}</strong>
                   <span>{o.tagline}</span>
                 </span>
-              </a>
+              </Link>
             ))}
           </div>
         </section>
 
         <ClassicFooter />
       </main>
-    </div>
+    </ClassicScroll>
   );
 }

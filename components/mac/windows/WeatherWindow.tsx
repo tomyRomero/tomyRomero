@@ -195,8 +195,7 @@ export default function WeatherWindow({ nav }: { nav?: React.ReactNode }) {
       background: skyOf(cond?.kind ?? 'clear', day), textShadow: '0 1px 2px rgba(0,0,0,.08)',
     }}>
       {nav ?? <Toolbar><span /></Toolbar>}
-      {/* white scrollbar thumbs on the sky */}
-      <div style={{ flex: 1, minHeight: 0, overflowY: 'auto', padding: `0 18px ${nav ? 'calc(24px + env(safe-area-inset-bottom, 0px))' : '18px'}`, ['--sb-thumb' as string]: 'rgba(255,255,255,.45)', ['--sb-thumb-hover' as string]: 'rgba(255,255,255,.65)' }}>
+      <div style={{ flex: 1, minHeight: 0, overflowY: 'auto', padding: `0 18px ${nav ? 'calc(24px + env(safe-area-inset-bottom, 0px))' : '18px'}`, ['--thumb' as string]: 'rgba(255,255,255,.55)' }}>
         <div style={{ maxWidth: 640, margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 12 }}>
           <header style={{ textAlign: 'center', padding: '0 0 12px' }}>
             <h2 style={{ fontSize: 28, fontWeight: 500 }}>Ocala</h2>

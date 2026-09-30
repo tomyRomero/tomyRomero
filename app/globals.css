@@ -18,11 +18,14 @@ html, body {
   font-family: var(--font-sans), system-ui, sans-serif;
 }
 
-/* Matches theme-color in layout.tsx so dark mode doesn't flash white */
+/* Matches theme-color in layout.tsx so dark mode doesn't flash white. The
+   site's own toggle wins once set; page transitions show this between pages */
 html { background: #f4f5f7; }
 @media (prefers-color-scheme: dark) {
   html { background: #0a0c11; }
 }
+html[data-theme="light"] { background: #f4f5f7; }
+html[data-theme="dark"] { background: #0a0c11; }
 
 /* Placeholder color for both themes */
 ::placeholder {
@@ -77,24 +80,24 @@ html.win-grabbing, html.win-grabbing * { cursor: grabbing !important; }
 /* No transitions while dragging */
 .mac-window.win-moving { transition: box-shadow .25s ease, border-color .2s !important; }
 
-/* macOS-style scrollbars. Don't set scrollbar-width: thin inline, Chrome then
-   ignores these rules. */
-:root { --sb-thumb: rgba(0,0,0,.26); --sb-thumb-hover: rgba(0,0,0,.42); }
-:root[data-theme="dark"] { --sb-thumb: rgba(255,255,255,.28); --sb-thumb-hover: rgba(255,255,255,.45); }
-::-webkit-scrollbar { width: 11px; height: 11px; background: transparent; }
-::-webkit-scrollbar-track, ::-webkit-scrollbar-corner { background: transparent; }
-::-webkit-scrollbar-thumb {
-  border: 3px solid transparent; background-clip: padding-box; border-radius: 8px;
-  background-color: transparent; min-height: 36px; min-width: 36px;
-}
-:hover::-webkit-scrollbar-thumb { background-color: var(--sb-thumb); }
-::-webkit-scrollbar-thumb:hover { background-color: var(--sb-thumb-hover); }
-@media (pointer: coarse) {
-  ::-webkit-scrollbar { width: 4px; height: 4px; }
-  ::-webkit-scrollbar-thumb { border: 0; background-color: var(--sb-thumb); }
-}
-@supports not selector(::-webkit-scrollbar) {
-  * { scrollbar-width: thin; scrollbar-color: var(--sb-thumb) transparent; }
+/* Scrollbars: windows draw their own over the content (ScrollThumbs), so
+   native ones are hidden there. Elsewhere they're the system's, and photo
+   strips keep a slim bar in view. */
+.mac-window { --thumb: rgba(0,0,0,.3); }
+:root[data-theme="dark"] .mac-window { --thumb: rgba(255,255,255,.32); color-scheme: dark; }
+.mac-window *, .mac-window .hscroll { scrollbar-width: none; }
+.mac-window ::-webkit-scrollbar, .mac-window .hscroll::-webkit-scrollbar { display: none; }
+@media (pointer: fine) {
+  .hscroll::-webkit-scrollbar { height: 11px; background: transparent; }
+  .hscroll::-webkit-scrollbar-track { background: transparent; }
+  .hscroll::-webkit-scrollbar-thumb {
+    border: 3px solid transparent; background-clip: padding-box; border-radius: 8px;
+    background-color: var(--sb-thumb); min-width: 36px;
+  }
+  .hscroll::-webkit-scrollbar-thumb:hover { background-color: var(--sb-thumb-hover); }
+  @supports not selector(::-webkit-scrollbar) {
+    .hscroll { scrollbar-width: thin; scrollbar-color: var(--sb-thumb) transparent; }
+  }
 }
 
 /* Window animations */
@@ -143,6 +146,12 @@ html.win-grabbing, html.win-grabbing * { cursor: grabbing !important; }
   0%   { opacity: 0; }
   100% { opacity: 1; }
 }
+/* Page changes (components/nav.tsx). The new page settles from slightly
+   larger so no edge shows while it scales */
+::view-transition-old(root) { animation: .2s ease-in both navOut; }
+::view-transition-new(root) { animation: .34s cubic-bezier(.2,.8,.2,1) both navIn; }
+@keyframes navOut { to { opacity: 0; } }
+@keyframes navIn  { from { opacity: 0; transform: scale(1.012); } }
 /* Spotlight is flex-centered, so no -50% translate here */
 @keyframes spotlightIn {
   0%   { opacity: 0; transform: scale(.96) translateY(-6px); }
