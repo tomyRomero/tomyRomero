@@ -22,9 +22,7 @@ export const metadata: Metadata = {
   },
 
   description:
-    'Full-stack software engineer specializing in ASP.NET Core, React, and SQL Server. ' +
-    'Currently building home care software at MEDsys Software Solutions. ' +
-    'Based in Ocala, Florida. Open to new opportunities.',
+    'Full-stack software engineer working in ASP.NET Core, React, and SQL Server. Based in Ocala, Florida.',
 
   keywords: [
     'Tomy F. Romero',
@@ -42,7 +40,6 @@ export const metadata: Metadata = {
     'Florida software engineer',
     'portfolio',
     'web developer',
-    'home care software',
     'UVI graduate',
   ],
 
@@ -71,8 +68,7 @@ export const metadata: Metadata = {
     siteName:    'Tomy F. Romero · Portfolio',
     title:       'Tomy F. Romero · Software Engineer',
     description:
-      'Full-stack software engineer specializing in ASP.NET Core, React, and SQL Server. ' +
-      'Open to new opportunities.',
+      'Full-stack software engineer working in ASP.NET Core, React, and SQL Server. Based in Ocala, Florida.',
     images: [{
       url:    '/opengraph-image',
       width:  1200,
@@ -84,7 +80,7 @@ export const metadata: Metadata = {
   twitter: {
     card:        'summary_large_image',
     title:       'Tomy F. Romero · Software Engineer',
-    description: 'Full-stack software engineer · ASP.NET Core · React · SQL Server · Open to work.',
+    description: 'Full-stack software engineer working in ASP.NET Core, React, and SQL Server. Based in Ocala, Florida.',
     images:      ['/opengraph-image'],
   },
 
@@ -103,12 +99,8 @@ const jsonLd = {
       image:      `${BASE}/assets/headshot.jpg`,
       jobTitle:   'Full-Stack Software Engineer',
       description:
-        'Full-stack software engineer building home care software with ASP.NET Core, React, and SQL Server.',
+        'Full-stack software engineer working in ASP.NET Core, React, and SQL Server.',
       knowsLanguage: ['English', 'Spanish'],
-      worksFor: {
-        '@type': 'Organization',
-        name:    'MEDsys Software Solutions',
-      },
       alumniOf: {
         '@type':  'CollegeOrUniversity',
         name:     'University of the Virgin Islands',
@@ -127,7 +119,7 @@ const jsonLd = {
       ],
       knowsAbout: [
         'ASP.NET Core', 'C#', 'React', 'Next.js', 'TypeScript',
-        'SQL Server', 'Azure', 'Docker', 'Node.js',
+        'SQL Server', 'Azure', 'Docker',
       ],
     },
     {

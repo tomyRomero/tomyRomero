@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import {
   ME, projects, experiences, education, certifications, skills, contactBlurb, profilePhoto, resumeFile,
-  totalSkills, yearsExperience,
+  coreStack, skillAnchor,
 } from '@/constants';
 import { APP_BG, appGlyph } from '@/components/mac/appIcons';
 import { GitHubIcon, LinkedInIcon, MailIcon, PinIcon } from '@/components/mac/Icons';
@@ -15,6 +15,7 @@ import { Link } from '@/components/nav';
 import s from './classic.module.css';
 
 const SUBJECT = 'Hello from your portfolio';
+const STACK_BG = [APP_BG.about, APP_BG.projects, APP_BG.skills];
 
 export default function ClassicPage() {
   const now = experiences[0];
@@ -32,7 +33,7 @@ export default function ClassicPage() {
               <span className={s.introPhoto}>
                 <Image src={profilePhoto} alt="Picture of Tomy Romero smiling" fill sizes="58px" priority style={{ objectFit: 'cover' }} />
               </span>
-              <span className={s.status}><span className={s.dot} aria-hidden="true" />{ME.location} · Open to opportunities</span>
+              <span className={s.status}><PinIcon s={13} />{ME.location}</span>
             </div>
             <h1 className={s.name}>{ME.name}</h1>
             <p className={s.title}>{ME.title}</p>
@@ -66,15 +67,11 @@ export default function ClassicPage() {
             <span className={`${s.chips} ${s.roleTech}`}>{now.tech.map(t => <span key={t} className={s.mono}>{t}</span>)}</span>
           </a>
 
-          <a href="#experience" className={`${s.tile} ${s.stat}`} style={{ background: APP_BG.about }}>
-            <span className={s.statNum}>{yearsExperience()}</span><span className={s.statLabel}>Years</span>
-          </a>
-          <a href="#projects" className={`${s.tile} ${s.stat}`} style={{ background: APP_BG.projects }}>
-            <span className={s.statNum}>{projects.length}</span><span className={s.statLabel}>Projects</span>
-          </a>
-          <a href="#skills" className={`${s.tile} ${s.stat}`} style={{ background: APP_BG.skills }}>
-            <span className={s.statNum}>{totalSkills}</span><span className={s.statLabel}>Skills</span>
-          </a>
+          {coreStack.map((c, i) => (
+            <a key={c.cat} href={`#${skillAnchor(c.cat)}`} className={`${s.tile} ${s.stat}`} style={{ background: STACK_BG[i] }}>
+              <span className={s.stackName}>{c.name}</span><span className={s.statLabel}>{c.area}</span>
+            </a>
+          ))}
           <a href={resumeFile.href} download={resumeFile.filename} className={`${s.tile} ${s.resume}`} style={{ background: APP_BG.resume }}>
             {appGlyph('resume', 'cl', 1.2)}
             <span style={{ display: 'flex', flexDirection: 'column' }}>
@@ -158,7 +155,7 @@ export default function ClassicPage() {
           <Head app="skills" title="Skills" />
           <div className={s.skills}>
             {Object.entries(skills).map(([cat, items]) => (
-              <div key={cat} className={`${s.card} ${s.skillCard}`}>
+              <div key={cat} id={skillAnchor(cat)} className={`${s.card} ${s.skillCard}`}>
                 <h3><CatIcon cat={cat} size={26} />{cat}</h3>
                 <div className={s.chips}>{items.map(x => <span key={x} className={s.chip}>{x}</span>)}</div>
               </div>

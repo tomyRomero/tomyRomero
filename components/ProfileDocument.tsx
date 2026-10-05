@@ -8,7 +8,7 @@ export default function ProfileDocument() {
     <article className="profile-doc" aria-label="Portfolio summary">
       <header>
         <h1>{`${ME.name}, ${ME.title}`}</h1>
-        <p>{`${ME.location}. Open to opportunities.`}</p>
+        <p>{`${ME.location}.`}</p>
         <p>{ME.bio}</p>
         <ul>
           <li><a href={resumeFile.href}>Resume (PDF)</a></li>

@@ -56,7 +56,7 @@ export default function Image() {
         <div style={{
           fontSize: 26, color: '#78b3ff', fontWeight: 500, marginBottom: 28,
         }}>
-          Software Engineer · MEDsys Software Solutions
+          Full-Stack Software Engineer
         </div>
 
         <div style={{ display: 'flex', gap: 12 }}>
@@ -70,19 +70,6 @@ export default function Image() {
               {t}
             </div>
           ))}
-        </div>
-
-        <div style={{
-          display: 'flex', alignItems: 'center', gap: 10,
-          marginTop: 36,
-        }}>
-          <div style={{
-            width: 10, height: 10, borderRadius: '50%',
-            background: '#34c759',
-          }} />
-          <div style={{ fontSize: 17, color: '#34c759', letterSpacing: '.3px' }}>
-            Open to opportunities
-          </div>
         </div>
       </div>
     ),

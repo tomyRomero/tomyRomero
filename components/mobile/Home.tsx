@@ -1,7 +1,7 @@
 'use client';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
-import { ME, profilePhoto, projects, totalSkills, yearsExperience, shotsFor, shotLabel, isTallShot } from '@/constants';
+import { ME, profilePhoto, projects, shotsFor, shotLabel, isTallShot, coreStack } from '@/constants';
 import { S } from '@/components/mac/widgets/WidgetFrame';
 import { GitHubIcon, LinkedInIcon, MoonIcon, SunIcon, PinIcon } from '@/components/mac/Icons';
 import { requestResume } from '@/components/mac/ResumeDialog';
@@ -92,9 +92,7 @@ export default function Home({ dark, setDark, open, homeRef }: {
                   <span style={{ fontSize: 13.5, fontWeight: 500, color: sub }}>{ME.title}</span>
                   <span style={{ fontSize: 12.5, color: sub, display: 'flex', alignItems: 'center', gap: 4 }}><PinIcon s={11} />{ME.location}</span>
                   <span style={{ display: 'flex', gap: 5, marginTop: 8, flexWrap: 'wrap' }}>
-                    <span style={chip}>{yearsExperience()} Years</span>
-                    <span style={chip}>{projects.length} Projects</span>
-                    <span style={chip}>{totalSkills} Skills</span>
+                    {coreStack.map(c => <span key={c.cat} style={chip}>{c.name}</span>)}
                   </span>
                 </span>
               </div>

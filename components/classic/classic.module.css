@@ -157,7 +157,6 @@
   font-size: 13px; font-weight: 600; padding: 6px 11px; border-radius: 15px; background: var(--fill);
   display: inline-flex; align-items: center; gap: 7px;
 }
-.dot { width: 7px; height: 7px; border-radius: 50%; background: #30d158; }
 .name { margin-top: 4px; font-size: 54px; line-height: 1; font-weight: 700; letter-spacing: -1.6px; text-wrap: balance; }
 .title { font-size: 19px; font-weight: 500; color: var(--label2); }
 .bio { font-size: 15.5px; line-height: 1.55; }
@@ -180,7 +179,7 @@
 .rolePoint { font-size: 15px; line-height: 1.5; color: var(--label2); }
 
 .stat { padding: 20px 22px; color: #fff; display: flex; flex-direction: column; justify-content: flex-end; }
-.statNum { font-size: 72px; font-weight: 700; letter-spacing: -2px; line-height: 1; }
+.stackName { font-size: 32px; font-weight: 700; letter-spacing: -.8px; line-height: 1.1; }
 .statLabel { font-size: 15px; font-weight: 600; opacity: .92; }
 .resume { padding: 20px 22px; color: #fff; display: flex; flex-direction: column; justify-content: space-between; }
 .resumeName { font-size: 22px; font-weight: 700; }
@@ -228,7 +227,7 @@
 
 /* Skills */
 .skills { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
-.skillCard { padding: 20px; display: flex; flex-direction: column; gap: 12px; }
+.skillCard { scroll-margin-top: 84px; padding: 20px; display: flex; flex-direction: column; gap: 12px; }
 .skillCard h3 { display: flex; align-items: center; gap: 10px; font-size: 16px; font-weight: 700; }
 
 /* Contact */
@@ -291,6 +290,7 @@
   .photoTile { grid-column: 1; }
   .weather { grid-column: 2; }
   .polaroidImg { width: 124px; height: 124px; }
+  .stackName { font-size: 26px; }
 }
 
 /* Phones */
@@ -314,7 +314,7 @@
   .weatherTemp { font-size: 44px; }
   .role { grid-column: 1 / span 2; }
   .stat, .resume { min-height: 150px; }
-  .statNum { font-size: 52px; }
+  .stackName { font-size: 26px; }
 
   .projects { gap: 20px; }
   .projects > .head h2, .skillsHead h2, .head h2 { font-size: 30px; }

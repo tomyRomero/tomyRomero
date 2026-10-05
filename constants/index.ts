@@ -15,49 +15,23 @@ export const resumeFile = {
   filename: 'Tomy_Romero_Resume.pdf',
 };
 
-// Used for the years-of-experience stats
-export const CAREER_START = 2024;
-export const yearsExperience = () =>
-  `${Math.max(1, new Date().getFullYear() - CAREER_START)}+`;
-
 // Skills
 export const skills: Record<string, string[]> = {
   'Languages':    ['C#', 'JavaScript/TypeScript', 'SQL', 'HTML/CSS'],
-  'Backend':      ['ASP.NET Core', 'REST APIs', 'API Design', 'Entity Framework', 'Node.js'],
-  'Frontend':     ['React', 'React Native', 'Next.js', 'Tailwind CSS'],
-  'Data & Cloud': ['SQL Server', 'MySQL', 'Azure', 'AWS'],
-  'Tools':        ['Git', 'Docker', 'CI/CD', 'Unit Testing', 'Agile', 'Jira', 'Confluence', 'SSMS', 'Visual Studio'],
+  'Backend':      ['ASP.NET Core', 'REST APIs', 'API Design', 'Entity Framework', 'LINQ', 'SignalR', 'Authentication'],
+  'Frontend':     ['React', 'React Native', 'Next.js', 'TanStack Query', 'Tailwind CSS', 'Accessibility'],
+  'Data & Cloud': ['SQL Server', 'T-SQL', 'Database Design', 'Azure', 'AWS'],
+  'Tools':        ['Git', 'Docker', 'CI/CD', 'Unit Testing', 'Integration Testing', 'xUnit'],
 };
 
-export const totalSkills = Object.values(skills).flat().length;
+// What the About views lead with, each pointing at its Skills category
+export const coreStack = [
+  { name: 'C# / .NET',  area: 'Backend',  cat: 'Backend' },
+  { name: 'React',      area: 'Frontend', cat: 'Frontend' },
+  { name: 'SQL Server', area: 'Data',     cat: 'Data & Cloud' },
+];
+export const skillAnchor = (cat: string) => `skill-${cat.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
 
-// Where each skill was used: roles by company short name, projects by title
-export const skillUse: Record<string, { at?: string[]; in?: string[] }> = {
-  'C#':                    { at: ['MEDsys', 'Revature'],              in: ['ArtifyMe', 'iMovies'] },
-  'JavaScript/TypeScript': { at: ['MEDsys'],                          in: ['ArtifyMe', 'StoreOperations', 'Sparks', 'iMovies'] },
-  'SQL':                   { at: ['MEDsys', 'LocalChef', 'Revature'], in: ['ArtifyMe', 'Sparks', 'iMovies'] },
-  'HTML/CSS':              {                                          in: ['StoreOperations', 'Sparks', 'iMovies'] },
-  'ASP.NET Core':          { at: ['MEDsys'],                          in: ['ArtifyMe', 'iMovies'] },
-  'REST APIs':             {                                          in: ['ArtifyMe', 'iMovies'] },
-  'API Design':            {                                          in: ['ArtifyMe', 'iMovies'] },
-  'Entity Framework':      {                                          in: ['iMovies'] },
-  'Node.js':               {                                          in: ['StoreOperations', 'Sparks'] },
-  'React':                 { at: ['MEDsys', 'LocalChef', 'Revature'], in: ['StoreOperations', 'Sparks', 'iMovies'] },
-  'React Native':          {                                          in: ['ArtifyMe'] },
-  'Next.js':               {                                          in: ['StoreOperations', 'Sparks'] },
-  'Tailwind CSS':          {                                          in: ['Sparks'] },
-  'SQL Server':            { at: ['MEDsys', 'Revature'],              in: ['ArtifyMe', 'iMovies'] },
-  'MySQL':                 { at: ['LocalChef'] },
-  'Azure':                 {                                          in: ['iMovies'] },
-  'AWS':                   { at: ['LocalChef'],                       in: ['ArtifyMe', 'StoreOperations', 'Sparks'] },
-  'Git':                   {                                          in: ['ArtifyMe', 'StoreOperations', 'Sparks', 'iMovies'] },
-  'Docker':                { at: ['Revature'] },
-  'CI/CD':                 { at: ['Revature'] },
-  'Unit Testing':          { at: ['Revature'],                        in: ['iMovies'] },
-  'Agile':                 { at: ['MEDsys', 'Revature'] },
-  'Jira':                  { at: ['MEDsys'] },
-  'Confluence':            { at: ['MEDsys'] },
-};
 
 // About photos
 import tomy       from '../public/assets/tomyRomeroGrad.jpeg';
@@ -122,45 +96,34 @@ export const projects = [
     title:       'ArtifyMe',
     platform:    'mobile' as 'web' | 'mobile',
     emoji:       '🎨',
-    tagline:     'Transform sketches into AI-generated art',
+    tagline:     'AI paintings from your own sketches',
     status:      'shipped' as const,
-    year:        '2024',
-    techStack:   'React Native, ASP.NET Core, SQL Server, FastAPI, AWS',
-    description: 'Mobile app that turns hand-drawn sketches into AI-generated images with Stable Diffusion.',
+    year:        '2026',
+    techStack:   'React Native, Expo, ASP.NET Core, SQL Server, Python, Stable Diffusion',
+    description: 'Mobile app that paints your sketches with Stable Diffusion and ControlNet, live, step by step.',
     link:        'https://github.com/tomyRomero/artifyme',
   },
   {
     title:       'StoreOperations',
     platform:    'web' as 'web' | 'mobile',
     emoji:       '🛒',
-    tagline:     'E-commerce for customers & businesses',
+    tagline:     'An online store, and the console that runs it',
     status:      'shipped' as const,
-    year:        '2024',
-    techStack:   'React, Next.js, AWS, Stripe',
-    description: 'E-commerce store with Stripe checkout and a full admin back office.',
+    year:        '2026',
+    techStack:   'Next.js, React, ASP.NET Core, SQL Server, Stripe',
+    description: 'Online store platform with Stripe checkout and sales tax, guest orders, and a console to run and brand the store.',
     link:        'https://github.com/tomyRomero/StoreOperations',
   },
   {
     title:       'Sparks',
     platform:    'web' as 'web' | 'mobile',
     emoji:       '✨',
-    tagline:     'AI-powered social media & real-time messaging',
+    tagline:     'A social network for creative ideas',
     status:      'shipped' as const,
-    year:        '2023',
-    techStack:   'React, Next.js, WebSockets, AWS, SQL',
-    description: 'Social platform with AI-assisted posts and real-time WebSocket messaging.',
+    year:        '2026',
+    techStack:   'Next.js, React, ASP.NET Core, SQL Server, SignalR',
+    description: 'Social network for creative ideas, with AI drafting, threaded comments and live messaging.',
     link:        'https://github.com/tomyRomero/sparks',
-  },
-  {
-    title:       'iMovies',
-    platform:    'web' as 'web' | 'mobile',
-    emoji:       '🎬',
-    tagline:     'Collaborative movie content management',
-    status:      'shipped' as const,
-    year:        '2024',
-    techStack:   'React, ASP.NET Core, SQL Server, Azure, OMDb API',
-    description: 'Team-built movie CMS with social features, backed by the OMDb API.',
-    link:        'https://github.com/240708-NET-FS/Project2_OMDb_API_Movies_CMS_Group1',
   },
 ].map(p => ({ ...p, cover: shotsFor(p.title)[0] ?? null, image: shotsFor(p.title)[0]?.src ?? null }));
 
@@ -169,89 +132,71 @@ export const projects = [
 export const projectDetails = [
   {
     title:       'Sparks',
-    type:        'Full Stack CRUD Social Media App',
+    type:        'Full Stack Social Network with AI Drafting',
     tools: [
-      '/assets/sql.png', '/assets/next.webp', '/assets/reactjs.png',
-      '/assets/tailwind.png', '/assets/typescript.png', '/assets/s3.svg',
-      '/assets/rds.webp', '/assets/pusher.png',
+      '/assets/typescript.png', '/assets/next.webp', '/assets/reactjs.png',
+      '/assets/tailwind.png', '/assets/dotnet.png', '/assets/sql.png',
+      '/assets/docker.png',
     ],
-    description: `Sparks is a social platform for exploring and sharing creative ideas. Write posts yourself or draft them with AI, chat in real time, and dig through everything with search. Built with React and Next.js on AWS, using RDS for the SQL database, S3 for image storage, and Pusher for messaging.`,
+    description: `Sparks is a social network for creative ideas: movie pitches, book plots, artwork, haiku and jokes, each with a card of its own. Draft one with AI, talk it over in threaded comments, and message other members live. The Next.js and React web app talks to an ASP.NET Core API on .NET 10 with SQL Server, which owns the data, sign-in, images and real-time events over SignalR. Google Gemini writes the drafts, Cloudflare Workers AI paints the pictures, and images stay private in Cloudflare R2.`,
     features: [
-      'Full CRUD operations for posts',
-      'Real-time filtering and updates',
-      'WebSocket-based real-time user messaging',
-      'AI-driven post generation with customizable categories',
-      'User profiles with interaction insights',
-      'Search with pagination across posts',
+      'A card for each kind: a movie script on a dark screen under its poster, a book plot beside its cover',
+      'AI drafting with Gemini, and pictures painted by Cloudflare Workers AI',
+      'Live messaging over SignalR, with typing indicators, "Seen" receipts and shared sparks',
+      'Threaded comments, likes that update everywhere at once, and grouped activity',
+      'Sign-in built from scratch, with rotating refresh tokens, lockout and rate limits',
+      'Search, follows, who\'s online, and dark mode throughout',
+      'Integration tests against a real SQL Server, and browser tests with accessibility checks, run in CI',
     ],
-    livelink:   'https://sparkify.vercel.app/',
+    livelink:   'https://github.com/tomyRomero/sparks',
     githubrepo: 'https://github.com/tomyRomero/sparks',
-    year:       '2023',
+    year:       '2026',
     isLive:     false,
   },
   {
     title: 'ArtifyMe',
-    type:  'Full Stack CRUD Mobile App',
+    type:  'Full Stack Mobile App with AI Image Generation',
     tools: [
-      '/assets/typescript.png', '/assets/s3.svg', '/assets/dotnet.png',
-      '/assets/reactjs.png', '/assets/fastapi.png', '/assets/expo.png',
-      '/assets/sql.png',
+      '/assets/typescript.png', '/assets/reactjs.png', '/assets/expo.png',
+      '/assets/dotnet.png', '/assets/sql.png', '/assets/python.png',
+      '/assets/fastapi.png',
     ],
-    description: `ArtifyMe turns hand-drawn sketches into AI-generated images. Draw on the in-app canvas, pick your palette, and Stable Diffusion does the rest. React Native on the front end, an ASP.NET Core API handling JWT auth, and a FastAPI service running image generation. S3 handles storage and SQL Server holds the data.`,
+    description: `ArtifyMe turns a sketch into a painting. Draw on the canvas, say what it is, pick a style, and watch it painted step by step, following your lines. The Expo and React Native app talks to an ASP.NET Core API on .NET 10 with SQL Server, which runs each painting as a background job, so closing the app never loses one. A Python FastAPI service runs Stable Diffusion 1.5 with ControlNet on a cloud GPU, and images stay private in Cloudflare R2.`,
     features: [
-      'Sketch-to-image conversion on an in-app drawing canvas',
-      'Secure authentication with JWT',
-      'Cloud storage with Amazon S3',
-      'Dark mode and paginated artwork lists',
-      'Stable Diffusion image generation via FastAPI',
+      'Drawing canvas with pen, pencil and marker brushes, shapes, undo and redo',
+      'A live preview of every step, then the painting compared with the sketch',
+      'Eight styles, and a "How it was made" view with the outline, prompt and seed',
+      'Background generation, with a push notification when the artwork is ready',
+      'Rotating refresh tokens, a list of signed-in devices, Face ID sign-in and an app lock',
+      'Dark mode, VoiceOver support and reduced motion throughout',
+      'Automated tests across the app, API and image service, run in CI',
     ],
     livelink:   'https://github.com/tomyRomero/artifyme',
     githubrepo: 'https://github.com/tomyRomero/artifyme',
-    year:       '2024',
+    year:       '2026',
     isLive:     false,
   },
   {
     title: 'StoreOperations',
-    type:  'Full Stack CRUD E-Commerce Platform',
+    type:  'Full Stack E-Commerce Platform',
     tools: [
-      '/assets/reactjs.png', '/assets/next.webp', '/assets/typescript.png',
-      '/assets/mongodb.png', '/assets/s3.svg', '/assets/nextauth.png',
-      '/assets/stripe.svg',
+      '/assets/typescript.png', '/assets/reactjs.png', '/assets/next.webp',
+      '/assets/dotnet.png', '/assets/sql.png', '/assets/stripe.svg',
+      '/assets/docker.png',
     ],
-    description: `StoreOperations is an e-commerce platform with two sides: a storefront with cart, Stripe checkout, and order tracking for customers, and an admin back office for products, categories, deals, and newsletters. Built with Next.js, with email notifications via nodemailer and S3 image storage.`,
+    description: `StoreOps is an online store platform: a storefront for shoppers and a console for the people who run the store. Shoppers browse, search and check out with or without an account. Stripe takes the payment and works out the sales tax, and the order is created only once Stripe confirms it. Owners run orders, products, customers and newsletters from the console, and change the theme, logo, colors and home page with a live preview. Next.js and React sit in front of an ASP.NET Core API with SQL Server, which sends every email through an outbox.`,
     features: [
-      'Product and category management (CRUD)',
-      'Cart functionality and Stripe payment processing',
-      'User authentication and order management',
-      'Admin panel for products, orders, users, and deals',
-      'Responsive design with pagination, filtering, and search',
-      'Detailed analytics and reporting',
+      'Stripe checkout with sales tax, for guests and accounts',
+      'Order tracking, with an email at every step',
+      'A console for orders, refunds, products, deals, customers and newsletters',
+      'A theme and brand editor with a live preview, keeping any brand color readable',
+      'Light and dark mode, keyboard and screen reader support, aiming for WCAG 2.2 AA',
+      'Secure by default: cookie sessions, rate limits, lockouts and admin-only routes',
+      'Integration tests against a real SQL Server, plus unit and end-to-end tests, run in CI',
     ],
-    livelink:   'https://palettehub.vercel.app/',
+    livelink:   'https://github.com/tomyRomero/StoreOperations',
     githubrepo: 'https://github.com/tomyRomero/StoreOperations',
-    year:       '2024',
-    isLive:     false,
-  },
-  {
-    title: 'iMovies',
-    type:  'Full Stack CRUD Content Management System',
-    tools: [
-      '/assets/reactjs.png', '/assets/sql.png',
-      '/assets/dotnet.png',  '/assets/azure.png',
-    ],
-    description: `A team-built CMS for movie fans: search titles through the OMDb API, manage personal movie lists, and share, like, and rank favorites. ASP.NET Core and Entity Framework on the backend, React on the front, deployed on Azure. I worked across both the API and the UI.`,
-    features: [
-      'Content management for movie collections',
-      'User authentication with JWT',
-      'Integration with OMDb API for rich movie metadata',
-      'CRUD operations for managing user movie lists',
-      'Social features: movie sharing, liking, top-rated movies',
-      'Azure-hosted SQL Server database',
-      'Unit testing with xUnit and Jest',
-    ],
-    livelink:   '',
-    githubrepo: 'https://github.com/240708-NET-FS/Project2_OMDb_API_Movies_CMS_Group1',
-    year:       '2024',
+    year:       '2026',
     isLive:     false,
   },
 ].map(p => ({ ...p, images: shotsFor(p.title).map(x => x.src) }));
@@ -376,4 +321,4 @@ export const contactDetails = [
 ];
 
 export const contactBlurb =
-  'Hiring for a full-stack role, or just want to talk shop about .NET, React, or SQL? My inbox is open, and email is the fastest way to reach me.';
+  'Want to talk shop about .NET, React, or SQL, or ask about one of my projects? Email is the fastest way to reach me.';

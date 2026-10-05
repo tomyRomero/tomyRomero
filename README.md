@@ -94,23 +94,19 @@ Check out my [**Live Portfolio Site**](https://tomyromero.vercel.app/) to explor
 ## <a name="projects">🚀 Projects</a>
 
 ### 🎨 ArtifyMe
-Transform imaginative sketches into AI-generated images using React Native, ASP.NET, SQL Server, and Python FastAPI with Stable Diffusion.  
+Draw a sketch, say what it is, and watch it painted live by Stable Diffusion and ControlNet. An Expo and React Native app, an ASP.NET Core API with SQL Server, and a Python image service on a cloud GPU.  
 [ReadMe](https://github.com/tomyRomero/artifyme/blob/main/README.md)  
 ![Stars](https://img.shields.io/github/stars/tomyRomero/artifyMe?style=social)
 
 ### 📦 StoreOperations
-Full-stack e-commerce store powered by Next.js, Tailwind, MongoDB, and Stripe featuring an admin dashboard.  
-[ReadMe](https://github.com/tomyRomero/storeOps/blob/main/README.md)  
-![Stars](https://img.shields.io/github/stars/tomyRomero/storeOps?style=social)
+An online store platform: a storefront with Stripe checkout and sales tax, guest orders and order tracking, and a console to run the store and change its theme and brand with a live preview. Next.js and React on an ASP.NET Core API with SQL Server.  
+[ReadMe](https://github.com/tomyRomero/StoreOperations/blob/main/README.md)  
+![Stars](https://img.shields.io/github/stars/tomyRomero/StoreOperations?style=social)
 
 ### ⚡ Sparks
-Full-stack social media web app designed to help users discover and create new ideas with AI.  
+A social network for creative ideas: draft a movie pitch, book plot or haiku with AI, talk it over in threaded comments, and message other members live. A Next.js web app on an ASP.NET Core API with SQL Server and SignalR.  
 [ReadMe](https://github.com/tomyRomero/sparks/blob/main/README.md)  
 ![Stars](https://img.shields.io/github/stars/tomyRomero/sparks?style=social)
-
-### 🎬 iMovies
-Collaborative CMS for managing movies with social features using ASP.NET Core and React.  
-[ReadMe](https://github.com/240708-NET-FS/Project2_OMDb_API_Movies_CMS_Group1/blob/main/README.md)  
 
 ---
 

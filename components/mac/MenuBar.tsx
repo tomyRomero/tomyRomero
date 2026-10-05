@@ -355,8 +355,6 @@ export default function MenuBar({ dark, setDark, wins, dispatch, calPop, setCalP
         { div: true },
         { label: 'Print / Save as PDF', shortcut: '⌘P', action: () => { close(); window.print(); } },
         { div: true },
-        { label: '✓ Open to Opportunities', disabled: true },
-        { div: true },
         { label: 'Hide All Windows',
           action: () => { close(); dispatch({ type: 'MIN_ALL' }); } },
         { label: 'Quit',

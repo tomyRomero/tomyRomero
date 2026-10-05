@@ -13,9 +13,8 @@ export function hueOf(title: string) {
 // a pair from their name's hue.
 const MAT: Record<string, [string, string, string, string]> = {
   ArtifyMe:        ['#fde9da', '#e8dcf8', '#3b2b2c', '#262040'],
-  StoreOperations: ['#f1ebe4', '#dcd2c6', '#302b27', '#1b1917'],
+  StoreOperations: ['#f7e4f0', '#dfe4fb', '#2c1530', '#111a33'],
   Sparks:          ['#dde8ff', '#c7d4f4', '#1c2644', '#10162b'],
-  iMovies:         ['#efe3ff', '#ffe3d1', '#2b1d3e', '#3a2317'],
 };
 export function matColors(album: string): [string, string, string, string] {
   const h = hueOf(album);

@@ -59,14 +59,6 @@ export default function ContactWindow({ dark }: { dark: boolean }) {
             </div>
             <h2 style={{ marginTop: 14, fontSize: 22, fontWeight: 700, letterSpacing: '-.4px' }}>{ME.name}</h2>
             <div style={{ marginTop: 3, fontSize: 14, color: tk.label2 }}>{ME.title}</div>
-            <span style={{
-              marginTop: 12, display: 'inline-flex', alignItems: 'center', gap: 7, padding: '5px 12px 5px 10px', borderRadius: 20,
-              background: dark ? 'rgba(52,199,89,.16)' : 'rgba(52,199,89,.14)', color: dark ? '#4ade80' : '#166534',
-              fontSize: 13, fontWeight: 600,
-            }}>
-              <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#34c759', animation: 'pulse 2s infinite' }} />
-              Open to opportunities
-            </span>
           </div>
 
           <div style={{

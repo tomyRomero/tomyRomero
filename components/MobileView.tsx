@@ -4,8 +4,8 @@ import { flushSync } from 'react-dom';
 import Image from 'next/image';
 import dynamic from 'next/dynamic';
 import {
-  ME, images, projects, experiences, education, certifications, skills, skillUse, contactDetails, contactBlurb,
-  profilePhoto, totalSkills, yearsExperience, resumeFile, shotsFor, isTallShot,
+  ME, images, projects, experiences, education, certifications, skills, contactDetails, contactBlurb,
+  profilePhoto, resumeFile, shotsFor, isTallShot, coreStack, skillAnchor,
 } from '@/constants';
 import { GitHubIcon, LinkedInIcon, MoonIcon, SunIcon, MailIcon, PinIcon } from '@/components/mac/Icons';
 import { T } from '@/components/mac/tokens';
@@ -510,13 +510,17 @@ function AboutScreen({ dark, setDark, go, openPhoto }: {
     background: primary ? tk.select : dark ? '#2c2c2e' : '#ffffff', color: primary ? '#fff' : tk.accent,
     boxShadow: primary ? `0 10px 24px ${dark ? 'rgba(10,132,255,.3)' : 'rgba(0,98,204,.35)'}` : `0 10px 24px rgba(0,0,0,${dark ? '.4' : '.1'})`,
   });
-  const stat = (value: string, label: string, onClick: () => void, mid?: boolean) => (
-    <button onClick={onClick} style={{
+  // Opens Skills scrolled to the category
+  const stack = (c: (typeof coreStack)[number], mid?: boolean) => (
+    <button key={c.cat} onClick={() => {
+      go('skills');
+      requestAnimationFrame(() => document.getElementById(`m-${skillAnchor(c.cat)}`)?.scrollIntoView({ block: 'start' }));
+    }} style={{
       padding: '13px 0 12px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2, color: tk.label,
       borderLeft: mid ? `1px solid ${tk.sep}` : 'none', borderRight: mid ? `1px solid ${tk.sep}` : 'none',
     }}>
-      <span style={{ fontSize: 26, fontWeight: 700, letterSpacing: '-.8px', lineHeight: 1 }}>{value}</span>
-      <span style={{ fontSize: 12.5, color: tk.label2 }}>{label}</span>
+      <span style={{ fontSize: 17, fontWeight: 700, letterSpacing: '-.3px', lineHeight: 1.2 }}>{c.name}</span>
+      <span style={{ fontSize: 12.5, color: tk.label2 }}>{c.area}</span>
     </button>
   );
 
@@ -545,10 +549,6 @@ function AboutScreen({ dark, setDark, go, openPhoto }: {
             <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '5px 11px 5px 9px', borderRadius: 20, background: 'rgba(255,255,255,.2)', fontSize: 13, fontWeight: 500 }}>
               <PinLine />{ME.location}
             </span>
-            <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '5px 11px 5px 9px', borderRadius: 20, background: 'rgba(24,128,56,.66)', fontSize: 13, fontWeight: 600 }}>
-              <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#5ee07c', animation: 'pulse 2s infinite' }} />
-              Open to opportunities
-            </span>
           </div>
         </div>
       </header>
@@ -561,9 +561,7 @@ function AboutScreen({ dark, setDark, go, openPhoto }: {
       </div>
 
       <div style={{ ...group(dark), marginTop: 14, display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))' }}>
-        {stat(yearsExperience(), 'Years', () => go('experience'))}
-        {stat(String(projects.length), 'Projects', () => go('work'), true)}
-        {stat(String(totalSkills), 'Technologies', () => go('skills'))}
+        {coreStack.map((c, i) => stack(c, i === 1))}
       </div>
 
       <GroupLabel dark={dark} top>About</GroupLabel>
@@ -839,13 +837,6 @@ function ContactScreen({ dark }: { dark: boolean }) {
     <>
       <div style={{ padding: '6px 20px 0' }}>
         <p className="text-pretty" style={{ fontSize: 15, lineHeight: 1.45, color: dark ? '#d1d1d6' : '#3a3a3c' }}>{contactBlurb}</p>
-        <span style={{
-          marginTop: 10, display: 'inline-flex', alignItems: 'center', gap: 6, padding: '5px 12px 5px 10px', borderRadius: 20,
-          background: dark ? 'rgba(52,199,89,.18)' : '#e3f2e7', color: dark ? '#4ade80' : '#166534', fontSize: 13, fontWeight: 600,
-        }}>
-          <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#34c759', animation: 'pulse 2s infinite' }} />
-          Open to opportunities
-        </span>
       </div>
 
       <form aria-label="Email Tomy" onSubmit={send} style={{ ...group(dark), marginTop: 16, display: 'flex', flexDirection: 'column' }}>
@@ -923,39 +914,28 @@ function ContactScreen({ dark }: { dark: boolean }) {
   );
 }
 
-const orgTint = (org: string) => experiences.find(e => e.short === org)?.tint ?? 'blue';
-
 function SkillsScreen({ dark }: { dark: boolean }) {
   const tk = T(dark);
   return (
     <>
-      <div style={{ padding: '0 20px', fontSize: 15, color: tk.label2 }}>{totalSkills} technologies</div>
+      <div style={{ padding: '0 20px', fontSize: 15, color: tk.label2 }}>Core stack: {coreStack.map(c => c.name).join(', ')}</div>
       {Object.entries(skills).map(([cat, items]) => (
         <Fragment key={cat}>
-          <div style={{ padding: '24px 20px 8px', display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div id={`m-${skillAnchor(cat)}`} style={{
+            padding: '24px 20px 8px', display: 'flex', alignItems: 'center', gap: 10,
+            scrollMarginTop: 'calc(44px + env(safe-area-inset-top, 0px))',
+          }}>
             <CatIcon cat={cat} size={28} />
             <h3 style={{ fontSize: 17, fontWeight: 600 }}>{cat}</h3>
             <span style={{ marginLeft: 'auto', fontSize: 14, color: tk.label2 }}>{items.length}</span>
           </div>
           <div style={group(dark)}>
-            {items.map((s, i) => {
-              const use = skillUse[s] ?? {};
-              const n = use.in?.length ?? 0;
-              return (
-                <div key={s} style={{
-                  minHeight: 48, marginLeft: 16, padding: '8px 14px 8px 0', boxSizing: 'border-box',
-                  display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap',
-                  borderBottom: i < items.length - 1 ? `1px solid ${tk.sep}` : 'none',
-                }}>
-                  <span style={{ flex: 1, minWidth: 120, fontSize: 15 }}>{s}</span>
-                  {(use.at ?? []).map(org => {
-                    const c = tint(orgTint(org), dark);
-                    return <span key={org} style={{ padding: '2px 7px', borderRadius: 6, background: c.bg, color: c.fg, fontSize: 12, fontWeight: 600 }}>{org}</span>;
-                  })}
-                  {n > 0 && <span style={{ marginLeft: 2, fontSize: 13, color: tk.label2 }}>{n} project{n === 1 ? '' : 's'}</span>}
-                </div>
-              );
-            })}
+            {items.map((s, i) => (
+              <div key={s} style={{
+                minHeight: 46, marginLeft: 16, display: 'flex', alignItems: 'center', fontSize: 15,
+                borderBottom: i < items.length - 1 ? `1px solid ${tk.sep}` : 'none',
+              }}>{s}</div>
+            ))}
           </div>
         </Fragment>
       ))}

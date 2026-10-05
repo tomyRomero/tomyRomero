@@ -3,9 +3,10 @@ import { useState, useCallback, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import Image from 'next/image';
 import { T, thumbVars } from '../tokens';
-import { ME, images, profilePhoto, projects, totalSkills, yearsExperience, resumeFile, experiences, education } from '@/constants';
+import { ME, images, profilePhoto, resumeFile, experiences, education, coreStack } from '@/constants';
 import { GitHubIcon, LinkedInIcon } from '../Icons';
 import { requestResume } from '../ResumeDialog';
+import { requestSkillCategory } from './SkillsWindow';
 import { copyText } from '@/components/copyText';
 import { Monogram, TOOLBAR_H, Download, Envelope, ShareIcon, CheckIcon, PinLine } from '../Native';
 
@@ -249,9 +250,10 @@ export default function AboutWindow({ dark, onOpen }: {
     });
   };
 
-  const stat = (value: string, label: string, id: string, mid?: boolean) => (
+  const stack = (c: (typeof coreStack)[number], mid?: boolean) => (
     <button
-      onClick={() => onOpen?.(id)}
+      key={c.cat}
+      onClick={() => { requestSkillCategory(c.cat); onOpen?.('skills'); }}
       style={{
         padding: '14px 0 13px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3,
         borderLeft: mid ? `1px solid ${tk.sep}` : 'none', borderRight: mid ? `1px solid ${tk.sep}` : 'none',
@@ -260,8 +262,8 @@ export default function AboutWindow({ dark, onOpen }: {
       onMouseEnter={e => (e.currentTarget.style.background = dark ? 'rgba(255,255,255,.04)' : 'rgba(0,0,0,.025)')}
       onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
     >
-      <span style={{ fontSize: 28, fontWeight: 700, letterSpacing: '-.8px', lineHeight: 1, fontVariantNumeric: 'tabular-nums' }}>{value}</span>
-      <span style={{ fontSize: 12.5, color: tk.label2 }}>{label}</span>
+      <span style={{ fontSize: 19, fontWeight: 700, letterSpacing: '-.4px', lineHeight: 1.15 }}>{c.name}</span>
+      <span style={{ fontSize: 12.5, color: tk.label2 }}>{c.area}</span>
     </button>
   );
 
@@ -339,14 +341,6 @@ export default function AboutWindow({ dark, onOpen }: {
               }}>
                 <PinLine />{ME.location}
               </span>
-              <span style={{
-                display: 'inline-flex', alignItems: 'center', gap: 6, padding: '4px 11px 4px 9px', borderRadius: 20,
-                background: 'rgba(24,128,56,.62)', fontSize: 12.5, fontWeight: 600,
-                backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)',
-              }}>
-                <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#5ee07c', boxShadow: '0 0 0 3px rgba(94,224,124,.25)', animation: 'pulse 2s infinite' }} />
-                Open to opportunities
-              </span>
             </div>
           </div>
         </header>
@@ -367,9 +361,7 @@ export default function AboutWindow({ dark, onOpen }: {
           margin: '20px 24px 0', display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))',
           borderRadius: 14, background: tk.paneAlt, overflow: 'hidden',
         }}>
-          {stat(yearsExperience(), 'Years', 'experience')}
-          {stat(String(projects.length), 'Projects', 'projects', true)}
-          {stat(String(totalSkills), 'Technologies', 'skills')}
+          {coreStack.map((c, i) => stack(c, i === 1))}
         </div>
 
         <div style={{ margin: '10px 24px 0' }}>

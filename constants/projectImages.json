@@ -1,355 +1,243 @@
 {
   "artifyme": [
     {
-      "src": "/projects/artifyme/01-details.png",
-      "w": 1170,
-      "h": 2367,
+      "src": "/projects/artifyme/01-gallery.png",
+      "w": 1000,
+      "h": 2025,
       "framed": true,
       "vivid": true
     },
     {
-      "src": "/projects/artifyme/02-home.png",
-      "w": 1170,
-      "h": 2367,
+      "src": "/projects/artifyme/02-artwork.png",
+      "w": 1000,
+      "h": 2025,
       "framed": true,
       "vivid": true
     },
     {
-      "src": "/projects/artifyme/03-color-picker.png",
-      "w": 1170,
-      "h": 2367,
-      "framed": true,
-      "vivid": true
+      "src": "/projects/artifyme/03-how-it-was-made.png",
+      "w": 1000,
+      "h": 2025,
+      "framed": true
     },
     {
       "src": "/projects/artifyme/04-canvas.png",
-      "w": 1170,
-      "h": 2367,
+      "w": 1000,
+      "h": 2025,
+      "framed": true
+    },
+    {
+      "src": "/projects/artifyme/05-describe.png",
+      "w": 1000,
+      "h": 2025,
+      "framed": true
+    },
+    {
+      "src": "/projects/artifyme/06-painting.png",
+      "w": 1000,
+      "h": 2025,
+      "framed": true
+    },
+    {
+      "src": "/projects/artifyme/07-compare.png",
+      "w": 1000,
+      "h": 2025,
+      "framed": true
+    },
+    {
+      "src": "/projects/artifyme/08-welcome.png",
+      "w": 1000,
+      "h": 2025,
       "framed": true,
       "vivid": true
     },
     {
-      "src": "/projects/artifyme/05-home-dark.png",
-      "w": 1170,
-      "h": 2367,
+      "src": "/projects/artifyme/09-come-to-life.png",
+      "w": 1000,
+      "h": 2025,
       "framed": true,
       "vivid": true
     },
     {
-      "src": "/projects/artifyme/06-login.png",
-      "w": 1170,
-      "h": 2367,
+      "src": "/projects/artifyme/10-profile.png",
+      "w": 1000,
+      "h": 2025,
+      "framed": true
+    },
+    {
+      "src": "/projects/artifyme/11-gallery-dark.png",
+      "w": 1000,
+      "h": 2025,
       "framed": true,
       "vivid": true
     },
     {
-      "src": "/projects/artifyme/07-signup.png",
-      "w": 1170,
-      "h": 2367,
+      "src": "/projects/artifyme/12-artwork-dark.png",
+      "w": 1000,
+      "h": 2025,
       "framed": true,
-      "vivid": true
-    },
-    {
-      "src": "/projects/artifyme/08-about.png",
-      "w": 1170,
-      "h": 2367,
-      "framed": true,
-      "vivid": true
-    },
-    {
-      "src": "/projects/artifyme/09-profile.png",
-      "w": 1170,
-      "h": 2367,
-      "framed": true,
-      "vivid": true
-    },
-    {
-      "src": "/projects/artifyme/10-profile-dark.png",
-      "w": 1170,
-      "h": 2367,
-      "framed": true,
-      "vivid": true
-    },
-    {
-      "src": "/projects/artifyme/11-create.png",
-      "w": 1170,
-      "h": 2367,
-      "framed": true,
-      "vivid": true
-    },
-    {
-      "src": "/projects/artifyme/12-results.png",
-      "w": 1170,
-      "h": 2367,
-      "framed": true,
-      "vivid": true
-    }
-  ],
-  "imovies": [
-    {
-      "src": "/projects/imovies/01-home.png",
-      "w": 1599,
-      "h": 857,
-      "vivid": true
-    },
-    {
-      "src": "/projects/imovies/02-login.png",
-      "w": 858,
-      "h": 632,
-      "vivid": true
-    },
-    {
-      "src": "/projects/imovies/03-user-movie-list.png",
-      "w": 1470,
-      "h": 851,
-      "vivid": true
-    },
-    {
-      "src": "/projects/imovies/04-add-movie.png",
-      "w": 1470,
-      "h": 851,
-      "vivid": true
-    },
-    {
-      "src": "/projects/imovies/05-movie-modal.png",
-      "w": 1470,
-      "h": 851
-    },
-    {
-      "src": "/projects/imovies/06-signup.png",
-      "w": 858,
-      "h": 730,
-      "vivid": true
-    },
-    {
-      "src": "/projects/imovies/07-profile.png",
-      "w": 1470,
-      "h": 851,
       "vivid": true
     }
   ],
   "sparks": [
     {
-      "src": "/projects/sparks/01-chats.png",
-      "w": 899,
-      "h": 782,
+      "src": "/projects/sparks/01-movie-script.png",
+      "w": 2880,
+      "h": 1800,
       "vivid": true
     },
     {
-      "src": "/projects/sparks/02-login.png",
-      "w": 1428,
-      "h": 787,
+      "src": "/projects/sparks/02-home.png",
+      "w": 2880,
+      "h": 1800
+    },
+    {
+      "src": "/projects/sparks/03-drafting-with-AI.png",
+      "w": 2880,
+      "h": 1800,
       "vivid": true
     },
     {
-      "src": "/projects/sparks/03-home.png",
-      "w": 1689,
-      "h": 830
-    },
-    {
-      "src": "/projects/sparks/04-home-mobile.png",
-      "w": 500,
-      "h": 823
-    },
-    {
-      "src": "/projects/sparks/05-studio.png",
-      "w": 1046,
-      "h": 724,
+      "src": "/projects/sparks/04-messages.png",
+      "w": 2880,
+      "h": 1800,
       "vivid": true
     },
     {
-      "src": "/projects/sparks/06-edit-spark.png",
-      "w": 943,
-      "h": 783
+      "src": "/projects/sparks/05-profile.png",
+      "w": 2880,
+      "h": 1800
     },
     {
-      "src": "/projects/sparks/07-noti.png",
-      "w": 890,
-      "h": 783
+      "src": "/projects/sparks/06-search.png",
+      "w": 2880,
+      "h": 1800
     },
     {
-      "src": "/projects/sparks/08-profile.png",
-      "w": 988,
-      "h": 697,
+      "src": "/projects/sparks/07-activity.png",
+      "w": 2880,
+      "h": 1800
+    },
+    {
+      "src": "/projects/sparks/08-artwork-dark.png",
+      "w": 2880,
+      "h": 1800,
       "vivid": true
     },
     {
-      "src": "/projects/sparks/09-message.png",
-      "w": 928,
-      "h": 699,
+      "src": "/projects/sparks/09-home-mobile.png",
+      "w": 1170,
+      "h": 2532
+    },
+    {
+      "src": "/projects/sparks/10-spark-mobile-dark.png",
+      "w": 1170,
+      "h": 2532
+    },
+    {
+      "src": "/projects/sparks/11-chat-mobile-dark.png",
+      "w": 1170,
+      "h": 2532,
       "vivid": true
-    },
-    {
-      "src": "/projects/sparks/10-post.png",
-      "w": 1178,
-      "h": 836
-    },
-    {
-      "src": "/projects/sparks/11-share.png",
-      "w": 1064,
-      "h": 786
-    },
-    {
-      "src": "/projects/sparks/12-search.png",
-      "w": 1589,
-      "h": 840,
-      "vivid": true
-    },
-    {
-      "src": "/projects/sparks/13-search-post.png",
-      "w": 1589,
-      "h": 840
-    },
-    {
-      "src": "/projects/sparks/14-movie-spark.png",
-      "w": 1002,
-      "h": 738
-    },
-    {
-      "src": "/projects/sparks/15-novel-spark.png",
-      "w": 1002,
-      "h": 738
     }
   ],
   "storeoperations": [
     {
-      "src": "/projects/storeoperations/01-cart.png",
-      "w": 1360,
-      "h": 850
+      "src": "/projects/storeoperations/01-home.jpg",
+      "w": 1440,
+      "h": 900
     },
     {
-      "src": "/projects/storeoperations/02-home.png",
-      "w": 1249,
-      "h": 836,
+      "src": "/projects/storeoperations/02-shop.jpg",
+      "w": 1440,
+      "h": 900
+    },
+    {
+      "src": "/projects/storeoperations/03-product-on-sale.jpg",
+      "w": 1440,
+      "h": 900
+    },
+    {
+      "src": "/projects/storeoperations/04-search.jpg",
+      "w": 1440,
+      "h": 900
+    },
+    {
+      "src": "/projects/storeoperations/05-bag.jpg",
+      "w": 1440,
+      "h": 900
+    },
+    {
+      "src": "/projects/storeoperations/06-checkout.jpg",
+      "w": 1440,
+      "h": 900
+    },
+    {
+      "src": "/projects/storeoperations/07-order-confirmed.jpg",
+      "w": 1440,
+      "h": 900
+    },
+    {
+      "src": "/projects/storeoperations/08-order-tracking.jpg",
+      "w": 1440,
+      "h": 900
+    },
+    {
+      "src": "/projects/storeoperations/09-account.jpg",
+      "w": 1440,
+      "h": 900
+    },
+    {
+      "src": "/projects/storeoperations/10-home-light.jpg",
+      "w": 1440,
+      "h": 900
+    },
+    {
+      "src": "/projects/storeoperations/11-atelier-theme.jpg",
+      "w": 1440,
+      "h": 900
+    },
+    {
+      "src": "/projects/storeoperations/12-theme-and-brand.jpg",
+      "w": 1440,
+      "h": 900
+    },
+    {
+      "src": "/projects/storeoperations/13-console-home.jpg",
+      "w": 1440,
+      "h": 900
+    },
+    {
+      "src": "/projects/storeoperations/14-console-orders.jpg",
+      "w": 1440,
+      "h": 900
+    },
+    {
+      "src": "/projects/storeoperations/15-console-product.jpg",
+      "w": 1440,
+      "h": 900
+    },
+    {
+      "src": "/projects/storeoperations/16-console-dark.jpg",
+      "w": 1440,
+      "h": 900
+    },
+    {
+      "src": "/projects/storeoperations/17-phone-home.jpg",
+      "w": 780,
+      "h": 1688,
       "vivid": true
     },
     {
-      "src": "/projects/storeoperations/03-mobile-home.png",
-      "w": 497,
-      "h": 836,
+      "src": "/projects/storeoperations/18-phone-product.jpg",
+      "w": 780,
+      "h": 1688,
       "vivid": true
     },
     {
-      "src": "/projects/storeoperations/04-promotions.png",
-      "w": 1249,
-      "h": 836,
-      "vivid": true
-    },
-    {
-      "src": "/projects/storeoperations/05-footer.png",
-      "w": 1249,
-      "h": 836
-    },
-    {
-      "src": "/projects/storeoperations/06-products.png",
-      "w": 1505,
-      "h": 832
-    },
-    {
-      "src": "/projects/storeoperations/07-product-details.png",
-      "w": 1439,
-      "h": 832
-    },
-    {
-      "src": "/projects/storeoperations/08-checkout.png",
-      "w": 1297,
-      "h": 847
-    },
-    {
-      "src": "/projects/storeoperations/09-search.png",
-      "w": 1551,
-      "h": 812
-    },
-    {
-      "src": "/projects/storeoperations/10-login.png",
-      "w": 1427,
-      "h": 840,
-      "vivid": true
-    },
-    {
-      "src": "/projects/storeoperations/11-account-order-details.png",
-      "w": 1224,
-      "h": 836
-    },
-    {
-      "src": "/projects/storeoperations/12-account-orders.png",
-      "w": 1371,
-      "h": 836
-    },
-    {
-      "src": "/projects/storeoperations/13-account-addresses.png",
-      "w": 1371,
-      "h": 836
-    },
-    {
-      "src": "/projects/storeoperations/14-privacy-policy.png",
-      "w": 1371,
-      "h": 836
-    },
-    {
-      "src": "/projects/storeoperations/15-address.png",
-      "w": 1439,
-      "h": 832
-    },
-    {
-      "src": "/projects/storeoperations/16-order-success.png",
-      "w": 1297,
-      "h": 847
-    },
-    {
-      "src": "/projects/storeoperations/17-activity.png",
-      "w": 1460,
-      "h": 840
-    },
-    {
-      "src": "/projects/storeoperations/18-admin-products.png",
-      "w": 1467,
-      "h": 845
-    },
-    {
-      "src": "/projects/storeoperations/19-edit-product.png",
-      "w": 1505,
-      "h": 832
-    },
-    {
-      "src": "/projects/storeoperations/20-mobile-admin.png",
-      "w": 497,
-      "h": 836
-    },
-    {
-      "src": "/projects/storeoperations/21-admin-users.png",
-      "w": 1460,
-      "h": 840
-    },
-    {
-      "src": "/projects/storeoperations/22-admin-user-details.png",
-      "w": 1559,
-      "h": 835
-    },
-    {
-      "src": "/projects/storeoperations/23-admin-make-deal.png",
-      "w": 1559,
-      "h": 842
-    },
-    {
-      "src": "/projects/storeoperations/24-newsletter.png",
-      "w": 1207,
-      "h": 843
-    },
-    {
-      "src": "/projects/storeoperations/25-admin-categories.png",
-      "w": 1460,
-      "h": 840
-    },
-    {
-      "src": "/projects/storeoperations/26-edit-category.png",
-      "w": 1505,
-      "h": 832
-    },
-    {
-      "src": "/projects/storeoperations/27-admin-orders.png",
-      "w": 1207,
-      "h": 836
+      "src": "/projects/storeoperations/19-phone-bag.jpg",
+      "w": 780,
+      "h": 1688
     }
   ]
 }

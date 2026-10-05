@@ -1,19 +1,29 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { T } from '../tokens';
-import { skills, skillUse, totalSkills, experiences } from '@/constants';
-import { Toolbar, ToolbarButton, TOOLBAR_H, tint, useWidthClass, ChevronLeft, ChevronRight, SearchLine } from '../Native';
+import { skills, coreStack } from '@/constants';
+import { Toolbar, ToolbarButton, TOOLBAR_H, useWidthClass, ChevronLeft, ChevronRight, SearchLine } from '../Native';
 import { CATS, CatIcon } from '@/components/SkillIcon';
 
 // Styled after System Settings
 
 const NAMES = Object.keys(skills);
-const orgTint = (short: string) => experiences.find(e => e.short === short)?.tint ?? 'blue';
+
+// Opens on a category, as Projects does with requestProjectDetail
+let pendingCat: string | null = null;
+export function requestSkillCategory(cat: string) {
+  pendingCat = cat;
+  window.dispatchEvent(new CustomEvent('openSkillCategory', { detail: { cat } }));
+}
 
 export default function SkillsWindow({ dark }: { dark: boolean }) {
   const tk = T(dark);
   const [ref, wide] = useWidthClass<HTMLDivElement>([720]);
-  const [history, setHistory] = useState<string[]>([NAMES[0]]);
+  const [history, setHistory] = useState<string[]>(() => {
+    const c = pendingCat && NAMES.includes(pendingCat) ? pendingCat : NAMES[0];
+    pendingCat = null;
+    return [c];
+  });
   const [at, setAt] = useState(0);
   const [query, setQuery] = useState('');
   const cat = history[at];
@@ -23,6 +33,15 @@ export default function SkillsWindow({ dark }: { dark: boolean }) {
     setAt(a => a + 1);
     setQuery('');
   };
+
+  useEffect(() => {
+    const h = (e: Event) => {
+      const c = (e as CustomEvent<{ cat: string }>).detail?.cat;
+      if (c && NAMES.includes(c)) { pendingCat = null; go(c); }
+    };
+    window.addEventListener('openSkillCategory', h);
+    return () => window.removeEventListener('openSkillCategory', h);
+  });
 
   const q = query.trim().toLowerCase();
   const hits = q ? Object.entries(skills).flatMap(([c, items]) => items.filter(s => s.toLowerCase().includes(q)).map(s => ({ s, c }))) : [];
@@ -88,8 +107,8 @@ export default function SkillsWindow({ dark }: { dark: boolean }) {
           {/* Storage-style overview */}
           <div style={{ ...card, padding: '16px 18px 15px', display: 'flex', flexDirection: 'column', gap: 12 }}>
             <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 12 }}>
-              <span style={{ fontSize: 16, fontWeight: 600 }}>{totalSkills} technologies</span>
-              <span style={{ fontSize: 12.5, color: tk.label2 }}>across {NAMES.length} categories</span>
+              <span style={{ fontSize: 16, fontWeight: 600 }}>Core stack</span>
+              <span style={{ fontSize: 12.5, color: tk.label2 }}>{coreStack.map(c => c.name).join(' · ')}</span>
             </div>
             <div role="img" aria-label={NAMES.map(c => `${c} ${skills[c].length}`).join(', ')} style={{ display: 'flex', gap: 3, height: 14 }}>
               {NAMES.map((c, i) => {
@@ -126,33 +145,19 @@ export default function SkillsWindow({ dark }: { dark: boolean }) {
               <span style={{ fontSize: 20, fontWeight: 700, letterSpacing: '-.3px' }}>{q ? `Results for “${query.trim()}”` : cat}</span>
               <span style={{ fontSize: 13, color: tk.label2 }}>{rows.length} skill{rows.length === 1 ? '' : 's'}</span>
             </div>
-            {wide === 1 && rows.length > 0 && <span style={{ fontSize: 12, fontWeight: 600, color: tk.label2 }}>Where I've used it</span>}
           </div>
 
           {rows.length > 0 ? (
             <div key={q || cat} style={{ ...card, display: 'flex', flexDirection: 'column', animation: 'fadeIn .2s ease' }}>
-              {rows.map(({ s, c }, i) => {
-                const use = skillUse[s] ?? {};
-                const n = use.in?.length ?? 0;
-                return (
-                  <div key={s} style={{
-                    minHeight: 50, display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', margin: '0 18px', padding: '8px 0',
-                    borderBottom: i < rows.length - 1 ? `1px solid ${tk.sep}` : 'none',
-                  }}>
-                    {q && <span style={{ width: 8, height: 8, borderRadius: '50%', background: CATS[c].color, flexShrink: 0 }} title={c} />}
-                    <span style={{ flex: 1, minWidth: 140, fontSize: 14.5, fontWeight: 500 }}>{s}</span>
-                    <span style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-                      {(use.at ?? []).map(org => {
-                        const t = tint(orgTint(org), dark);
-                        return <span key={org} style={{ padding: '3px 8px', borderRadius: 6, background: t.bg, color: t.fg, fontSize: 12, fontWeight: 600 }}>{org}</span>;
-                      })}
-                    </span>
-                    <span title={use.in?.join(', ')} style={{ width: 74, textAlign: 'right', fontSize: 12.5, color: tk.label2, flexShrink: 0 }}>
-                      {n ? `${n} project${n === 1 ? '' : 's'}` : ''}
-                    </span>
-                  </div>
-                );
-              })}
+              {rows.map(({ s, c }, i) => (
+                <div key={s} style={{
+                  minHeight: 46, display: 'flex', alignItems: 'center', gap: 10, margin: '0 18px',
+                  borderBottom: i < rows.length - 1 ? `1px solid ${tk.sep}` : 'none',
+                }}>
+                  {q && <span style={{ width: 8, height: 8, borderRadius: '50%', background: CATS[c].color, flexShrink: 0 }} title={c} />}
+                  <span style={{ fontSize: 14.5, fontWeight: 500 }}>{s}</span>
+                </div>
+              ))}
             </div>
           ) : (
             <div style={{ ...card, padding: '28px 18px', textAlign: 'center', fontSize: 14, color: tk.label2 }}>No skills match “{query.trim()}”</div>
